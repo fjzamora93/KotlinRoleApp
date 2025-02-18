@@ -10,6 +10,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
+import com.unir.sheet.ui.screens.MainScreen
+import com.unir.sheet.ui.screens.character.CharacterCreatorScreen
+import com.unir.sheet.ui.screens.character.CharacterListScreen
+import com.unir.sheet.ui.screens.character.characterDetail.CharacterDetailScreen
+import com.unir.sheet.ui.screens.character.items.CharacterInventoryScreen
+import com.unir.sheet.ui.screens.character.items.ItemListScreen
+import com.unir.sheet.ui.screens.character.skills.SkillListScreen
+import com.unir.sheet.ui.screens.character.spells.CharacterSpellScreen
+import com.unir.sheet.ui.screens.layout.FontsTemplateScreen
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
 
 @Composable
