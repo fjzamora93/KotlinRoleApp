@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "name": "Habla bestial",
+    "description": "Permite hablar con animales"
+  },
+  {
+    "id": 2,
+    "name": "Pico de oro",
+    "description": "Mejora las tiradas de persuasión"
+  }
+]
