@@ -105,7 +105,7 @@ fun CharacterCreatorForm(){
 
     var name by remember { mutableStateOf("") }
     var gender by remember { mutableStateOf(Gender.MALE) }
-    var rolClass by remember { mutableStateOf(RolClass.NINGUNA) }
+    var rolClass by remember { mutableStateOf(RolClass.WARRIOR) }
     var race by remember { mutableStateOf(Race.HUMANO) }
     var height by remember { mutableStateOf(Range.MEDIO) }
     var weight by remember { mutableStateOf(Range.MEDIO) }

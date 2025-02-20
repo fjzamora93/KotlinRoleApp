@@ -123,7 +123,7 @@ fun ItemSummary(
 
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Daño: ${item.damageDice}",
+                    text = "Daño: ${item.dice}",
                     style = CustomType.bodyMedium
                 )
             }

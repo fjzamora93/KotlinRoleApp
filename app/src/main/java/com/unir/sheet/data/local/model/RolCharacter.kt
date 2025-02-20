@@ -10,7 +10,7 @@ data class RolCharacter(
     // Datos del personaje
     var name: String = "",
     var description: String = "",
-    var rolClass: RolClass = RolClass.NINGUNA,
+    var rolClass: RolClass = RolClass.NULL,
     var gender: Gender = Gender.MALE,
     var race: Race = Race.HUMANO,
     var height: Range = Range.MEDIO,
@@ -104,30 +104,30 @@ data class RolCharacter(
 
     fun calculateStatsBasedOnClass() {
         when (this.rolClass) {
-            RolClass.MAGO, RolClass.BRUJO, RolClass.HECHICERO -> {
+            RolClass.WIZARD, RolClass.WARLOCK, RolClass.SORCERER -> {
                 intelligence = 15 // Atributo principal
                 wisdom = 12       // Secundario
                 strength = 8      // Débil
             }
-            RolClass.BARDO -> {
+            RolClass.BARD -> {
                 charisma = 15     // Atributo principal
                 dexterity = 14    // Secundario fuerte
                 intelligence = 12 // Secundario bajo
                 strength = 8      // Débil
             }
-            RolClass.CLÉRIGO, RolClass.DRUIDA -> {
+            RolClass.CLERIC, RolClass.DRUID -> {
                 wisdom = 15       // Atributo principal
                 constitution = 13 // Secundario fuerte
                 strength = 12     // Secundario bajo
                 dexterity = 8     // Débil
             }
-            RolClass.GUERRERO, RolClass.PALADÍN -> {
+            RolClass.WARRIOR, RolClass.PALADIN -> {
                 strength = 15     // Atributo principal
                 constitution = 14 // Secundario fuerte
                 dexterity = 12    // Secundario bajo
                 intelligence = 8  // Débil
             }
-            RolClass.PÍCARO -> {
+            RolClass.ROGUE -> {
                 dexterity = 15    // Atributo principal
                 intelligence = 13 // Secundario fuerte
                 charisma = 12     // Secundario bajo
@@ -160,7 +160,7 @@ data class RolCharacter(
 }
 
 enum class RolClass {
-    NINGUNA, MAGO, BRUJO, HECHICERO, BARDO, CLÉRIGO, GUERRERO, PÍCARO, PALADÍN, DRUIDA
+    NINGUNA, NULL, WARRIOR, BARD, ROGUE, EXPLORER, CLERIC, PALADIN, SORCERER, WIZARD, DRUID, MONK, WARLOCK, BARBARIAN
 }
 
 enum class Race {

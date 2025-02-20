@@ -26,41 +26,6 @@ import javax.inject.Singleton
 object  AppModule {
 
 
-    /** INSTANCIA ÚNICA DE RETROFIT + CONVERTIDOR JSON
-     * API UTILIZADA: https://api.open5e.com/
-     *
-     * EJEMPLOS
-     * https://api.open5e.com/v2/weapons/
-     * https://api.open5e.com/v2/spells/
-     *
-     * https://api.open5e.com/v2/weapons/?name=Dagger
-     * */
-    @Provides
-    @Singleton
-    fun provideRetrofit(): Retrofit {
-        // Configura el cliente OkHttp con tiempo de espera personalizado
-        val client = OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)  // Tiempo de conexión
-            .readTimeout(30, TimeUnit.SECONDS)     // Tiempo de lectura
-            .writeTimeout(30, TimeUnit.SECONDS)    // Tiempo de escritura
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl("https://api.open5e.com/v2/")
-            .client(client)  // Pasa el cliente configurado
-            .addConverterFactory(GsonConverterFactory.create())  // Usa el convertidor de Gson
-            .build()
-    }
-
-
-
-    /** INSTANCIA ÚNICA DEL SERVICIO API */
-    @Provides
-    @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
-
 
 
     @Provides

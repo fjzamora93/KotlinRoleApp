@@ -98,7 +98,7 @@ fun InventoryItemCard(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Daño: ${item.damageDice}",
+                text = "Daño: ${item.dice}",
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(

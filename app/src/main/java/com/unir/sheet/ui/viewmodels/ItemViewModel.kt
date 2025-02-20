@@ -7,7 +7,7 @@ import com.unir.sheet.data.local.model.Item
 import com.unir.sheet.data.local.model.RolCharacter
 import com.unir.sheet.data.local.repository.LocalCharacterRepository
 import com.unir.sheet.data.local.repository.LocalSkillRepository
-import com.unir.sheet.data.remote.repository.RemoteItemRepository
+import com.unir.sheet.data.remote.repository.RemoteCustomItemRepository
 import com.unir.sheet.domain.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ItemViewModel @Inject constructor(
-    private val remoteItemRepository: RemoteItemRepository,
+    private val remoteItemRepository: RemoteCustomItemRepository,
     private val localCharacterRepository: LocalCharacterRepository
 
 ) : ViewModel() {
@@ -51,7 +51,7 @@ class ItemViewModel @Inject constructor(
         onError: () -> Unit = { }
     ) {
         viewModelScope.launch {
-            val result = remoteItemRepository.fetchItems(name)
+            val result = remoteItemRepository.fetchItems()
             result.onSuccess {
                     items ->
                 _itemList.value = items
@@ -60,7 +60,7 @@ class ItemViewModel @Inject constructor(
                 onError()
             }
 
-            //println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")
+            println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")
         }
     }
 
