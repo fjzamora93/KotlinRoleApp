@@ -44,7 +44,7 @@ fun CharacterPortrait(
                 println(imagePath)
                 navigationViewModel.navigate(
                     ScreensRoutes.CharacterDetailScreen.createRoute(
-                        character.id
+                        character.id!!
                     )
                 )
             })

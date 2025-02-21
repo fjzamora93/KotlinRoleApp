@@ -108,7 +108,7 @@ fun CharacterThumbnail(
                 if (selectedCharacter != null) {
                     navigationViewModel.navigate(
                         ScreensRoutes.CharacterDetailScreen.createRoute(
-                            selectedCharacter!!.id))
+                            selectedCharacter!!.id!!))
                 } else {
                     navigationViewModel.navigate(ScreensRoutes.CharacterListScreen.route)
                 }

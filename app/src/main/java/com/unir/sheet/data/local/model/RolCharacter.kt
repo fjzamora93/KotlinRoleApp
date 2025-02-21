@@ -6,13 +6,13 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "rolCharacterTable")
 data class RolCharacter(
-    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @PrimaryKey(autoGenerate = true) var id: Int? = null,
     // Datos del personaje
     var name: String = "",
     var description: String = "",
     var rolClass: RolClass = RolClass.NULL,
     var gender: Gender = Gender.MALE,
-    var race: Race = Race.HUMANO,
+    var race: Race = Race.HUMAN,
     var height: Range = Range.MEDIO,
     var weight: Range = Range.MEDIO,
     var age: Int = 18,
@@ -55,31 +55,31 @@ data class RolCharacter(
 
     fun applyRaceBonuses() {
         when (this.race) {
-            Race.HUMANO -> {
+            Race.HUMAN -> {
                 // Los Humanos no tienen bonificaciones ni penalizaciones, por lo que no es necesario modificar nada
             }
-            Race.ELFO -> {
+            Race.ELF -> {
                 // Los Elfos tienen bonificaciones a Destreza y Sabiduría, pero penalizan en Fuerza
                 this.strength -= 1
                 this.dexterity += 2
                 this.constitution -= 1
                 this.wisdom += 1
             }
-            Race.ENANO -> {
+            Race.DWARF -> {
                 // Los Enanos son fuertes y resistentes, pero menos ágiles
                 this.strength += 2
                 this.dexterity -= 1
                 this.constitution += 2
                 this.charisma -= 1
             }
-            Race.ORCO -> {
+            Race.ORC -> {
                 // Los Orcos son fuertes, pero su inteligencia y sabiduría suelen ser más bajas
                 this.strength += 2
                 this.constitution += 1
                 this.intelligence -= 2
                 this.wisdom -= 1
             }
-            Race.DRAGON -> {
+            Race.DRAGONBORN -> {
                 // Los Dragones son poderosos en muchos aspectos, pero no tanto en lo social
                 this.strength += 3
                 this.dexterity += 1
@@ -88,14 +88,14 @@ data class RolCharacter(
                 this.wisdom += 1
                 this.charisma -= 2
             }
-            Race.MEDIANO -> {
+            Race.TEFLIN -> {
                 // Los Medianos (Halflings) suelen ser ágiles y carismáticos, pero débiles físicamente
                 this.strength -= 1
                 this.dexterity += 2
                 this.wisdom += 1
                 this.charisma += 1
             }
-            Race.OTROS -> {
+            Race.OTHER -> {
                 // Para razas personalizadas, puedes agregar reglas adicionales o dejarlas en base
             }
         }
@@ -159,12 +159,33 @@ data class RolCharacter(
 
 }
 
+
 enum class RolClass {
-    NINGUNA, NULL, WARRIOR, BARD, ROGUE, EXPLORER, CLERIC, PALADIN, SORCERER, WIZARD, DRUID, MONK, WARLOCK, BARBARIAN
+    NULL, WARRIOR, BARD, ROGUE, EXPLORER, CLERIC, PALADIN, SORCERER, WIZARD, DRUID, MONK, WARLOCK, BARBARIAN;
+
+    companion object {
+        fun getString(rolClass: RolClass): String {
+            return when (rolClass) {
+                NULL -> "None"
+                WARRIOR -> "Warrior"
+                BARD -> "Bard"
+                ROGUE -> "Rogue"
+                EXPLORER -> "Explorer"
+                CLERIC -> "Cleric"
+                PALADIN -> "Paladin"
+                SORCERER -> "Sorcerer"
+                WIZARD -> "Wizard"
+                DRUID -> "Druid"
+                MONK -> "Monk"
+                WARLOCK -> "Warlock"
+                BARBARIAN -> "Barbarian"
+            }
+        }
+    }
 }
 
 enum class Race {
-    HUMANO, ELFO, ENANO, ORCO, DRAGON, MEDIANO, OTROS
+    HUMAN, ELF, DWARF, TEFLIN, DRAGONBORN, ORC, OTHER
 }
 
 enum class Range(val value: Int) {

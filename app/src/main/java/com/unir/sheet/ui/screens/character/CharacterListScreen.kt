@@ -113,7 +113,7 @@ fun CharacterSummary(
                 text = "Seleccionar",
                 icon = Icons.Default.RemoveRedEye,
                 onClick = {
-                    navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(character.id))
+                    navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(character.id!!))
                 })
         }
     }

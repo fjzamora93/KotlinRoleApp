@@ -22,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.unir.sheet.data.local.model.RolCharacter
+import com.unir.sheet.data.local.model.RolClass
+import com.unir.sheet.ui.screens.components.TextBodyMedium
 
 
 @Composable
@@ -31,65 +33,6 @@ fun InfoSection(
 ){
 
 
-    CharacterTextField(
-        label = "lvl: ${editableCharacter.level} ",
-        value = editableCharacter.name,
-        onValueChange = { onCharacterChange(editableCharacter.copy(name = it)) }
-    )
-
-    CharacterTextField(
-        label = "",
-        value = editableCharacter.rolClass.toString(),
-        onValueChange = { onCharacterChange(editableCharacter.copy(description = it)) }
-    )
-
-    CharacterTextField(
-        label = "",
-        value = editableCharacter.race.toString(),
-        onValueChange = { onCharacterChange(editableCharacter.copy(description = it)) }
-    )
 
 }
 
-
-
-@Composable
-fun CharacterTextField(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var isEdditing by remember { mutableStateOf(false) }
-    var localValue by remember { mutableStateOf(value) }
-
-    if (isEdditing) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = { isEdditing = false }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
-            }
-            TextField(
-                value = localValue,
-                onValueChange = {
-                    localValue = it
-                    onValueChange(it)
-                })
-
-        }
-    } else {
-        Row(
-            modifier = modifier.padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = label, style = MaterialTheme.typography.bodyMedium)
-            Text(text = value, style = MaterialTheme.typography.labelMedium)
-            IconButton(onClick = { isEdditing = true }) {
-                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-
-        }
-    }
-}

@@ -90,6 +90,8 @@ class CharacterViewModel @Inject constructor(
             characterRepository.updateCharacter(rolCharacter)
             _selectedCharacter.value = rolCharacter
             println("Personaje actualizado: $rolCharacter")
+
+            _selectedCharacter.value = characterRepository.getCharacterById(rolCharacter.id!!)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.unir.sheet.ui.screens.character
 
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,12 +12,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -37,11 +40,13 @@ import com.unir.sheet.data.local.model.Race
 import com.unir.sheet.data.local.model.Range
 import com.unir.sheet.data.local.model.RolCharacter
 import com.unir.sheet.data.local.model.RolClass
+import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.layout.MainLayout
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
+import com.unir.sheet.util.MedievalColours
 
 @Composable
 fun CharacterCreatorScreen() {
@@ -62,7 +67,6 @@ fun Body(
 ){
     Column(modifier = modifier.fillMaxWidth()){
         CharacterCreatorForm()
-
     }
 }
 
@@ -70,6 +74,7 @@ fun Body(
 fun InsertCharacterButton(
     newCharacter: RolCharacter,
     characterViewModel: CharacterViewModel = hiltViewModel(),
+    onEditComplete: (Boolean) -> Unit = { }
 ) {
     val navigationViewModel = LocalNavigationViewModel.current
     val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
@@ -77,11 +82,18 @@ fun InsertCharacterButton(
     BackButton()
     Button(
         onClick = {
-            characterViewModel.insertCharacter(newCharacter)
+            if (newCharacter.id != null){
+                println("Actualizando personaje ${newCharacter.id}")
+                characterViewModel.updateCharacter(newCharacter)
+            } else {
+                println("INsertando nuevo personaje ${newCharacter.id}")
+                characterViewModel.insertCharacter(newCharacter)
+            }
             isNavigating = true
+            onEditComplete(false)
         }
     ) {
-        Text("Insertar y navegar")
+        Text("Guardar")
     }
 
     // Utiliza LaunchedEffect para esperar a que selectedCharacter se actualice
@@ -99,194 +111,158 @@ fun InsertCharacterButton(
 }
 
 
-
+/**
+ * El formulario tiene dos modos:
+ * 1. Edición / update de un personaje ya existente.
+ * 2. Creación de un nuevo personaje.
+ *
+ * En el caso de que haya una actualización, se evaluará la condición para ir modificando el personaje
+ * en tiempo de ejecución (no se espera a que terminen de rellenarse todos los campos, sino que se actualizan al momento).
+ *
+ * POr el contrario, si es un nuevo personaje será necesario esperar a pulsar el botón de guardar para que se produzca la inserción.
+ *
+ * TOdo esto lo conseguimos gracias al operador ? que nos permite verificar si existe o si no existe.
+ *
+ * */
 @Composable
-fun CharacterCreatorForm(){
+fun CharacterCreatorForm(
+    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    isEditing: Boolean = false,
+    onEditComplete: (Boolean) -> Unit = { }
+){
+    val editableCharacter by characterViewModel.selectedCharacter.observeAsState()
 
     var name by remember { mutableStateOf("") }
     var gender by remember { mutableStateOf(Gender.MALE) }
     var rolClass by remember { mutableStateOf(RolClass.WARRIOR) }
-    var race by remember { mutableStateOf(Race.HUMANO) }
-    var height by remember { mutableStateOf(Range.MEDIO) }
-    var weight by remember { mutableStateOf(Range.MEDIO) }
+    var race by remember { mutableStateOf(Race.HUMAN) }
+    var size by remember { mutableStateOf(Range.MEDIO) }
     var age by remember { mutableStateOf(18) }
+
+    LaunchedEffect(editableCharacter) {
+        if (isEditing && editableCharacter != null) {
+            println("TENEMOS UN PESONAJE EXISTENTE CON ID" + editableCharacter!!.id)
+            name = editableCharacter!!.name
+            gender = editableCharacter!!.gender
+            rolClass = editableCharacter!!.rolClass
+            race = editableCharacter!!.race
+            size = editableCharacter!!.height
+            age = editableCharacter!!.age
+        }
+    }
+
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-
     ) {
+            TextField(
+                value = name,
+                onValueChange = {
+                    newName ->
+                    name = newName
+                    editableCharacter?.let { character ->
+                        characterViewModel.updateCharacter(character.copy(name = newName))
+                    }},
+                label = { Text("Nombre") }
+            )
 
-        // Nombre y edad
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Column(
-                Modifier.weight(3f)
-            ) {
-                TextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = { Text("Nombre") }
-                )
-            }
-            Column(
-                Modifier.weight(1f)
-            ) {
-                TextField(
-                    value = age.toString(),
-                    onValueChange = { age = it.toIntOrNull() ?: age },
-                    label = { Text("Edad") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
-            }
+            RolClassDropdown(
+                selectedRolClass = rolClass,
+                onRolClassSelected = { newRolClass ->
+                    rolClass = newRolClass
+                    editableCharacter?.let { character ->
+                        characterViewModel.updateCharacter(character.copy(rolClass = newRolClass))
+                    }
+                })
+
+            RaceDropDown(
+                selectedRace = race,
+                onRaceSelected = { newRace ->
+                    race = newRace
+                    editableCharacter?.let { character ->
+                        characterViewModel.updateCharacter(character.copy(race = newRace))
+                    }
+                })
         }
 
-        // Gender
-        GenericDropdown(
-            selectedItem = gender,
-            items = Gender.entries.toList(),
-            onItemSelected = { gender = it },
-            itemToString = { it.toString() }
-        )
+        val characterToSave: RolCharacter
 
-        // Altura y peso
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Column(
-                Modifier.weight(1f)
-            ){
-                DropdownSelector(
-                    label = "Altura",
-                    selectedValue = height,
-                    onValueChange = { height = it },
-                    values = Range.values(),
-                )
-            }
-            Column(
-                Modifier.weight(1f)
-            ){
-                DropdownSelector(
-                    label = "Peso",
-                    selectedValue = weight,
-                    onValueChange = { weight = it },
-                    values = Range.values(),
-                )
-            }
+        if (isEditing && editableCharacter != null) {
+            characterToSave = editableCharacter!!.copy()
+        } else {
+            characterToSave = RolCharacter()
         }
-
-
-        // Raza y clase
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Column(
-                Modifier.weight(1f)
-            ){
-                DropdownSelector(
-                    label = "Clase",
-                    selectedValue = rolClass,
-                    onValueChange = { rolClass = it },
-                    values = RolClass.entries.toTypedArray(),
-                )
-            }
-            Column(
-                Modifier.weight(1f)
-            ){
-                DropdownSelector(
-                    label = "Raza",
-                    selectedValue = race,
-                    onValueChange = { race = it },
-                    values = Race.values(),
-                )
-            }
-
-        }
+        characterToSave.name = name
+        characterToSave.rolClass = rolClass
+        characterToSave.race = race
 
         InsertCharacterButton(
-            newCharacter = RolCharacter(
-                name = name,
-                gender = gender,
-                rolClass = rolClass,
-                race = race,
-                height = height,
-                weight = weight,
-                age = age
-            )
+            newCharacter = characterToSave,
+            onEditComplete = { onEditComplete(false) }
         )
-    }
+
 }
 
 
-// DROP DOWN
 @Composable
-fun <T> DropdownSelector(
-    label: String,
-    selectedValue: T, // Usamos Range como ejemplo, pero puedes usar cualquier tipo de dato
-    onValueChange: (T) -> Unit,
-    values: Array<T>, // Array de las opciones a mostrar
-) where T : Enum<T> {
-    var expanded by remember { mutableStateOf(false) }
-
-    TextField(
-        value = selectedValue.name,
-        onValueChange = {},
-        readOnly = true,
-        label = { Text(label) },
-        trailingIcon = {
-            Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown", modifier = Modifier.clickable { expanded = !expanded })
-        },
-    )
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = { expanded = false }
-    ) {
-        values.forEach { selectionOption ->
-            DropdownMenuItem(
-                onClick = {
-                    onValueChange(selectionOption) // Actualiza el valor seleccionado
-                    expanded = false
-                },
-                text = { Text(selectionOption.name) }
-            )
-        }
-    }
-}
-
-
-
-@Composable
-fun <T> GenericDropdown(
-    selectedItem: T,
-    items: List<T>,
-    onItemSelected: (T) -> Unit,
-    itemToString: (T) -> String = { it.toString() }
+fun RolClassDropdown(
+    selectedRolClass: RolClass,
+    onRolClassSelected: (RolClass) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.wrapContentSize()) {
-        Button(onClick = { expanded = true }) {
-            Text(text = itemToString(selectedItem))
-        }
+        Text(
+            text = selectedRolClass.name,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .clickable { expanded = true }
+                .border(1.dp, MedievalColours.LeatherAged, shape = MaterialTheme.shapes.medium)
+                .padding(16.dp),
+        )
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            items.forEach { item ->
-                DropdownMenuItem(text = { Text(text = itemToString(item)) }, onClick = {
-                    onItemSelected(item)
-                    expanded = false
-                })
+            RolClass.entries.forEach { rol ->
+                DropdownMenuItem(
+                    text = { Text(text = rol.name) },
+                    onClick = {
+                        onRolClassSelected(rol)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun RaceDropDown(
+    selectedRace: Race,
+    onRaceSelected: (Race) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.wrapContentSize()) {
+        Text(
+            text = selectedRace.name,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .clickable { expanded = true }
+                .border(1.dp, MedievalColours.LeatherAged, shape = MaterialTheme.shapes.medium)
+                .padding(16.dp),
+        )
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            Race.entries.forEach { race ->
+                DropdownMenuItem(
+                    text = { Text(text = race.name) },
+                    onClick = {
+                        onRaceSelected(race)
+                        expanded = false
+                    }
+                )
             }
         }
     }

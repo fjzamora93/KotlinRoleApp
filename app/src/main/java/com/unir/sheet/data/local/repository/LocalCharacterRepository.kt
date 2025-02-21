@@ -47,12 +47,12 @@ class LocalCharacterRepository @Inject constructor(
 
     override suspend fun addItemToCharacter(character: RolCharacter, item: Item) {
         itemDao.insertItem(item) // ANtes de insertar la relación, nos aseguramos de que el item, que viene de la API, está dentro de SQLITE
-        val characterCrossRef = CharacterItemCrossRef(character.id, item.id)
+        val characterCrossRef = CharacterItemCrossRef(character.id!!, item.id)
         characterDao.addItemToCharacter(characterCrossRef)
     }
 
     suspend fun removeItemFromCharacter(character: RolCharacter, item: Item) {
-        val characterCrossRef = CharacterItemCrossRef(character.id, item.id)
+        val characterCrossRef = CharacterItemCrossRef(character.id!!, item.id)
         characterDao.removeItemFromCharacter(characterCrossRef)
     }
 

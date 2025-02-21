@@ -22,7 +22,7 @@ import com.unir.sheet.data.local.model.Spell
     CharacterItemCrossRef::class,
     CharacterSpellCrossRef::class,
     CharacterSkillCrossRef::class,
-], version = 17)
+], version = 18)
 abstract class MyDatabase: RoomDatabase() {
     abstract fun getItemDao(): ItemDao
     abstract fun characterDao(): CharacterDao
