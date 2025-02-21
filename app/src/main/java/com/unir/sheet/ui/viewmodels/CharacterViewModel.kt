@@ -4,11 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unir.sheet.data.local.model.Item
-import com.unir.sheet.data.local.model.RolCharacter
-import com.unir.sheet.data.local.repository.LocalCharacterRepository
-import com.unir.sheet.data.local.repository.LocalSkillRepository
-import com.unir.sheet.domain.repository.CharacterRepository
+import com.unir.sheet.data.model.Item
+import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.domain.usecase.character.CharacterUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,15 +17,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CharacterViewModel @Inject constructor(
-    private val characterRepository: CharacterRepository,
-    private val localCharacterRepository: LocalCharacterRepository,
-    private val skillRepository: LocalSkillRepository
+    private val characterUseCases: CharacterUseCases,
 ) : ViewModel() {
 
     // Usamos `mutableStateOf` para el listado de personajes
     private val _characters = MutableStateFlow<List<RolCharacter>>(emptyList())
     val characters: StateFlow<List<RolCharacter>> get() = _characters.asStateFlow()
-
 
     // Generalmente usaríamos State para ambos, pero en este caso LiveData funciona mejor (con State no va a cambiar bien)
     private val _selectedCharacter = MutableLiveData<RolCharacter?>()
@@ -37,8 +32,6 @@ class CharacterViewModel @Inject constructor(
     val selectedCharacterItems: LiveData<List<Item>> = _selectedCharacterItems
 
 
-
-
     init {
         getAllCharacters()
     }
@@ -46,8 +39,8 @@ class CharacterViewModel @Inject constructor(
     // Función para obtener un personaje por ID
     fun getCharacterById(characterId: Int) {
         viewModelScope.launch {
-            val rolCharacter = characterRepository.getCharacterById(characterId)
-            val characterItems = characterRepository.getCharacterWithRelations(characterId)?.items
+            val rolCharacter = characterUseCases.getCharacterById(characterId)
+            val characterItems = characterUseCases.getCharacterWithRelations(characterId)?.items
 
             // Aquí puedes actualizar el UI con el personaje encontrado
             _selectedCharacter.value = rolCharacter
@@ -59,7 +52,7 @@ class CharacterViewModel @Inject constructor(
     // Función para obtener todos los personajes
     fun getAllCharacters() {
         viewModelScope.launch {
-            val charactersList = characterRepository.getAllCharacters() // Obtén la lista de personajes
+            val charactersList = characterUseCases.getAllCharacters() // Obtén la lista de personajes
             _characters.value = charactersList // Actualiza el estado con la lista obtenida
         }
     }
@@ -71,10 +64,10 @@ class CharacterViewModel @Inject constructor(
         viewModelScope.launch {
             // Completar el personaje (por ejemplo, asignar valores predeterminados)
             rolCharacter.completeCharacter()
-            characterRepository.insertCharacter(rolCharacter)
+            characterUseCases.insertCharacter(rolCharacter)
 
             // Fetch the updated list of characters
-            val updatedCharacters = characterRepository.getAllCharacters()
+            val updatedCharacters = characterUseCases.getAllCharacters()
             _characters.value = updatedCharacters
 
             _selectedCharacter.value = updatedCharacters.lastOrNull()
@@ -87,43 +80,21 @@ class CharacterViewModel @Inject constructor(
     // Función para actualizar un personaje
     fun updateCharacter(rolCharacter: RolCharacter) {
         viewModelScope.launch {
-            characterRepository.updateCharacter(rolCharacter)
+            characterUseCases.updateCharacter(rolCharacter)
             _selectedCharacter.value = rolCharacter
             println("Personaje actualizado: $rolCharacter")
-
-            _selectedCharacter.value = characterRepository.getCharacterById(rolCharacter.id!!)
+            _selectedCharacter.value = characterUseCases.getCharacterById(rolCharacter.id!!)
         }
     }
 
     // Función para eliminar un personaje
     fun deleteCharacter(rolCharacter: RolCharacter) {
         viewModelScope.launch {
-            characterRepository.deleteCharacter(rolCharacter)
+            characterUseCases.deleteCharacter(rolCharacter)
             println("Personaje eliminado: $rolCharacter")
-            val updatedCharacters = characterRepository.getAllCharacters()
+            val updatedCharacters = characterUseCases.getAllCharacters()
             _characters.value = updatedCharacters
         }
-    }
-
-    fun updateCharacterGold(newGold: Int) {
-        val currentCharacter = _selectedCharacter.value ?: return
-        val updatedCharacter = currentCharacter.copy(gold = newGold)
-        _selectedCharacter.value = updatedCharacter
-        viewModelScope.launch {
-            characterRepository.updateCharacter(updatedCharacter)
-        }
-    }
-
-
-    fun removeItemFromCharacter(
-        currentCharacter: RolCharacter,
-        currentItem: Item,
-    ){
-        viewModelScope.launch {
-            localCharacterRepository.removeItemFromCharacter(currentCharacter, currentItem)
-            _selectedCharacterItems.value = _selectedCharacterItems.value?.filterNot { it == currentItem }
-        }
-
     }
 
 

@@ -6,13 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.unir.sheet.data.local.model.Item
-import com.unir.sheet.data.local.model.RolCharacter
-import com.unir.sheet.data.local.model.Skill
-import com.unir.sheet.data.local.model.CharacterItemCrossRef
-import com.unir.sheet.data.local.model.CharacterSkillCrossRef
-import com.unir.sheet.data.local.model.CharacterSpellCrossRef
-import com.unir.sheet.data.local.model.Spell
+import com.unir.sheet.data.model.Item
+import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.model.Skill
+import com.unir.sheet.data.model.CharacterItemCrossRef
+import com.unir.sheet.data.model.CharacterSkillCrossRef
+import com.unir.sheet.data.model.CharacterSpellCrossRef
+import com.unir.sheet.data.model.Spell
 
 @Database(entities = [
     RolCharacter::class,

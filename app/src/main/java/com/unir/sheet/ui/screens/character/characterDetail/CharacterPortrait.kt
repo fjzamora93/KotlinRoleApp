@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
-import com.unir.sheet.data.local.model.RolCharacter
+import com.unir.sheet.data.model.RolCharacter
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.ui.navigation.NavigationViewModel

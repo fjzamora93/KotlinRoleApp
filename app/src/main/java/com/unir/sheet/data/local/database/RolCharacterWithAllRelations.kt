@@ -3,13 +3,13 @@ package com.unir.sheet.data.local.database
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import com.unir.sheet.data.local.model.CharacterItemCrossRef
-import com.unir.sheet.data.local.model.CharacterSkillCrossRef
-import com.unir.sheet.data.local.model.CharacterSpellCrossRef
-import com.unir.sheet.data.local.model.Item
-import com.unir.sheet.data.local.model.RolCharacter
-import com.unir.sheet.data.local.model.Skill
-import com.unir.sheet.data.local.model.Spell
+import com.unir.sheet.data.model.CharacterItemCrossRef
+import com.unir.sheet.data.model.CharacterSkillCrossRef
+import com.unir.sheet.data.model.CharacterSpellCrossRef
+import com.unir.sheet.data.model.Item
+import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.model.Skill
+import com.unir.sheet.data.model.Spell
 
 data class RolCharacterWithAllRelations(
     @Embedded val rolCharacter: RolCharacter,

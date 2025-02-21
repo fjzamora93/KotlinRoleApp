@@ -35,11 +35,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.unir.sheet.data.local.model.Gender
-import com.unir.sheet.data.local.model.Race
-import com.unir.sheet.data.local.model.Range
-import com.unir.sheet.data.local.model.RolCharacter
-import com.unir.sheet.data.local.model.RolClass
+import com.unir.sheet.data.model.Gender
+import com.unir.sheet.data.model.Race
+import com.unir.sheet.data.model.Range
+import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.model.RolClass
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes

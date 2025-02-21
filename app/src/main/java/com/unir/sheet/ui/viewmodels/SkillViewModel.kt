@@ -2,29 +2,21 @@ package com.unir.sheet.ui.viewmodels
 import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unir.sheet.data.local.model.Item
-import com.unir.sheet.data.local.model.RolCharacter
-import com.unir.sheet.data.local.model.Skill
-import com.unir.sheet.data.local.repository.LocalCharacterRepository
-import com.unir.sheet.data.local.repository.LocalSkillRepository
-import com.unir.sheet.domain.repository.CharacterRepository
+import com.unir.sheet.data.model.Skill
+import com.unir.sheet.data.repository.CharacterRepositoryImpl
+import com.unir.sheet.data.repository.SkillRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class SkillViewModel  @Inject constructor(
-    private val localCharacterRepository: LocalCharacterRepository,
-    private val skillRepository: LocalSkillRepository,
+    private val characterRepository: CharacterRepositoryImpl,
+    private val skillRepository: SkillRepository,
     @ApplicationContext private val context: Context
 ) :  ViewModel() {
 

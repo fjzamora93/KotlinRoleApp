@@ -21,8 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.unir.sheet.data.local.model.RolCharacter
-import com.unir.sheet.data.local.model.RolClass
+import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.model.RolClass
 import com.unir.sheet.ui.screens.components.TextBodyMedium
 
 

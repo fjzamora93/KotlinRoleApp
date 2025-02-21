@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.unir.sheet.data.local.model.Item
-import com.unir.sheet.data.local.model.Spell
+import com.unir.sheet.data.model.Item
+import com.unir.sheet.data.model.Spell
 
 @Dao
 interface SpellDao {

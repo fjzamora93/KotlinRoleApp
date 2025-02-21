@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.unir.sheet.data.local.model.Skill
+import com.unir.sheet.data.model.Skill
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.components.RegularCard

@@ -1,11 +1,11 @@
-package com.unir.sheet.data.local.model
+package com.unir.sheet.data.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 
 @Entity(
-    tableName = "character_spell_table",
-    primaryKeys = ["characterId", "spellId"],
+    tableName = "character_skill_table",
+    primaryKeys = ["characterId", "skillId"],
     foreignKeys = [
         ForeignKey(
             entity = RolCharacter::class,
@@ -14,14 +14,14 @@ import androidx.room.ForeignKey
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = Spell::class,
+            entity = Skill::class,
             parentColumns = ["id"],
-            childColumns = ["spellId"],
+            childColumns = ["skillId"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
-data class CharacterSpellCrossRef(
+data class CharacterSkillCrossRef(
     val characterId: Int,
-    val spellId: String
+    val skillId: Int
 )

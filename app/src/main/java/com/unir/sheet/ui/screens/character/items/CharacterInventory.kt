@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.unir.sheet.data.local.model.Item
+import com.unir.sheet.data.model.Item
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.components.RegularCard
@@ -58,7 +58,6 @@ fun CharacterInventoryBody(
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     val inventoryItems by characterViewModel.selectedCharacterItems.observeAsState()
-    val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
 
     if (inventoryItems == null) {
         Text("Cargando objetos...")
@@ -106,9 +105,12 @@ fun InventoryItemCard(
                 style = MaterialTheme.typography.bodyMedium
             )
             Button(onClick = {
-                var currentGold = characterViewModel.selectedCharacter.value?.gold ?: 0
-                characterViewModel.updateCharacterGold(item.goldValue + currentGold)
-                characterViewModel.removeItemFromCharacter(characterViewModel.selectedCharacter.value!!, item)
+                val currentCharacter = characterViewModel.selectedCharacter.value
+                if (currentCharacter != null) {
+                    currentCharacter.gold += item.goldValue
+                    itemViewModel.removeItemFromCharacter(currentCharacter, item)
+                    characterViewModel.updateCharacter(currentCharacter)
+                }
             }) {
                 Text(text = "vender")
             }
@@ -133,8 +135,9 @@ fun CurrentGold(
             onValueChange = { newValue ->
                 if (newValue.all { it.isDigit() }) {
                     goldText = newValue
-                    val newGold = newValue.toIntOrNull() ?: 0
-                    characterViewModel.updateCharacterGold(newGold)
+                    val currentCharacter = characterViewModel.selectedCharacter.value
+                    currentCharacter!!.gold = newValue.toIntOrNull() ?: 0
+                    characterViewModel.updateCharacter(currentCharacter)
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

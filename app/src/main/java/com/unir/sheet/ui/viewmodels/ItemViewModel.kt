@@ -3,24 +3,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unir.sheet.data.local.model.Item
-import com.unir.sheet.data.local.model.RolCharacter
-import com.unir.sheet.data.local.repository.LocalCharacterRepository
-import com.unir.sheet.data.local.repository.LocalSkillRepository
-import com.unir.sheet.data.remote.repository.RemoteCustomItemRepository
-import com.unir.sheet.domain.repository.CharacterRepository
+import com.unir.sheet.data.model.Item
+import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.repository.CharacterRepositoryImpl
+import com.unir.sheet.data.repository.ItemRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class ItemViewModel @Inject constructor(
-    private val remoteItemRepository: RemoteCustomItemRepository,
-    private val localCharacterRepository: LocalCharacterRepository
+    private val remoteItemRepository: ItemRepository,
+    private val characterRepository: CharacterRepositoryImpl
 
 ) : ViewModel() {
 
@@ -39,11 +34,20 @@ class ItemViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             println("AÑADIENDO ${currentItem.name} AL PERSONAJE: ${currentCharacter.name}")
-            localCharacterRepository.addItemToCharacter(currentCharacter, currentItem)
+            characterRepository.addItemToCharacter(currentCharacter, currentItem)
         }
     }
 
+    fun removeItemFromCharacter(
+        currentCharacter: RolCharacter,
+        currentItem: Item,
+    ){
+        viewModelScope.launch {
+            characterRepository.removeItemFromCharacter(currentCharacter, currentItem)
+            _itemList.value = _itemList.value?.filterNot { it == currentItem }
+        }
 
+    }
 
     fun getItems(
         name: String = "",

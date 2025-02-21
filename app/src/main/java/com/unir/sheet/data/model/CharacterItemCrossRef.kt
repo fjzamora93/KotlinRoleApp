@@ -1,4 +1,4 @@
-package com.unir.sheet.data.local.model
+package com.unir.sheet.data.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

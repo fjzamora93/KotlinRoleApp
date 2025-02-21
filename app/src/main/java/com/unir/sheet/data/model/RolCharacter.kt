@@ -1,12 +1,19 @@
-package com.unir.sheet.data.local.model
+package com.unir.sheet.data.model
 
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "rolCharacterTable")
 data class RolCharacter(
     @PrimaryKey(autoGenerate = true) var id: Int? = null,
+
+    // DATOS DE USUARIO Y SESIÓN
+    @ColumnInfo(name = "userId")
+    val userId: Int? = null,
+    var gameSessionId: Int? = null,
+
     // Datos del personaje
     var name: String = "",
     var description: String = "",

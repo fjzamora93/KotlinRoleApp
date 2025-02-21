@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.unir.sheet.data.local.model.Item
+import com.unir.sheet.data.model.Item
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.components.MenuMedievalButton
@@ -91,19 +91,19 @@ fun ItemSummary(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (characterViewModel.selectedCharacter.value != null) {
+            val currentCharacter = characterViewModel.selectedCharacter.value
+            if (currentCharacter != null) {
 
                 // Botón de comprar
                 MenuMedievalButton(
                     onClick = {
                         if (characterViewModel.selectedCharacter.value!!.gold > item.goldValue) {
-                            characterViewModel.updateCharacterGold(
-                                characterViewModel.selectedCharacter.value!!.gold - item.goldValue
-                            )
+                            currentCharacter.gold -= item.goldValue
                             itemViewModel.addItemToCharacter(
                                 currentCharacter = characterViewModel.selectedCharacter.value!!,
                                 currentItem = item
                             )
+                            characterViewModel.updateCharacter(currentCharacter)
                         }
 
                     },

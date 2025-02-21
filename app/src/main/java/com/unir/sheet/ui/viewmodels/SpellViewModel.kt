@@ -3,25 +3,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unir.sheet.data.local.model.Item
-import com.unir.sheet.data.local.model.RolCharacter
-import com.unir.sheet.data.local.model.Spell
-import com.unir.sheet.data.local.repository.LocalCharacterRepository
-import com.unir.sheet.data.local.repository.LocalSkillRepository
-import com.unir.sheet.data.remote.repository.RemoteSpellRepository
-import com.unir.sheet.domain.repository.CharacterRepository
+import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.model.Spell
+import com.unir.sheet.data.repository.CharacterRepositoryImpl
+import com.unir.sheet.data.repository.SpellRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class SpellViewModel @Inject constructor(
-    private val remoteSpellRepository: RemoteSpellRepository,
-    private val localCharacterRepository: LocalCharacterRepository
+    private val remoteSpellRepository: SpellRepository,
+    private val characterRepository: CharacterRepositoryImpl
 ) : ViewModel(){
 
     private val _spellList = MutableLiveData<List<Spell>>()

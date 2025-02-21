@@ -1,11 +1,11 @@
-package com.unir.sheet.data.local.repository
+package com.unir.sheet.data.repository
 
 import com.unir.sheet.data.local.database.CharacterDao
 import com.unir.sheet.data.local.database.ItemDao
 import com.unir.sheet.data.local.database.RolCharacterWithAllRelations
-import com.unir.sheet.data.local.model.CharacterItemCrossRef
-import com.unir.sheet.data.local.model.Item
-import com.unir.sheet.data.local.model.RolCharacter
+import com.unir.sheet.data.model.CharacterItemCrossRef
+import com.unir.sheet.data.model.Item
+import com.unir.sheet.data.model.RolCharacter
 import com.unir.sheet.domain.repository.CharacterRepository
 import javax.inject.Inject
 
@@ -13,13 +13,19 @@ import javax.inject.Inject
 /**
  * LAS CLASES DE ESTE REPOSITORIO DEBEN IMPLEMENTAR LA INTERFAZ DEL REPOSITORIO domain.repository.CharacterRepository
  *
+ * Además, deben aplicar la lógica para decidir si la petición se va a realizar al repositorio remoto o al local.
  * */
-class LocalCharacterRepository @Inject constructor(
+class CharacterRepositoryImpl @Inject constructor(
     private val characterDao: CharacterDao,
     private val itemDao: ItemDao
 ) : CharacterRepository {
 
     override suspend fun getAllCharacters(): List<RolCharacter> {
+        return characterDao.getAllCharacters()
+    }
+
+    /** TODO : Pendiente de implementar en el dao la búsqueda por usuario */
+    override suspend fun getCharacterByUserId(userId: Int): List<RolCharacter> {
         return characterDao.getAllCharacters()
     }
 
@@ -51,7 +57,7 @@ class LocalCharacterRepository @Inject constructor(
         characterDao.addItemToCharacter(characterCrossRef)
     }
 
-    suspend fun removeItemFromCharacter(character: RolCharacter, item: Item) {
+    override suspend fun removeItemFromCharacter(character: RolCharacter, item: Item) {
         val characterCrossRef = CharacterItemCrossRef(character.id!!, item.id)
         characterDao.removeItemFromCharacter(characterCrossRef)
     }

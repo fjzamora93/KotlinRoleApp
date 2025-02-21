@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.unir.sheet.data.local.model.RolClass
+import com.unir.sheet.data.model.RolClass
 
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel

@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 
-import com.unir.sheet.data.local.model.RolCharacter
+import com.unir.sheet.data.model.RolCharacter
 import com.unir.sheet.ui.screens.components.MinusButton
 import com.unir.sheet.ui.screens.components.PlusButton
 import com.unir.sheet.ui.screens.components.RegularCard

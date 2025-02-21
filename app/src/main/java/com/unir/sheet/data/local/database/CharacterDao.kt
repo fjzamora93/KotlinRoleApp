@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.unir.sheet.data.local.model.CharacterItemCrossRef
-import com.unir.sheet.data.local.model.RolCharacter
+import com.unir.sheet.data.model.CharacterItemCrossRef
+import com.unir.sheet.data.model.RolCharacter
 
 
 @Dao

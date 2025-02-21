@@ -1,11 +1,10 @@
-package com.unir.sheet.data.remote.repository
+package com.unir.sheet.data.repository
 
-import com.unir.sheet.data.local.model.Item
+import com.unir.sheet.data.model.Item
 import com.unir.sheet.data.remote.service.ApiService
 import javax.inject.Inject
-import javax.inject.Named
 
-class RemoteCustomItemRepository @Inject constructor(
+class ItemRepository @Inject constructor(
     private val apiService: ApiService
 ) {
 

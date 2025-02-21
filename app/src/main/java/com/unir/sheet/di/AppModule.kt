@@ -5,20 +5,19 @@ import androidx.room.Room
 import com.unir.sheet.data.local.database.CharacterDao
 import com.unir.sheet.data.local.database.ItemDao
 import com.unir.sheet.data.local.database.MyDatabase
-import com.unir.sheet.data.local.repository.LocalCharacterRepository
-import com.unir.sheet.data.local.repository.LocalSkillRepository
-import com.unir.sheet.data.remote.service.ApiService
-import com.unir.sheet.domain.repository.CharacterRepository
-import com.unir.sheet.domain.repository.SkillRepository
+import com.unir.sheet.domain.usecase.character.CharacterUseCases
+import com.unir.sheet.domain.usecase.character.DeleteCharacterUseCase
+import com.unir.sheet.domain.usecase.character.GetAllCharactersUseCase
+import com.unir.sheet.domain.usecase.character.GetCharacterByIdUseCase
+import com.unir.sheet.domain.usecase.character.GetCharacterByUserIdUseCase
+import com.unir.sheet.domain.usecase.character.GetCharacterWithRelationsUseCase
+import com.unir.sheet.domain.usecase.character.InsertCharacterUseCase
+import com.unir.sheet.domain.usecase.character.UpdateCharacterUseCase
 import com.unir.sheet.util.Constants.MY_DATA_BASE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -42,8 +41,8 @@ object  AppModule {
 
     @Provides
     @Singleton
-    fun provideCharacterRepository(database: MyDatabase): CharacterRepository {
-        return LocalCharacterRepository(
+    fun provideCharacterRepository(database: MyDatabase): com.unir.sheet.domain.repository.CharacterRepository {
+        return com.unir.sheet.data.repository.CharacterRepositoryImpl(
             database.characterDao(),
             database.getItemDao()
         )
@@ -51,8 +50,8 @@ object  AppModule {
 
     @Provides
     @Singleton
-    fun provideSkillRepository(database: MyDatabase): SkillRepository {
-        return LocalSkillRepository(
+    fun provideSkillRepository(database: MyDatabase): com.unir.sheet.domain.repository.SkillRepository {
+        return com.unir.sheet.data.repository.SkillRepository(
             database.characterDao(),
         )
     }
@@ -68,6 +67,19 @@ object  AppModule {
         return database.getItemDao()
     }
 
-
+    // Proveer el CharacterUseCases
+    @Provides
+    @Singleton
+    fun provideCharacterUseCases(characterRepository: com.unir.sheet.domain.repository.CharacterRepository): CharacterUseCases {
+        return CharacterUseCases(
+            getAllCharacters = GetAllCharactersUseCase(characterRepository),
+            getCharacterByUserId = GetCharacterByUserIdUseCase(characterRepository),
+            getCharacterById = GetCharacterByIdUseCase(characterRepository),
+            insertCharacter = InsertCharacterUseCase(characterRepository),
+            updateCharacter = UpdateCharacterUseCase(characterRepository),
+            deleteCharacter = DeleteCharacterUseCase(characterRepository),
+            getCharacterWithRelations = GetCharacterWithRelationsUseCase(characterRepository)
+        )
+    }
 
 }

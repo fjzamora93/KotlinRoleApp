@@ -1,11 +1,11 @@
-package com.unir.sheet.data.remote.repository
+package com.unir.sheet.data.repository
 
-import com.unir.sheet.data.local.model.Spell
+import com.unir.sheet.data.model.Spell
 import com.unir.sheet.data.remote.service.ApiService
 import javax.inject.Inject
 
 
-class RemoteSpellRepository @Inject constructor(
+class SpellRepository @Inject constructor(
     private val apiService: ApiService
 ) {
 
@@ -53,7 +53,7 @@ class RemoteSpellRepository @Inject constructor(
         }
     }
 
-    private fun mapApiResultToLocal(apiResult: Map<String, Any>) : Spell{
+    private fun mapApiResultToLocal(apiResult: Map<String, Any>) : Spell {
         return Spell(
             id = apiResult["id"] as? String ?: "",
             name = apiResult["name"] as? String ?: "",

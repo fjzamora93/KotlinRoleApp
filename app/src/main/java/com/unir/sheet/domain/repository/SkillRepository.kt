@@ -1,7 +1,7 @@
 package com.unir.sheet.domain.repository
 
 import android.content.Context
-import com.unir.sheet.data.local.model.Skill
+import com.unir.sheet.data.model.Skill
 
 
 interface SkillRepository {
