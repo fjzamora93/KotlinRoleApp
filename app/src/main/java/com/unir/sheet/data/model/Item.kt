@@ -2,16 +2,35 @@ package com.unir.sheet.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-
-@Entity(tableName = "itemTable")
+@Entity(
+    tableName = "itemTable",
+    foreignKeys = [
+        ForeignKey(
+            entity = CharacterEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["characterId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index("characterId")]
+)
 data class Item(
-    @PrimaryKey(autoGenerate = false)
-
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: String,
+    val id: Int,
 
+    @ColumnInfo(name = "characterId")
+    val characterId: Int?,
+
+    @ColumnInfo(name = "id_game_session")
+    val gameSession: Int?,
+
+
+    // DEMÁS ATRIBUTOS
     @ColumnInfo(name = "name")
     val name: String,
 
@@ -35,6 +54,9 @@ data class Item(
 
     @ColumnInfo(name = "statValue")
     val statValue: Int,
+
+    @ColumnInfo(name = "quantity")
+    val quantity: Int,
 
 
     )

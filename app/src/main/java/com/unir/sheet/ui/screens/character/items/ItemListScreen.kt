@@ -51,15 +51,8 @@ fun ItemListBody(
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
-
-    itemViewModel.getItems(
-        name = "",
-        onSuccess = { },
-        onError = { }
-    )
-
+    itemViewModel.getItems()
     val items by itemViewModel.itemList.observeAsState()
-
     Column(
         modifier = modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally

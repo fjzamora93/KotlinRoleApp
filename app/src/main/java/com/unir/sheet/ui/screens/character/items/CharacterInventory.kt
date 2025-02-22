@@ -55,26 +55,37 @@ fun CharacterInventoryScreen(){
 @Composable
 fun CharacterInventoryBody(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    itemViewModel: ItemViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-    val inventoryItems by characterViewModel.selectedCharacterItems.observeAsState()
+    val currentCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val inventoryItems by itemViewModel.itemList.observeAsState()
+    val isLoading by itemViewModel.loadingState.observeAsState(false) // Asumiendo que tienes un estado de carga
 
-    if (inventoryItems == null) {
+
+    itemViewModel.getItemsByCharacterId(currentCharacter!!.id!!)
+
+
+    // Mostrar mensajes de carga o error
+    if (isLoading) {
         Text("Cargando objetos...")
     } else {
-        Column(
-            modifier = modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            CurrentGold()
-            inventoryItems!!.forEach { item ->
-                InventoryItemCard(item = item)
+        if (inventoryItems != null) {
+            Column(
+                modifier = modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CurrentGold()
+                inventoryItems!!.forEach { item ->
+                    InventoryItemCard(item = item)
+                }
             }
+        } else {
+            Text("No se encontraron objetos")
         }
-
-
     }
 }
+
 
 
 @Composable
@@ -107,12 +118,19 @@ fun InventoryItemCard(
             Button(onClick = {
                 val currentCharacter = characterViewModel.selectedCharacter.value
                 if (currentCharacter != null) {
-                    currentCharacter.gold += item.goldValue
-                    itemViewModel.removeItemFromCharacter(currentCharacter, item)
-                    characterViewModel.updateCharacter(currentCharacter)
+                    itemViewModel.sellItem(currentCharacter, item)
                 }
             }) {
                 Text(text = "vender")
+            }
+
+            Button(onClick = {
+                val currentCharacter = characterViewModel.selectedCharacter.value
+                if (currentCharacter != null) {
+                    itemViewModel.removeItemFromCharacter(currentCharacter, item)
+                }
+            }) {
+                Text(text = "consumir")
             }
         }
     }

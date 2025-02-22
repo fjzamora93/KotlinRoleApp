@@ -4,9 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.sheet.data.model.Item
-import com.unir.sheet.data.model.RolCharacter
-import com.unir.sheet.data.repository.CharacterRepositoryImpl
-import com.unir.sheet.data.repository.ItemRepository
+import com.unir.sheet.data.model.CharacterEntity
+import com.unir.sheet.domain.usecase.item.ItemUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,9 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ItemViewModel @Inject constructor(
-    private val remoteItemRepository: ItemRepository,
-    private val characterRepository: CharacterRepositoryImpl
-
+    private val itemUseCases: ItemUseCases,
 ) : ViewModel() {
 
     private val _itemList = MutableLiveData<List<Item>>()
@@ -25,43 +22,66 @@ class ItemViewModel @Inject constructor(
     private val _itemDetail = MutableLiveData<Item?>()
     val itemDetail: LiveData<Item?> = _itemDetail
 
+    private val _loadingState = MutableLiveData<Boolean>()
+    val loadingState: LiveData<Boolean> get() = _loadingState
+
+
+    fun getItemsByCharacterId(characterId: Int) {
+        _loadingState.value = true
+        viewModelScope.launch {
+            val result = itemUseCases.getItemsByCharacterId(characterId)
+            result.onSuccess { items ->
+                _itemList.value = items
+                _loadingState.value = false
+                println("Inventario del personaje en el viewModel: ${_itemList.value}")
+            }.onFailure {
+                _loadingState.value = false
+                println("Error al obtener los items del personaje con ID $characterId")
+            }
+        }
+    }
 
     fun addItemToCharacter(
-        currentCharacter: RolCharacter,
+        currentCharacter: CharacterEntity,
         currentItem: Item,
-//        onSuccess: (List<Item>) -> Unit = { },
-//        onError: () -> Unit = { }
     ){
         viewModelScope.launch {
             println("AÑADIENDO ${currentItem.name} AL PERSONAJE: ${currentCharacter.name}")
-            characterRepository.addItemToCharacter(currentCharacter, currentItem)
+            itemUseCases.addItemToCharacter(currentCharacter, currentItem)
         }
     }
 
     fun removeItemFromCharacter(
-        currentCharacter: RolCharacter,
+        currentCharacter: CharacterEntity,
         currentItem: Item,
     ){
         viewModelScope.launch {
-            characterRepository.removeItemFromCharacter(currentCharacter, currentItem)
+            itemUseCases.destroyItem(currentCharacter, currentItem)
             _itemList.value = _itemList.value?.filterNot { it == currentItem }
         }
-
     }
 
-    fun getItems(
-        name: String = "",
-        onSuccess: (List<Item>) -> Unit = { },
-        onError: () -> Unit = { }
-    ) {
+    fun sellItem(
+        currentCharacter: CharacterEntity,
+        currentItem: Item,
+    ){
         viewModelScope.launch {
-            val result = remoteItemRepository.fetchItems()
+            itemUseCases.sellItem(currentCharacter, currentItem)
+            _itemList.value = _itemList.value?.filterNot { it == currentItem }
+        }
+    }
+
+
+    fun getItems() {
+        viewModelScope.launch {
+            val result = itemUseCases.fetchItems()
             result.onSuccess {
                     items ->
                 _itemList.value = items
-                onSuccess(items)
+                println("Primer control de items en el view model" + items)
             }.onFailure {
-                onError()
+                _loadingState.value = false
+                println("Error al obtener los items desde la API")
             }
 
             println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")

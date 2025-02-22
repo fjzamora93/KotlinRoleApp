@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.ui.navigation.NavigationViewModel
@@ -68,7 +68,7 @@ fun CharacterListBody(
 
 @Composable
 fun CharacterSummary(
-    character: RolCharacter,
+    character: CharacterEntity,
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
     onDestroyItem: () -> Unit = {}

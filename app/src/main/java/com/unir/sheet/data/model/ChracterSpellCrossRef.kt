@@ -8,7 +8,7 @@ import androidx.room.ForeignKey
     primaryKeys = ["characterId", "spellId"],
     foreignKeys = [
         ForeignKey(
-            entity = RolCharacter::class,
+            entity = CharacterEntity::class,
             parentColumns = ["id"],
             childColumns = ["characterId"],
             onDelete = ForeignKey.CASCADE

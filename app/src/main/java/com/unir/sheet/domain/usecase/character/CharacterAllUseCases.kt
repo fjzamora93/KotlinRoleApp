@@ -1,8 +1,7 @@
 package com.unir.sheet.domain.usecase.character
 
-import com.unir.sheet.data.local.database.RolCharacterWithAllRelations
-import com.unir.sheet.data.model.Item
-import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.local.dao.RolCharacterWithAllRelations
+import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.domain.repository.CharacterRepository
 import javax.inject.Inject
 
@@ -10,7 +9,7 @@ import javax.inject.Inject
 class GetAllCharactersUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(): List<RolCharacter> {
+    suspend operator fun invoke(): List<CharacterEntity> {
         return repository.getAllCharacters()
     }
 }
@@ -19,7 +18,7 @@ class GetAllCharactersUseCase @Inject constructor(
 class GetCharacterByUserIdUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(userId: Int): List<RolCharacter> {
+    suspend operator fun invoke(userId: Int): List<CharacterEntity> {
         return repository.getCharacterByUserId(userId)
     }
 }
@@ -28,7 +27,7 @@ class GetCharacterByUserIdUseCase @Inject constructor(
 class GetCharacterByIdUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(id: Int): RolCharacter? {
+    suspend operator fun invoke(id: Int): CharacterEntity? {
         return repository.getCharacterById(id)
     }
 }
@@ -37,7 +36,7 @@ class GetCharacterByIdUseCase @Inject constructor(
 class InsertCharacterUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(character: RolCharacter) {
+    suspend operator fun invoke(character: CharacterEntity) {
         repository.insertCharacter(character)
     }
 }
@@ -46,7 +45,7 @@ class InsertCharacterUseCase @Inject constructor(
 class UpdateCharacterUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(character: RolCharacter) {
+    suspend operator fun invoke(character: CharacterEntity) {
         repository.updateCharacter(character)
     }
 }
@@ -55,7 +54,7 @@ class UpdateCharacterUseCase @Inject constructor(
 class DeleteCharacterUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(character: RolCharacter) {
+    suspend operator fun invoke(character: CharacterEntity) {
         repository.deleteCharacter(character)
     }
 }

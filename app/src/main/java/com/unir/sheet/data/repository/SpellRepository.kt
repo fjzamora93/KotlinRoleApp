@@ -57,10 +57,11 @@ class SpellRepository @Inject constructor(
         return Spell(
             id = apiResult["id"] as? String ?: "",
             name = apiResult["name"] as? String ?: "",
-            desc = apiResult["description"] as? String ?: "",
+            description = apiResult["description"] as? String ?: "",
             level = apiResult["level"] as? Int ?: 0,
-            targetCount = apiResult["cost"] as? Int ?: 0,
-            range = apiResult["dice"] as? Double ?: 0.0,
+            cost = apiResult["cost"] as? Int ?: 0,
+            dice = apiResult["dice"] as? Int ?: 0,
+            imgUrl = apiResult["imgUrl"] as? String ?: "",
         )
     }
 

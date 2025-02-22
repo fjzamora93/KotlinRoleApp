@@ -3,7 +3,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.Spell
 import com.unir.sheet.data.repository.CharacterRepositoryImpl
 import com.unir.sheet.data.repository.SpellRepository
@@ -27,7 +27,7 @@ class SpellViewModel @Inject constructor(
 
     // APlica un filtro de acuerdo al personaje
     fun getSpellsForCharacter(
-        currentCharacter: RolCharacter,
+        currentCharacter: CharacterEntity,
     ){
         viewModelScope.launch {
             val result = remoteSpellRepository.fetchSpellsByLevelAndRoleClass(currentCharacter.level, currentCharacter.rolClass.toString())

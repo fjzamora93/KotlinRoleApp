@@ -4,9 +4,22 @@ package com.unir.sheet.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.unir.sheet.data.model.RolClass.BARBARIAN
+import com.unir.sheet.data.model.RolClass.BARD
+import com.unir.sheet.data.model.RolClass.CLERIC
+import com.unir.sheet.data.model.RolClass.DRUID
+import com.unir.sheet.data.model.RolClass.EXPLORER
+import com.unir.sheet.data.model.RolClass.MONK
+import com.unir.sheet.data.model.RolClass.NULL
+import com.unir.sheet.data.model.RolClass.PALADIN
+import com.unir.sheet.data.model.RolClass.ROGUE
+import com.unir.sheet.data.model.RolClass.SORCERER
+import com.unir.sheet.data.model.RolClass.WARLOCK
+import com.unir.sheet.data.model.RolClass.WARRIOR
+import com.unir.sheet.data.model.RolClass.WIZARD
 
-@Entity(tableName = "rolCharacterTable")
-data class RolCharacter(
+@Entity(tableName = "character_entity_table")
+data class CharacterEntity(
     @PrimaryKey(autoGenerate = true) var id: Int? = null,
 
     // DATOS DE USUARIO Y SESIÓN
@@ -17,13 +30,12 @@ data class RolCharacter(
     // Datos del personaje
     var name: String = "",
     var description: String = "",
-    var rolClass: RolClass = RolClass.NULL,
+    var rolClass: RolClass = RolClass.WARRIOR,
     var gender: Gender = Gender.MALE,
     var race: Race = Race.HUMAN,
-    var height: Range = Range.MEDIO,
-    var weight: Range = Range.MEDIO,
-    var age: Int = 18,
-    var gold: Int = 0,
+    var size: Int = 11,
+    var age: Int = 23,
+    var gold: Int = 50,
 
 
     // Stats
@@ -37,12 +49,10 @@ data class RolCharacter(
     // Stats derivados (se calculan con la información anterior y NO tienen formulario propio)
     // DE la llamada de CHutlhú (dentro del screen, el sistema de Chutlhu y aquelarre se basan en d100, no en d20)
     var power : Int = 11,  // Cálculo de la séptima edición: 3d6 x 5
-    var size: Int = 11,
     var sanity : Int = 11,
     var currentSanity : Int = sanity,
 
     // Otros stats calculados
-    var speed: Range = Range.MEDIO, // calculada a partir de Strength, Size y Dexterity
     var hp: Int = 10, // calculada a partir de Constitution y size
     var currentHp: Int = hp,
     var ap: Int = 1, // calculada a partir de inteligencia, sabiduría o pow
@@ -155,10 +165,7 @@ data class RolCharacter(
 
 
     fun calculateHp(){
-        // PUntos de vida es la media entre tamaño y constitución
-        this.size = (this.height.value  + this.weight.value) * 2 - 2 // El tamaño toma un valor entre 2 y 18.
         this.hp = (this.size + this.constitution) / 2
-
         this.ap = this.intelligence + this.wisdom / 2
     }
 
@@ -174,38 +181,41 @@ enum class RolClass {
         fun getString(rolClass: RolClass): String {
             return when (rolClass) {
                 NULL -> "None"
-                WARRIOR -> "Warrior"
-                BARD -> "Bard"
-                ROGUE -> "Rogue"
-                EXPLORER -> "Explorer"
-                CLERIC -> "Cleric"
-                PALADIN -> "Paladin"
-                SORCERER -> "Sorcerer"
-                WIZARD -> "Wizard"
-                DRUID -> "Druid"
-                MONK -> "Monk"
-                WARLOCK -> "Warlock"
-                BARBARIAN -> "Barbarian"
+                WARRIOR -> "Guerrero"
+                BARD -> "Bardo"
+                ROGUE -> "Pícaro"
+                EXPLORER -> "Explorador"
+                CLERIC -> "Clérigo"
+                PALADIN -> "Paladín"
+                SORCERER -> "Hechicero"
+                WIZARD -> "Mago"
+                DRUID -> "Druida"
+                MONK -> "Monje"
+                WARLOCK -> "Brujo"
+                BARBARIAN -> "Bárbaro"
             }
         }
     }
 }
 
 enum class Race {
-    HUMAN, ELF, DWARF, TEFLIN, DRAGONBORN, ORC, OTHER
-}
+    HUMAN, ELF, DWARF, TEFLIN, DRAGONBORN, ORC, OTHER;
 
-enum class Range(val value: Int) {
-    MUY_ALTO(5),
-    ALTO(4),
-    MEDIO(3),
-    BAJO(2),
-    MUY_BAJO(1);
-
-    // Método opcional para convertir en cadena
-    override fun toString(): String {
-        return "$name (valor=$value)"
+    companion object {
+        fun getString(race: Race): String {
+            return when (race) {
+                HUMAN -> "Humano"
+                ELF -> "Elfo"
+                DWARF -> "Enano"
+                TEFLIN -> "Mediano"
+                DRAGONBORN -> "Dragonborn"
+                ORC -> "Orco"
+                OTHER -> "Otro"
+            }
+        }
     }
 }
+
+
 
 enum class Gender{MALE, FEMALE, NEUTRAL}

@@ -1,21 +1,31 @@
 package com.unir.sheet.domain.repository
 
 import com.unir.sheet.data.model.Item
-import com.unir.sheet.data.model.RolCharacter
 
 interface ItemRepository {
 
     // Obtener todos los ítems
-    suspend fun getAllItems(): List<Item>
+    suspend fun fetchItems(): Result<List<Item>>
 
-    // Obtener ítems por nombre
-    suspend fun getItemsByName(name: String): List<Item>
+    suspend fun getItemsByCharacterId(characterId: Int): Result<List<Item>>
 
-    // Obtener ítems por categoría
-    suspend fun getItemsByCategory(category: String): List<Item>
+    suspend fun getItemByCharacterIdAndItemId(characterId: Int, itemId: Int) : Result<Item>
 
-    // Obtener ítems por su valor en oro
-    suspend fun getItemsByGoldValue(goldValue: Int): List<Item>
+    // Eliminar un ítem de un personaje (lo que implica su destrucción)
+    suspend fun deleteItem(item: Item)
+
+    // Modificar un Item (como añadirlo a un personaje)
+    suspend fun insertOrUpdate(item: Item)
+
+//    // Obtener ítems por nombre
+//    suspend fun getItemsByName(name: String): List<Item>
+//
+//    // Obtener ítems por categoría
+//    suspend fun getItemsByCategory(category: String): List<Item>
+//
+//    // Obtener ítems por su valor en oro
+//    suspend fun getItemsByGoldValue(goldValue: Int): List<Item>
+    //     suspend fun getItemsByCustomFilter(filterJson: String): List<Item>
 
     /** TODO: Sin concretar el fitro, pero funciona así:
      *
@@ -28,11 +38,6 @@ interface ItemRepository {
      * """
      * val items = itemRepository.getItemsByCustomFilter(filterJson)
      */
-    suspend fun getItemsByCustomFilter(filterJson: String): List<Item>
 
-    // Eliminar un ítem de un personaje
-    suspend fun deleteItemFromCharacter(character: RolCharacter, item: Item)
 
-    // Añadir un ítem a un personaje
-    suspend fun addItemToCharacter(character: RolCharacter, item: Item)
 }

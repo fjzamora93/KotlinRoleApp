@@ -9,6 +9,8 @@ interface ApiService {
     @GET("items")
     suspend fun getItems(): Response<List<Map<String, Any>>>
 
+
+
     @GET("spells")
     suspend fun getSpells(): Response<List<Map<String, Any>>>
 

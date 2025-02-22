@@ -14,10 +14,9 @@ data class Spell(
     val id: String,
 
     var name: String = "",
-
-    var desc: String = "",
+    var description: String = "",
+    var dice: Int = 0,
     var level: Int = 0,
-    var targetCount: Int = 0,
-    var range: Double = 0.0,
-
+    var cost: Int = 0,
+    var imgUrl: String = "",
     )

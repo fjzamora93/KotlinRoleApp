@@ -3,7 +3,7 @@ package com.unir.sheet.data.repository
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.unir.sheet.data.local.database.CharacterDao
+import com.unir.sheet.data.local.dao.CharacterDao
 import com.unir.sheet.data.model.Skill
 import com.unir.sheet.domain.repository.SkillRepository
 import java.io.IOException

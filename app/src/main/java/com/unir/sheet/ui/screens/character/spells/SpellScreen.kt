@@ -86,7 +86,7 @@ fun SpellCard(spell: Spell, modifier: Modifier = Modifier) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Daño: ${spell.desc}",
+                text = "Daño: ${spell.description}",
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(

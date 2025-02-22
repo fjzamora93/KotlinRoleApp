@@ -3,22 +3,15 @@ package com.unir.sheet.ui.screens.character
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -26,19 +19,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.unir.sheet.data.model.Gender
 import com.unir.sheet.data.model.Race
-import com.unir.sheet.data.model.Range
-import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.RolClass
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
@@ -72,7 +63,7 @@ fun Body(
 
 @Composable
 fun InsertCharacterButton(
-    newCharacter: RolCharacter,
+    newCharacter: CharacterEntity,
     characterViewModel: CharacterViewModel = hiltViewModel(),
     onEditComplete: (Boolean) -> Unit = { }
 ) {
@@ -136,8 +127,8 @@ fun CharacterCreatorForm(
     var gender by remember { mutableStateOf(Gender.MALE) }
     var rolClass by remember { mutableStateOf(RolClass.WARRIOR) }
     var race by remember { mutableStateOf(Race.HUMAN) }
-    var size by remember { mutableStateOf(Range.MEDIO) }
-    var age by remember { mutableStateOf(18) }
+    var size by remember { mutableIntStateOf(11) }
+    var age by remember { mutableIntStateOf(18) }
 
     LaunchedEffect(editableCharacter) {
         if (isEditing && editableCharacter != null) {
@@ -146,7 +137,7 @@ fun CharacterCreatorForm(
             gender = editableCharacter!!.gender
             rolClass = editableCharacter!!.rolClass
             race = editableCharacter!!.race
-            size = editableCharacter!!.height
+            size = editableCharacter!!.size
             age = editableCharacter!!.age
         }
     }
@@ -187,12 +178,12 @@ fun CharacterCreatorForm(
                 })
         }
 
-        val characterToSave: RolCharacter
+        val characterToSave: CharacterEntity
 
         if (isEditing && editableCharacter != null) {
             characterToSave = editableCharacter!!.copy()
         } else {
-            characterToSave = RolCharacter()
+            characterToSave = CharacterEntity()
         }
         characterToSave.name = name
         characterToSave.rolClass = rolClass

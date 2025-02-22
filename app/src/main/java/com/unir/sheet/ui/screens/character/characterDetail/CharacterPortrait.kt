@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
-import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.ui.navigation.NavigationViewModel
@@ -25,7 +25,7 @@ fun CharacterPortrait(
     context: Context,
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
-    character: RolCharacter
+    character: CharacterEntity
 ) {
     val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
 

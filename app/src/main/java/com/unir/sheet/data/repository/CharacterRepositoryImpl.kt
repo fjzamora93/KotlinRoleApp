@@ -1,11 +1,8 @@
 package com.unir.sheet.data.repository
 
-import com.unir.sheet.data.local.database.CharacterDao
-import com.unir.sheet.data.local.database.ItemDao
-import com.unir.sheet.data.local.database.RolCharacterWithAllRelations
-import com.unir.sheet.data.model.CharacterItemCrossRef
-import com.unir.sheet.data.model.Item
-import com.unir.sheet.data.model.RolCharacter
+import com.unir.sheet.data.local.dao.CharacterDao
+import com.unir.sheet.data.local.dao.RolCharacterWithAllRelations
+import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.domain.repository.CharacterRepository
 import javax.inject.Inject
 
@@ -17,32 +14,31 @@ import javax.inject.Inject
  * */
 class CharacterRepositoryImpl @Inject constructor(
     private val characterDao: CharacterDao,
-    private val itemDao: ItemDao
 ) : CharacterRepository {
 
-    override suspend fun getAllCharacters(): List<RolCharacter> {
+    override suspend fun getAllCharacters(): List<CharacterEntity> {
         return characterDao.getAllCharacters()
     }
 
     /** TODO : Pendiente de implementar en el dao la búsqueda por usuario */
-    override suspend fun getCharacterByUserId(userId: Int): List<RolCharacter> {
+    override suspend fun getCharacterByUserId(userId: Int): List<CharacterEntity> {
         return characterDao.getAllCharacters()
     }
 
-    override suspend fun getCharacterById(id: Int): RolCharacter? {
+    override suspend fun getCharacterById(id: Int): CharacterEntity? {
         return characterDao.getCharacter(id)
     }
 
-    override suspend fun insertCharacter(character: RolCharacter) {
+    override suspend fun insertCharacter(character: CharacterEntity) {
         characterDao.insertCharacter(character)
     }
 
-    override suspend fun updateCharacter(character: RolCharacter) {
+    override suspend fun updateCharacter(character: CharacterEntity) {
         character.calculateHp()
         characterDao.updateCharacter(character)
     }
 
-    override suspend fun deleteCharacter(character: RolCharacter) {
+    override suspend fun deleteCharacter(character: CharacterEntity) {
         characterDao.deleteCharacter(character)
     }
 
@@ -51,15 +47,6 @@ class CharacterRepositoryImpl @Inject constructor(
         return characterDao.getCharacterWithRelations(characterId)
     }
 
-    override suspend fun addItemToCharacter(character: RolCharacter, item: Item) {
-        itemDao.insertItem(item) // ANtes de insertar la relación, nos aseguramos de que el item, que viene de la API, está dentro de SQLITE
-        val characterCrossRef = CharacterItemCrossRef(character.id!!, item.id)
-        characterDao.addItemToCharacter(characterCrossRef)
-    }
 
-    override suspend fun removeItemFromCharacter(character: RolCharacter, item: Item) {
-        val characterCrossRef = CharacterItemCrossRef(character.id!!, item.id)
-        characterDao.removeItemFromCharacter(characterCrossRef)
-    }
 
 }
