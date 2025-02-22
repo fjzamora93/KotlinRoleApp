@@ -2,6 +2,7 @@ package com.unir.sheet.data.repository
 
 import com.unir.sheet.data.local.dao.ItemDao
 import com.unir.sheet.data.model.Item
+import com.unir.sheet.data.remote.model.ApiItem
 import com.unir.sheet.data.remote.service.ApiService
 import com.unir.sheet.domain.repository.ItemRepository
 import javax.inject.Inject
@@ -16,13 +17,12 @@ class ItemRepositoryImpl @Inject constructor(
         return try {
             val response = apiService.getItems()
             if (response.isSuccessful) {
-                val itemResponse: List<Map<String, Any>> = response.body() ?: emptyList()
-                println("Resultado dentro de la response: $itemResponse")
+                val apiItems: List<ApiItem> = response.body() ?: emptyList()
+                println("Resultado dentro de la response: $apiItems")
 
-                val itemList: List<Item> = itemResponse.mapNotNull { mapApiItemToLocal(it) }
+                val itemList: List<Item> = apiItems.map { it.toItem() }
                 Result.success(itemList)
             } else {
-                // Manejamos errores HTTP
                 Result.failure(Exception("Error en la respuesta: ${response.code()}"))
             }
         } catch (e: Exception) {
@@ -30,6 +30,7 @@ class ItemRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
 
     override suspend fun getItemsByCharacterId(characterId: Int): Result<List<Item>> {
         return try {
@@ -79,25 +80,5 @@ class ItemRepositoryImpl @Inject constructor(
     }
 
 
-
-    // Función para mapear el modelo de la API (ApiItemResponse) al modelo local (Item)
-    private fun mapApiItemToLocal(apiItem: Map<String, Any>): Item {
-        return Item(
-            id = (apiItem["id"] as? Double)?.toInt() ?: 0,  // Convertir Double a Int
-            characterId = (apiItem["characterId"] as? Double)?.toInt(),  // Convertir Double a Int si está presente
-            gameSession = (apiItem["gameSession"] as? Double)?.toInt(),  // Convertir Double a Int si está presente
-
-            name = apiItem["name"] as? String ?: "",
-            description = apiItem["description"] as? String ?: "",
-            imgUrl = apiItem["imgUrl"] as? String ?: "",
-            goldValue = (apiItem["goldValue"] as? Double)?.toInt() ?: 50,  // Convertir Double a Int
-            category = apiItem["category"] as? String ?: "",
-            dice = (apiItem["dice"] as? Double)?.toInt() ?: 1,  // Convertir Double a Int
-
-            quantity = (apiItem["quantity"] as? Double)?.toInt() ?: 1,  // Convertir Double a Int
-            statValue = (apiItem["statValue"] as? Double)?.toInt() ?: 0,  // Convertir Double a Int
-            statType = apiItem["statType"] as? String ?: ""
-        )
-    }
 
 }

@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 data class Spell(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
-    val id: String,
+    val id: Int,
 
     var name: String = "",
     var description: String = "",
