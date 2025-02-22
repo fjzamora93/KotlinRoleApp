@@ -6,7 +6,7 @@ import com.unir.sheet.data.model.Item
 import com.unir.sheet.data.model.Race
 import com.unir.sheet.data.model.RolClass
 
-data class CharacterApiModel(
+data class ApiCharacter(
     val id: Int,
     val name: String,
     val description: String,

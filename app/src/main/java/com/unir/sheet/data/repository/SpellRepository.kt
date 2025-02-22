@@ -55,7 +55,7 @@ class SpellRepository @Inject constructor(
 
     private fun mapApiResultToLocal(apiResult: Map<String, Any>) : Spell {
         return Spell(
-            id = apiResult["id"] as? String ?: "",
+            id = apiResult["id"] as? Int ?: 0,
             name = apiResult["name"] as? String ?: "",
             description = apiResult["description"] as? String ?: "",
             level = apiResult["level"] as? Int ?: 0,
