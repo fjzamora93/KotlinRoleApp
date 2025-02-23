@@ -21,8 +21,6 @@ class SpellViewModel @Inject constructor(
     private val _spellList = MutableLiveData<List<Spell>>()
     val spellList: LiveData<List<Spell>> get() = _spellList
 
-    private val _spellDetail = MutableLiveData<Spell>()
-    val spellDetail : LiveData<Spell> get() = _spellDetail
 
 
     // APlica un filtro de acuerdo al personaje
@@ -42,14 +40,6 @@ class SpellViewModel @Inject constructor(
         }
     }
 
-    // Lanza una petición a la API para obtener los detalles del hechizo en cuestión
-    fun getSpellDetail(
-        spell: Spell
-    ){
-        viewModelScope.launch {
-            val result = remoteSpellRepository.fetchSpells(filter = "")
-        }
-    }
 
 
 

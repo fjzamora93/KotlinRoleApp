@@ -16,6 +16,6 @@ class FetchItemsUseCase @Inject constructor(
     private val repository: ItemRepository
 ) {
     suspend operator fun invoke(): Result<List<Item>> {
-        return repository.fetchItems()
+        return repository.getAllItems()
     }
 }

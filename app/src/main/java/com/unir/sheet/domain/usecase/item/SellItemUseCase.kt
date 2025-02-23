@@ -10,28 +10,27 @@ class SellItemUseCase @Inject constructor(
     private val characterRepository: CharacterRepository,
     private val itemRepository: ItemRepository
 ) {
-    suspend operator fun invoke(character: CharacterEntity, item: Item): Boolean {
+    suspend operator fun invoke(character: CharacterEntity, item: Item): Result<Unit> {
+        return try {
+            if (item.quantity <= 0) {
+                return Result.failure(Exception("NO tienes el objeto que quieres vender"))
+            }
+            val updatedItem = item.copy(quantity = item.quantity - 1)
 
-        // Vender el ítem si ya lo tiene. Disminuir la cantidad si ya lo tiene y es superior a 0, aumentar el oro en el personaje.
-        val existingItemResult = itemRepository.getItemByCharacterIdAndItemId(character.id!!, item.id!!)
-        val updatedItem = existingItemResult.fold(
-            onSuccess = { existingItem ->
-                if (existingItem.quantity <= 0) return false
-                existingItem.copy(quantity = existingItem.quantity - 1)
-            },
-            onFailure = { return false }
-        )
+            // Actualizar el oro del personaje
+            val updatedCharacter = character.copy(gold = character.gold + item.goldValue)
+            characterRepository.updateCharacter(updatedCharacter)
 
-        // Actualizar el oro del personaje
-        val updatedCharacter = character.copy(gold = character.gold + item.goldValue)
-        characterRepository.updateCharacter(updatedCharacter)
+            val itemUpdateResult = if (updatedItem.quantity <= 0) {
+                itemRepository.deleteItem(updatedItem)
+            } else {
+                itemRepository.insertOrUpdate(updatedItem)
+            }
 
-        if (updatedItem.quantity <= 0) {
-            itemRepository.deleteItem(updatedItem)
-        } else {
-            itemRepository.insertOrUpdate(updatedItem)
+            if (itemUpdateResult.isFailure) return itemUpdateResult
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
-
-        return true
     }
 }

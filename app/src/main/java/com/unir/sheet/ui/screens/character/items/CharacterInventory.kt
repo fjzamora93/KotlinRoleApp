@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -60,11 +61,13 @@ fun CharacterInventoryBody(
 ) {
     val currentCharacter by characterViewModel.selectedCharacter.observeAsState()
     val inventoryItems by itemViewModel.itemList.observeAsState()
-    val isLoading by itemViewModel.loadingState.observeAsState(false) // Asumiendo que tienes un estado de carga
+    val isLoading by itemViewModel.loadingState.observeAsState(false)
 
-
-    itemViewModel.getItemsByCharacterId(currentCharacter!!.id!!)
-
+    LaunchedEffect(currentCharacter?.id) {
+        currentCharacter?.id?.let { id ->
+            itemViewModel.getItemsByCharacterId(id)
+        }
+    }
 
     // Mostrar mensajes de carga o error
     if (isLoading) {
@@ -127,7 +130,7 @@ fun InventoryItemCard(
             Button(onClick = {
                 val currentCharacter = characterViewModel.selectedCharacter.value
                 if (currentCharacter != null) {
-                    itemViewModel.removeItemFromCharacter(currentCharacter, item)
+                    itemViewModel.removeItemFromCharacter(item)
                 }
             }) {
                 Text(text = "consumir")

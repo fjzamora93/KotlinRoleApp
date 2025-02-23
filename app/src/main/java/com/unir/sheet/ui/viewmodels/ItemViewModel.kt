@@ -19,9 +19,6 @@ class ItemViewModel @Inject constructor(
     private val _itemList = MutableLiveData<List<Item>>()
     val itemList: LiveData<List<Item>> get() = _itemList
 
-    private val _itemDetail = MutableLiveData<Item?>()
-    val itemDetail: LiveData<Item?> = _itemDetail
-
     private val _loadingState = MutableLiveData<Boolean>()
     val loadingState: LiveData<Boolean> get() = _loadingState
 
@@ -47,17 +44,26 @@ class ItemViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             println("AÑADIENDO ${currentItem.name} AL PERSONAJE: ${currentCharacter.name}")
-            itemUseCases.addItemToCharacter(currentCharacter, currentItem)
+            val result = itemUseCases.addItemToCharacter(currentCharacter, currentItem)
+            result.onSuccess {
+                println("El objeto se ha añadido correctamente")
+            }.onFailure { error ->
+                println("Error al añadir el objeto: ${error.message}")
+            }
         }
     }
 
     fun removeItemFromCharacter(
-        currentCharacter: CharacterEntity,
         currentItem: Item,
     ){
         viewModelScope.launch {
-            itemUseCases.destroyItem(currentCharacter, currentItem)
-            _itemList.value = _itemList.value?.filterNot { it == currentItem }
+            val result = itemUseCases.destroyItem(currentItem)
+            result.onSuccess {
+                println("El objeto se ha eliminado correctamente")
+                _itemList.value = _itemList.value?.filterNot { it == currentItem }
+            }.onFailure { error ->
+                println("Error al eliminar el objeto: ${error.message}")
+            }
         }
     }
 
@@ -66,8 +72,14 @@ class ItemViewModel @Inject constructor(
         currentItem: Item,
     ){
         viewModelScope.launch {
-            itemUseCases.sellItem(currentCharacter, currentItem)
-            _itemList.value = _itemList.value?.filterNot { it == currentItem }
+            val result =   itemUseCases.sellItem(currentCharacter, currentItem)
+            result.onSuccess {
+                println("El objeto se vendió correctamente")
+                _itemList.value = _itemList.value?.filterNot { it == currentItem }
+
+            }.onFailure { error ->
+                println("Error al vender el objeto: ${error.message}")
+            }
         }
     }
 

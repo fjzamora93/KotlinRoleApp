@@ -17,7 +17,10 @@ data class ApiItem(
     val statValue: Int,
     val statType: String
 ){
-    fun toItem(): Item {
+    /**
+     * MAPEO INCOMPLETO, AÚN NO ASIGNA NI EL ID DEL PERSONAJE NI LA SESIÓN (CORREGIR EN LA API)
+     * */
+    fun toItemEntity(): Item {
         return Item(
             id = this.id ?: 0,
             characterId = this.characterId,

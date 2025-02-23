@@ -23,19 +23,6 @@ interface ApiService {
     @GET("items")
     suspend fun getAllItems(): Response<List<ApiItem>>
 
-    // AÑADIR ITEM A UN PERSONAJE
-    @POST("items/item")
-    suspend fun addItemToCharacter(
-        @Query("characterId") characterId: Long,
-        @Query("itemId") itemId: Long
-    ): Response<ApiCharacter>
-
-    // ELIMINAR ITEM DE UN PERSONAJE
-    @DELETE("items/item")
-    suspend fun deleteItemFromCharacter(
-        @Query("characterId") characterId: Long,
-        @Query("itemId") itemId: Long
-    ): Response<ApiCharacter>
 
     // FILTRO COMBINADO
     @GET("items/filter")

@@ -10,16 +10,19 @@ data class ApiSpell(
     val level: Int,
     val cost: Int,
     val imgUrl: String?
-)
+){
+    fun toSpellEntity(): Spell {
+        return Spell(
+            id = this.id,
+            name = this.name,
+            description = this.description,
+            dice = this.dice,
+            level = this.level,
+            cost = this.cost,
+            imgUrl = this.imgUrl ?: ""
+        )
+    }
 
-fun ApiSpell.toSpellEntity(): Spell {
-    return Spell(
-        id = this.id,
-        name = this.name,
-        description = this.description,
-        dice = this.dice,
-        level = this.level,
-        cost = this.cost,
-        imgUrl = this.imgUrl ?: ""
-    )
+
 }
+

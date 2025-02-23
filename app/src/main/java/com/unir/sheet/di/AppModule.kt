@@ -106,11 +106,9 @@ object  AppModule {
         return ItemUseCases(
             fetchItems = FetchItemsUseCase(itemRepository),
             getItemsByCharacterId = GetItemsByCharacterId(itemRepository),
-            addItemToCharacter = AddItemToCharacterUseCase(characterRepository, itemRepository),
             sellItem = SellItemUseCase(characterRepository, itemRepository),
-            destroyItem = DestroyItemUseCase(characterRepository, itemRepository),
-
-
+            destroyItem = DestroyItemUseCase(itemRepository),
+            addItemToCharacter = AddItemToCharacterUseCase(characterRepository, itemRepository)
         )
     }
 

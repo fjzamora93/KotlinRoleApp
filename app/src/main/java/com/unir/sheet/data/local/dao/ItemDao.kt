@@ -9,18 +9,11 @@ import com.unir.sheet.data.model.Item
 
 @Dao
 interface ItemDao {
-    @Query("SELECT * FROM itemTable")
-    suspend fun getItemList(): List<Item>
+
 
     @Query("SELECT * FROM itemTable WHERE characterId = :characterId")
-    suspend fun getItemByCharacterId(characterId: Int): List<Item>
+    suspend fun getItemsByCharacterId(characterId: Int): List<Item>
 
-
-    @Query("SELECT * FROM itemTable WHERE characterId = :characterId AND id = :itemId")
-    suspend fun getItemByCharacterIdAndItemId(characterId: Int, itemId: Int): Item?
-
-    @Query("SELECT * FROM itemTable WHERE id = :itemId")
-    suspend fun getItemById(itemId: Int): Item?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(item: Item)
