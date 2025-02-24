@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 data class SkillUseCases @Inject constructor(
     val getAllSkills: GetAllSkillsUseCase,
-    val addSkillToCharacter: AddSkillToCharacterUseCase,
+    val addDefaultSkills: AddDefaultSkills,
     val deleteSkillFromCharacter: DeleteSkillFromCharacterUseCase,
     val getSkillsFromCharacter: GetSkillsFromCharacterUseCase
 )

@@ -24,7 +24,7 @@ import com.unir.sheet.domain.usecase.item.FetchItemsUseCase
 import com.unir.sheet.domain.usecase.item.GetItemsByCharacterId
 import com.unir.sheet.domain.usecase.item.ItemUseCases
 import com.unir.sheet.domain.usecase.item.SellItemUseCase
-import com.unir.sheet.domain.usecase.skill.AddSkillToCharacterUseCase
+import com.unir.sheet.domain.usecase.skill.AddDefaultSkills
 import com.unir.sheet.domain.usecase.skill.DeleteSkillFromCharacterUseCase
 import com.unir.sheet.domain.usecase.skill.GetAllSkillsUseCase
 import com.unir.sheet.domain.usecase.skill.GetSkillsFromCharacterUseCase
@@ -39,10 +39,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object  AppModule {
-
-
-
-
 
     @Provides
     @Singleton
@@ -99,16 +95,20 @@ object  AppModule {
     // Proveer el CharacterUseCases
     @Provides
     @Singleton
-    fun provideCharacterUseCases(characterRepository: CharacterRepository): CharacterUseCases {
+    fun provideCharacterUseCases(
+        characterRepository: CharacterRepository,
+        addDefaultSkills: AddDefaultSkills // Inyectas AddDefaultSkills
+    ): CharacterUseCases {
         return CharacterUseCases(
             getAllCharacters = GetAllCharactersUseCase(characterRepository),
             getCharacterByUserId = GetCharacterByUserIdUseCase(characterRepository),
             getCharacterById = GetCharacterByIdUseCase(characterRepository),
             insertCharacter = InsertCharacterUseCase(characterRepository),
-            updateCharacter = UpdateCharacterUseCase(characterRepository),
-            deleteCharacter = DeleteCharacterUseCase(characterRepository),
+            updateCharacter = UpdateCharacterUseCase(characterRepository, addDefaultSkills), // Inyectas AddDefaultSkills aquí
+            deleteCharacter = DeleteCharacterUseCase(characterRepository)
         )
     }
+
 
     @Provides
     @Singleton
@@ -131,7 +131,7 @@ object  AppModule {
     fun provideSkillUseCases(repository: SkillRepositoryImpl): SkillUseCases {
         return SkillUseCases(
             getAllSkills = GetAllSkillsUseCase(repository),
-            addSkillToCharacter = AddSkillToCharacterUseCase(repository),
+            addDefaultSkills = AddDefaultSkills(repository),
             deleteSkillFromCharacter = DeleteSkillFromCharacterUseCase(repository),
             getSkillsFromCharacter = GetSkillsFromCharacterUseCase(repository)
         )

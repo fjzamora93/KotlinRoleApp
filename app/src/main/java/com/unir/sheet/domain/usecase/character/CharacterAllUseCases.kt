@@ -3,6 +3,9 @@ package com.unir.sheet.domain.usecase.character
 import com.unir.sheet.data.local.dao.RolCharacterWithAllRelations
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.domain.repository.CharacterRepository
+import com.unir.sheet.domain.usecase.skill.AddDefaultSkills
+import com.unir.sheet.domain.usecase.skill.GetAllSkillsUseCase
+import com.unir.sheet.domain.usecase.skill.SkillUseCases
 import javax.inject.Inject
 
 // Obtener todos los personajes
@@ -61,12 +64,20 @@ class InsertCharacterUseCase @Inject constructor(
 
 // Actualizar personaje
 class UpdateCharacterUseCase @Inject constructor(
-    private val repository: CharacterRepository
+    private val repository: CharacterRepository,
+    private val addDefaultSkills: AddDefaultSkills
 ) {
+
     suspend operator fun invoke(character: CharacterEntity): Result<Unit> {
         val result = repository.saveCharacter(character)
         return if (result.isSuccess) {
-            Result.success(Unit) // Indicar que la actualización fue exitosa
+            if (character.id == null) {
+                result.onSuccess {
+                        newCharacter -> addDefaultSkills(newCharacter)
+                    println("INsertando habilidades")
+                }
+            }
+            Result.success(Unit)
         } else {
             Result.failure(result.exceptionOrNull() ?: Exception("Error al actualizar el personaje"))
         }

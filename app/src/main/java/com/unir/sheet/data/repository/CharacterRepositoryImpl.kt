@@ -95,8 +95,20 @@ class CharacterRepositoryImpl @Inject constructor(
 
     /** MÉTODO SOLAMENTE LOCAL (ELIMINAR EN CUANTO FUNCIONE EL GET CHARACTER BY USER ID*/
     override suspend fun getAllCharacters(): Result<List<CharacterEntity>> {
-        return try{
-            Result.success(characterDao.getAllCharacters())
+        return try {
+            val result = apiService.getCharactersByUserId(6)
+            if (result.isSuccessful) {
+                val characters = result.body()
+                if (characters != null) {
+                    val charactersEntities = characters.map( { it.toCharacterEntity() } )
+                    Result.success(charactersEntities)
+                } else {
+                    Result.failure(Exception("No se encontraron personajes para el usuario"))
+                }
+            } else {
+                Result.failure(Exception("Error en la respuesta del servidor"))
+            }
+
         } catch (e: Exception) {
             Result.failure(e)
         }

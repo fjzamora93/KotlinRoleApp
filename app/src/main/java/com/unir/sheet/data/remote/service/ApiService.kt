@@ -92,6 +92,12 @@ interface ApiService {
         @Query("skillId") skillId: Long
     ): Response<ApiCharacterResponse>
 
+    @POST("skills/addDefault/{characterId}")
+    suspend fun addDefaultSkills(
+        @Path("characterId") characterId: Int,
+        @Body skillIds: List<Int>
+    ): Response<ApiCharacterResponse>
+
     // ELIMINAR HABILIDAD DE UN PERSONAJE
     @DELETE("skills")
     suspend fun deleteSkillFromCharacter(

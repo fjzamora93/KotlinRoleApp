@@ -44,7 +44,19 @@ class SkillRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addDefaultSkills(characterId: Int, skillIds: List<Int>): Result<Unit> {
+        return try {
+            val response = apiService.addDefaultSkills(characterId, skillIds)
 
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Error al agregar habilidades"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 
     override suspend fun addSkillToCharacter(characterId: Int, skillId: Int): Result<Unit> {

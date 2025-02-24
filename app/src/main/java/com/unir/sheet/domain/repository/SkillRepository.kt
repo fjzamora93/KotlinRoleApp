@@ -9,4 +9,5 @@ interface SkillRepository {
     suspend fun addSkillToCharacter(characterId: Int, skillId: Int) : Result<Unit>
     suspend fun deleteSkillFromCharacter(characterId: Int, skillId: Int) : Result<Unit>
     suspend fun getSkillsFromCharacter(characterId: Int) : Result<List<Skill>>
+    suspend fun addDefaultSkills(characterId: Int, skillIds: List<Int>): Result<Unit>
 }
