@@ -2,7 +2,6 @@ package com.unir.sheet.data.repository
 
 import com.unir.sheet.data.local.dao.ItemDao
 import com.unir.sheet.data.model.Item
-import com.unir.sheet.data.remote.model.ApiCharacter
 import com.unir.sheet.data.remote.model.ApiItem
 import com.unir.sheet.data.remote.service.ApiService
 import com.unir.sheet.domain.repository.ItemRepository

@@ -5,6 +5,8 @@ import com.unir.sheet.data.model.Skill
 
 
 interface SkillRepository {
-    suspend fun readFromJson(context: Context) : List<Skill>
-    suspend fun fetchSkillsFromCharacter(characterId: Int, skillId: Int) : List<Skill>
+    suspend fun getAllSkills() : Result<List<Skill>>
+    suspend fun addSkillToCharacter(characterId: Int, skillId: Int) : Result<Unit>
+    suspend fun deleteSkillFromCharacter(characterId: Int, skillId: Int) : Result<Unit>
+    suspend fun getSkillsFromCharacter(characterId: Int) : Result<List<Skill>>
 }

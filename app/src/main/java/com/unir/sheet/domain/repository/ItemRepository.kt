@@ -1,7 +1,6 @@
 package com.unir.sheet.domain.repository
 
 import com.unir.sheet.data.model.Item
-import com.unir.sheet.data.remote.model.ApiCharacter
 
 interface ItemRepository {
 

@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetAllCharactersUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(): List<CharacterEntity> {
+    suspend operator fun invoke(): Result<List<CharacterEntity>> {
         return repository.getAllCharacters()
     }
 }
@@ -18,55 +18,79 @@ class GetAllCharactersUseCase @Inject constructor(
 class GetCharacterByUserIdUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(userId: Int): List<CharacterEntity> {
-        return repository.getCharacterByUserId(userId)
+    suspend operator fun invoke(userId: Int): Result<List<CharacterEntity>> {
+        val result = repository.getCharacterByUserId(userId)
+        return if (result.isSuccess) {
+            Result.success(result.getOrNull() ?: emptyList())
+        } else {
+            Result.failure(result.exceptionOrNull() ?: Exception("Unknown error"))
+        }
     }
 }
+
 
 // Obtener personaje por ID
 class GetCharacterByIdUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(id: Int): CharacterEntity? {
-        return repository.getCharacterById(id)
+    suspend operator fun invoke(id: Int): Result<CharacterEntity?> {
+        val result = repository.getCharacterById(id)
+        return if (result.isSuccess) {
+            Result.success(result.getOrNull()) // Devolver el personaje o null si no se encuentra
+        } else {
+            Result.failure(result.exceptionOrNull() ?: Exception("Character not found"))
+        }
     }
 }
+
 
 // Insertar personaje
 class InsertCharacterUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(character: CharacterEntity) {
-        repository.insertCharacter(character)
+    suspend operator fun invoke(character: CharacterEntity): Result<CharacterEntity?> {
+        val result = repository.saveCharacter(character)
+        return if (result.isSuccess) {
+            Result.success(result.getOrNull()) // El personaje guardado
+        } else {
+            Result.failure(result.exceptionOrNull() ?: Exception("Error al guardar el personaje"))
+        }
     }
 }
+
 
 // Actualizar personaje
 class UpdateCharacterUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(character: CharacterEntity) {
-        repository.updateCharacter(character)
+    suspend operator fun invoke(character: CharacterEntity): Result<Unit> {
+        val result = repository.saveCharacter(character)
+        return if (result.isSuccess) {
+            Result.success(Unit) // Indicar que la actualización fue exitosa
+        } else {
+            Result.failure(result.exceptionOrNull() ?: Exception("Error al actualizar el personaje"))
+        }
     }
 }
+
 
 // Eliminar personaje
 class DeleteCharacterUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(character: CharacterEntity) {
-        repository.deleteCharacter(character)
+    suspend operator fun invoke(character: CharacterEntity): Result<Unit> {
+        val result = repository.deleteCharacter(character)
+        return if (result.isSuccess) {
+            Result.success(Unit) // Indicar que la eliminación fue exitosa
+        } else {
+            Result.failure(result.exceptionOrNull() ?: Exception("Error al eliminar el personaje"))
+        }
     }
 }
 
-// Obtener personaje con todas sus relaciones
-class GetCharacterWithRelationsUseCase @Inject constructor(
-    private val repository: CharacterRepository
-) {
-    suspend operator fun invoke(characterId: Int): RolCharacterWithAllRelations? {
-        return repository.getCharacterWithRelations(characterId)
-    }
-}
+
+
+
 
 
 

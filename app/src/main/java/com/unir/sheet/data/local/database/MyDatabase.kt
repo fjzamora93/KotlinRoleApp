@@ -8,6 +8,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.unir.sheet.data.local.dao.CharacterDao
 import com.unir.sheet.data.local.dao.ItemDao
+import com.unir.sheet.data.local.dao.SkillDao
 import com.unir.sheet.data.model.Item
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.Skill
@@ -23,10 +24,11 @@ import com.unir.sheet.data.model.Spell
     Spell::class,
     CharacterSpellCrossRef::class,
     CharacterSkillCrossRef::class,
-], version = 21)
+], version = 22)
 abstract class MyDatabase: RoomDatabase() {
     abstract fun getItemDao(): ItemDao
     abstract fun characterDao(): CharacterDao
+    abstract fun getSkillDao(): SkillDao
 
     companion object {
 
@@ -39,9 +41,8 @@ abstract class MyDatabase: RoomDatabase() {
                     MyDatabase::class.java,
                     "my_database"
                 )
-                    //.addMigrations()
-                    .fallbackToDestructiveMigration() // DESTRUYE LA BASE DE DATOS ANTERIOR AL MIGRAR
-                    .build() // Remove addMigrations() if present
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE= instance
                 instance
             }

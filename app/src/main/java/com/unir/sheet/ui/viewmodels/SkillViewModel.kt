@@ -4,9 +4,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.Skill
 import com.unir.sheet.data.repository.CharacterRepositoryImpl
-import com.unir.sheet.data.repository.SkillRepository
+import com.unir.sheet.domain.usecase.skill.SkillUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -15,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SkillViewModel  @Inject constructor(
-    private val characterRepository: CharacterRepositoryImpl,
-    private val skillRepository: SkillRepository,
+    private val skillUseCases: SkillUseCases,
     @ApplicationContext private val context: Context
 ) :  ViewModel() {
 
@@ -26,18 +26,27 @@ class SkillViewModel  @Inject constructor(
 
     fun getAllSKills(){
         viewModelScope.launch {
-            _skillList.value = skillRepository.readFromJson(context)
-            println("Skills: ${skillList.value}")
+            val result = skillUseCases.getAllSkills()
+            result.onSuccess {
+                _skillList.value = it
+                println("Skills: ${skillList.value}")
+            }.onFailure {
+                println("Error al obtener las skills")
+            }
         }
     }
 
     fun getSkillsFromCharacter(
-        characterId: Int,
-        skillId: Int,
+        character: CharacterEntity,
     ){
         viewModelScope.launch {
-            skillRepository.fetchSkillsFromCharacter(characterId, skillId)
-            println("Skills: ${skillList.value}")
+            val result = skillUseCases.getSkillsFromCharacter(character.id!!)
+            result.onSuccess {
+                _skillList.value = it
+                println("Skills: ${skillList.value}")
+            }.onFailure {
+                println("Error al obtener las skills")
+            }
         }
     }
 

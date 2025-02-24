@@ -19,7 +19,7 @@ class AddItemToCharacterUseCase(
             val updatedCharacter = character.copy(gold = character.gold - item.goldValue)
 
             // Actualizamos personaje e ítem asegurándonos de que ambas operaciones sean exitosas
-            val characterUpdateResult = characterRepository.updateCharacter(updatedCharacter)
+            val characterUpdateResult = characterRepository.saveCharacter(updatedCharacter)
             val itemUpdateResult = itemRepository.insertOrUpdate(updatedItem)
 
             if (itemUpdateResult.isFailure) return itemUpdateResult

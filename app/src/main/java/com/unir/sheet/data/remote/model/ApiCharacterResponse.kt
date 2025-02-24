@@ -2,11 +2,10 @@ package com.unir.sheet.data.remote.model
 
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.Gender
-import com.unir.sheet.data.model.Item
 import com.unir.sheet.data.model.Race
 import com.unir.sheet.data.model.RolClass
 
-data class ApiCharacter(
+data class ApiCharacterResponse(
     val id: Int,
     val name: String,
     val description: String,
@@ -54,4 +53,6 @@ data class ApiCharacter(
             level = 1
         )
     }
+
+
 }

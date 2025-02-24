@@ -19,7 +19,7 @@ class SellItemUseCase @Inject constructor(
 
             // Actualizar el oro del personaje
             val updatedCharacter = character.copy(gold = character.gold + item.goldValue)
-            characterRepository.updateCharacter(updatedCharacter)
+            characterRepository.saveCharacter(updatedCharacter)
 
             val itemUpdateResult = if (updatedItem.quantity <= 0) {
                 itemRepository.deleteItem(updatedItem)

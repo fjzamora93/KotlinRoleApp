@@ -1,6 +1,8 @@
 package com.unir.sheet.data.remote.service
 
-import com.unir.sheet.data.remote.model.ApiCharacter
+import com.unir.sheet.data.model.CharacterEntity
+import com.unir.sheet.data.remote.model.ApiCharacterRequest
+import com.unir.sheet.data.remote.model.ApiCharacterResponse
 import com.unir.sheet.data.remote.model.ApiGameSession
 import com.unir.sheet.data.remote.model.ApiItem
 import com.unir.sheet.data.remote.model.ApiSkill
@@ -48,32 +50,29 @@ interface ApiService {
 
 
     // CHARACTER
-    // OBTENER TODOS LOS PERSONAJES
-    @GET("characters")
-    suspend fun getAllCharacters(): Response<List<ApiCharacter>>
 
     // OBTENER LOS PERSONAJES DE UN USUARIO
     @GET("characters/user/{userId}")
-    suspend fun getCharactersByUser(
-        @Path("userId") userId: Long
-    ):  Response<List<ApiCharacter>>
+    suspend fun getCharactersByUserId(
+        @Path("userId") userId: Int
+    ):  Response<List<ApiCharacterResponse>>
 
     // OBTENER UN PERSONAJE POR SU ID
     @GET("characters/{id}")
     suspend fun getCharacterById(
-        @Path("id") id: Long
-    ):  Response<List<ApiCharacter>>
+        @Path("id") id: Int
+    ):  Response<ApiCharacterResponse>
 
     // CREAR O ACTUALIZAR UN PERSONAJE
     @POST("characters")
-    suspend fun postCharacter(
-        @Body character: ApiCharacter
-    ):  Response<List<ApiCharacter>>
+    suspend fun saveCharacter(
+        @Body character: ApiCharacterRequest
+    ):  Response<ApiCharacterResponse>
 
     // ELIMINAR UN PERSONAJE POR ID
     @DELETE("characters/{id}")
     suspend fun deleteCharacter(
-        @Path("id") id: Long
+        @Path("id") id: Int
     ): Response<Void>
 
 
@@ -83,19 +82,22 @@ interface ApiService {
     @GET("skills")
     suspend fun getAllSkills(): Response<List<ApiSkill>>
 
+    @GET("skills/{characterId}")
+    suspend fun getSkillsByCharacterId(@Path("id") id: Int): Response<List<ApiSkill>>
+
     // AÑADIR HABILIDAD A UN PERSONAJE
     @POST("skills")
     suspend fun addSkillToCharacter(
         @Query("characterId") characterId: Long,
         @Query("skillId") skillId: Long
-    ): Response<ApiCharacter>
+    ): Response<ApiCharacterResponse>
 
     // ELIMINAR HABILIDAD DE UN PERSONAJE
     @DELETE("skills")
     suspend fun deleteSkillFromCharacter(
         @Query("characterId") characterId: Long,
         @Query("skillId") skillId: Long
-    ): Response<ApiCharacter>
+    ): Response<ApiCharacterResponse>
 
 
 
@@ -144,7 +146,7 @@ interface ApiService {
     suspend fun addCharacterToGameSession(
         @Query("characterId") characterId: Long,
         @Query("gameSessionId") gameSessionId: Long
-    ): Response<ApiCharacter>
+    ): Response<ApiCharacterResponse>
 
     // AÑADIR OBJETO A LA SESIÓN
     @POST("gamesession/add-item")

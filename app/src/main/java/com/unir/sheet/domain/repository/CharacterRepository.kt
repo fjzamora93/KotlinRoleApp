@@ -4,14 +4,11 @@ import com.unir.sheet.data.local.dao.RolCharacterWithAllRelations
 import com.unir.sheet.data.model.CharacterEntity
 
 interface CharacterRepository {
-    suspend fun getAllCharacters(): List<CharacterEntity>
-    suspend fun getCharacterByUserId(userId: Int): List<CharacterEntity>
-    suspend fun getCharacterById(id: Int): CharacterEntity?
-    suspend fun insertCharacter(character: CharacterEntity)
-    suspend fun updateCharacter(character: CharacterEntity)
-    suspend fun deleteCharacter(character: CharacterEntity)
+    suspend fun getCharacterByUserId(userId: Int): Result<List<CharacterEntity>>
+    suspend fun getCharacterById(id: Int):  Result<CharacterEntity?>
+    suspend fun saveCharacter(character: CharacterEntity): Result<CharacterEntity>
+    suspend fun deleteCharacter(character: CharacterEntity): Result<Unit>
 
-    // RELACIONES CROSS-REF
-    suspend fun getCharacterWithRelations(characterId: Int): RolCharacterWithAllRelations?
-
+    // ELIMINAR EN CUANTO TODOS LOS PERSONAJES TENGAN UN USER ID
+    suspend fun getAllCharacters(): Result<List<CharacterEntity>>
 }

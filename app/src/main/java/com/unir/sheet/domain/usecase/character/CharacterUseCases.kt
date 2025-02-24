@@ -8,5 +8,4 @@ data class CharacterUseCases(
     val insertCharacter: InsertCharacterUseCase,
     val updateCharacter: UpdateCharacterUseCase,
     val deleteCharacter: DeleteCharacterUseCase,
-    val getCharacterWithRelations: GetCharacterWithRelationsUseCase,
 )

@@ -4,19 +4,7 @@ package com.unir.sheet.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.unir.sheet.data.model.RolClass.BARBARIAN
-import com.unir.sheet.data.model.RolClass.BARD
-import com.unir.sheet.data.model.RolClass.CLERIC
-import com.unir.sheet.data.model.RolClass.DRUID
-import com.unir.sheet.data.model.RolClass.EXPLORER
-import com.unir.sheet.data.model.RolClass.MONK
-import com.unir.sheet.data.model.RolClass.NULL
-import com.unir.sheet.data.model.RolClass.PALADIN
-import com.unir.sheet.data.model.RolClass.ROGUE
-import com.unir.sheet.data.model.RolClass.SORCERER
-import com.unir.sheet.data.model.RolClass.WARLOCK
-import com.unir.sheet.data.model.RolClass.WARRIOR
-import com.unir.sheet.data.model.RolClass.WIZARD
+import com.unir.sheet.data.remote.model.ApiCharacterRequest
 
 @Entity(tableName = "character_entity_table")
 data class CharacterEntity(
@@ -24,7 +12,7 @@ data class CharacterEntity(
 
     // DATOS DE USUARIO Y SESIÓN
     @ColumnInfo(name = "userId")
-    val userId: Int? = null,
+    val userId: Int? = 0,
     var gameSessionId: Int? = null,
 
     // Datos del personaje
@@ -60,6 +48,31 @@ data class CharacterEntity(
     var level: Int = 1,
 
     ){
+
+    fun toApiRequest(): ApiCharacterRequest {
+        return ApiCharacterRequest(
+            id = this.id ?: 0,
+            name = this.name,
+            description = this.description,
+            race = this.race.name,
+            gender = this.gender.name,
+            size = this.size,
+            age = this.age,
+            gold = this.gold,
+            strength = this.strength,
+            dexterity = this.dexterity,
+            constitution = this.constitution,
+            intelligence = this.intelligence,
+            wisdom = this.wisdom,
+            charisma = this.charisma,
+            imgUrl = null,
+            gameSessionId = this.gameSessionId,
+            userId = this.userId,
+            roleClass = this.rolClass.name,
+        )
+    }
+
+
 
     fun completeCharacter(){
         println("Procedemos a completar la ficha del personaje...")

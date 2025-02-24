@@ -12,8 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-
 @HiltViewModel
 class CharacterViewModel @Inject constructor(
     private val characterUseCases: CharacterUseCases,
@@ -23,10 +21,17 @@ class CharacterViewModel @Inject constructor(
     private val _characters = MutableStateFlow<List<CharacterEntity>>(emptyList())
     val characters: StateFlow<List<CharacterEntity>> get() = _characters.asStateFlow()
 
+    // Para manejar errores
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> get() = _errorMessage
+
+    // Para mostrar un loading state
+    private val _loadingState = MutableStateFlow(false)
+    val loadingState: StateFlow<Boolean> get() = _loadingState
+
     // Generalmente usaríamos State para ambos, pero en este caso LiveData funciona mejor (con State no va a cambiar bien)
     private val _selectedCharacter = MutableLiveData<CharacterEntity?>()
     val selectedCharacter: LiveData<CharacterEntity?> = _selectedCharacter
-
 
     init {
         getAllCharacters()
@@ -34,63 +39,86 @@ class CharacterViewModel @Inject constructor(
 
     // Función para obtener un personaje por ID
     fun getCharacterById(characterId: Int) {
+        _loadingState.value = true
         viewModelScope.launch {
-            val rolCharacter = characterUseCases.getCharacterById(characterId)
-
-            // Aquí puedes actualizar el UI con el personaje encontrado
-            _selectedCharacter.value = rolCharacter
-            println("Personaje: ${_selectedCharacter.value?.name} ")
+            val result = characterUseCases.getCharacterById(characterId)
+            result.onSuccess { rolCharacter ->
+                _selectedCharacter.value = rolCharacter
+                _loadingState.value = false
+                println("Personaje encontrado: ${rolCharacter?.name}")
+            }.onFailure {
+                _loadingState.value = false
+                _errorMessage.value = it.message
+                println("Error al obtener el personaje con ID $characterId")
+            }
         }
     }
 
     // Función para obtener todos los personajes
     fun getAllCharacters() {
+        _loadingState.value = true
         viewModelScope.launch {
-            val charactersList = characterUseCases.getAllCharacters() // Obtén la lista de personajes
-            _characters.value = charactersList // Actualiza el estado con la lista obtenida
+            val result = characterUseCases.getAllCharacters()
+            result.onSuccess { charactersList ->
+                _characters.value = charactersList
+                _loadingState.value = false
+            }.onFailure {
+                _loadingState.value = false
+                _errorMessage.value = it.message
+                println("Error al obtener los personajes")
+            }
         }
     }
-
-
 
     // Función para insertar un nuevo personaje
     fun insertCharacter(characterEntity: CharacterEntity) {
+        _loadingState.value = true
         viewModelScope.launch {
-            // Completar el personaje (por ejemplo, asignar valores predeterminados)
-            characterEntity.completeCharacter()
-            characterUseCases.insertCharacter(characterEntity)
-
-            // Fetch the updated list of characters
-            val updatedCharacters = characterUseCases.getAllCharacters()
-            _characters.value = updatedCharacters
-
-            _selectedCharacter.value = updatedCharacters.lastOrNull()
-            println("Personaje seleccionado dentro de CharacterViewModel: ${_selectedCharacter.value}")
+            val result = characterUseCases.insertCharacter(characterEntity)
+            result.onSuccess {
+                getAllCharacters() // Actualizamos la lista
+                _selectedCharacter.value = characterEntity
+                _loadingState.value = false
+                println("Personaje insertado: ${characterEntity.name}")
+            }.onFailure {
+                _loadingState.value = false
+                _errorMessage.value = it.message
+                println("Error al insertar el personaje")
+            }
         }
     }
 
-
-
     // Función para actualizar un personaje
     fun updateCharacter(characterEntity: CharacterEntity) {
+        _loadingState.value = true
         viewModelScope.launch {
-            characterUseCases.updateCharacter(characterEntity)
-            _selectedCharacter.value = characterEntity
-            println("Personaje actualizado: $characterEntity")
-            _selectedCharacter.value = characterUseCases.getCharacterById(characterEntity.id!!)
+            val result = characterUseCases.updateCharacter(characterEntity)
+            result.onSuccess {
+                _selectedCharacter.value = characterEntity
+                _loadingState.value = false
+                println("Personaje actualizado: ${characterEntity.name}")
+            }.onFailure {
+                _loadingState.value = false
+                _errorMessage.value = it.message
+                println("Error al actualizar el personaje")
+            }
         }
     }
 
     // Función para eliminar un personaje
     fun deleteCharacter(characterEntity: CharacterEntity) {
+        _loadingState.value = true
         viewModelScope.launch {
-            characterUseCases.deleteCharacter(characterEntity)
-            println("Personaje eliminado: $characterEntity")
-            val updatedCharacters = characterUseCases.getAllCharacters()
-            _characters.value = updatedCharacters
+            val result = characterUseCases.deleteCharacter(characterEntity)
+            result.onSuccess {
+                getAllCharacters() // Actualizamos la lista
+                _loadingState.value = false
+                println("Personaje eliminado: ${characterEntity.name}")
+            }.onFailure {
+                _loadingState.value = false
+                _errorMessage.value = it.message
+                println("Error al eliminar el personaje")
+            }
         }
     }
-
-
-
 }

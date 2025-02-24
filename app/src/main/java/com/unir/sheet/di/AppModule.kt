@@ -1,13 +1,14 @@
 package com.unir.sheet.di
 
-import android.app.Application
 import android.content.Context
-import androidx.room.Room
 import com.unir.sheet.data.local.dao.CharacterDao
 import com.unir.sheet.data.local.dao.ItemDao
+import com.unir.sheet.data.local.dao.SkillDao
 import com.unir.sheet.data.local.database.MyDatabase
 import com.unir.sheet.data.remote.service.ApiService
+import com.unir.sheet.data.repository.CharacterRepositoryImpl
 import com.unir.sheet.data.repository.ItemRepositoryImpl
+import com.unir.sheet.data.repository.SkillRepositoryImpl
 import com.unir.sheet.domain.repository.CharacterRepository
 import com.unir.sheet.domain.repository.ItemRepository
 import com.unir.sheet.domain.usecase.character.CharacterUseCases
@@ -15,7 +16,6 @@ import com.unir.sheet.domain.usecase.character.DeleteCharacterUseCase
 import com.unir.sheet.domain.usecase.character.GetAllCharactersUseCase
 import com.unir.sheet.domain.usecase.character.GetCharacterByIdUseCase
 import com.unir.sheet.domain.usecase.character.GetCharacterByUserIdUseCase
-import com.unir.sheet.domain.usecase.character.GetCharacterWithRelationsUseCase
 import com.unir.sheet.domain.usecase.character.InsertCharacterUseCase
 import com.unir.sheet.domain.usecase.character.UpdateCharacterUseCase
 import com.unir.sheet.domain.usecase.item.AddItemToCharacterUseCase
@@ -24,7 +24,11 @@ import com.unir.sheet.domain.usecase.item.FetchItemsUseCase
 import com.unir.sheet.domain.usecase.item.GetItemsByCharacterId
 import com.unir.sheet.domain.usecase.item.ItemUseCases
 import com.unir.sheet.domain.usecase.item.SellItemUseCase
-import com.unir.sheet.util.Constants.MY_DATA_BASE
+import com.unir.sheet.domain.usecase.skill.AddSkillToCharacterUseCase
+import com.unir.sheet.domain.usecase.skill.DeleteSkillFromCharacterUseCase
+import com.unir.sheet.domain.usecase.skill.GetAllSkillsUseCase
+import com.unir.sheet.domain.usecase.skill.GetSkillsFromCharacterUseCase
+import com.unir.sheet.domain.usecase.skill.SkillUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,9 +52,12 @@ object  AppModule {
 
     @Provides
     @Singleton
-    fun provideCharacterRepository(database: MyDatabase): com.unir.sheet.domain.repository.CharacterRepository {
-        return com.unir.sheet.data.repository.CharacterRepositoryImpl(
-            database.characterDao(),
+    fun provideCharacterRepository(
+        database: MyDatabase,
+        apiService: ApiService
+    ): com.unir.sheet.domain.repository.CharacterRepository {
+        return CharacterRepositoryImpl(
+            database.characterDao(), apiService
         )
     }
 
@@ -65,10 +72,11 @@ object  AppModule {
 
     @Provides
     @Singleton
-    fun provideSkillRepository(database: MyDatabase): com.unir.sheet.domain.repository.SkillRepository {
-        return com.unir.sheet.data.repository.SkillRepository(
-            database.characterDao(),
-        )
+    fun provideSkillRepository(
+        apiService: ApiService,
+        skillDao: SkillDao
+    ): SkillRepositoryImpl {
+        return SkillRepositoryImpl(apiService, skillDao)
     }
 
     @Provides
@@ -82,6 +90,12 @@ object  AppModule {
         return database.getItemDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideSkillDao(database: MyDatabase): SkillDao {
+        return database.getSkillDao()
+    }
+
     // Proveer el CharacterUseCases
     @Provides
     @Singleton
@@ -93,7 +107,6 @@ object  AppModule {
             insertCharacter = InsertCharacterUseCase(characterRepository),
             updateCharacter = UpdateCharacterUseCase(characterRepository),
             deleteCharacter = DeleteCharacterUseCase(characterRepository),
-            getCharacterWithRelations = GetCharacterWithRelationsUseCase(characterRepository)
         )
     }
 
@@ -111,5 +124,18 @@ object  AppModule {
             addItemToCharacter = AddItemToCharacterUseCase(characterRepository, itemRepository)
         )
     }
+
+    // Dependency Injection in AppModule
+    @Provides
+    @Singleton
+    fun provideSkillUseCases(repository: SkillRepositoryImpl): SkillUseCases {
+        return SkillUseCases(
+            getAllSkills = GetAllSkillsUseCase(repository),
+            addSkillToCharacter = AddSkillToCharacterUseCase(repository),
+            deleteSkillFromCharacter = DeleteSkillFromCharacterUseCase(repository),
+            getSkillsFromCharacter = GetSkillsFromCharacterUseCase(repository)
+        )
+    }
+
 
 }
