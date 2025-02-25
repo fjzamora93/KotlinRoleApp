@@ -8,10 +8,13 @@ import com.unir.sheet.data.remote.model.ApiItem
 import com.unir.sheet.data.remote.model.ApiSkill
 import com.unir.sheet.data.remote.model.ApiSpell
 import com.unir.sheet.data.remote.model.ApiUser
+import com.unir.sheet.data.remote.model.LoginRequest
+import com.unir.sheet.data.remote.model.LoginResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -107,30 +110,29 @@ interface ApiService {
 
 
 
-    // BUSCAR USUARIO POR ID
-    @GET("user/{id}")
-    suspend fun getUserById(@Path("id") id: Long): Response<ApiUser>
 
     // INICIAR SESIÓN
-    @GET("user/login")
-    suspend fun loginUser(
-        @Query("email") email: String,
-        @Query("password") password: String
-    ): Response<ApiUser>
 
-    // AÑADIR UN NUEVO USUARIO
+    @POST("user/login")
+    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
+
     @POST("user/signup")
     suspend fun signUpUser(@Body user: ApiUser): Response<ApiUser>
 
-    // ACTUALIZAR USUARIO
+    @POST("user/logout")
+    suspend fun logoutUser(@Header("Authorization") token: String): Response<Void>
+
+    @GET("me")
+    suspend fun getUser(@Header("Authorization") token: String): Response<ApiUser>
+
     @PUT("user/update")
-    suspend fun updateUser(@Body user: ApiUser): Response<ApiUser>
+    suspend fun updateUser(
+        @Header("Authorization") token: String,
+        @Body user: ApiUser
+    ): Response<ApiUser>
 
-    // ELIMINAR CUENTA
-    @DELETE("user/{id}")
-    suspend fun deleteUser(@Path("id") id: Long): Response<Void>
-
-
+    @DELETE("user/delete")
+    suspend fun deleteUser(@Header("Authorization") token: String): Response<Void>
 
 
 

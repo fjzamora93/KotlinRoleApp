@@ -5,8 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.Spell
-import com.unir.sheet.data.repository.CharacterRepositoryImpl
-import com.unir.sheet.data.repository.SpellRepository
+import com.unir.sheet.domain.usecase.spell.SpellUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,13 +13,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SpellViewModel @Inject constructor(
-    private val remoteSpellRepository: SpellRepository,
-    private val characterRepository: CharacterRepositoryImpl
+    private val spellUseCase: SpellUseCases,
 ) : ViewModel(){
 
     private val _spellList = MutableLiveData<List<Spell>>()
     val spellList: LiveData<List<Spell>> get() = _spellList
-
 
 
     // APlica un filtro de acuerdo al personaje
@@ -28,19 +25,29 @@ class SpellViewModel @Inject constructor(
         currentCharacter: CharacterEntity,
     ){
         viewModelScope.launch {
-            val result = remoteSpellRepository.fetchSpellsByLevelAndRoleClass(currentCharacter.level, currentCharacter.rolClass.toString())
+            val result = spellUseCase.getSpellsByLevelAndRoleClass(currentCharacter.level, currentCharacter.rolClass.toString())
             println("La clase del personaje es:  "+ currentCharacter.rolClass.toString())
             result.onSuccess {
                     spells -> _spellList.value = spells
                 println("VIendo hechizos disponibles para el personaje: $spells")
 
             }.onFailure {
-                println("ALgo salió mal")
+                println("ALgo salió mal: $result")
             }
         }
     }
 
 
+    fun getAllSpells(){
+        viewModelScope.launch {
+            val result = spellUseCase.getAllSpells()
+            result.onSuccess {
+                    spells -> _spellList.value = spells
+            }.onFailure {
+                println("ALgo salió mal: $result")
+            }
+        }
+    }
 
 
 }

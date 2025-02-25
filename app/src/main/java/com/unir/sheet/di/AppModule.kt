@@ -1,6 +1,7 @@
 package com.unir.sheet.di
 
 import android.content.Context
+import com.unir.sheet.data.local.UserPreferences
 import com.unir.sheet.data.local.dao.CharacterDao
 import com.unir.sheet.data.local.dao.ItemDao
 import com.unir.sheet.data.local.dao.SkillDao
@@ -9,8 +10,10 @@ import com.unir.sheet.data.remote.service.ApiService
 import com.unir.sheet.data.repository.CharacterRepositoryImpl
 import com.unir.sheet.data.repository.ItemRepositoryImpl
 import com.unir.sheet.data.repository.SkillRepositoryImpl
+import com.unir.sheet.data.repository.SpellRepositoryImpl
 import com.unir.sheet.domain.repository.CharacterRepository
 import com.unir.sheet.domain.repository.ItemRepository
+import com.unir.sheet.domain.repository.SpellRepository
 import com.unir.sheet.domain.usecase.character.CharacterUseCases
 import com.unir.sheet.domain.usecase.character.DeleteCharacterUseCase
 import com.unir.sheet.domain.usecase.character.GetAllCharactersUseCase
@@ -29,6 +32,9 @@ import com.unir.sheet.domain.usecase.skill.DeleteSkillFromCharacterUseCase
 import com.unir.sheet.domain.usecase.skill.GetAllSkillsUseCase
 import com.unir.sheet.domain.usecase.skill.GetSkillsFromCharacterUseCase
 import com.unir.sheet.domain.usecase.skill.SkillUseCases
+import com.unir.sheet.domain.usecase.spell.GetAllSpellsUseCase
+import com.unir.sheet.domain.usecase.spell.GetSpellsByLevelAndRoleClassUseCase
+import com.unir.sheet.domain.usecase.spell.SpellUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +50,12 @@ object  AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): MyDatabase {
         return MyDatabase.getDatabase(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserPreferences(@ApplicationContext context: Context): UserPreferences {
+        return UserPreferences(context)
     }
 
     @Provides
@@ -138,4 +150,18 @@ object  AppModule {
     }
 
 
+    @Provides
+    @Singleton
+    fun provideSpellRepository(apiService: ApiService): SpellRepository {
+        return SpellRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSpellUseCases(spellRepository: SpellRepository): SpellUseCases {
+        return SpellUseCases(
+            getAllSpells = GetAllSpellsUseCase(spellRepository),
+            getSpellsByLevelAndRoleClass = GetSpellsByLevelAndRoleClassUseCase(spellRepository)
+        )
+    }
 }

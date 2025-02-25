@@ -3,13 +3,14 @@ package com.unir.sheet.data.repository
 import com.unir.sheet.data.model.Spell
 import com.unir.sheet.data.remote.model.ApiSpell
 import com.unir.sheet.data.remote.service.ApiService
+import com.unir.sheet.domain.repository.SpellRepository
 import javax.inject.Inject
 
 
-class SpellRepository @Inject constructor(
+class SpellRepositoryImpl @Inject constructor(
     private val apiService: ApiService
-) {
-    suspend fun fetchSpells(): Result<List<Spell>> {
+) : SpellRepository {
+    override suspend fun getAllSpells(): Result<List<Spell>> {
         return try {
             val response = apiService.getAllSpells()
             if (response.isSuccessful) {
@@ -26,7 +27,7 @@ class SpellRepository @Inject constructor(
 
 
 
-    suspend fun fetchSpellsByLevelAndRoleClass(level: Int, roleClass: String): Result<List<Spell>> {
+    override suspend fun getSpellsByLevelAndRoleClass(level: Int, roleClass: String): Result<List<Spell>> {
         return try {
             val response = apiService.getSpellsByLevelAndRoleClass(level, roleClass)
             if (response.isSuccessful) {
@@ -40,7 +41,5 @@ class SpellRepository @Inject constructor(
             Result.failure(e)
         }
     }
-
-
 
 }

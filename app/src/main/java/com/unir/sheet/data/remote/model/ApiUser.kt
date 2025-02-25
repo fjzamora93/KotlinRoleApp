@@ -8,14 +8,4 @@ data class ApiUser(
     val id: Int,
     val username: String,
     val email: String,
-    val password: String,
-
 )
-fun ApiUser.toUserEntity(): User {
-    return User(
-        id = this.id,
-        name = this.username,
-        email = this.email,
-        password = this.password
-    )
-}
