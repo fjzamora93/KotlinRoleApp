@@ -26,6 +26,27 @@ class UserRepository @Inject constructor(
         }
     }
 
+    suspend fun signup(email: String, password: String, confirmPassword: String): Result<ApiUser> {
+        println("!! CORREGIR SIGNUP, ASEGURAR DE QUE FUNCIONA BIEN (CREO QUE EN LA API EL SIGNUP NO DEVUELVE UN TOKEN")
+        return try {
+            if (password != confirmPassword) {
+                return Result.failure(Exception("Las contraseñas no coinciden"))
+            }
+            val newUserRequest = LoginRequest(email, password)
+            val response = api.signup(newUserRequest)
+
+            if (response.isSuccessful && response.body() != null) {
+                val loginResponse = response.body()!!
+                sessionManager.saveToken(loginResponse.token)
+                Result.success(loginResponse.user)
+            } else {
+                Result.failure(Exception("Error en login: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun logout(): Result<Unit> {
         return try {
             val token = sessionManager.getToken() ?: return Result.failure(Exception("No hay token"))

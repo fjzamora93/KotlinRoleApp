@@ -29,7 +29,7 @@ interface ApiService {
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @POST("auth/signup")
-    suspend fun signUpUser(@Body user: ApiUser): Response<ApiUser>
+    suspend fun signup(@Body request: LoginRequest): Response<LoginResponse>
 
     @GET("user/me")
     suspend fun getUser(@Header("Authorization") token: String): Response<ApiUser>

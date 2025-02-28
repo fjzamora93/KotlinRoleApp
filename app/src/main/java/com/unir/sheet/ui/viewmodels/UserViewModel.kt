@@ -29,6 +29,17 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun signup(email: String, password: String, confirmPassword: String) {
+        _userState.value = UserState.Loading
+        viewModelScope.launch {
+            val result = repository.signup(email, password, confirmPassword)
+            _userState.value = result.fold(
+                onSuccess = { UserState.Success(it) },
+                onFailure = { UserState.Error(it.message ?: "Error actualizando usuario") }
+            )
+        }
+    }
+
     fun logout() {
         _userState.value = UserState.Loading
         viewModelScope.launch {
@@ -50,6 +61,8 @@ class UserViewModel @Inject constructor(
             )
         }
     }
+
+
 
     fun updateUser(user: ApiUser) {
         _userState.value = UserState.Loading

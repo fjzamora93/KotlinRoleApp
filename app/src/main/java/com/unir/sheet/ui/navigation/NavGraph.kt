@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
+import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.ui.screens.MainScreen
 import com.unir.sheet.ui.screens.character.CharacterCreatorScreen
 import com.unir.sheet.ui.screens.character.CharacterListScreen
@@ -22,6 +23,7 @@ import com.unir.sheet.ui.screens.layout.FontsTemplateScreen
 import com.unir.sheet.ui.screens.userscreens.LoginScreen
 import com.unir.sheet.ui.screens.userscreens.UserProfileScreen
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
+import com.unir.sheet.ui.viewmodels.UserViewModel
 
 @Composable
 fun NavGraph(
@@ -30,10 +32,12 @@ fun NavGraph(
     // Proveer instancias GLOBALES en el árbol de composables dentro de NavGraph (la navegación, el usuario, un carrito de la compra... lo que va a ser común)
     val navigationViewModel: NavigationViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
     val characterViewModel: CharacterViewModel = hiltViewModel()
+    val userViewModel: UserViewModel = hiltViewModel()
 
     CompositionLocalProvider(
         LocalNavigationViewModel provides navigationViewModel,
-        LocalCharacterViewModel provides characterViewModel
+        LocalCharacterViewModel provides characterViewModel,
+        LocalUserViewModel provides userViewModel
     ) {
         // (LAUNCHEDEFECT) Llamamos a la función que va a detectar cualquier eventos de navegación
         HandleNavigationEvents(navController, navigationViewModel)
