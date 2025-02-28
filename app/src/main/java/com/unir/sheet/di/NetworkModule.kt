@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 // https://springbootroleplay-production.up.railway.app/api/
@@ -47,6 +48,9 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(logging)
             .addInterceptor(authInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS) // Aumenta el tiempo de espera de conexión a 30 segundos
+            .readTimeout(30, TimeUnit.SECONDS)    // Aumenta el tiempo de espera de lectura a 30 segundos
+            .writeTimeout(30, TimeUnit.SECONDS)   // Aumenta el tiempo de espera de escritura a 30 segundos
             .build()
     }
 
