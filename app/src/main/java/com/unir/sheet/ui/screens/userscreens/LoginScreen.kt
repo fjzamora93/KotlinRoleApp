@@ -1,6 +1,8 @@
 package com.unir.sheet.ui.screens.userscreens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -12,17 +14,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
+import com.unir.sheet.ui.screens.character.items.CharacterInventoryBody
+import com.unir.sheet.ui.screens.components.BackButton
+import com.unir.sheet.ui.screens.layout.MainLayout
 import com.unir.sheet.ui.viewmodels.UserState
 import com.unir.sheet.ui.viewmodels.UserViewModel
 
+
 @Composable
-fun LoginScreen(
-    viewModel: UserViewModel = hiltViewModel()
-) {
+fun LoginScreen() {
+    MainLayout(){
+        Column(){
+            LoginBody()
+            BackButton()
+        }
+    }
+}
+
+@Composable
+fun LoginBody(viewModel: UserViewModel = hiltViewModel()) {
     val userState by viewModel.userState.collectAsState()
     val navigationViewModel = LocalNavigationViewModel.current
 
@@ -45,15 +61,20 @@ fun LoginScreen(
         }
         is UserState.LoggedOut -> Text("Sesión cerrada")
         is UserState.Deleted -> Text("Cuenta eliminada")
-        else -> {}
+        else -> {
+            // Aquí manejamos el estado Idle o cualquier otro que no esté relacionado con el login
+            LoginForm(viewModel::login)
+        }
     }
 }
 
 
+
+
 @Composable
 fun LoginForm(onLogin: (String, String) -> Unit) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("test_6@mail.com") }
+    var password by remember { mutableStateOf("1234") }
 
     Column {
         TextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
@@ -66,3 +87,4 @@ fun LoginForm(onLogin: (String, String) -> Unit) {
         }
     }
 }
+

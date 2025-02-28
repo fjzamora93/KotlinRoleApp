@@ -1,7 +1,6 @@
 package com.unir.sheet.di
 
 import android.content.Context
-import com.unir.sheet.data.local.UserPreferences
 import com.unir.sheet.data.local.dao.CharacterDao
 import com.unir.sheet.data.local.dao.ItemDao
 import com.unir.sheet.data.local.dao.SkillDao
@@ -52,11 +51,7 @@ object  AppModule {
         return MyDatabase.getDatabase(context)
     }
 
-    @Provides
-    @Singleton
-    fun provideUserPreferences(@ApplicationContext context: Context): UserPreferences {
-        return UserPreferences(context)
-    }
+
 
     @Provides
     @Singleton

@@ -23,11 +23,34 @@ import retrofit2.http.Query
 
 interface ApiService {
 
+    // INICIAR SESIÓN
+
+    @POST("auth/login")
+    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
+
+    @POST("auth/signup")
+    suspend fun signUpUser(@Body user: ApiUser): Response<ApiUser>
+
+    @GET("user/me")
+    suspend fun getUser(@Header("Authorization") token: String): Response<ApiUser>
+
+    @POST("user/logout")
+    suspend fun logoutUser(@Header("Authorization") token: String): Response<Void>
+
+    @PUT("user/update")
+    suspend fun updateUser(
+        @Header("Authorization") token: String,
+        @Body user: ApiUser
+    ): Response<ApiUser>
+
+    @DELETE("user/delete")
+    suspend fun deleteUser(@Header("Authorization") token: String): Response<Void>
+
+
+
     // ITEMS
-    // OBTENER TODOS LOS OBJETOS
     @GET("items")
     suspend fun getAllItems(): Response<List<ApiItem>>
-
 
     // FILTRO COMBINADO
     @GET("items/filter")
@@ -108,31 +131,6 @@ interface ApiService {
         @Query("skillId") skillId: Long
     ): Response<ApiCharacterResponse>
 
-
-
-
-    // INICIAR SESIÓN
-
-    @POST("user/login")
-    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
-
-    @POST("user/signup")
-    suspend fun signUpUser(@Body user: ApiUser): Response<ApiUser>
-
-    @POST("user/logout")
-    suspend fun logoutUser(@Header("Authorization") token: String): Response<Void>
-
-    @GET("me")
-    suspend fun getUser(@Header("Authorization") token: String): Response<ApiUser>
-
-    @PUT("user/update")
-    suspend fun updateUser(
-        @Header("Authorization") token: String,
-        @Body user: ApiUser
-    ): Response<ApiUser>
-
-    @DELETE("user/delete")
-    suspend fun deleteUser(@Header("Authorization") token: String): Response<Void>
 
 
 

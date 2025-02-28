@@ -20,4 +20,9 @@ sealed class ScreensRoutes(val route: String) {
     object ItemDetailScreen : ScreensRoutes("ItemDetailScreen/{itemId}") {
         fun createRoute(itemId: Int) = "ItemDetailScreen/$itemId"
     }
+
+
+    // AUTH
+    object LoginScreen: ScreensRoutes("LoginScreen")
+    object UserProfileScreen: ScreensRoutes("UserProfileScreen")
 }

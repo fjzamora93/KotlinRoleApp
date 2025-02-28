@@ -15,10 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.Architecture
 import androidx.compose.material.icons.filled.EditOff
 import androidx.compose.material.icons.filled.FontDownload
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
@@ -89,6 +91,18 @@ fun MainMenu(
                         text = "Tipografías y fuentes",
                         onClick = { navigationViewModel.navigate(ScreensRoutes.FontTemplateScreen.route) },
                         icon = Icons.Default.FontDownload
+                    )
+
+                    MenuOption(
+                        text = "Login",
+                        onClick = { navigationViewModel.navigate(ScreensRoutes.LoginScreen.route) },
+                        icon = Icons.AutoMirrored.Filled.Login
+                    )
+
+                    MenuOption(
+                        text = "Perfil",
+                        onClick = { navigationViewModel.navigate(ScreensRoutes.UserProfileScreen.route) },
+                        icon = Icons.Default.Person
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))

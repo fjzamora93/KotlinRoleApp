@@ -24,7 +24,7 @@ class ItemRepositoryImpl @Inject constructor(
                 Result.failure(Exception("Error en la respuesta: ${response.code()}"))
             }
         } catch (e: Exception) {
-            println("Error de otro tipo dentro del repositorio al obtener los datos de la API")
+            println("Error de otro tipo dentro del repositorio al obtener los Items de la API")
             Result.failure(e)
         }
     }

@@ -6,6 +6,6 @@ import com.unir.sheet.data.model.User
 
 data class ApiUser(
     val id: Int,
-    val username: String,
+    val name: String,
     val email: String,
 )

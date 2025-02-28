@@ -19,6 +19,8 @@ import com.unir.sheet.ui.screens.character.items.ItemListScreen
 import com.unir.sheet.ui.screens.character.skills.SkillListScreen
 import com.unir.sheet.ui.screens.character.spells.CharacterSpellScreen
 import com.unir.sheet.ui.screens.layout.FontsTemplateScreen
+import com.unir.sheet.ui.screens.userscreens.LoginScreen
+import com.unir.sheet.ui.screens.userscreens.UserProfileScreen
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
 
 @Composable
@@ -74,6 +76,14 @@ fun NavGraph(
 
             composable( ScreensRoutes.SkillListScreen.route ){
                 SkillListScreen()
+            }
+
+            composable (ScreensRoutes.LoginScreen.route){
+                LoginScreen()
+            }
+
+            composable (ScreensRoutes.UserProfileScreen.route){
+                UserProfileScreen()
             }
 
             // Pantalla de detalle del personaje
