@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
+import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.character.characterDetail.CharacterPortrait
@@ -30,6 +31,8 @@ import com.unir.sheet.ui.screens.components.NavigationButton
 import com.unir.sheet.ui.screens.components.RegularCard
 import com.unir.sheet.ui.screens.layout.MainLayout
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
+import com.unir.sheet.ui.viewmodels.UserState
+import com.unir.sheet.ui.viewmodels.UserViewModel
 import com.unir.sheet.util.CustomType
 import java.util.Locale
 
@@ -46,9 +49,12 @@ fun CharacterListScreen(){
 
 @Composable
 fun CharacterListBody(
-    characterViewModel: CharacterViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    userViewModel: UserViewModel = LocalUserViewModel.current,
 ) {
+    val userState by userViewModel.userState.collectAsState()
+    characterViewModel.getCharactersByUserId(userState.let { (it as UserState.Success).user.id!! })
+
     val characters by characterViewModel.characters.collectAsState()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -69,7 +75,6 @@ fun CharacterListBody(
 @Composable
 fun CharacterSummary(
     character: CharacterEntity,
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
     onDestroyItem: () -> Unit = {}
 ){

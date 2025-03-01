@@ -1,7 +1,7 @@
 package com.unir.sheet.data.remote.model
 
 data class ApiCharacterRequest(
-    val id: Int,
+    val id: Int?,
     val name: String,
     val description: String,
     val race: String,

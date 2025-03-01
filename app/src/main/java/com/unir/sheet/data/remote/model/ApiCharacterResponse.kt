@@ -7,6 +7,8 @@ import com.unir.sheet.data.model.RolClass
 
 data class ApiCharacterResponse(
     val id: Int,
+    val userId: Int,
+
     val name: String,
     val description: String,
     val race: String,
@@ -22,7 +24,6 @@ data class ApiCharacterResponse(
     val charisma: Int,
     val imgUrl: String?,
     val gameSessionId: Int?,
-    val userId: Int?,
     val roleClass: ApiRoleClass?,
     val items: List<ApiItem>,
     val skills: List<ApiSkill>

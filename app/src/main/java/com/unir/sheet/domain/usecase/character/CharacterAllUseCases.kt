@@ -1,28 +1,19 @@
 package com.unir.sheet.domain.usecase.character
 
-import com.unir.sheet.data.local.dao.RolCharacterWithAllRelations
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.domain.repository.CharacterRepository
 import com.unir.sheet.domain.usecase.skill.AddDefaultSkills
-import com.unir.sheet.domain.usecase.skill.GetAllSkillsUseCase
-import com.unir.sheet.domain.usecase.skill.SkillUseCases
+import com.unir.sheet.ui.viewmodels.UserState
 import javax.inject.Inject
 
-// Obtener todos los personajes
-class GetAllCharactersUseCase @Inject constructor(
-    private val repository: CharacterRepository
-) {
-    suspend operator fun invoke(): Result<List<CharacterEntity>> {
-        return repository.getAllCharacters()
-    }
-}
+
 
 // Obtener personajes por User ID
-class GetCharacterByUserIdUseCase @Inject constructor(
+class GetCharactersByUserIdUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
     suspend operator fun invoke(userId: Int): Result<List<CharacterEntity>> {
-        val result = repository.getCharacterByUserId(userId)
+        val result = repository.getCharactersByUserId(userId)
         return if (result.isSuccess) {
             Result.success(result.getOrNull() ?: emptyList())
         } else {
@@ -47,27 +38,12 @@ class GetCharacterByIdUseCase @Inject constructor(
 }
 
 
-// Insertar personaje
-class InsertCharacterUseCase @Inject constructor(
-    private val repository: CharacterRepository
-) {
-    suspend operator fun invoke(character: CharacterEntity): Result<CharacterEntity?> {
-        val result = repository.saveCharacter(character)
-        return if (result.isSuccess) {
-            Result.success(result.getOrNull()) // El personaje guardado
-        } else {
-            Result.failure(result.exceptionOrNull() ?: Exception("Error al guardar el personaje"))
-        }
-    }
-}
-
 
 // Actualizar personaje
 class UpdateCharacterUseCase @Inject constructor(
     private val repository: CharacterRepository,
     private val addDefaultSkills: AddDefaultSkills
 ) {
-
     suspend operator fun invoke(character: CharacterEntity): Result<Unit> {
         val result = repository.saveCharacter(character)
         return if (result.isSuccess) {

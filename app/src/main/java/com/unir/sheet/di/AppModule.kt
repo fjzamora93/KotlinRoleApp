@@ -15,10 +15,8 @@ import com.unir.sheet.domain.repository.ItemRepository
 import com.unir.sheet.domain.repository.SpellRepository
 import com.unir.sheet.domain.usecase.character.CharacterUseCases
 import com.unir.sheet.domain.usecase.character.DeleteCharacterUseCase
-import com.unir.sheet.domain.usecase.character.GetAllCharactersUseCase
 import com.unir.sheet.domain.usecase.character.GetCharacterByIdUseCase
-import com.unir.sheet.domain.usecase.character.GetCharacterByUserIdUseCase
-import com.unir.sheet.domain.usecase.character.InsertCharacterUseCase
+import com.unir.sheet.domain.usecase.character.GetCharactersByUserIdUseCase
 import com.unir.sheet.domain.usecase.character.UpdateCharacterUseCase
 import com.unir.sheet.domain.usecase.item.AddItemToCharacterUseCase
 import com.unir.sheet.domain.usecase.item.DestroyItemUseCase
@@ -107,10 +105,8 @@ object  AppModule {
         addDefaultSkills: AddDefaultSkills // Inyectas AddDefaultSkills
     ): CharacterUseCases {
         return CharacterUseCases(
-            getAllCharacters = GetAllCharactersUseCase(characterRepository),
-            getCharacterByUserId = GetCharacterByUserIdUseCase(characterRepository),
+            getCharactersByUserId = GetCharactersByUserIdUseCase(characterRepository),
             getCharacterById = GetCharacterByIdUseCase(characterRepository),
-            insertCharacter = InsertCharacterUseCase(characterRepository),
             updateCharacter = UpdateCharacterUseCase(characterRepository, addDefaultSkills), // Inyectas AddDefaultSkills aquí
             deleteCharacter = DeleteCharacterUseCase(characterRepository)
         )

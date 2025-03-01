@@ -12,7 +12,7 @@ data class CharacterEntity(
 
     // DATOS DE USUARIO Y SESIÓN
     @ColumnInfo(name = "userId")
-    var userId: Int? = 0,
+    var userId: Int,
     var gameSessionId: Int? = null,
 
     // Datos del personaje
@@ -51,7 +51,7 @@ data class CharacterEntity(
 
     fun toApiRequest(): ApiCharacterRequest {
         return ApiCharacterRequest(
-            id = this.id ?: 0,
+            id = this.id,
             name = this.name,
             description = this.description,
             race = this.race.name,

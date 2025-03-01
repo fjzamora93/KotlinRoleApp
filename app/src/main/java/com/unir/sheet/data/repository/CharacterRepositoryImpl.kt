@@ -1,7 +1,6 @@
 package com.unir.sheet.data.repository
 
 import com.unir.sheet.data.local.dao.CharacterDao
-import com.unir.sheet.data.local.dao.RolCharacterWithAllRelations
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.remote.service.ApiService
 import com.unir.sheet.domain.repository.CharacterRepository
@@ -19,7 +18,7 @@ class CharacterRepositoryImpl @Inject constructor(
 ) : CharacterRepository {
 
 
-    override suspend fun getCharacterByUserId(userId: Int): Result<List<CharacterEntity>> {
+    override suspend fun getCharactersByUserId(userId: Int): Result<List<CharacterEntity>> {
         return try {
             val result = apiService.getCharactersByUserId(userId)
             if (result.isSuccessful) {
@@ -92,27 +91,6 @@ class CharacterRepositoryImpl @Inject constructor(
         }
     }
 
-
-    /** MÉTODO SOLAMENTE LOCAL (ELIMINAR EN CUANTO FUNCIONE EL GET CHARACTER BY USER ID*/
-    override suspend fun getAllCharacters(): Result<List<CharacterEntity>> {
-        return try {
-            val result = apiService.getCharactersByUserId(6)
-            if (result.isSuccessful) {
-                val characters = result.body()
-                if (characters != null) {
-                    val charactersEntities = characters.map( { it.toCharacterEntity() } )
-                    Result.success(charactersEntities)
-                } else {
-                    Result.failure(Exception("No se encontraron personajes para el usuario"))
-                }
-            } else {
-                Result.failure(Exception("Error en la respuesta del servidor"))
-            }
-
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
 
 
 }

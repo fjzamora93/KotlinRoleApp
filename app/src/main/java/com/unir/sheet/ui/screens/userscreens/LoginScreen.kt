@@ -28,11 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.layout.MainLayout
+import com.unir.sheet.ui.viewmodels.CharacterViewModel
 import com.unir.sheet.ui.viewmodels.UserState
 import com.unir.sheet.ui.viewmodels.UserViewModel
 
@@ -50,13 +52,16 @@ fun LoginScreen() {
 @Composable
 fun LoginBody(
     viewModel: UserViewModel = LocalUserViewModel.current,
+    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current
 ) {
     val userState by viewModel.userState.collectAsState()
     val navigationViewModel = LocalNavigationViewModel.current
 
+    // En cuanto se complete el login sucederán dos cosas: 1. Se navegará a otra ruta. 2. Se deben cargar inmediatamente los personajes del usuario.
     LaunchedEffect(userState) {
         if (userState is UserState.Success) {
             navigationViewModel.navigate(ScreensRoutes.UserProfileScreen.route)
+            characterViewModel.getCharactersByUserId(userState.let { (it as UserState.Success).user.id!! })
         }
     }
 

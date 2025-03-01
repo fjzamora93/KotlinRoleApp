@@ -66,45 +66,7 @@ fun Body(
     }
 }
 
-@Composable
-fun InsertCharacterButton(
-    newCharacter: CharacterEntity,
-    characterViewModel: CharacterViewModel = hiltViewModel(),
-    onEditComplete: (Boolean) -> Unit = { }
-) {
-    val navigationViewModel = LocalNavigationViewModel.current
-    val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
-    var isNavigating by remember { mutableStateOf(false) }
-    BackButton()
-    Button(
-        onClick = {
-            if (newCharacter.id != null){
-                println("Actualizando personaje ${newCharacter.id}")
-                characterViewModel.updateCharacter(newCharacter)
-            } else {
-                println("INsertando nuevo personaje ${newCharacter.id}")
-                characterViewModel.insertCharacter(newCharacter)
-            }
-            isNavigating = true
-            onEditComplete(false)
-        }
-    ) {
-        Text("Guardar")
-    }
 
-    // Utiliza LaunchedEffect para esperar a que selectedCharacter se actualice
-    LaunchedEffect(isNavigating, selectedCharacter) {
-        // Aseguramos que solo se navega cuando isNavigating es true y selectedCharacter tiene un valor válido. SI no lo hacemos, no nos dejará volver atrás.
-        if (isNavigating && selectedCharacter?.id != null) {
-            selectedCharacter?.id?.let { idNewCharacter ->
-                // Ahora que selectedCharacter tiene una id válida, navegamos
-                println("ID del último personaje insertado: $idNewCharacter")
-                navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(idNewCharacter))
-                isNavigating = false // Después de la navegación, desactivamos el flag
-            }
-        }
-    }
-}
 
 
 /**
@@ -187,22 +149,55 @@ fun CharacterCreatorForm(
         }
 
         val characterToSave: CharacterEntity
-
         if (isEditing && editableCharacter != null) {
             characterToSave = editableCharacter!!.copy()
         } else {
-            characterToSave = CharacterEntity()
+            characterToSave = CharacterEntity(
+                userId = userState.let { (it as UserState.Success).user.id!! }
+            )
         }
         characterToSave.name = name
         characterToSave.rolClass = rolClass
         characterToSave.race = race
-        characterToSave.userId = userState.let { (it as UserState.Success).user.id }
 
         InsertCharacterButton(
             newCharacter = characterToSave,
             onEditComplete = { onEditComplete(false) }
         )
+}
 
+@Composable
+fun InsertCharacterButton(
+    newCharacter: CharacterEntity,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
+    onEditComplete: (Boolean) -> Unit = { }
+) {
+    val navigationViewModel = LocalNavigationViewModel.current
+    val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
+    var isNavigating by remember { mutableStateOf(false) }
+    BackButton()
+    Button(
+        onClick = {
+            characterViewModel.updateCharacter(newCharacter)
+            isNavigating = true
+            onEditComplete(false)
+        }
+    ) {
+        Text("Guardar")
+    }
+
+    // Utiliza LaunchedEffect para esperar a que selectedCharacter se actualice  y haya insertado en la base de datos
+    LaunchedEffect(isNavigating, selectedCharacter) {
+        if (isNavigating && selectedCharacter?.id != null) {
+            selectedCharacter?.id?.let { idNewCharacter ->
+                println("ID del último personaje insertado: $idNewCharacter")
+                navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(idNewCharacter))
+                isNavigating = false // Después de la navegación, desactivamos el flag
+            }
+        } else {
+            println("Nada, que no se ha insertado. Mensaje desde el botón del CHaracterCreatorScreen")
+        }
+    }
 }
 
 

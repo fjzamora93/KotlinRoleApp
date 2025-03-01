@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.sheet.data.model.CharacterEntity
+import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.domain.usecase.character.CharacterUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,9 +34,7 @@ class CharacterViewModel @Inject constructor(
     private val _selectedCharacter = MutableLiveData<CharacterEntity?>()
     val selectedCharacter: LiveData<CharacterEntity?> = _selectedCharacter
 
-    init {
-        getAllCharacters()
-    }
+
 
     // Función para obtener un personaje por ID
     fun getCharacterById(characterId: Int) {
@@ -55,10 +54,10 @@ class CharacterViewModel @Inject constructor(
     }
 
     // Función para obtener todos los personajes
-    fun getAllCharacters() {
+    fun getCharactersByUserId(userId: Int) {
         _loadingState.value = true
         viewModelScope.launch {
-            val result = characterUseCases.getAllCharacters()
+            val result = characterUseCases.getCharactersByUserId(userId)
             result.onSuccess { charactersList ->
                 _characters.value = charactersList
                 _loadingState.value = false
@@ -70,26 +69,11 @@ class CharacterViewModel @Inject constructor(
         }
     }
 
-    // Función para insertar un nuevo personaje
-    fun insertCharacter(characterEntity: CharacterEntity) {
-        _loadingState.value = true
-        viewModelScope.launch {
-            val result = characterUseCases.insertCharacter(characterEntity)
-            result.onSuccess {
-                getAllCharacters() // Actualizamos la lista
-                _selectedCharacter.value = characterEntity
-                _loadingState.value = false
-                println("Personaje insertado: ${characterEntity.name}")
-            }.onFailure {
-                _loadingState.value = false
-                _errorMessage.value = it.message
-                println("Error al insertar el personaje")
-            }
-        }
-    }
+
 
     // Función para actualizar un personaje
     fun updateCharacter(characterEntity: CharacterEntity) {
+        println("Comenzando a actualizar personaje: ${characterEntity}")
         _loadingState.value = true
         viewModelScope.launch {
             val result = characterUseCases.updateCharacter(characterEntity)
@@ -105,13 +89,13 @@ class CharacterViewModel @Inject constructor(
         }
     }
 
-    // Función para eliminar un personaje
     fun deleteCharacter(characterEntity: CharacterEntity) {
         _loadingState.value = true
         viewModelScope.launch {
             val result = characterUseCases.deleteCharacter(characterEntity)
             result.onSuccess {
-                getAllCharacters() // Actualizamos la lista
+                val updatedCharacters = _characters.value.filter { it.id != characterEntity.id }
+                _characters.value = updatedCharacters
                 _loadingState.value = false
                 println("Personaje eliminado: ${characterEntity.name}")
             }.onFailure {
