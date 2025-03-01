@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -33,9 +34,12 @@ import androidx.compose.ui.unit.dp
 
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
+import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
+import com.unir.sheet.ui.viewmodels.UserState
+import com.unir.sheet.ui.viewmodels.UserViewModel
 import com.unir.sheet.util.CustomType
 import com.unir.sheet.util.MedievalColours
 
@@ -97,8 +101,14 @@ fun HeaderBody(
 fun CharacterThumbnail(
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    userViewModel: UserViewModel = LocalUserViewModel.current
 ){
     val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val userState by userViewModel.userState.collectAsState()
+    val user = when (userState){
+        is UserState.Success -> (userState as UserState.Success).user
+        else -> null
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -124,7 +134,7 @@ fun CharacterThumbnail(
             )
         }
         Text(
-            text = " ${selectedCharacter?.name ?: "Ninguno"}",
+            text = " ${selectedCharacter?.name ?: "Ninguno"} + ${user?.id}",
             style = CustomType.bodyMedium,
         )
     }

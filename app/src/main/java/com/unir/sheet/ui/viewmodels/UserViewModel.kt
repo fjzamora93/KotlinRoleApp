@@ -2,11 +2,14 @@ package com.unir.sheet.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unir.sheet.data.model.User
 import com.unir.sheet.data.remote.model.ApiUser
 import com.unir.sheet.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,6 +20,8 @@ class UserViewModel @Inject constructor(
 
     private val _userState = MutableStateFlow<UserState>(UserState.Idle)
     val userState: StateFlow<UserState> = _userState
+
+
 
     fun login(email: String, password: String) {
         _userState.value = UserState.Loading
@@ -64,10 +69,10 @@ class UserViewModel @Inject constructor(
 
 
 
-    fun updateUser(user: ApiUser) {
+    fun updateUser(user: User) {
         _userState.value = UserState.Loading
         viewModelScope.launch {
-            val result = repository.updateUser(user)
+            val result = repository.updateUser(user.toUserApi())
             _userState.value = result.fold(
                 onSuccess = { UserState.Success(it) },
                 onFailure = { UserState.Error(it.message ?: "Error actualizando usuario") }

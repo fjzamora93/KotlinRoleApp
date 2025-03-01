@@ -12,7 +12,7 @@ data class CharacterEntity(
 
     // DATOS DE USUARIO Y SESIÓN
     @ColumnInfo(name = "userId")
-    val userId: Int? = 0,
+    var userId: Int? = 0,
     var gameSessionId: Int? = null,
 
     // Datos del personaje

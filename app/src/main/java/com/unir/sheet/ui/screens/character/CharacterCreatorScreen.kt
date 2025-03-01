@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -33,10 +34,14 @@ import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.RolClass
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
+import com.unir.sheet.di.LocalUserViewModel
+import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.layout.MainLayout
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
+import com.unir.sheet.ui.viewmodels.UserState
+import com.unir.sheet.ui.viewmodels.UserViewModel
 import com.unir.sheet.util.MedievalColours
 
 @Composable
@@ -118,9 +123,12 @@ fun InsertCharacterButton(
 @Composable
 fun CharacterCreatorForm(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    userViewModel: UserViewModel = LocalUserViewModel.current,
     isEditing: Boolean = false,
     onEditComplete: (Boolean) -> Unit = { }
 ){
+    val userState by userViewModel.userState.collectAsState()
+
     val editableCharacter by characterViewModel.selectedCharacter.observeAsState()
 
     var name by remember { mutableStateOf("") }
@@ -188,6 +196,7 @@ fun CharacterCreatorForm(
         characterToSave.name = name
         characterToSave.rolClass = rolClass
         characterToSave.race = race
+        characterToSave.userId = userState.let { (it as UserState.Success).user.id }
 
         InsertCharacterButton(
             newCharacter = characterToSave,

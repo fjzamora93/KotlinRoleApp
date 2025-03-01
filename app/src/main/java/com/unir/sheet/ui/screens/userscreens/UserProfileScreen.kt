@@ -8,12 +8,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,14 +23,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.unir.sheet.di.LocalCharacterViewModel
+import com.unir.sheet.data.model.User
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.layout.MainLayout
-import com.unir.sheet.ui.viewmodels.CharacterViewModel
 import com.unir.sheet.ui.viewmodels.UserState
 import com.unir.sheet.ui.viewmodels.UserViewModel
 
@@ -47,44 +45,28 @@ fun UserProfileScreen() {
 
 @Composable
 fun UserProfileBody(
-    viewModel: UserViewModel = LocalUserViewModel.current
+    userViewModel: UserViewModel = LocalUserViewModel.current
 ) {
-    val userState by viewModel.userState.collectAsState()
+    val userState by userViewModel.userState.collectAsState()
 
     when (userState) {
-        is UserState.Loading -> {
-            // Mostrar un loader
-            CircularProgressIndicator()
-        }
-        is UserState.Success -> {
-            UserProfileDetail()
-        }
-        is UserState.Error -> {
-            val errorMessage = (userState as UserState.Error).message
-            Text("Error: $errorMessage")
-        }
-        is UserState.LoggedOut -> {
-            Text("Sesión cerrada")
-        }
-        is UserState.Deleted -> {
-            Text("Cuenta eliminada")
-        }
-        else -> {
-            // Estado Idle (sin login)
-            Text("Usuario no registrado")
-        }
+        is UserState.Loading -> CircularProgressIndicator()
+        is UserState.Success -> UserProfileDetail(user = (userState as UserState.Success).user)
+        is UserState.Error -> Text("Error: ${(userState as UserState.Error).message}")
+        is UserState.LoggedOut -> Text("Sesión cerrada")
+        is UserState.Deleted -> Text("Cuenta eliminada")
+        else -> Text("Usuario no registrado")
     }
 }
 
 
+
 @Composable
 fun UserProfileDetail(
-    viewModel: UserViewModel = LocalUserViewModel.current,
+    user: User,
+    viewModel: UserViewModel = hiltViewModel(),
     navigation : NavigationViewModel = LocalNavigationViewModel.current
 ){
-    val userState by viewModel.userState.collectAsState()
-
-    val user = (userState as UserState.Success).user
 
     Column(
         modifier = Modifier
@@ -100,7 +82,7 @@ fun UserProfileDetail(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Nombre: ${user.name}",
+            text = "Nombre: ${user.id}",
             fontSize = 18.sp
         )
         Text(
@@ -117,7 +99,7 @@ fun UserProfileDetail(
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.ExitToApp,
+                imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                 contentDescription = "Cerrar sesión",
                 tint = Color.White
             )

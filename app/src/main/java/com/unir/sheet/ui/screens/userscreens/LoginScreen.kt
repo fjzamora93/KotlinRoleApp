@@ -28,11 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
-import com.unir.sheet.ui.screens.character.items.CharacterInventoryBody
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.layout.MainLayout
 import com.unir.sheet.ui.viewmodels.UserState
@@ -51,7 +49,7 @@ fun LoginScreen() {
 
 @Composable
 fun LoginBody(
-    viewModel: UserViewModel = LocalUserViewModel.current
+    viewModel: UserViewModel = LocalUserViewModel.current,
 ) {
     val userState by viewModel.userState.collectAsState()
     val navigationViewModel = LocalNavigationViewModel.current
