@@ -31,8 +31,8 @@ class CharacterViewModel @Inject constructor(
     val loadingState: StateFlow<Boolean> get() = _loadingState
 
     // Generalmente usaríamos State para ambos, pero en este caso LiveData funciona mejor (con State no va a cambiar bien)
-    private val _selectedCharacter = MutableLiveData<CharacterEntity?>()
-    val selectedCharacter: LiveData<CharacterEntity?> = _selectedCharacter
+    private val _selectedCharacter = MutableStateFlow<CharacterEntity?>(null)
+    val selectedCharacter: MutableStateFlow<CharacterEntity?> = _selectedCharacter
 
 
 

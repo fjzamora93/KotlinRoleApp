@@ -1,6 +1,7 @@
 package com.unir.sheet.data.remote.service
 
 import com.unir.sheet.data.model.CharacterEntity
+import com.unir.sheet.data.model.CharacterWithItems
 import com.unir.sheet.data.remote.model.ApiCharacterRequest
 import com.unir.sheet.data.remote.model.ApiCharacterResponse
 import com.unir.sheet.data.remote.model.ApiGameSession
@@ -49,16 +50,31 @@ interface ApiService {
 
 
     // ITEMS
-    @GET("items")
+    @GET("items-template")
     suspend fun getAllItems(): Response<List<ApiItem>>
 
-    // FILTRO COMBINADO
-    @GET("items/filter")
-    suspend fun getFilteredItems(
-        @Query("name") name: String?,
-        @Query("category") category: String?,
-        @Query("goldValue") goldValue: Int?
+    @GET("items/game-session/{id}")
+    suspend fun getItemsBySession(
+        @Path("id") gameSessionId: Int
     ): Response<List<ApiItem>>
+
+    @GET("custom-items/character/{id}")
+    suspend fun getItemsByCharacterId(
+        @Path("id") characterId: Int
+    ): Response<List<ApiItem>>
+
+    @POST("custom-items")
+    suspend fun addOrUpdateItemToCharacter(
+        @Query("characterId") characterId: Int,
+        @Body customItemDTO: ApiItem,
+        @Query("quantity") quantity: Int
+    ): Response<CharacterWithItems>
+
+    @DELETE("custom-items")
+    suspend fun deleteItemFromCharacter(
+        @Query("characterId") characterId: Int,
+        @Query("itemId") itemId: Int
+    ): Response<Void>
 
 
 

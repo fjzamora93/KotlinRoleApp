@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -60,58 +61,53 @@ fun DetailCharacterBody(
     navigation: NavigationViewModel = LocalNavigationViewModel.current,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-    val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     var isEditing by remember { mutableStateOf(false) }
 
     // Si el personaje no está seleccionado, mostramos un texto vacío o de espera
     if (selectedCharacter == null) {
         Text("Cargando personaje...")
     } else {
-        // Mantén un solo estado compartido
 
-        CharacterMenu()
-        IconButton(onClick = { isEditing = !isEditing }) {
-            Icon(imageVector = Icons.Default.EditOff, contentDescription = "Add")
-        }
-
-        if (!isEditing){
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ){
-//                Column(modifier = Modifier.weight(1.5f)){
-//                    CharacterPortrait(
-//                        character = editableCharacter,
-//                        context = LocalContext.current
-//                    )
-//                }
-
-                Column(modifier = Modifier.weight(1f)){
-                    TextBodyMedium(text = "Name: ${selectedCharacter!!.name} ",)
-
-                    TextBodyMedium(text ="lvl: ${selectedCharacter!!.level} ",)
-
-                    TextBodyMedium(text = RolClass.getString(selectedCharacter!!.rolClass),)
-
-                    TextBodyMedium(text = selectedCharacter!!.race.toString(),)
-                }
+        // Puesto que el estado de null puede cambiar, llamamos al let
+        selectedCharacter?.let { character ->
+            CharacterMenu()
+            IconButton(onClick = { isEditing = !isEditing }) {
+                Icon(imageVector = Icons.Default.EditOff, contentDescription = "Add")
             }
-        } else {
-            CharacterCreatorForm(
-                isEditing = true,
-                onEditComplete = {
-                    isEditing = it
+
+            if (!isEditing) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1.5f)) {
+                        CharacterPortrait(character)
+                    }
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        TextBodyMedium(text = "Name: ${character.name} ",)
+                        TextBodyMedium(text = "Descripción: ${character.description} ",)
+                        TextBodyMedium(text = RolClass.getString(character.rolClass),)
+                        TextBodyMedium(text = character.race.toString(),)
+                    }
+                }
+            } else {
+                CharacterCreatorForm(
+                    isEditing = true,
+                    onEditComplete = {
+                        isEditing = it
+                    }
+                )
+            }
+
+            // CAMPOS NUMÉRICOS Y STATS
+            StatSection(
+                editableCharacter = character,
+                onCharacterChange = {
+                    characterViewModel.updateCharacter(it)
                 }
             )
         }
-
-        // CAMPOS NUMÉRICOS Y STATS
-        StatSection(
-            editableCharacter = selectedCharacter!!,
-            onCharacterChange = {
-                characterViewModel.updateCharacter(it)
-            }
-        )
-
     }
 }

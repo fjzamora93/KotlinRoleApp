@@ -31,7 +31,7 @@ class SkillViewModel  @Inject constructor(
                 _skillList.value = it
                 println("Skills: ${skillList.value}")
             }.onFailure {
-                println("Error al obtener las skills")
+                println("Error ${it.message} al obtener las skills")
             }
         }
     }
@@ -45,7 +45,7 @@ class SkillViewModel  @Inject constructor(
                 _skillList.value = it
                 println("Skills: ${skillList.value}")
             }.onFailure {
-                println("Error al obtener las skills")
+                println("Error ${it.message} al obtener las skills")
             }
         }
     }

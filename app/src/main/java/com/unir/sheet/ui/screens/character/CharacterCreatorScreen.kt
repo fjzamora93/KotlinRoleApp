@@ -91,7 +91,7 @@ fun CharacterCreatorForm(
 ){
     val userState by userViewModel.userState.collectAsState()
 
-    val editableCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
 
     var name by remember { mutableStateOf("") }
     var gender by remember { mutableStateOf(Gender.MALE) }
@@ -173,7 +173,7 @@ fun InsertCharacterButton(
     onEditComplete: (Boolean) -> Unit = { }
 ) {
     val navigationViewModel = LocalNavigationViewModel.current
-    val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     var isNavigating by remember { mutableStateOf(false) }
     BackButton()
     Button(

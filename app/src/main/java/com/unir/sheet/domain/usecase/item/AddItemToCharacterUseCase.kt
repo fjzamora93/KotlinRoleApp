@@ -9,20 +9,30 @@ class AddItemToCharacterUseCase(
     private val characterRepository: CharacterRepository,
     private val itemRepository: ItemRepository
 ) {
-    suspend operator fun invoke(character: CharacterEntity, item: Item): Result<Unit> {
+    suspend operator fun invoke(
+        character: CharacterEntity,
+        item: Item,
+        quantity: Int = 1,
+    ): Result<Unit> {
         return try {
             if (character.gold < item.goldValue) {
                 return Result.failure(Exception("Oro insuficiente"))
             }
 
-            val updatedItem = item.copy(characterId = character.id)
-            val updatedCharacter = character.copy(gold = character.gold - item.goldValue)
+
+            val itemUpdateResult = character.id?.let {
+                val newItem = item.copy(gameSession = character.gameSessionId)
+                itemRepository.insertOrUpdate(it, newItem, quantity)
+            }
+
+            if (itemUpdateResult != null) {
+                if (itemUpdateResult.isFailure) return itemUpdateResult
+            }
 
             // Actualizamos personaje e ítem asegurándonos de que ambas operaciones sean exitosas
+            val updatedCharacter = character.copy(gold = character.gold - item.goldValue)
             val characterUpdateResult = characterRepository.saveCharacter(updatedCharacter)
-            val itemUpdateResult = itemRepository.insertOrUpdate(updatedItem)
-
-            if (itemUpdateResult.isFailure) return itemUpdateResult
+            if (characterUpdateResult.isFailure) return Result.failure(characterUpdateResult.exceptionOrNull()!!)
 
             Result.success(Unit)
         } catch (e: Exception) {

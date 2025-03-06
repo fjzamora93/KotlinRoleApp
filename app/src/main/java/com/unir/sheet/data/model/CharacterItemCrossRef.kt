@@ -2,10 +2,11 @@ package com.unir.sheet.data.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 
 @Entity(
-    tableName = "character_spell_table",
-    primaryKeys = ["characterId", "spellId"],
+    tableName = "character_item_cross_ref",
+    primaryKeys = ["characterId", "itemId"],
     foreignKeys = [
         ForeignKey(
             entity = CharacterEntity::class,
@@ -14,14 +15,16 @@ import androidx.room.ForeignKey
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = Spell::class,
+            entity = Item::class,
             parentColumns = ["id"],
-            childColumns = ["spellId"],
+            childColumns = ["itemId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index(value = ["characterId"]), Index(value = ["itemId"])]
 )
-data class CharacterSpellCrossRef(
+data class CharacterItemCrossRef(
     val characterId: Int,
-    val spellId: String
+    val itemId: Int,
+    val quantity: Int
 )

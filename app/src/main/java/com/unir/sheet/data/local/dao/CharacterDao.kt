@@ -32,12 +32,6 @@ interface CharacterDao {
     suspend fun deleteCharacter(character: CharacterEntity)
 
 
-    // QUERYS DE CROSS REF
-    @Transaction
-    @Query("SELECT * FROM character_entity_table WHERE id = :characterId")
-    suspend fun getCharacterWithRelations(characterId: Int): RolCharacterWithAllRelations?
-
-
 
 
 }

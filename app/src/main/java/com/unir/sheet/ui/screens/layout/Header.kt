@@ -66,7 +66,7 @@ fun HeaderBody(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
 ){
     val activity = LocalContext.current as Activity
-    val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
 
     Row(
         modifier = modifier
@@ -103,7 +103,7 @@ fun CharacterThumbnail(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     userViewModel: UserViewModel = LocalUserViewModel.current
 ){
-    val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     val userState by userViewModel.userState.collectAsState()
     val user = when (userState){
         is UserState.Success -> (userState as UserState.Success).user

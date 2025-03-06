@@ -25,7 +25,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     //private const val BASE_URL = "https://springbootroleplay-production.up.railway.app/api/"
-    private const val BASE_URL = "http://192.168.1.156:8080/api/"
+    private const val BASE_URL = "http://192.168.1.200:8080/api/"
 
     @Singleton
     @Provides

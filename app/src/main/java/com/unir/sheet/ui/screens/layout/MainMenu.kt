@@ -29,6 +29,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,8 +40,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.unir.sheet.di.LocalNavigationViewModel
+import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
+import com.unir.sheet.ui.viewmodels.UserState
+import com.unir.sheet.ui.viewmodels.UserViewModel
 import com.unir.sheet.util.MedievalColours
 
 
@@ -48,8 +53,11 @@ fun MainMenu(
     drawerState: DrawerState,
     onClose: () -> Unit,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
+    userViewModel: UserViewModel = LocalUserViewModel.current,
     content: @Composable () -> Unit,
 ) {
+    val user by userViewModel.userState.collectAsState()
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -69,41 +77,47 @@ fun MainMenu(
                     )
 
                     MenuOption(
-                        text = "Personajes",
-                        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterListScreen.route) },
-                        icon = Icons.Default.Person
-                    )
-
-                    MenuOption(
-                        text = "Items",
-                        onClick = { navigationViewModel.navigate(ScreensRoutes.ItemListScreen.route) },
-                        icon = Icons.Default.Architecture
-                    )
-
-
-                    MenuOption(
-                        text = "Creación personaje",
-                        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterCreatorScreen.route) },
-                        icon = Icons.Default.EditOff
-                    )
-
-                    MenuOption(
-                        text = "Tipografías y fuentes",
-                        onClick = { navigationViewModel.navigate(ScreensRoutes.FontTemplateScreen.route) },
-                        icon = Icons.Default.FontDownload
-                    )
-
-                    MenuOption(
                         text = "Login",
                         onClick = { navigationViewModel.navigate(ScreensRoutes.LoginScreen.route) },
                         icon = Icons.AutoMirrored.Filled.Login
                     )
+
 
                     MenuOption(
                         text = "Perfil",
                         onClick = { navigationViewModel.navigate(ScreensRoutes.UserProfileScreen.route) },
                         icon = Icons.Default.Person
                     )
+
+                    if (user is UserState.Success){
+                        MenuOption(
+                            text = "Personajes",
+                            onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterListScreen.route) },
+                            icon = Icons.Default.Person
+                        )
+
+                        MenuOption(
+                            text = "Items",
+                            onClick = { navigationViewModel.navigate(ScreensRoutes.ItemListScreen.route) },
+                            icon = Icons.Default.Architecture
+                        )
+
+
+                        MenuOption(
+                            text = "Creación personaje",
+                            onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterCreatorScreen.route) },
+                            icon = Icons.Default.EditOff
+                        )
+
+                        MenuOption(
+                            text = "Tipografías y fuentes",
+                            onClick = { navigationViewModel.navigate(ScreensRoutes.FontTemplateScreen.route) },
+                            icon = Icons.Default.FontDownload
+                        )
+
+                    }
+
+
 
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = onClose) {

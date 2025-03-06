@@ -88,7 +88,6 @@ fun CharacterSummary(
             Column( modifier = Modifier.weight(1f).wrapContentHeight()){
                 CharacterPortrait(
                     character = character,
-                    context = LocalContext.current
                 )
             }
 

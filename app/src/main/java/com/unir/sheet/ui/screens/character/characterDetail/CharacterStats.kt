@@ -46,14 +46,22 @@ fun StatSection(
     )
 
     RegularCard(){
-        Column(horizontalAlignment = Alignment.CenterHorizontally ){
-            Text(text = "Stats", style = MaterialTheme.typography.titleMedium)
 
+        Column(horizontalAlignment = Alignment.CenterHorizontally ){
+            Text(text = "General", style = MaterialTheme.typography.titleMedium)
+            CharacterNumberField(
+                label = "Nivel",
+                value = editableCharacter.level,
+                onValueChange = { onCharacterChange(editableCharacter.copy(level = it)) }
+            )
+
+            Text(text = "Stats", style = MaterialTheme.typography.titleMedium)
             CharacterNumberField(
                 label = "Fuerza",
                 value = editableCharacter.strength,
                 onValueChange = { onCharacterChange(editableCharacter.copy(strength = it)) }
             )
+
             CharacterNumberField(
                 label = "Destreza",
                 value = editableCharacter.dexterity,

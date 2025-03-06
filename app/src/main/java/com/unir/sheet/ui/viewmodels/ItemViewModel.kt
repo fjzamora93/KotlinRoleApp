@@ -33,7 +33,7 @@ class ItemViewModel @Inject constructor(
                 println("Inventario del personaje en el viewModel: ${_itemList.value}")
             }.onFailure {
                 _loadingState.value = false
-                println("Error al obtener los items del personaje con ID $characterId")
+                println("Error ${it.message} al obtener los items del personaje con ID $characterId")
             }
         }
     }
@@ -53,19 +53,6 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    fun removeItemFromCharacter(
-        currentItem: Item,
-    ){
-        viewModelScope.launch {
-            val result = itemUseCases.destroyItem(currentItem)
-            result.onSuccess {
-                println("El objeto se ha eliminado correctamente")
-                _itemList.value = _itemList.value?.filterNot { it == currentItem }
-            }.onFailure { error ->
-                println("Error al eliminar el objeto: ${error.message}")
-            }
-        }
-    }
 
     fun sellItem(
         currentCharacter: CharacterEntity,
@@ -83,6 +70,22 @@ class ItemViewModel @Inject constructor(
         }
     }
 
+    fun removeItemFromCharacter(
+        currentCharacter: CharacterEntity,
+        currentItem: Item,
+    ){
+        viewModelScope.launch {
+            val result = itemUseCases.destroyItem(currentCharacter, currentItem)
+            result.onSuccess {
+                println("El objeto se ha eliminado correctamente")
+                _itemList.value = _itemList.value?.filterNot { it == currentItem }
+            }.onFailure { error ->
+                println("Error al eliminar el objeto: ${error.message}")
+            }
+        }
+    }
+
+
 
     fun getItems() {
         viewModelScope.launch {
@@ -90,10 +93,9 @@ class ItemViewModel @Inject constructor(
             result.onSuccess {
                     items ->
                 _itemList.value = items
-                println("Primer control de items en el view model" + items)
             }.onFailure {
                 _loadingState.value = false
-                println("Error al obtener los items desde la API")
+                println("Error ${it.message} al obtener los items desde la API")
             }
 
             println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")

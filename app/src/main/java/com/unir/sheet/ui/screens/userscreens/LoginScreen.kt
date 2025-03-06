@@ -64,22 +64,26 @@ fun LoginBody(
             characterViewModel.getCharactersByUserId(userState.let { (it as UserState.Success).user.id!! })
         }
     }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        when (userState) {
+            is UserState.Loading -> CircularProgressIndicator()
+            is UserState.Error -> {
 
-    when (userState) {
-        is UserState.Loading -> CircularProgressIndicator()
-        is UserState.Error -> {
-            Column {
-                Text("Error: ${(userState as UserState.Error).message}")
-                Button(onClick = { viewModel.login("email", "password") }) {
-                    Text("Reintentar")
-                }
+                    Text("Error: ${(userState as UserState.Error).message}")
+                    Button(onClick = { viewModel.login("email", "password") }) {
+                        Text("Reintentar")
+                    }
             }
-        }
-//        is UserState.LoggedOut -> Text("Sesión cerrada")
-//        is UserState.Deleted -> Text("Cuenta eliminada")
-        else -> {
-            // Aquí manejamos el estado Idle o cualquier otro que no esté relacionado con el login
-            LoginForm(viewModel::login, viewModel::signup)
+    //        is UserState.LoggedOut -> Text("Sesión cerrada")
+    //        is UserState.Deleted -> Text("Cuenta eliminada")
+            else -> {
+                // Aquí manejamos el estado Idle o cualquier otro que no esté relacionado con el login
+                LoginForm(viewModel::login, viewModel::signup)
+            }
         }
     }
 }

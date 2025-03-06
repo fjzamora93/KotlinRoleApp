@@ -1,6 +1,5 @@
 package com.unir.sheet.domain.repository
 
-import com.unir.sheet.data.local.dao.RolCharacterWithAllRelations
 import com.unir.sheet.data.model.CharacterEntity
 
 interface CharacterRepository {

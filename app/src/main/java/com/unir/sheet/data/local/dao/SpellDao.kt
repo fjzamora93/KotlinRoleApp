@@ -10,13 +10,17 @@ import com.unir.sheet.data.model.Spell
 
 @Dao
 interface SpellDao {
+
+    @Query("SELECT * FROM spellTable WHERE characterId = :characterId")
+    suspend fun getSpellsByCharacter(characterId: Int): List<Spell>
+
     @Query("SELECT * FROM spellTable")
     suspend fun getSpellList(): List<Spell>
 
     @Query("SELECT * FROM spellTable WHERE id = :id")
     suspend fun getSpellById(id: String): Spell?
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSpell(spell: Spell)
 
     @Update

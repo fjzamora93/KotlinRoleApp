@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -50,7 +51,7 @@ fun ItemListBody(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-    val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     itemViewModel.getItems()
     val items by itemViewModel.itemList.observeAsState()
     Column(
@@ -84,21 +85,13 @@ fun ItemSummary(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val currentCharacter = characterViewModel.selectedCharacter.value
+            val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
             if (currentCharacter != null) {
 
                 // Botón de comprar
                 MenuMedievalButton(
                     onClick = {
-                        if (characterViewModel.selectedCharacter.value!!.gold > item.goldValue) {
-                            currentCharacter.gold -= item.goldValue
-                            itemViewModel.addItemToCharacter(
-                                currentCharacter = characterViewModel.selectedCharacter.value!!,
-                                currentItem = item
-                            )
-                            characterViewModel.updateCharacter(currentCharacter)
-                        }
-
+                        itemViewModel.addItemToCharacter(currentCharacter!!, item)
                     },
                     modifier = medievalButtonStyleSquare(size = 50.dp),
                     icon = Icons.Default.MonetizationOn,

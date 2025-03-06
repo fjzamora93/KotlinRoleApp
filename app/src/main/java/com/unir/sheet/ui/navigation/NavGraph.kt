@@ -35,11 +35,10 @@ fun NavGraph(
     val navigationViewModel: NavigationViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
     val characterViewModel: CharacterViewModel = hiltViewModel()
     val userViewModel: UserViewModel = hiltViewModel()
-
     CompositionLocalProvider(
         LocalNavigationViewModel provides navigationViewModel,
         LocalCharacterViewModel provides characterViewModel,
-        LocalUserViewModel provides userViewModel
+        LocalUserViewModel provides userViewModel,
     ) {
         // (LAUNCHEDEFECT) Llamamos a la función que va a detectar cualquier eventos de navegación
         HandleNavigationEvents(navController, navigationViewModel)

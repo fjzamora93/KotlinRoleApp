@@ -13,12 +13,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +61,7 @@ fun CharacterInventoryBody(
     itemViewModel: ItemViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-    val currentCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
     val inventoryItems by itemViewModel.itemList.observeAsState()
     val isLoading by itemViewModel.loadingState.observeAsState(false)
 
@@ -69,24 +71,26 @@ fun CharacterInventoryBody(
         }
     }
 
-    // Mostrar mensajes de carga o error
-    if (isLoading) {
-        Text("Cargando objetos...")
-    } else {
-        if (inventoryItems != null) {
-            Column(
-                modifier = modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                CurrentGold()
+    Column(
+        modifier = modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+    ){
+        CurrentGold()
+        if (isLoading) {
+            CircularProgressIndicator()
+            Text("Cargando objetos...")
+        } else {
+            if (inventoryItems != null) {
                 inventoryItems!!.forEach { item ->
                     InventoryItemCard(item = item)
                 }
+            } else {
+                Text("No se encontraron objetos")
             }
-        } else {
-            Text("No se encontraron objetos")
         }
     }
+
 }
 
 
@@ -98,6 +102,8 @@ fun InventoryItemCard(
     item: Item,
     modifier: Modifier = Modifier
 ) {
+    val character by characterViewModel.selectedCharacter.collectAsState()
+
     RegularCard() {
         Column(
             modifier = Modifier
@@ -120,18 +126,13 @@ fun InventoryItemCard(
             )
             Button(onClick = {
                 val currentCharacter = characterViewModel.selectedCharacter.value
-                if (currentCharacter != null) {
-                    itemViewModel.sellItem(currentCharacter, item)
-                }
+                itemViewModel.sellItem(currentCharacter!!, item)
             }) {
                 Text(text = "vender")
             }
 
             Button(onClick = {
-                val currentCharacter = characterViewModel.selectedCharacter.value
-                if (currentCharacter != null) {
-                    itemViewModel.removeItemFromCharacter(item)
-                }
+                itemViewModel.removeItemFromCharacter(character!!, item)
             }) {
                 Text(text = "consumir")
             }
@@ -143,7 +144,7 @@ fun InventoryItemCard(
 fun CurrentGold(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current
 ){
-    val selectedCharacter by characterViewModel.selectedCharacter.observeAsState()
+    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     var goldText by remember { mutableStateOf(selectedCharacter?.gold?.toString() ?: "0") }
     Row(
         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
@@ -152,7 +153,7 @@ fun CurrentGold(
         Icon(imageVector = Icons.Default.MonetizationOn, contentDescription = "", tint = MedievalColours.Gold, modifier = Modifier.size(40.dp))
 
         TextField(
-            value = selectedCharacter!!.gold.toString(),
+            value = goldText,
             onValueChange = { newValue ->
                 if (newValue.all { it.isDigit() }) {
                     goldText = newValue

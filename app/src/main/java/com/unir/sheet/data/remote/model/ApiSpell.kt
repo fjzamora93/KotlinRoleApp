@@ -11,6 +11,8 @@ data class ApiSpell(
     val cost: Int,
     val imgUrl: String?
 ){
+
+    // De la API no regresa ningún ID de personaje, así que debemos pasárselo como parámetro.
     fun toSpellEntity(): Spell {
         return Spell(
             id = this.id,
