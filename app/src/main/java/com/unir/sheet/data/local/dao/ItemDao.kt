@@ -48,4 +48,7 @@ interface ItemDao {
 
     @Delete
     suspend fun deleteItemFromCharacter(characterItem: CharacterItemCrossRef)
+
+
+
 }

@@ -1,7 +1,8 @@
 package com.unir.sheet.domain.usecase.item
 
 data class ItemUseCases (
-    val fetchItems: FetchItemsUseCase,
+    val fetchTemplateItems: FetchTemplateItemsUseCase,
+    val getItemsBySession: GetItemsBySessionUseCase,
     val getItemsByCharacterId: GetItemsByCharacterId,
     val sellItem: SellItemUseCase,
     val destroyItem: DestroyItemUseCase,

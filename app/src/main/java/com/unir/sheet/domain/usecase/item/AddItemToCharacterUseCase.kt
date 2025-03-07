@@ -5,6 +5,7 @@ import com.unir.sheet.data.model.Item
 import com.unir.sheet.domain.repository.CharacterRepository
 import com.unir.sheet.domain.repository.ItemRepository
 
+/**Actualmente el parámetro QUANTITY se establece dentro de la base de datos, no aquí*/
 class AddItemToCharacterUseCase(
     private val characterRepository: CharacterRepository,
     private val itemRepository: ItemRepository
@@ -19,20 +20,14 @@ class AddItemToCharacterUseCase(
                 return Result.failure(Exception("Oro insuficiente"))
             }
 
-
             val itemUpdateResult = character.id?.let {
                 val newItem = item.copy(gameSession = character.gameSessionId)
-                itemRepository.insertOrUpdate(it, newItem, quantity)
+                itemRepository.addItemToCharacter(it, newItem, quantity)
             }
 
             if (itemUpdateResult != null) {
                 if (itemUpdateResult.isFailure) return itemUpdateResult
             }
-
-            // Actualizamos personaje e ítem asegurándonos de que ambas operaciones sean exitosas
-            val updatedCharacter = character.copy(gold = character.gold - item.goldValue)
-            val characterUpdateResult = characterRepository.saveCharacter(updatedCharacter)
-            if (characterUpdateResult.isFailure) return Result.failure(characterUpdateResult.exceptionOrNull()!!)
 
             Result.success(Unit)
         } catch (e: Exception) {

@@ -1,8 +1,19 @@
 package com.unir.sheet.data.remote.model
 
+import com.unir.sheet.data.model.CharacterItemDetail
+
+
 data class ApiCharacterItem(
-    val item: ApiItem,
+    val customItem: ApiItem,
     val characterId: Int,
     val quantity: Int
 
 )
+
+fun ApiCharacterItem.toCharacterItemDetail(): CharacterItemDetail {
+    return CharacterItemDetail(
+        item = customItem.toItemEntity(),
+        characterId = characterId,
+        quantity = quantity
+    )
+}

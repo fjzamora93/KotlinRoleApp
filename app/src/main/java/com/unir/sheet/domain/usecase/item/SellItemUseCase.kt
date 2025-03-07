@@ -2,7 +2,6 @@ package com.unir.sheet.domain.usecase.item
 
 import com.unir.sheet.data.model.Item
 import com.unir.sheet.data.model.CharacterEntity
-import com.unir.sheet.data.model.CharacterItemCrossRef
 import com.unir.sheet.domain.repository.CharacterRepository
 import com.unir.sheet.domain.repository.ItemRepository
 import javax.inject.Inject
@@ -27,7 +26,7 @@ class SellItemUseCase @Inject constructor(
 
                 // Reducir la cantidad en la relación
                 val newQuantity = characterItem.quantity - 1
-                itemRepository.insertOrUpdate(characterId, item, newQuantity).onFailure { error ->
+                itemRepository.addItemToCharacter(characterId, item, newQuantity).onFailure { error ->
                     return Result.failure(error) // Manejar error al actualizar la cantidad
                 }
 

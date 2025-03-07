@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.sheet.data.model.Item
 import com.unir.sheet.data.model.CharacterEntity
+import com.unir.sheet.data.model.CharacterItemDetail
 import com.unir.sheet.domain.usecase.item.ItemUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,6 +20,9 @@ class ItemViewModel @Inject constructor(
     private val _itemList = MutableLiveData<List<Item>>()
     val itemList: LiveData<List<Item>> get() = _itemList
 
+    private val _itemsByCharacter = MutableLiveData<List<CharacterItemDetail>>()
+    val itemsByCharacter: LiveData<List<CharacterItemDetail>> get() = _itemsByCharacter
+
     private val _loadingState = MutableLiveData<Boolean>()
     val loadingState: LiveData<Boolean> get() = _loadingState
 
@@ -28,7 +32,7 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             val result = itemUseCases.getItemsByCharacterId(characterId)
             result.onSuccess { items ->
-                _itemList.value = items
+                _itemsByCharacter.value = items
                 _loadingState.value = false
                 println("Inventario del personaje en el viewModel: ${_itemList.value}")
             }.onFailure {
@@ -86,10 +90,29 @@ class ItemViewModel @Inject constructor(
     }
 
 
-
-    fun getItems() {
+    fun getItemsBySession(sessionId: Int) {
         viewModelScope.launch {
-            val result = itemUseCases.fetchItems()
+            val result = itemUseCases.getItemsBySession(sessionId)
+            result.onSuccess {
+                    items ->
+                _itemList.value = items
+            }.onFailure {
+                _loadingState.value = false
+                println("Error ${it.message} al obtener los items desde la API")
+            }
+
+            println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")
+        }
+    }
+
+    /**OBTIENE TODOS LOS OBJETOS DE PLANTILLA.
+     * Los objetos de plantilla NO adminte POST, PUT O DELETE. Solamente son de lectura
+     * Cuando el GM quiera personalizar el objeto, obtiene uno de plantilla y
+     * devuelve una copia del objeto a la base de datos custom_item, con el ID del contexto de una sesión.
+     * */
+    fun fetchTemplateItems() {
+        viewModelScope.launch {
+            val result = itemUseCases.fetchTemplateItems()
             result.onSuccess {
                     items ->
                 _itemList.value = items

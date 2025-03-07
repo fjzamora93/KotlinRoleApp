@@ -62,7 +62,7 @@ fun CharacterInventoryBody(
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
-    val inventoryItems by itemViewModel.itemList.observeAsState()
+    val inventoryItems by itemViewModel.itemsByCharacter.observeAsState()
     val isLoading by itemViewModel.loadingState.observeAsState(false)
 
     LaunchedEffect(currentCharacter?.id) {
@@ -82,8 +82,8 @@ fun CharacterInventoryBody(
             Text("Cargando objetos...")
         } else {
             if (inventoryItems != null) {
-                inventoryItems!!.forEach { item ->
-                    InventoryItemCard(item = item)
+                inventoryItems!!.forEach { details ->
+                    InventoryItemCard(item = details.item )
                 }
             } else {
                 Text("No se encontraron objetos")

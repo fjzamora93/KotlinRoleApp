@@ -52,7 +52,7 @@ fun ItemListBody(
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
-    itemViewModel.getItems()
+    itemViewModel.getItemsBySession(selectedCharacter!!.gameSessionId!!)
     val items by itemViewModel.itemList.observeAsState()
     Column(
         modifier = modifier.padding(16.dp),

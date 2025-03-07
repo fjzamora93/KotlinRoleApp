@@ -1,7 +1,7 @@
 package com.unir.sheet.data.remote.service
 
-import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.CharacterWithItems
+import com.unir.sheet.data.remote.model.ApiCharacterItem
 import com.unir.sheet.data.remote.model.ApiCharacterRequest
 import com.unir.sheet.data.remote.model.ApiCharacterResponse
 import com.unir.sheet.data.remote.model.ApiGameSession
@@ -61,14 +61,14 @@ interface ApiService {
     @GET("custom-items/character/{id}")
     suspend fun getItemsByCharacterId(
         @Path("id") characterId: Int
-    ): Response<List<ApiItem>>
+    ): Response<List<ApiCharacterItem> >
 
     @POST("custom-items")
     suspend fun addOrUpdateItemToCharacter(
         @Query("characterId") characterId: Int,
         @Body customItemDTO: ApiItem,
         @Query("quantity") quantity: Int
-    ): Response<CharacterWithItems>
+    ): Response<ApiItem>
 
     @DELETE("custom-items")
     suspend fun deleteItemFromCharacter(

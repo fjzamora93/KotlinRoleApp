@@ -1,12 +1,12 @@
 package com.unir.sheet.data.repository
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import com.unir.sheet.data.local.dao.ItemDao
 import com.unir.sheet.data.model.CharacterItemCrossRef
-import com.unir.sheet.data.model.CharacterWithItems
 import com.unir.sheet.data.model.Item
+import com.unir.sheet.data.remote.model.ApiCharacterItem
+import com.unir.sheet.data.model.CharacterItemDetail
 import com.unir.sheet.data.remote.model.ApiItem
+import com.unir.sheet.data.remote.model.toCharacterItemDetail
 import com.unir.sheet.data.remote.service.ApiService
 import com.unir.sheet.domain.repository.ItemRepository
 import javax.inject.Inject
@@ -17,7 +17,7 @@ class ItemRepositoryImpl @Inject constructor(
 ) : ItemRepository {
 
     // https://springbootroleplay-production.up.railway.app/api/items
-    override suspend fun getAllItems(): Result<List<Item>> {
+    override suspend fun getTemplateItems(): Result<List<Item>> {
         return try {
             val response = apiService.getAllItems()
             if (response.isSuccessful) {
@@ -38,6 +38,7 @@ class ItemRepositoryImpl @Inject constructor(
         gameSessionId: Int): Result<List<Item>> {
         return try {
             val response = apiService.getItemsBySession(gameSessionId)
+            println("Respuesta de la API: $response dentro de la SESIÓN $gameSessionId")
             if (response.isSuccessful){
                 val apiItems: List<ApiItem> = response.body() ?: emptyList()
                 val itemList: List<Item> = apiItems.map { it.toItemEntity() }
@@ -53,24 +54,27 @@ class ItemRepositoryImpl @Inject constructor(
 
 
 
-    /** MÉTODOS DE ACCESO AL INVENTARIO - LOCALES CON ROOM  */
-    override suspend fun getItemsByCharacterId(
-        characterId: Int): Result<List<Item>> {
+    /** MÉTODOS DE ACCESO AL INVENTARIO  */
+    override suspend fun getItemsByCharacterId(characterId: Int): Result<List<CharacterItemDetail>> {
         return try {
-
             val response = apiService.getItemsByCharacterId(characterId)
-            if (response.isSuccessful){
-                val apiItems: List<ApiItem> = response.body() ?: emptyList()
-                val itemList: List<Item> = apiItems.map { it.toItemEntity() }
-                Result.success(itemList)
+            if (response.isSuccessful) {
+                val apiItems: List<ApiCharacterItem> = response.body()
+                    ?: return Result.failure(Exception("La respuesta de la API es nula"))
+
+                println("CharacterItemList: $apiItems")
+
+                val itemsDetail: List<CharacterItemDetail> = apiItems.map { it.toCharacterItemDetail() }
+                Result.success(itemsDetail )
             } else {
                 Result.failure(Exception("Error en la respuesta: ${response.code()}"))
             }
         } catch (e: Exception) {
-            println("Error de otro tipo dentro del repositorio al obtener los datos de la API")
+            println("Error en el repositorio al obtener los datos de la API")
             Result.failure(e)
         }
     }
+
 
 
     override suspend fun deleteItemById(characterId: Int, itemId: Int): Result<Unit> {
@@ -87,7 +91,7 @@ class ItemRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertOrUpdate(
+    override suspend fun addItemToCharacter(
         characterId: Int,
         item: Item,
         quantity: Int

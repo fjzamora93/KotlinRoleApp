@@ -20,8 +20,9 @@ import com.unir.sheet.domain.usecase.character.GetCharactersByUserIdUseCase
 import com.unir.sheet.domain.usecase.character.UpdateCharacterUseCase
 import com.unir.sheet.domain.usecase.item.AddItemToCharacterUseCase
 import com.unir.sheet.domain.usecase.item.DestroyItemUseCase
-import com.unir.sheet.domain.usecase.item.FetchItemsUseCase
+import com.unir.sheet.domain.usecase.item.FetchTemplateItemsUseCase
 import com.unir.sheet.domain.usecase.item.GetItemsByCharacterId
+import com.unir.sheet.domain.usecase.item.GetItemsBySessionUseCase
 import com.unir.sheet.domain.usecase.item.ItemUseCases
 import com.unir.sheet.domain.usecase.item.SellItemUseCase
 import com.unir.sheet.domain.usecase.skill.AddDefaultSkills
@@ -120,8 +121,9 @@ object  AppModule {
         characterRepository: CharacterRepository
     ): ItemUseCases {
         return ItemUseCases(
-            fetchItems = FetchItemsUseCase(itemRepository),
+            fetchTemplateItems = FetchTemplateItemsUseCase(itemRepository),
             getItemsByCharacterId = GetItemsByCharacterId(itemRepository),
+            getItemsBySession = GetItemsBySessionUseCase(itemRepository),
             sellItem = SellItemUseCase(characterRepository, itemRepository),
             destroyItem = DestroyItemUseCase(itemRepository),
             addItemToCharacter = AddItemToCharacterUseCase(characterRepository, itemRepository)
