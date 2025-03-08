@@ -22,8 +22,15 @@ interface CharacterDao {
     @Query("SELECT * FROM character_entity_table WHERE id = :characterId")
     suspend fun getCharacter(characterId: Int): CharacterEntity?
 
+    @Transaction
+    @Query("SELECT * FROM character_entity_table WHERE userId = :userId")
+    suspend fun getCharactersByUserId(userId: Int): List<CharacterEntity>
+
     @Insert
     suspend fun insertCharacter(character: CharacterEntity)
+
+    @Insert
+    suspend fun insertAll(characters: List<CharacterEntity>)
 
     @Update
     suspend fun updateCharacter(character: CharacterEntity)

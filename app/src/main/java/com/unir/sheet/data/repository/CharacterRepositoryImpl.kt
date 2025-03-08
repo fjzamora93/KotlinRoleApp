@@ -1,9 +1,13 @@
 package com.unir.sheet.data.repository
 
+import android.util.Log
 import com.unir.sheet.data.local.dao.CharacterDao
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.remote.service.ApiService
 import com.unir.sheet.domain.repository.CharacterRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -20,23 +24,50 @@ class CharacterRepositoryImpl @Inject constructor(
 
     override suspend fun getCharactersByUserId(userId: Int): Result<List<CharacterEntity>> {
         return try {
-            val result = apiService.getCharactersByUserId(userId)
-            if (result.isSuccessful) {
-                val characters = result.body()
-                if (characters != null) {
-                    val charactersEntities = characters.map( { it.toCharacterEntity() } )
-                    Result.success(charactersEntities)
-                } else {
-                    Result.failure(Exception("No se encontraron personajes para el usuario"))
+            // 1. Obtener datos locales y devolverlos de inmediato si existen
+            val localCharacters = characterDao.getCharactersByUserId(userId)
+            if (localCharacters.isNotEmpty()) {
+
+                // Lanzamos el fetch en una corrutina para no bloquear el flujo principal
+                CoroutineScope(Dispatchers.IO).launch {
+                    fetchAndUpdateCharacters(userId)
                 }
-            } else {
-                Result.failure(Exception("Error en la respuesta del servidor"))
+                return Result.success(localCharacters)
             }
 
+            // 2. Si no hay datos locales, hacer la llamada remota
+            val remoteResponse = apiService.getCharactersByUserId(userId)
+            if (remoteResponse.isSuccessful) {
+                val remoteCharacters = remoteResponse.body()
+                if (!remoteCharacters.isNullOrEmpty()) {
+                    val remoteEntities = remoteCharacters.map { it.toCharacterEntity() }
+                    characterDao.insertAll(remoteEntities)
+                    return Result.success(remoteEntities)
+                }
+            }
+
+            Result.success(emptyList()) // Si no hay datos ni remotos ni locales
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
+    /** MÉTODO QUE REALIZARÁ EL FETCH EN PARALELO, MIENTRAS SE DEVUELVE AL USUARIO LOS DATOS LOCALES */
+    private suspend fun fetchAndUpdateCharacters(userId: Int) {
+        try {
+            val remoteResponse = apiService.getCharactersByUserId(userId)
+            if (remoteResponse.isSuccessful) {
+                val remoteCharacters = remoteResponse.body()
+                if (!remoteCharacters.isNullOrEmpty()) {
+                    val remoteEntities = remoteCharacters.map { it.toCharacterEntity() }
+                    characterDao.insertAll(remoteEntities)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("Error al conectar con la API", "NO se ha logrado sincronizar los datos de la API remota")
+        }
+    }
+
 
     override suspend fun getCharacterById(id: Int): Result<CharacterEntity?> {
         return try {
