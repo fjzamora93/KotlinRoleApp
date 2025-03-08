@@ -14,7 +14,7 @@ data class Spell(
     val id: Int,
 
     @ColumnInfo(name = "characterId")
-    var characterId: Int = 0,
+    var characterId: Long = 0,
 
     var name: String = "",
     var description: String = "",

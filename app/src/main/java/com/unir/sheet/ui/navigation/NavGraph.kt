@@ -94,9 +94,9 @@ fun NavGraph(
             // Pantalla de detalle del personaje
             composable(
                 ScreensRoutes.CharacterDetailScreen.route,
-                arguments = listOf(navArgument("characterId") { type = NavType.IntType })
+                arguments = listOf(navArgument("characterId") { type = NavType.LongType })
             ) { backStackEntry ->
-                val characterId = backStackEntry.arguments?.getInt("characterId") ?: 0
+                val characterId = backStackEntry.arguments?.getLong("characterId") ?: 0
                 CharacterDetailScreen(characterId = characterId)
             }
         }

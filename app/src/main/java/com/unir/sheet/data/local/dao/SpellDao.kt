@@ -12,7 +12,7 @@ import com.unir.sheet.data.model.Spell
 interface SpellDao {
 
     @Query("SELECT * FROM spellTable WHERE characterId = :characterId")
-    suspend fun getSpellsByCharacter(characterId: Int): List<Spell>
+    suspend fun getSpellsByCharacter(characterId: Long): List<Spell>
 
     @Query("SELECT * FROM spellTable")
     suspend fun getSpellList(): List<Spell>

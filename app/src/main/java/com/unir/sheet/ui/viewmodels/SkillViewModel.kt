@@ -40,7 +40,7 @@ class SkillViewModel  @Inject constructor(
         character: CharacterEntity,
     ){
         viewModelScope.launch {
-            val result = skillUseCases.getSkillsFromCharacter(character.id!!)
+            val result = skillUseCases.getSkillsFromCharacter(character.id)
             result.onSuccess {
                 _skillList.value = it
                 println("Skills: ${skillList.value}")

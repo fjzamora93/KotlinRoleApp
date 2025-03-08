@@ -6,7 +6,7 @@ sealed class ScreensRoutes(val route: String) {
     object CharacterListScreen : ScreensRoutes("CharacterListScreen")
     object CharacterSpellScreen : ScreensRoutes("CharacterSpellScreen")
     object CharacterDetailScreen : ScreensRoutes("CharacterDetailScreen/{characterId}") {
-        fun createRoute(characterId: Int) = "CharacterDetailScreen/$characterId"
+        fun createRoute(characterId: Long) = "CharacterDetailScreen/$characterId"
     }
     object SkillListScreen : ScreensRoutes("SkillListScreen")
 

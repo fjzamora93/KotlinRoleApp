@@ -55,7 +55,7 @@ class ItemRepositoryImpl @Inject constructor(
 
 
     /** MÉTODOS DE ACCESO AL INVENTARIO  */
-    override suspend fun getItemsByCharacterId(characterId: Int): Result<List<CharacterItemDetail>> {
+    override suspend fun getItemsByCharacterId(characterId: Long): Result<List<CharacterItemDetail>> {
         return try {
             val response = apiService.getItemsByCharacterId(characterId)
             if (response.isSuccessful) {
@@ -77,7 +77,7 @@ class ItemRepositoryImpl @Inject constructor(
 
 
 
-    override suspend fun deleteItemById(characterId: Int, itemId: Int): Result<Unit> {
+    override suspend fun deleteItemById(characterId: Long, itemId: Int): Result<Unit> {
         return try {
             val response = apiService.deleteItemFromCharacter(characterId, itemId)
 
@@ -92,7 +92,7 @@ class ItemRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addItemToCharacter(
-        characterId: Int,
+        characterId: Long,
         item: Item,
         quantity: Int
     ): Result<Unit> {
@@ -111,7 +111,7 @@ class ItemRepositoryImpl @Inject constructor(
 
 
     override suspend fun getCharacterItem(
-        characterId: Int,
+        characterId: Long,
         itemId: Int
     ): Result<CharacterItemCrossRef> { // Cambia el tipo de retorno a Result<CharacterItemCrossRef> (sin el ?)
         return try {

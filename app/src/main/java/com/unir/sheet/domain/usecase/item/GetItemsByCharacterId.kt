@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetItemsByCharacterId @Inject constructor(
     private val repository: ItemRepository
 ) {
-    suspend operator fun invoke(characterId: Int): Result<List<CharacterItemDetail>> {
+    suspend operator fun invoke(characterId: Long): Result<List<CharacterItemDetail>> {
         return try {
             val items = repository.getItemsByCharacterId(characterId)
             if (items.getOrNull().isNullOrEmpty()) {

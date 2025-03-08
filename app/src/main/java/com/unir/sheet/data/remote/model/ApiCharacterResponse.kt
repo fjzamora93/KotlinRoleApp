@@ -6,8 +6,9 @@ import com.unir.sheet.data.model.Race
 import com.unir.sheet.data.model.RolClass
 
 data class ApiCharacterResponse(
-    val id: Int,
+    val id: Long,
     val userId: Int,
+    val updatedAt: Long,
 
     val name: String,
     val description: String,
@@ -33,6 +34,8 @@ data class ApiCharacterResponse(
             id = this.id,
             userId = this.userId,
             gameSessionId = this.gameSessionId,
+            updatedAt = this.updatedAt,
+
             name = this.name,
             description = this.description,
             rolClass = RolClass.valueOf(this.roleClass?.name ?: "WARRIOR"),

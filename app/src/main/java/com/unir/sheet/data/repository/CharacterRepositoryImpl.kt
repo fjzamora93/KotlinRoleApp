@@ -7,6 +7,7 @@ import com.unir.sheet.data.remote.service.ApiService
 import com.unir.sheet.domain.repository.CharacterRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +30,7 @@ class CharacterRepositoryImpl @Inject constructor(
             if (localCharacters.isNotEmpty()) {
 
                 // Lanzamos el fetch en una corrutina para no bloquear el flujo principal
-                CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.IO).async {
                     fetchAndUpdateCharacters(userId)
                 }
                 return Result.success(localCharacters)
@@ -56,20 +57,27 @@ class CharacterRepositoryImpl @Inject constructor(
     private suspend fun fetchAndUpdateCharacters(userId: Int) {
         try {
             val remoteResponse = apiService.getCharactersByUserId(userId)
+            println(" MANDANDO LA PETICIÓN ")
             if (remoteResponse.isSuccessful) {
+                println(" EXITO ")
+
                 val remoteCharacters = remoteResponse.body()
                 if (!remoteCharacters.isNullOrEmpty()) {
+                    println(" MAPEANDO E INSERTANDO ")
+
                     val remoteEntities = remoteCharacters.map { it.toCharacterEntity() }
+
+                    println(remoteEntities)
+
                     characterDao.insertAll(remoteEntities)
                 }
             }
         } catch (e: Exception) {
-            Log.e("Error al conectar con la API", "NO se ha logrado sincronizar los datos de la API remota")
-        }
+            Log.e("Error al insertar los remotos en la local", "No se pudieron insertar los personajes", e)        }
     }
 
 
-    override suspend fun getCharacterById(id: Int): Result<CharacterEntity?> {
+    override suspend fun getCharacterById(id: Long): Result<CharacterEntity?> {
         return try {
             val result = apiService.getCharacterById(id)
             if (result.isSuccessful) {
@@ -90,6 +98,7 @@ class CharacterRepositoryImpl @Inject constructor(
 
     override suspend fun saveCharacter(character: CharacterEntity): Result<CharacterEntity> {
         return try {
+            println("EL personaje en cuestión + "+ character.toApiRequest())
             val result = apiService.saveCharacter(character.toApiRequest()) // Convert to CharacterResponse
             if (result.isSuccessful) {
                 val savedCharacter = result.body()

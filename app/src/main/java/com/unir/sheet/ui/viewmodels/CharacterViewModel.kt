@@ -1,5 +1,6 @@
 package com.unir.sheet.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,7 +38,7 @@ class CharacterViewModel @Inject constructor(
 
 
     // Función para obtener un personaje por ID
-    fun getCharacterById(characterId: Int) {
+    fun getCharacterById(characterId: Long) {
         _loadingState.value = true
         viewModelScope.launch {
             val result = characterUseCases.getCharacterById(characterId)
@@ -84,7 +85,7 @@ class CharacterViewModel @Inject constructor(
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message
-                println("Error al actualizar el personaje")
+                Log.e("Error en la inserción","Error al actualizar personaje: ${errorMessage.value}")
             }
         }
     }

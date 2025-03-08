@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +52,8 @@ fun CharacterSpellBody(
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     val spellList by spellViewModel.spellList.observeAsState()
-    spellViewModel.getSpellsForCharacter(characterViewModel.selectedCharacter.value!!)
+    val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
+    spellViewModel.getSpellsForCharacter(currentCharacter!!)
 
     if (spellList == null) {
         Text("Cargando Hechizos...")

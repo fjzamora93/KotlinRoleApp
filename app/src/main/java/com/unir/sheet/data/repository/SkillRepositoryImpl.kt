@@ -30,7 +30,7 @@ class SkillRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getSkillsFromCharacter(characterId: Int): Result<List<Skill>> {
+    override suspend fun getSkillsFromCharacter(characterId: Long): Result<List<Skill>> {
         return try {
             val response = apiService.getSkillsByCharacterId(characterId)
             if (response.isSuccessful) {
@@ -44,7 +44,7 @@ class SkillRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addDefaultSkills(characterId: Int, skillIds: List<Int>): Result<Unit> {
+    override suspend fun addDefaultSkills(characterId: Long, skillIds: List<Int>): Result<Unit> {
         return try {
             val response = apiService.addDefaultSkills(characterId, skillIds)
 
@@ -59,7 +59,7 @@ class SkillRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun addSkillToCharacter(characterId: Int, skillId: Int): Result<Unit> {
+    override suspend fun addSkillToCharacter(characterId: Long, skillId: Int): Result<Unit> {
         return try {
             val response = apiService.addSkillToCharacter(characterId.toLong(), skillId.toLong())
             if (response.isSuccessful) {
@@ -72,7 +72,7 @@ class SkillRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteSkillFromCharacter(characterId: Int, skillId: Int): Result<Unit> {
+    override suspend fun deleteSkillFromCharacter(characterId: Long, skillId: Int): Result<Unit> {
         return try {
             val response = apiService.deleteSkillFromCharacter(characterId.toLong(), skillId.toLong())
             if (response.isSuccessful) {

@@ -11,11 +11,11 @@ class GetAllSkillsUseCase @Inject constructor(private val repository: SkillRepos
 }
 
 class GetSkillsFromCharacterUseCase @Inject constructor(private val repository: SkillRepositoryImpl) {
-    suspend operator fun invoke(characterId: Int): Result<List<Skill>> = repository.getSkillsFromCharacter(characterId)
+    suspend operator fun invoke(characterId: Long): Result<List<Skill>> = repository.getSkillsFromCharacter(characterId)
 }
 
 class DeleteSkillFromCharacterUseCase @Inject constructor(private val repository: SkillRepositoryImpl) {
-    suspend operator fun invoke(characterId: Int, skillId: Int): Result<Unit> = repository.deleteSkillFromCharacter(characterId, skillId)
+    suspend operator fun invoke(characterId: Long, skillId: Int): Result<Unit> = repository.deleteSkillFromCharacter(characterId, skillId)
 }
 
 /**

@@ -27,7 +27,7 @@ class ItemViewModel @Inject constructor(
     val loadingState: LiveData<Boolean> get() = _loadingState
 
 
-    fun getItemsByCharacterId(characterId: Int) {
+    fun getItemsByCharacterId(characterId: Long) {
         _loadingState.value = true
         viewModelScope.launch {
             val result = itemUseCases.getItemsByCharacterId(characterId)

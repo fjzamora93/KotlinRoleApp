@@ -15,16 +15,16 @@ interface ItemDao {
 
     @Transaction
     @Query("SELECT * FROM item_table WHERE id IN (SELECT itemId FROM character_item_cross_ref WHERE characterId = :characterId)")
-    suspend fun getItemsByCharacterId(characterId: Int): List<Item>
+    suspend fun getItemsByCharacterId(characterId: Long): List<Item>
 
     @Query("SELECT * FROM character_item_cross_ref WHERE characterId = :characterId AND itemId = :itemId")
-    suspend fun getCharacterItem(characterId: Int, itemId: Int): CharacterItemCrossRef?
+    suspend fun getCharacterItem(characterId: Long, itemId: Int): CharacterItemCrossRef?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(item: Item)
 
     @Transaction
-    suspend fun insertOrUpdateItemWithCharacter(item: Item, characterId: Int, quantity: Int) {
+    suspend fun insertOrUpdateItemWithCharacter(item: Item, characterId: Long, quantity: Int) {
         // Primero, inserta o actualiza el ítem
         insertItem(item)
 

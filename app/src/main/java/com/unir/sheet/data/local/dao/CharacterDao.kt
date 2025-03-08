@@ -20,7 +20,7 @@ interface CharacterDao {
 
     @Transaction
     @Query("SELECT * FROM character_entity_table WHERE id = :characterId")
-    suspend fun getCharacter(characterId: Int): CharacterEntity?
+    suspend fun getCharacter(characterId: Long): CharacterEntity?
 
     @Transaction
     @Query("SELECT * FROM character_entity_table WHERE userId = :userId")
@@ -29,7 +29,7 @@ interface CharacterDao {
     @Insert
     suspend fun insertCharacter(character: CharacterEntity)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(characters: List<CharacterEntity>)
 
     @Update

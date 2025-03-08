@@ -24,7 +24,7 @@ import androidx.room.Index
     indices = [Index(value = ["characterId"]), Index(value = ["itemId"])]
 )
 data class CharacterItemCrossRef(
-    val characterId: Int,
+    val characterId: Long,
     val itemId: Int,
     val quantity: Int
 )

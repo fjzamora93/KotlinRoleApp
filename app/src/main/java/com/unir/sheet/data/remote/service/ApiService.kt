@@ -60,19 +60,19 @@ interface ApiService {
 
     @GET("custom-items/character/{id}")
     suspend fun getItemsByCharacterId(
-        @Path("id") characterId: Int
+        @Path("id") characterId: Long
     ): Response<List<ApiCharacterItem> >
 
     @POST("custom-items")
     suspend fun addOrUpdateItemToCharacter(
-        @Query("characterId") characterId: Int,
+        @Query("characterId") characterId: Long,
         @Body customItemDTO: ApiItem,
         @Query("quantity") quantity: Int
     ): Response<ApiItem>
 
     @DELETE("custom-items")
     suspend fun deleteItemFromCharacter(
-        @Query("characterId") characterId: Int,
+        @Query("characterId") characterId: Long,
         @Query("itemId") itemId: Int
     ): Response<Void>
 
@@ -102,7 +102,7 @@ interface ApiService {
     // OBTENER UN PERSONAJE POR SU ID
     @GET("characters/{id}")
     suspend fun getCharacterById(
-        @Path("id") id: Int
+        @Path("id") id: Long
     ):  Response<ApiCharacterResponse>
 
     // CREAR O ACTUALIZAR UN PERSONAJE
@@ -114,7 +114,7 @@ interface ApiService {
     // ELIMINAR UN PERSONAJE POR ID
     @DELETE("characters/{id}")
     suspend fun deleteCharacter(
-        @Path("id") id: Int
+        @Path("id") id: Long
     ): Response<Void>
 
 
@@ -125,7 +125,7 @@ interface ApiService {
     suspend fun getAllSkills(): Response<List<ApiSkill>>
 
     @GET("skills/{characterId}")
-    suspend fun getSkillsByCharacterId(@Path("id") id: Int): Response<List<ApiSkill>>
+    suspend fun getSkillsByCharacterId(@Path("id") id: Long): Response<List<ApiSkill>>
 
     // AÑADIR HABILIDAD A UN PERSONAJE
     @POST("skills")
@@ -136,7 +136,7 @@ interface ApiService {
 
     @POST("skills/addDefault/{characterId}")
     suspend fun addDefaultSkills(
-        @Path("characterId") characterId: Int,
+        @Path("characterId") characterId: Long,
         @Body skillIds: List<Int>
     ): Response<ApiCharacterResponse>
 

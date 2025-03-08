@@ -36,7 +36,7 @@ import com.unir.sheet.ui.viewmodels.CharacterViewModel
 
 @Composable
 fun CharacterDetailScreen(
-    characterId : Int,
+    characterId : Long,
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
 ){
 

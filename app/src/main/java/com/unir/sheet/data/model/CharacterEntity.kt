@@ -5,15 +5,18 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.unir.sheet.data.remote.model.ApiCharacterRequest
+import java.util.UUID
+import java.util.concurrent.atomic.AtomicInteger
 
 @Entity(tableName = "character_entity_table")
 data class CharacterEntity(
-    @PrimaryKey(autoGenerate = true) var id: Int? = null,
+    @PrimaryKey var id: Long = 0L,
 
     // DATOS DE USUARIO Y SESIÓN
     @ColumnInfo(name = "userId")
     var userId: Int,
     var gameSessionId: Int? = null,
+    val updatedAt: Long,
 
     // Datos del personaje
     var name: String = "",
@@ -49,10 +52,19 @@ data class CharacterEntity(
 
     ){
 
+    // Asignamos el ID único cuando se crea el objeto
+    init {
+        if (id == 0L) {
+            this.id = "$userId${System.currentTimeMillis()}".toLong()
+        }
+    }
+
     fun toApiRequest(): ApiCharacterRequest {
         return ApiCharacterRequest(
             id = this.id,
             name = this.name,
+            updatedAt = this.updatedAt,
+
             description = this.description,
             race = this.race.name,
             gender = this.gender.name,

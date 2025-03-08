@@ -38,7 +38,7 @@ class SellItemUseCase @Inject constructor(
 
                 // Si la cantidad del ítem es 0, eliminar la relación
                 if (newQuantity == 0) {
-                    itemRepository.deleteItemById(item.id, characterId).onFailure { error ->
+                    itemRepository.deleteItemById(characterId, item.id).onFailure { error ->
                         return Result.failure(error) // Manejar error al eliminar la relación
                     }
                 }

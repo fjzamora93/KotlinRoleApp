@@ -5,7 +5,7 @@ import com.unir.sheet.data.model.CharacterItemDetail
 
 data class ApiCharacterItem(
     val customItem: ApiItem,
-    val characterId: Int,
+    val characterId: Long,
     val quantity: Int
 
 )

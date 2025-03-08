@@ -27,7 +27,7 @@ class GetCharactersByUserIdUseCase @Inject constructor(
 class GetCharacterByIdUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(id: Int): Result<CharacterEntity?> {
+    suspend operator fun invoke(id: Long): Result<CharacterEntity?> {
         val result = repository.getCharacterById(id)
         return if (result.isSuccess) {
             Result.success(result.getOrNull()) // Devolver el personaje o null si no se encuentra
@@ -51,16 +51,13 @@ class UpdateCharacterUseCase @Inject constructor(
             character.gameSessionId = 0
         }
 
-
-
         val result = repository.saveCharacter(character)
         return if (result.isSuccess) {
-            if (character.id == null) {
-                result.onSuccess {
-                        newCharacter -> addDefaultSkills(newCharacter)
-                    println("INsertando habilidades")
-                }
+            result.onSuccess {
+                    newCharacter -> addDefaultSkills(newCharacter)
+                println("INsertando habilidades")
             }
+
             Result.success(Unit)
         } else {
             Result.failure(result.exceptionOrNull() ?: Exception("Error al actualizar el personaje"))
