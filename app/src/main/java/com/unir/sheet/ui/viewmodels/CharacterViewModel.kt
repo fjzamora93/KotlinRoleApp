@@ -35,7 +35,22 @@ class CharacterViewModel @Inject constructor(
     private val _selectedCharacter = MutableStateFlow<CharacterEntity?>(null)
     val selectedCharacter: MutableStateFlow<CharacterEntity?> = _selectedCharacter
 
-
+    // Función para actualizar un personaje
+    fun updateCharacter(characterEntity: CharacterEntity) {
+        _loadingState.value = true
+        viewModelScope.launch {
+            val result = characterUseCases.updateCharacter(characterEntity)
+            result.onSuccess {
+                _selectedCharacter.value = characterEntity
+                _loadingState.value = false
+                println("Personaje actualizado: ${characterEntity.name}")
+            }.onFailure {
+                _loadingState.value = false
+                _errorMessage.value = it.message
+                Log.e("Error en la inserción","Error al actualizar personaje: ${errorMessage.value}")
+            }
+        }
+    }
 
     // Función para obtener un personaje por ID
     fun getCharacterById(characterId: Long) {
@@ -72,23 +87,7 @@ class CharacterViewModel @Inject constructor(
 
 
 
-    // Función para actualizar un personaje
-    fun updateCharacter(characterEntity: CharacterEntity) {
-        println("Comenzando a actualizar personaje: ${characterEntity}")
-        _loadingState.value = true
-        viewModelScope.launch {
-            val result = characterUseCases.updateCharacter(characterEntity)
-            result.onSuccess {
-                _selectedCharacter.value = characterEntity
-                _loadingState.value = false
-                println("Personaje actualizado: ${characterEntity.name}")
-            }.onFailure {
-                _loadingState.value = false
-                _errorMessage.value = it.message
-                Log.e("Error en la inserción","Error al actualizar personaje: ${errorMessage.value}")
-            }
-        }
-    }
+
 
     fun deleteCharacter(characterEntity: CharacterEntity) {
         _loadingState.value = true

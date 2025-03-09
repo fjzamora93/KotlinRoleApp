@@ -56,10 +56,11 @@ object  AppModule {
     @Singleton
     fun provideCharacterRepository(
         database: MyDatabase,
-        apiService: ApiService
+        apiService: ApiService,
+        skillDao: SkillDao
     ): com.unir.sheet.domain.repository.CharacterRepository {
         return CharacterRepositoryImpl(
-            database.characterDao(), apiService
+            database.characterDao(), apiService, skillDao
         )
     }
 
@@ -103,12 +104,11 @@ object  AppModule {
     @Singleton
     fun provideCharacterUseCases(
         characterRepository: CharacterRepository,
-        addDefaultSkills: AddDefaultSkills // Inyectas AddDefaultSkills
     ): CharacterUseCases {
         return CharacterUseCases(
             getCharactersByUserId = GetCharactersByUserIdUseCase(characterRepository),
             getCharacterById = GetCharacterByIdUseCase(characterRepository),
-            updateCharacter = UpdateCharacterUseCase(characterRepository, addDefaultSkills), // Inyectas AddDefaultSkills aquí
+            updateCharacter = UpdateCharacterUseCase(characterRepository), // Inyectas AddDefaultSkills aquí
             deleteCharacter = DeleteCharacterUseCase(characterRepository)
         )
     }

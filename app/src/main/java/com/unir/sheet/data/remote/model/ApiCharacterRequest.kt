@@ -9,6 +9,7 @@ data class ApiCharacterRequest(
     val description: String,
     val race: String,
     val gender: String,
+    val level: Int,
     val size: Int,
     val age: Int,
     val gold: Int,
@@ -22,4 +23,6 @@ data class ApiCharacterRequest(
     val gameSessionId: Int?,
     val userId: Int?,
     val roleClass: String,
+
+
 )

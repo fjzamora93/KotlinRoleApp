@@ -1,6 +1,7 @@
 package com.unir.sheet.domain.usecase.skill
 
 import com.unir.sheet.data.model.CharacterEntity
+import com.unir.sheet.data.model.CharacterSkillCrossRef
 import com.unir.sheet.data.model.RolClass
 import com.unir.sheet.data.model.Skill
 import com.unir.sheet.data.repository.SkillRepositoryImpl
@@ -26,7 +27,7 @@ class DeleteSkillFromCharacterUseCase @Inject constructor(private val repository
 class AddDefaultSkills @Inject constructor(private val repository: SkillRepositoryImpl) {
     suspend operator fun invoke(
         character: CharacterEntity,
-    ): Result<Unit> {
+    ): Result<List<Skill> >{
 
         val skillIndex = when (character.rolClass) {
             RolClass.WARRIOR -> listOf(1, 2, 3)
@@ -49,8 +50,7 @@ class AddDefaultSkills @Inject constructor(private val repository: SkillReposito
         }
 
         return try {
-            repository.addDefaultSkills(character.id!!, skillIndex)
-            Result.success(Unit)
+            repository.addDefaultSkills(character.id, skillIndex)
         } catch (e: Exception) {
             Result.failure(e)
         }

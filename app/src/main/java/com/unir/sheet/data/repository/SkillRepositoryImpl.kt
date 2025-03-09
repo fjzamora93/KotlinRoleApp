@@ -4,10 +4,14 @@ import android.content.Context
 import com.unir.sheet.data.local.dao.CharacterDao
 import com.unir.sheet.data.local.dao.ItemDao
 import com.unir.sheet.data.local.dao.SkillDao
+import com.unir.sheet.data.model.CharacterSkillCrossRef
 import com.unir.sheet.data.model.Skill
 import com.unir.sheet.data.remote.model.toSkill
 import com.unir.sheet.data.remote.service.ApiService
 import com.unir.sheet.domain.repository.SkillRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -21,6 +25,7 @@ class SkillRepositoryImpl @Inject constructor(
             val response = apiService.getAllSkills()
             if (response.isSuccessful) {
                 val skills = response.body()?.map { it.toSkill() } ?: emptyList()
+                skillDao.insertAll(skills)
                 Result.success(skills)
             } else {
                 Result.failure(Exception("Error al obtener habilidades: ${response.code()}"))
@@ -44,24 +49,28 @@ class SkillRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addDefaultSkills(characterId: Long, skillIds: List<Int>): Result<Unit> {
-        return try {
-            val response = apiService.addDefaultSkills(characterId, skillIds)
 
-            if (response.isSuccessful) {
-                Result.success(Unit)
-            } else {
-                Result.failure(Exception("Error al agregar habilidades"))
-            }
+    override suspend fun addDefaultSkills(characterId: Long, skillIds: List<Int>): Result<List<Skill>> {
+
+
+
+        val defaultSkills : List<Skill> =  skillDao.updateCharacterSkills(characterId, skillIds)
+        println("Asignando habilidades $defaultSkills al personaje $characterId")
+        CoroutineScope(Dispatchers.IO).launch {
+            apiService.addDefaultSkills(characterId, skillIds)
+        }
+        return try {
+            Result.success(defaultSkills)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
 
+
     override suspend fun addSkillToCharacter(characterId: Long, skillId: Int): Result<Unit> {
         return try {
-            val response = apiService.addSkillToCharacter(characterId.toLong(), skillId.toLong())
+            val response = apiService.addSkillToCharacter(characterId, skillId.toLong())
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {

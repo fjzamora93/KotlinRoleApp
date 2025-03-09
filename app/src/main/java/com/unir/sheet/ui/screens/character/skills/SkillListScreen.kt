@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,18 +50,24 @@ fun SkillListBody(
     skillViewModel: SkillViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-    val spellList by remember { skillViewModel.skillList }
+    val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
+    val spellList by skillViewModel.skillList.collectAsState()
     skillViewModel.getAllSKills()
+    //skillViewModel.getSkillsFromCharacter(currentCharacter!!)
 
     if (spellList == null) {
         Text("Cargando Hechizos...")
     } else {
-        var spells by remember { mutableStateOf(spellList) }
         Column(
             modifier = modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            spells.forEach { spell ->
+            Button(onClick = {
+                skillViewModel.getSkillsFromCharacter(currentCharacter!!)
+            }) {
+                Text(text = "Obtener habilidades")
+            }
+            spellList.forEach { spell ->
                 SkillCard(skill = spell)
             }
         }

@@ -27,7 +27,6 @@ data class ApiCharacterResponse(
     val gameSessionId: Int?,
     val roleClass: ApiRoleClass?,
     val items: List<ApiItem>,
-    val skills: List<ApiSkill>
 ) {
     fun toCharacterEntity(): CharacterEntity {
         return CharacterEntity(

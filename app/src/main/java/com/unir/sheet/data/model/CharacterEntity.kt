@@ -4,6 +4,7 @@ package com.unir.sheet.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.unir.sheet.data.local.dao.SkillDao
 import com.unir.sheet.data.remote.model.ApiCharacterRequest
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
@@ -60,14 +61,15 @@ data class CharacterEntity(
     }
 
     fun toApiRequest(): ApiCharacterRequest {
+
         return ApiCharacterRequest(
             id = this.id,
             name = this.name,
             updatedAt = this.updatedAt,
-
             description = this.description,
             race = this.race.name,
             gender = this.gender.name,
+            level = this.level,
             size = this.size,
             age = this.age,
             gold = this.gold,

@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.unir.sheet.data.model.CharacterWithItems
 import com.unir.sheet.data.model.CharacterEntity
 
 
@@ -20,20 +19,17 @@ interface CharacterDao {
 
     @Transaction
     @Query("SELECT * FROM character_entity_table WHERE id = :characterId")
-    suspend fun getCharacter(characterId: Long): CharacterEntity?
+    suspend fun getCharacterById(characterId: Long): CharacterEntity?
 
     @Transaction
     @Query("SELECT * FROM character_entity_table WHERE userId = :userId")
     suspend fun getCharactersByUserId(userId: Int): List<CharacterEntity>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacter(character: CharacterEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(characters: List<CharacterEntity>)
-
-    @Update
-    suspend fun updateCharacter(character: CharacterEntity)
 
     @Delete
     suspend fun deleteCharacter(character: CharacterEntity)

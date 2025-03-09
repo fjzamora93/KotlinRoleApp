@@ -10,6 +10,8 @@ import com.unir.sheet.data.repository.CharacterRepositoryImpl
 import com.unir.sheet.domain.usecase.skill.SkillUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +22,8 @@ class SkillViewModel  @Inject constructor(
     @ApplicationContext private val context: Context
 ) :  ViewModel() {
 
-    private val _skillList = mutableStateOf<List<Skill>>(emptyList())
-    val skillList: State<List<Skill>> get() = _skillList
+    private val _skillList = MutableStateFlow<List<Skill>>(emptyList())
+    val skillList: StateFlow<List<Skill>> get() = _skillList
 
 
     fun getAllSKills(){
@@ -40,10 +42,10 @@ class SkillViewModel  @Inject constructor(
         character: CharacterEntity,
     ){
         viewModelScope.launch {
-            val result = skillUseCases.getSkillsFromCharacter(character.id)
+            val result = skillUseCases.addDefaultSkills(character)
             result.onSuccess {
                 _skillList.value = it
-                println("Skills: ${skillList.value}")
+                println("Skills en el viewMOdel: ${skillList.value}")
             }.onFailure {
                 println("Error ${it.message} al obtener las skills")
             }

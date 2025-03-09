@@ -2,6 +2,7 @@ package com.unir.sheet.data.repository
 
 import android.util.Log
 import com.unir.sheet.data.local.dao.CharacterDao
+import com.unir.sheet.data.local.dao.SkillDao
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.remote.service.ApiService
 import com.unir.sheet.domain.repository.CharacterRepository
@@ -19,35 +20,20 @@ import javax.inject.Inject
  * */
 class CharacterRepositoryImpl @Inject constructor(
     private val characterDao: CharacterDao,
-    private val apiService: ApiService
-) : CharacterRepository {
+    private val apiService: ApiService,
+    private val skillDao: SkillDao,
+
+    ) : CharacterRepository {
 
 
+    /** Este método hace el fetch en segundo plano, pero la vista no se va a refrescar automáticamente, habría que refrescarla manualmente */
     override suspend fun getCharactersByUserId(userId: Int): Result<List<CharacterEntity>> {
         return try {
-            // 1. Obtener datos locales y devolverlos de inmediato si existen
             val localCharacters = characterDao.getCharactersByUserId(userId)
-            if (localCharacters.isNotEmpty()) {
-
-                // Lanzamos el fetch en una corrutina para no bloquear el flujo principal
-                CoroutineScope(Dispatchers.IO).async {
-                    fetchAndUpdateCharacters(userId)
-                }
-                return Result.success(localCharacters)
+            CoroutineScope(Dispatchers.IO).launch {
+                fetchAndUpdateCharacters(userId)
             }
-
-            // 2. Si no hay datos locales, hacer la llamada remota
-            val remoteResponse = apiService.getCharactersByUserId(userId)
-            if (remoteResponse.isSuccessful) {
-                val remoteCharacters = remoteResponse.body()
-                if (!remoteCharacters.isNullOrEmpty()) {
-                    val remoteEntities = remoteCharacters.map { it.toCharacterEntity() }
-                    characterDao.insertAll(remoteEntities)
-                    return Result.success(remoteEntities)
-                }
-            }
-
-            Result.success(emptyList()) // Si no hay datos ni remotos ni locales
+            return Result.success(localCharacters)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -57,59 +43,55 @@ class CharacterRepositoryImpl @Inject constructor(
     private suspend fun fetchAndUpdateCharacters(userId: Int) {
         try {
             val remoteResponse = apiService.getCharactersByUserId(userId)
-            println(" MANDANDO LA PETICIÓN ")
             if (remoteResponse.isSuccessful) {
-                println(" EXITO ")
-
                 val remoteCharacters = remoteResponse.body()
                 if (!remoteCharacters.isNullOrEmpty()) {
-                    println(" MAPEANDO E INSERTANDO ")
+                    val localCharacters = characterDao.getCharactersByUserId(userId)
+                    val localCharacterMap = localCharacters.associateBy { it.id }
+                    val charactersToInsert = remoteCharacters.filter { remoteCharacter ->
+                        val localCharacter = localCharacterMap[remoteCharacter.id]
+                        localCharacter == null || remoteCharacter.updatedAt > localCharacter.updatedAt
+                    }
 
-                    val remoteEntities = remoteCharacters.map { it.toCharacterEntity() }
-
-                    println(remoteEntities)
-
-                    characterDao.insertAll(remoteEntities)
+                    // Insertar solo los personajes más recientes
+                    if (charactersToInsert.isNotEmpty()) {
+                        val remoteEntities = charactersToInsert.map { it.toCharacterEntity() }
+                        println(remoteEntities) // Ver lo que se va a insertar
+                        characterDao.insertAll(remoteEntities)
+                    }
                 }
             }
         } catch (e: Exception) {
-            Log.e("Error al insertar los remotos en la local", "No se pudieron insertar los personajes", e)        }
+            Log.e("Error al insertar los remotos en la local", "No se pudieron insertar los personajes", e)
+        }
     }
 
 
-    override suspend fun getCharacterById(id: Long): Result<CharacterEntity?> {
+
+    /** LOs personajes por id los buscará directamente en el DAO. Si no lo encuentra, levantará una excepción  */
+    override suspend fun getCharacterById(id: Long): Result<CharacterEntity> {
         return try {
-            val result = apiService.getCharacterById(id)
-            if (result.isSuccessful) {
-                val character = result.body()
-                if (character != null) {
-                    Result.success(character.toCharacterEntity())
-                } else {
-                    Result.success(null) // Return null if no character is found
-                }
-            } else {
-                Result.failure(Exception("Error en la respuesta: ${result.code()}"))
-            }
+            val character = characterDao.getCharacterById(id)
+                ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
+            Result.success(character)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-
+    // Comienza con intentar guardarlo en la API, mientras que devuelve la inserción local
     override suspend fun saveCharacter(character: CharacterEntity): Result<CharacterEntity> {
         return try {
-            println("EL personaje en cuestión + "+ character.toApiRequest())
-            val result = apiService.saveCharacter(character.toApiRequest()) // Convert to CharacterResponse
-            if (result.isSuccessful) {
-                val savedCharacter = result.body()
-                if (savedCharacter != null) {
-                    Result.success(savedCharacter.toCharacterEntity()) // Convert back to CharacterEntity
-                } else {
-                    Result.failure(Exception("Error al guardar el personaje: Respuesta vacía")) // Return an error
+            characterDao.insertCharacter(character)
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val apiCharacter = character.toApiRequest()
+                    apiService.saveCharacter(apiCharacter)
+                } catch (e: Exception) {
+                    Log.e("API Error", "Fallo al guardar en la API", e)
                 }
-            } else {
-                Result.failure(Exception("Error en la respuesta: ${result.code()}")) // Return an error
             }
+            Result.success(character)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -119,13 +101,15 @@ class CharacterRepositoryImpl @Inject constructor(
 
     override suspend fun deleteCharacter(character: CharacterEntity): Result<Unit> {
         return try {
-            val result = apiService.deleteCharacter(character.id!!)
-            if (result.isSuccessful) {
-                characterDao.deleteCharacter(character)
-                Result.success(Unit) // Return success if both operations are successful
-            } else {
-                Result.failure(Exception("Error al eliminar el personaje en el servidor: ${result.code()}"))
+            CoroutineScope(Dispatchers.IO).async {
+                try {
+                    apiService.deleteCharacter(character.id)
+                } catch (e: Exception) {
+                    Log.e("API Error", "Fallo al eliminar en la API", e)
+                }
             }
+            characterDao.deleteCharacter(character)
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }

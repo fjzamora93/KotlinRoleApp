@@ -1,6 +1,7 @@
 package com.unir.sheet.data.remote.service
 
 import com.unir.sheet.data.model.CharacterWithItems
+import com.unir.sheet.data.model.Skill
 import com.unir.sheet.data.remote.model.ApiCharacterItem
 import com.unir.sheet.data.remote.model.ApiCharacterRequest
 import com.unir.sheet.data.remote.model.ApiCharacterResponse
@@ -138,7 +139,7 @@ interface ApiService {
     suspend fun addDefaultSkills(
         @Path("characterId") characterId: Long,
         @Body skillIds: List<Int>
-    ): Response<ApiCharacterResponse>
+    ): Response<List<Skill>>
 
     // ELIMINAR HABILIDAD DE UN PERSONAJE
     @DELETE("skills")
