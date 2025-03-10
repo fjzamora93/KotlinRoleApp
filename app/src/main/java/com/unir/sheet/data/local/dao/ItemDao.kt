@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.CharacterItemCrossRef
 import com.unir.sheet.data.model.Item
 
@@ -23,25 +24,8 @@ interface ItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(item: Item)
 
-    @Transaction
-    suspend fun insertOrUpdateItemWithCharacter(item: Item, characterId: Long, quantity: Int) {
-        // Primero, inserta o actualiza el ítem
-        insertItem(item)
-
-        // Luego, inserta o actualiza la relación en la tabla intermedia
-        val crossRef = CharacterItemCrossRef(
-            characterId = characterId,
-            itemId = item.id,
-            quantity = quantity
-        )
-        insertItemToCharacter(crossRef)
-    }
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertItem(item: Item)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertItemToCharacter(crossRef: CharacterItemCrossRef)
+    @Query("SELECT * FROM item_table WHERE id_game_session = :gameSessionId")
+    suspend fun getItemsBySession(gameSessionId: Int): List<Item>
 
     @Query("DELETE FROM item_table WHERE id = :itemId")
     suspend fun deleteItemById(itemId: Int)
@@ -49,6 +33,25 @@ interface ItemDao {
     @Delete
     suspend fun deleteItemFromCharacter(characterItem: CharacterItemCrossRef)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(items: List<Item>)
+
+    /** TRANSACCIÓN Para añadir un objeto a un personaje (son 2 pasos, primero insertar el item y luego la relación entre el personaje y el item) */
+    @Transaction
+    suspend fun insertOrUpdateItemWithCharacter(item: Item, characterId: Long, quantity: Int) {
+        insertItem(item)
+        val crossRef = CharacterItemCrossRef(
+            characterId = characterId,
+            itemId = item.id,
+            quantity = quantity
+        )
+        insertItemToCharacter(crossRef)
+    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertItem(item: Item)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertItemToCharacter(crossRef: CharacterItemCrossRef)
 
 
 }

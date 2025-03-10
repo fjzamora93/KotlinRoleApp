@@ -12,7 +12,7 @@ interface ItemRepository {
 
 
     suspend fun deleteItemById(characterId: Long, itemId: Int) :  Result<Unit>
-    suspend fun addItemToCharacter(characteriId: Long, item: Item, quantity: Int) :  Result<Unit>
+    suspend fun addItemToCharacter(characterId: Long, item: Item, quantity: Int) :  Result<Unit>
     suspend fun getItemsByCharacterId(characterId: Long): Result<List<CharacterItemDetail>>
 
     suspend fun getCharacterItem(characterId: Long, itemId: Int) :  Result<CharacterItemCrossRef?>
