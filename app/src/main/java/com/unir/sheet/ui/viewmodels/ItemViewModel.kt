@@ -8,6 +8,8 @@ import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.CharacterItemDetail
 import com.unir.sheet.domain.usecase.item.ItemUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,14 +19,17 @@ class ItemViewModel @Inject constructor(
     private val itemUseCases: ItemUseCases,
 ) : ViewModel() {
 
-    private val _itemList = MutableLiveData<List<Item>>()
-    val itemList: LiveData<List<Item>> get() = _itemList
+    private val _itemList = MutableStateFlow<List<Item>>(emptyList())
+    val itemList: StateFlow<List<Item>> get() = _itemList
 
-    private val _itemsByCharacter = MutableLiveData<List<CharacterItemDetail>>()
-    val itemsByCharacter: LiveData<List<CharacterItemDetail>> get() = _itemsByCharacter
+    private val _itemsByCharacter = MutableStateFlow<List<CharacterItemDetail>>(emptyList())
+    val itemsByCharacter: StateFlow<List<CharacterItemDetail>> get() = _itemsByCharacter
 
-    private val _loadingState = MutableLiveData<Boolean>()
-    val loadingState: LiveData<Boolean> get() = _loadingState
+    private val _currentGold = MutableStateFlow<Int>(0)
+    val currentGold: StateFlow<Int> get() = _currentGold
+
+    private val _loadingState = MutableStateFlow<Boolean>(false)
+    val loadingState: StateFlow<Boolean> get() = _loadingState
 
 
     fun getItemsByCharacterId(characterId: Long) {
@@ -49,7 +54,8 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             println("AÑADIENDO ${currentItem.name} AL PERSONAJE: ${currentCharacter.name}")
             val result = itemUseCases.addItemToCharacter(currentCharacter, currentItem)
-            result.onSuccess {
+            result.onSuccess { items ->
+                _itemsByCharacter.value = items
                 println("El objeto se ha añadido correctamente")
             }.onFailure { error ->
                 println("Error al añadir el objeto: ${error.message}")
@@ -64,9 +70,9 @@ class ItemViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             val result =   itemUseCases.sellItem(currentCharacter, currentItem)
-            result.onSuccess {
+            result.onSuccess { items ->
                 println("El objeto se vendió correctamente")
-                _itemList.value = _itemList.value?.filterNot { it == currentItem }
+                _itemsByCharacter.value = items
 
             }.onFailure { error ->
                 println("Error al vender el objeto: ${error.message}")
@@ -80,9 +86,9 @@ class ItemViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             val result = itemUseCases.destroyItem(currentCharacter, currentItem)
-            result.onSuccess {
+            result.onSuccess { items ->
                 println("El objeto se ha eliminado correctamente")
-                _itemList.value = _itemList.value?.filterNot { it == currentItem }
+                _itemsByCharacter.value = items
             }.onFailure { error ->
                 println("Error al eliminar el objeto: ${error.message}")
             }
@@ -102,6 +108,20 @@ class ItemViewModel @Inject constructor(
             }
 
             println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")
+        }
+    }
+
+    // IMPLEMENTAR MÉTODO QUE PERMITA OBTENER EL ORO Y ASÍ TENERLO SIEMPRE ACTUALIZADO AL MARGEN DEL CHARACTER
+    fun getCurrentGold(character: CharacterEntity){
+        viewModelScope.launch {
+//            val result = itemUseCases.getCurrentGold(character)
+//            result.onSuccess {
+//                    gold ->
+//                _currentGold.value = gold
+//            }.onFailure {
+//                _loadingState.value = false
+//                println("Error ${it.message} al obtener el oro")
+//            }
         }
     }
 

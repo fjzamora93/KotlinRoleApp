@@ -11,10 +11,11 @@ interface ItemRepository {
     suspend fun getItemsBySession( gameSessionId: Int): Result<List<Item>>
 
 
-    suspend fun deleteItemById(characterId: Long, itemId: Int) :  Result<Unit>
-    suspend fun addItemToCharacter(characterId: Long, item: Item, quantity: Int) :  Result<Unit>
+    suspend fun deleteItemFromCharacter(characterId: Long, itemId: Int) :  Result<List<CharacterItemDetail>>
+
+    suspend fun addItemToCharacter(characterId: Long, item: Item, quantity: Int) :  Result<List<CharacterItemDetail>>
     suspend fun getItemsByCharacterId(characterId: Long): Result<List<CharacterItemDetail>>
 
-    suspend fun getCharacterItem(characterId: Long, itemId: Int) :  Result<CharacterItemCrossRef?>
-
+    suspend fun sellItem(characterId: Long, item: Item) :  Result<Unit>
+    suspend fun buyItem(characterId: Long, item: Item) :  Result<Unit>
 }

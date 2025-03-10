@@ -1,6 +1,7 @@
 package com.unir.sheet.domain.usecase.item
 
 import com.unir.sheet.data.model.CharacterEntity
+import com.unir.sheet.data.model.CharacterItemDetail
 import com.unir.sheet.data.model.Item
 import com.unir.sheet.domain.repository.CharacterRepository
 import com.unir.sheet.domain.repository.ItemRepository
@@ -14,22 +15,13 @@ class AddItemToCharacterUseCase(
         character: CharacterEntity,
         item: Item,
         quantity: Int = 1,
-    ): Result<Unit> {
+    ): Result<List<CharacterItemDetail>> {
         return try {
             if (character.gold < item.goldValue) {
                 return Result.failure(Exception("Oro insuficiente"))
             }
-
-            val itemUpdateResult = character.id?.let {
-                val newItem = item.copy(gameSession = character.gameSessionId)
-                itemRepository.addItemToCharacter(it, newItem, quantity)
-            }
-
-            if (itemUpdateResult != null) {
-                if (itemUpdateResult.isFailure) return itemUpdateResult
-            }
-
-            Result.success(Unit)
+            itemRepository.buyItem(character.id, item)
+            return itemRepository.addItemToCharacter(character.id, item, quantity)
         } catch (e: Exception) {
             Result.failure(e)
         }

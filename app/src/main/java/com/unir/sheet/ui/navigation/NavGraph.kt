@@ -17,8 +17,8 @@ import com.unir.sheet.ui.screens.MainScreen
 import com.unir.sheet.ui.screens.character.CharacterCreatorScreen
 import com.unir.sheet.ui.screens.character.CharacterListScreen
 import com.unir.sheet.ui.screens.character.characterDetail.CharacterDetailScreen
-import com.unir.sheet.ui.screens.character.items.CharacterInventoryScreen
-import com.unir.sheet.ui.screens.character.items.ItemListScreen
+import com.unir.sheet.ui.screens.items.CharacterInventoryScreen
+import com.unir.sheet.ui.screens.items.ItemListScreen
 import com.unir.sheet.ui.screens.character.skills.SkillListScreen
 import com.unir.sheet.ui.screens.character.spells.CharacterSpellScreen
 import com.unir.sheet.ui.screens.layout.FontsTemplateScreen

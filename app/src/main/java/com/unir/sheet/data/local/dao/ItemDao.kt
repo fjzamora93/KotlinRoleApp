@@ -8,18 +8,31 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.CharacterItemCrossRef
+import com.unir.sheet.data.model.CharacterItemDetail
 import com.unir.sheet.data.model.Item
 
 @Dao
 interface ItemDao {
 
 
-    @Transaction
+    /**Transacción única para obtener la relación entre persnoajes e items */
     @Query("SELECT * FROM item_table WHERE id IN (SELECT itemId FROM character_item_cross_ref WHERE characterId = :characterId)")
     suspend fun getItemsByCharacterId(characterId: Long): List<Item>
 
-    @Query("SELECT * FROM character_item_cross_ref WHERE characterId = :characterId AND itemId = :itemId")
-    suspend fun getCharacterItem(characterId: Long, itemId: Int): CharacterItemCrossRef?
+    @Query("SELECT * FROM character_item_cross_ref WHERE characterId = :characterId")
+    suspend fun getCharacterItemsByCharacterId(characterId: Long): List<CharacterItemCrossRef>
+
+    @Transaction
+    suspend fun getItemsDetailByCharacter(characterId: Long): List<CharacterItemDetail> {
+        val items = getItemsByCharacterId(characterId)
+        val itemsCrossRef = getCharacterItemsByCharacterId(characterId).associateBy { it.itemId }
+
+        return items.map { item ->
+            CharacterItemDetail(item, characterId, itemsCrossRef[item.id]?.quantity ?: 0)
+        }
+    }
+
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(item: Item)
@@ -53,5 +66,33 @@ interface ItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItemToCharacter(crossRef: CharacterItemCrossRef)
 
+
+    // Vender un objeto: Sumar el valor del item al oro del personaje
+    @Query("""
+        UPDATE character_entity_table
+        SET gold = gold + (
+            SELECT item_table.goldValue 
+            FROM item_table 
+            INNER JOIN character_item_cross_ref ON item_table.id = character_item_cross_ref.itemId
+            WHERE character_item_cross_ref.characterId = :characterId AND character_item_cross_ref.itemId = :itemId
+        ),
+        updatedAt = strftime('%s', 'now') * 1000
+        WHERE id = :characterId
+    """)
+    suspend fun sellItem(characterId: Long, itemId: Int)
+
+    // Comprar un objeto: Multiplicar el oro del personaje por el valor del item
+    @Query("""
+        UPDATE character_entity_table
+        SET gold = gold - (
+            SELECT item_table.goldValue 
+            FROM item_table 
+            INNER JOIN character_item_cross_ref ON item_table.id = character_item_cross_ref.itemId
+            WHERE character_item_cross_ref.characterId = :characterId AND character_item_cross_ref.itemId = :itemId
+        ),
+        updatedAt = strftime('%s', 'now') * 1000
+        WHERE id = :characterId
+    """)
+    suspend fun buyItem(characterId: Long, itemId: Int)
 
 }

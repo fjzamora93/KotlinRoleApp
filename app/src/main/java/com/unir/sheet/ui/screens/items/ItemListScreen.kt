@@ -1,4 +1,4 @@
-package com.unir.sheet.ui.screens.character.items
+package com.unir.sheet.ui.screens.items
 
 
 import androidx.compose.foundation.layout.Column
@@ -53,7 +53,7 @@ fun ItemListBody(
 ) {
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     itemViewModel.getItemsBySession(selectedCharacter!!.gameSessionId!!)
-    val items by itemViewModel.itemList.observeAsState()
+    val items by itemViewModel.itemList.collectAsState()
     Column(
         modifier = modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally

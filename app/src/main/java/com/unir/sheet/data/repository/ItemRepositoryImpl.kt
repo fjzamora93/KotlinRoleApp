@@ -83,15 +83,9 @@ class ItemRepositoryImpl @Inject constructor(
                     throw Exception("Error en la respuesta: ${response.code()}")
                 }
             }
-
-            val localItems = itemDao.getItemsByCharacterId(characterId)
-            val localItemsDetail = localItems.map { item ->
-                val itemCharacter : CharacterItemCrossRef = itemDao.getCharacterItem(characterId, item.id)
-                    ?: throw NoSuchElementException("No se encontró el CharacterItemCrossRef para characterId: $characterId y itemId: ${item.id}")
-                CharacterItemDetail(item, characterId, itemCharacter.quantity)
-            }
-            Result.success(localItemsDetail)
-
+            val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
+            Log.w("ITEMS", itemsDetail.toString())
+            Result.success(itemsDetail)
         } catch (e: Exception) {
             println("Error en el repositorio al obtener los datos de la API")
             Result.failure(e)
@@ -99,8 +93,7 @@ class ItemRepositoryImpl @Inject constructor(
     }
 
 
-
-    override suspend fun deleteItemById(characterId: Long, itemId: Int): Result<Unit> {
+    override suspend fun deleteItemFromCharacter(characterId: Long, itemId: Int): Result<List<CharacterItemDetail>> {
         return try {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = apiService.deleteItemFromCharacter(characterId, itemId)
@@ -109,7 +102,8 @@ class ItemRepositoryImpl @Inject constructor(
                 }
             }
             itemDao.deleteItemFromCharacter(CharacterItemCrossRef(characterId, itemId))
-            Result.success(Unit)
+            val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
+            Result.success(itemsDetail)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -119,20 +113,39 @@ class ItemRepositoryImpl @Inject constructor(
         characterId: Long,
         item: Item,
         quantity: Int
-    ): Result<Unit> {
+    ): Result<List<CharacterItemDetail>> {
         return try {
             CoroutineScope(Dispatchers.IO).launch {
                 try{
                     val apiItem = item.toApiItem()
                     val response = apiService.addOrUpdateItemToCharacter(characterId, apiItem, quantity)
                     if (!response.isSuccessful) {
-                        throw Exception("Error en el borrado en la API: ${response.code()}")
+                        throw Exception("Error al añadir item a character en la API: ${response.code()}")
                     }
                 } catch (e: Exception) {
                     Log.e("API Error", "Fallo al actualizar item de character en la API", e)
                 }
             }
             itemDao.insertOrUpdateItemWithCharacter(item, characterId, quantity)
+            val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
+            Result.success(itemsDetail)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun sellItem(characterId: Long, item: Item): Result<Unit> {
+        return try{
+            itemDao.sellItem(characterId, item.id)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun buyItem(characterId: Long, item: Item): Result<Unit> {
+        return try{
+            itemDao.buyItem(characterId, item.id)
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -140,18 +153,19 @@ class ItemRepositoryImpl @Inject constructor(
     }
 
 
+
     // Método sin uso en la vista, ya que devuelve el CrossRef (id item, idc character y quantity)
-    override suspend fun getCharacterItem(
-        characterId: Long,
-        itemId: Int
-    ): Result<CharacterItemCrossRef> {
-        return try {
-            val itemCharacter : CharacterItemCrossRef = itemDao.getCharacterItem(characterId, itemId)
-                ?: throw NoSuchElementException("No se encontró el CharacterItemCrossRef para characterId: $characterId y itemId: $itemId")
-            Result.success(itemCharacter)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
+//    override suspend fun getCharacterItem(
+//        characterId: Long,
+//        itemId: Int
+//    ): Result<CharacterItemCrossRef> {
+//        return try {
+//            val itemCharacter : CharacterItemCrossRef = itemDao.getCharacterItem(characterId, itemId)
+//                ?: throw NoSuchElementException("No se encontró el CharacterItemCrossRef para characterId: $characterId y itemId: $itemId")
+//            Result.success(itemCharacter)
+//        } catch (e: Exception) {
+//            Result.failure(e)
+//        }
+//    }
 
 }

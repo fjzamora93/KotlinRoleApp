@@ -56,7 +56,7 @@ class CharacterRepositoryImpl @Inject constructor(
                     // Insertar solo los personajes más recientes
                     if (charactersToInsert.isNotEmpty()) {
                         val remoteEntities = charactersToInsert.map { it.toCharacterEntity() }
-                        println(remoteEntities) // Ver lo que se va a insertar
+                        println(remoteEntities)
                         characterDao.insertAll(remoteEntities)
                     }
                 }
@@ -71,8 +71,9 @@ class CharacterRepositoryImpl @Inject constructor(
     /** LOs personajes por id los buscará directamente en el DAO. Si no lo encuentra, levantará una excepción  */
     override suspend fun getCharacterById(id: Long): Result<CharacterEntity> {
         return try {
-            val character = characterDao.getCharacterById(id)
-                ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
+            val character = characterDao.getCharacterById(id) ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
+
+
             Result.success(character)
         } catch (e: Exception) {
             Result.failure(e)

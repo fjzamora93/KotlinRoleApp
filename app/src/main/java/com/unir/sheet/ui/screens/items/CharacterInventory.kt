@@ -1,4 +1,4 @@
-package com.unir.sheet.ui.screens.character.items
+package com.unir.sheet.ui.screens.items
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -62,8 +62,8 @@ fun CharacterInventoryBody(
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
-    val inventoryItems by itemViewModel.itemsByCharacter.observeAsState()
-    val isLoading by itemViewModel.loadingState.observeAsState(false)
+    val inventoryItems by itemViewModel.itemsByCharacter.collectAsState()
+    val isLoading by itemViewModel.loadingState.collectAsState(false)
 
     LaunchedEffect(currentCharacter?.id) {
         currentCharacter?.id?.let { id ->
@@ -125,8 +125,7 @@ fun InventoryItemCard(
                 style = MaterialTheme.typography.bodyMedium
             )
             Button(onClick = {
-                val currentCharacter = characterViewModel.selectedCharacter.value
-                itemViewModel.sellItem(currentCharacter!!, item)
+                itemViewModel.sellItem(character!!, item)
             }) {
                 Text(text = "vender")
             }
