@@ -7,14 +7,28 @@ import com.unir.sheet.domain.repository.ItemRepository
 import javax.inject.Inject
 
 class DestroyItemUseCase @Inject constructor(
-    private val repository: ItemRepository
+    private val itemRepository: ItemRepository
 ) {
-    suspend operator fun invoke(character: CharacterEntity, item: Item): Result<List<CharacterItemDetail>> {
+    suspend operator fun invoke(
+        character: CharacterEntity,
+        item: Item,
+    ): Result<List<CharacterItemDetail>> {
         return try {
-            return repository.deleteItemFromCharacter(character.id, item.id)
+            var quantity: Int = itemRepository.getItemDetail(character.id, item.id).getOrThrow().quantity
+            quantity -= 1
+            println("La cantidad que se va a modificar es... $quantity")
+            if (quantity <= 0) {
+                itemRepository.deleteItemFromCharacter(character.id, item.id)
+            } else {
+                itemRepository.upsertItemToCharacter(character.id, item, quantity)
+            }
+
+            // Devolver el resultado actualizado
+            return itemRepository.getItemsByCharacterId(character.id)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 }
+
 

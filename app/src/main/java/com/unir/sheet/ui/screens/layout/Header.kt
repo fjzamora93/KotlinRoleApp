@@ -118,7 +118,7 @@ fun CharacterThumbnail(
                 if (selectedCharacter != null) {
                     navigationViewModel.navigate(
                         ScreensRoutes.CharacterDetailScreen.createRoute(
-                            selectedCharacter!!.id!!))
+                            selectedCharacter!!.id))
                 } else {
                     navigationViewModel.navigate(ScreensRoutes.CharacterListScreen.route)
                 }
@@ -134,7 +134,7 @@ fun CharacterThumbnail(
             )
         }
         Text(
-            text = " ${selectedCharacter?.name ?: "Ninguno"} + ${user?.id}",
+            text = "${selectedCharacter?.id ?: ""}. ${selectedCharacter?.name ?: ""} -- User: ${user?.id}",
             style = CustomType.bodyMedium,
         )
     }

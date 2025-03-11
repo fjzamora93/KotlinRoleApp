@@ -69,13 +69,13 @@ interface ApiService {
         @Query("characterId") characterId: Long,
         @Body customItemDTO: ApiItem,
         @Query("quantity") quantity: Int
-    ): Response<ApiItem>
+    ): Response<List<ApiCharacterItem> >
 
     @DELETE("custom-items")
     suspend fun deleteItemFromCharacter(
         @Query("characterId") characterId: Long,
         @Query("itemId") itemId: Int
-    ): Response<Void>
+    ): Response<List<ApiCharacterItem> >
 
 
 

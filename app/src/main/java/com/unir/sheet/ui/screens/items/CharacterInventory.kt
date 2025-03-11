@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -83,7 +82,7 @@ fun CharacterInventoryBody(
         } else {
             if (inventoryItems != null) {
                 inventoryItems!!.forEach { details ->
-                    InventoryItemCard(item = details.item )
+                    InventoryItemCard(item = details.item , quantity = details.quantity)
                 }
             } else {
                 Text("No se encontraron objetos")
@@ -100,6 +99,7 @@ fun InventoryItemCard(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     itemViewModel: ItemViewModel = hiltViewModel(),
     item: Item,
+    quantity: Int,
     modifier: Modifier = Modifier
 ) {
     val character by characterViewModel.selectedCharacter.collectAsState()
@@ -111,30 +111,26 @@ fun InventoryItemCard(
                 .padding(16.dp)
         ) {
             Text(
-                text = item.name,
+                text = "${item.id} - ${item.name}",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.height(8.dp))
+
             Text(
-                text = "Daño: ${item.dice}",
-                style = MaterialTheme.typography.bodyMedium
+                text = "Precio: ${item.goldValue} + Cantidad $quantity",
+                style = MaterialTheme.typography.labelSmall
             )
-            Text(
-                text = "Precio: ${item.goldValue}",
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Button(onClick = {
-                itemViewModel.sellItem(character!!, item)
-            }) {
-                Text(text = "vender")
+
+            Row(){
+
+                Button(onClick = {
+                    itemViewModel.destroyItem(character!!, item)
+                }) {
+                    Text(text = "consumir / destruir")
+                }
             }
 
-            Button(onClick = {
-                itemViewModel.removeItemFromCharacter(character!!, item)
-            }) {
-                Text(text = "consumir")
-            }
         }
     }
 }

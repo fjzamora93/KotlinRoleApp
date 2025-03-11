@@ -66,6 +66,13 @@ class ItemRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getItemDetail(characterId: Long, itemId: Int): Result<CharacterItemDetail> {
+        return try {
+            Result.success(itemDao.getItemDetail(characterId, itemId))
+        } catch (e : Exception) {
+            Result.failure(e)
+        }
+    }
 
 
     /** MÉTODOS DE ACCESO AL INVENTARIO  */
@@ -97,8 +104,14 @@ class ItemRepositoryImpl @Inject constructor(
         return try {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = apiService.deleteItemFromCharacter(characterId, itemId)
-                if (!response.isSuccessful) {
-                    throw Exception("Error en el borrado en la API: ${response.code()}")
+                if (response.isSuccessful) {
+                    val apiItems: List<ApiCharacterItem> = response.body() ?: throw Exception("Error en la respuesta: ${response.code()}")
+                    val itemsDetail: List<CharacterItemDetail> = apiItems.map { it.toCharacterItemDetail() }
+                    itemsDetail.forEach { itemDetail ->
+                        itemDao.insertOrUpdateItemWithCharacter(itemDetail.item, characterId, itemDetail.quantity)
+                    }
+                } else {
+                    throw Exception("Error en la respuesta: ${response.code()}")
                 }
             }
             itemDao.deleteItemFromCharacter(CharacterItemCrossRef(characterId, itemId))
@@ -109,21 +122,28 @@ class ItemRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addItemToCharacter(
+    override suspend fun upsertItemToCharacter(
         characterId: Long,
         item: Item,
         quantity: Int
     ): Result<List<CharacterItemDetail>> {
         return try {
             CoroutineScope(Dispatchers.IO).launch {
-                try{
+                try {
                     val apiItem = item.toApiItem()
-                    val response = apiService.addOrUpdateItemToCharacter(characterId, apiItem, quantity)
-                    if (!response.isSuccessful) {
-                        throw Exception("Error al añadir item a character en la API: ${response.code()}")
+                    val response =
+                        apiService.addOrUpdateItemToCharacter(characterId, apiItem, quantity)
+                    if (response.isSuccessful) {
+                        val apiItems: List<ApiCharacterItem> = response.body() ?: emptyList()
+                        val itemsDetail: List<CharacterItemDetail> = apiItems.map { it.toCharacterItemDetail() }
+                        itemsDetail.forEach { itemDetail ->
+                            itemDao.insertOrUpdateItemWithCharacter(itemDetail.item, characterId, itemDetail.quantity)
+                        }
+                    } else {
+                        throw Exception("Error en la respuesta: ${response.code()}")
                     }
                 } catch (e: Exception) {
-                    Log.e("API Error", "Fallo al actualizar item de character en la API", e)
+                    Log.e("API Error", "Fallo al obtener items de la API", e)
                 }
             }
             itemDao.insertOrUpdateItemWithCharacter(item, characterId, quantity)

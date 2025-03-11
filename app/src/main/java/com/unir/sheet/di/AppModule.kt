@@ -18,7 +18,7 @@ import com.unir.sheet.domain.usecase.character.DeleteCharacterUseCase
 import com.unir.sheet.domain.usecase.character.GetCharacterByIdUseCase
 import com.unir.sheet.domain.usecase.character.GetCharactersByUserIdUseCase
 import com.unir.sheet.domain.usecase.character.UpdateCharacterUseCase
-import com.unir.sheet.domain.usecase.item.AddItemToCharacterUseCase
+import com.unir.sheet.domain.usecase.item.UpsertItemToCharacter
 import com.unir.sheet.domain.usecase.item.DestroyItemUseCase
 import com.unir.sheet.domain.usecase.item.FetchTemplateItemsUseCase
 import com.unir.sheet.domain.usecase.item.GetItemsByCharacterId
@@ -126,7 +126,7 @@ object  AppModule {
             getItemsBySession = GetItemsBySessionUseCase(itemRepository),
             sellItem = SellItemUseCase(characterRepository, itemRepository),
             destroyItem = DestroyItemUseCase(itemRepository),
-            addItemToCharacter = AddItemToCharacterUseCase(characterRepository, itemRepository)
+            upsertItemToCharacter = UpsertItemToCharacter(characterRepository, itemRepository)
         )
     }
 

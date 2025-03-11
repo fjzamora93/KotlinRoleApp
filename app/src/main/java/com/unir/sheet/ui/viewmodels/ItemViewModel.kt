@@ -1,6 +1,4 @@
 package com.unir.sheet.ui.viewmodels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.sheet.data.model.Item
@@ -47,13 +45,13 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    fun addItemToCharacter(
+    fun upsertItemToCharacter(
         currentCharacter: CharacterEntity,
         currentItem: Item,
     ){
         viewModelScope.launch {
             println("AÑADIENDO ${currentItem.name} AL PERSONAJE: ${currentCharacter.name}")
-            val result = itemUseCases.addItemToCharacter(currentCharacter, currentItem)
+            val result = itemUseCases.upsertItemToCharacter(currentCharacter, currentItem)
             result.onSuccess { items ->
                 _itemsByCharacter.value = items
                 println("El objeto se ha añadido correctamente")
@@ -64,33 +62,20 @@ class ItemViewModel @Inject constructor(
     }
 
 
-    fun sellItem(
+
+
+    fun destroyItem(
         currentCharacter: CharacterEntity,
         currentItem: Item,
     ){
         viewModelScope.launch {
-            val result =   itemUseCases.sellItem(currentCharacter, currentItem)
-            result.onSuccess { items ->
-                println("El objeto se vendió correctamente")
-                _itemsByCharacter.value = items
-
-            }.onFailure { error ->
-                println("Error al vender el objeto: ${error.message}")
-            }
-        }
-    }
-
-    fun removeItemFromCharacter(
-        currentCharacter: CharacterEntity,
-        currentItem: Item,
-    ){
-        viewModelScope.launch {
+            println("AÑADIENDO ${currentItem.name} AL PERSONAJE: ${currentCharacter.name}")
             val result = itemUseCases.destroyItem(currentCharacter, currentItem)
             result.onSuccess { items ->
-                println("El objeto se ha eliminado correctamente")
                 _itemsByCharacter.value = items
+                println("El objeto se ha añadido correctamente")
             }.onFailure { error ->
-                println("Error al eliminar el objeto: ${error.message}")
+                println("Error al añadir el objeto: ${error.message}")
             }
         }
     }

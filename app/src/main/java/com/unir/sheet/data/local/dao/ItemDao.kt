@@ -32,6 +32,16 @@ interface ItemDao {
         }
     }
 
+    @Transaction()
+    suspend fun getItemDetail(characterId: Long, itemId: Int): CharacterItemDetail {
+        val item = getItemById(itemId)
+        val quantity = getCharacterItemsByCharacterId(characterId).find { it.itemId == itemId }?.quantity ?: 0
+        return CharacterItemDetail(item, characterId, quantity)
+    }
+
+    @Query("SELECT * FROM ITEM_TABLE WHERE id = :itemId ")
+    suspend fun getItemById(itemId: Int): Item
+
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
