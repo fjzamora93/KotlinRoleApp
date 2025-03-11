@@ -12,11 +12,13 @@ interface ItemRepository {
 
     suspend fun deleteItemFromCharacter(characterId: Long, itemId: Int) :  Result<List<CharacterItemDetail>>
 
-    suspend fun upsertItemToCharacter(characterId: Long, item: Item, quantity: Int) :  Result<List<CharacterItemDetail>>
+    suspend fun upsertItemToCharacter(characterId: Long, item: Item, quantity: Int ) :  Result<List<CharacterItemDetail>>
     suspend fun getItemsByCharacterId(characterId: Long): Result<List<CharacterItemDetail>>
 
     suspend fun sellItem(characterId: Long, item: Item) :  Result<Unit>
     suspend fun buyItem(characterId: Long, item: Item) :  Result<Unit>
 
     suspend fun getItemDetail(characterId: Long, itemId: Int): Result<CharacterItemDetail>
+
+    suspend fun syncToApiCharacterItem(characterId: Long): Result<List<CharacterItemDetail>>
 }

@@ -26,5 +26,6 @@ import androidx.room.Index
 data class CharacterItemCrossRef(
     val characterId: Long,
     val itemId: Int,
-    val quantity: Int = 1
+    val quantity: Int = 1,
+    val updatedAt: Long = System.currentTimeMillis()
 )

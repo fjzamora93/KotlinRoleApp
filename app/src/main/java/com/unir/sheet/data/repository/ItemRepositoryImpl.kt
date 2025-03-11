@@ -79,16 +79,7 @@ class ItemRepositoryImpl @Inject constructor(
     override suspend fun getItemsByCharacterId(characterId: Long): Result<List<CharacterItemDetail>> {
         return try {
             CoroutineScope(Dispatchers.IO).launch {
-                val response = apiService.getItemsByCharacterId(characterId)
-                if (response.isSuccessful) {
-                    val apiItems: List<ApiCharacterItem> = response.body() ?: throw Exception("Error en la respuesta: ${response.code()}")
-                    val itemsDetail: List<CharacterItemDetail> = apiItems.map { it.toCharacterItemDetail() }
-                    itemsDetail.forEach { itemDetail ->
-                        itemDao.insertOrUpdateItemWithCharacter(itemDetail.item, characterId, itemDetail.quantity)
-                    }
-                } else {
-                    throw Exception("Error en la respuesta: ${response.code()}")
-                }
+                syncToApiCharacterItem(characterId)
             }
             val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
             Log.w("ITEMS", itemsDetail.toString())
@@ -102,18 +93,6 @@ class ItemRepositoryImpl @Inject constructor(
 
     override suspend fun deleteItemFromCharacter(characterId: Long, itemId: Int): Result<List<CharacterItemDetail>> {
         return try {
-            CoroutineScope(Dispatchers.IO).launch {
-                val response = apiService.deleteItemFromCharacter(characterId, itemId)
-                if (response.isSuccessful) {
-                    val apiItems: List<ApiCharacterItem> = response.body() ?: throw Exception("Error en la respuesta: ${response.code()}")
-                    val itemsDetail: List<CharacterItemDetail> = apiItems.map { it.toCharacterItemDetail() }
-                    itemsDetail.forEach { itemDetail ->
-                        itemDao.insertOrUpdateItemWithCharacter(itemDetail.item, characterId, itemDetail.quantity)
-                    }
-                } else {
-                    throw Exception("Error en la respuesta: ${response.code()}")
-                }
-            }
             itemDao.deleteItemFromCharacter(CharacterItemCrossRef(characterId, itemId))
             val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
             Result.success(itemsDetail)
@@ -122,32 +101,14 @@ class ItemRepositoryImpl @Inject constructor(
         }
     }
 
+    // Al llamar a este método el updatedAT se fija automáticamente.
     override suspend fun upsertItemToCharacter(
         characterId: Long,
         item: Item,
-        quantity: Int
+        quantity: Int,
     ): Result<List<CharacterItemDetail>> {
         return try {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val apiItem = item.toApiItem()
-                    val response =
-                        apiService.addOrUpdateItemToCharacter(characterId, apiItem, quantity)
-                    if (response.isSuccessful) {
-                        val apiItems: List<ApiCharacterItem> = response.body() ?: emptyList()
-                        val itemsDetail: List<CharacterItemDetail> = apiItems.map { it.toCharacterItemDetail() }
-                        itemsDetail.forEach { itemDetail ->
-                            itemDao.insertOrUpdateItemWithCharacter(itemDetail.item, characterId, itemDetail.quantity)
-                        }
-                    } else {
-                        throw Exception("Error en la respuesta: ${response.code()}")
-                    }
-                } catch (e: Exception) {
-                    Log.e("API Error", "Fallo al obtener items de la API", e)
-                }
-            }
-            itemDao.insertOrUpdateItemWithCharacter(item, characterId, quantity)
-            val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
+            val itemsDetail = itemDao.insertOrUpdateItemWithCharacter(item, characterId, quantity)
             Result.success(itemsDetail)
         } catch (e: Exception) {
             Result.failure(e)
@@ -173,19 +134,63 @@ class ItemRepositoryImpl @Inject constructor(
     }
 
 
+    /**
+     * Sincroniza la base de datos local y la remota.
+     *
+     * SI la base de datos remota está más actualizada, devolverá una lista actualizada.
+     *
+     * Si la versión más actual es la local, devolverá exactamente lo mismo que se envió.
+     *
+     * */
+    override suspend fun syncToApiCharacterItem(
+        characterId: Long,
+    ): Result<List<CharacterItemDetail>> {
+        return try {
+            // 1. Obtener los detalles locales del ítem
+            val localItemsDetails: List<CharacterItemDetail> = itemDao.getItemsDetailByCharacter(characterId)
 
-    // Método sin uso en la vista, ya que devuelve el CrossRef (id item, idc character y quantity)
-//    override suspend fun getCharacterItem(
-//        characterId: Long,
-//        itemId: Int
-//    ): Result<CharacterItemCrossRef> {
-//        return try {
-//            val itemCharacter : CharacterItemCrossRef = itemDao.getCharacterItem(characterId, itemId)
-//                ?: throw NoSuchElementException("No se encontró el CharacterItemCrossRef para characterId: $characterId y itemId: $itemId")
-//            Result.success(itemCharacter)
-//        } catch (e: Exception) {
-//            Result.failure(e)
-//        }
-//    }
+            // 2. Sincronizar con la API
+            val response = apiService.updateItemsToCharacter(localItemsDetails.map {  it.toCharacterApiCharacterItem() })
+
+            // 3. Verificar si la respuesta fue exitosa
+            if (!response.isSuccessful) {
+                throw Exception("Error en la respuesta: ${response.code()}")
+            }
+
+            // 4. Obtener los datos actualizados de la API
+            val apiItems: List<ApiCharacterItem> = response.body()
+                ?: throw Exception("Error en el cuerpo de la respuesta")
+
+            // 5. Convertir los datos de la API a dominio local
+            val updatedItemsDetail: List<CharacterItemDetail> = apiItems.map { it.toCharacterItemDetail() }
+
+
+            // 6. Comparar los datos locales con los datos de la API y actualizar SOLO si hay cambios
+            if (localItemsDetails != updatedItemsDetail) {
+
+                // Encontrar las relaciones locales que no están en la API y borrarlas localmente
+                val localItemIds = localItemsDetails.map { it.item.id }.toSet()
+                val apiItemIds = updatedItemsDetail.map { it.item.id }.toSet()
+                val itemsToDelete = localItemIds - apiItemIds
+                itemsToDelete.forEach { itemId ->
+                    itemDao.deleteItemFromCharacter(CharacterItemCrossRef(characterId, itemId))
+                }
+
+                // Actualizar las relaciones que permanecen
+                updatedItemsDetail.forEach { itemDetail ->
+                    itemDao.insertOrUpdateItemWithCharacter(
+                        itemDetail.item,
+                        characterId,
+                        itemDetail.quantity
+                    )
+                }
+            }
+
+            // 7. Devolver la lista sincronizada
+            Result.success(updatedItemsDetail)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 }

@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.data.model.CharacterItemCrossRef
 import com.unir.sheet.data.model.CharacterItemDetail
 import com.unir.sheet.data.model.Item
@@ -20,23 +19,29 @@ interface ItemDao {
     suspend fun getItemsByCharacterId(characterId: Long): List<Item>
 
     @Query("SELECT * FROM character_item_cross_ref WHERE characterId = :characterId")
-    suspend fun getCharacterItemsByCharacterId(characterId: Long): List<CharacterItemCrossRef>
+    suspend fun getCharacterItemCrossRef(characterId: Long): List<CharacterItemCrossRef>
 
     @Transaction
     suspend fun getItemsDetailByCharacter(characterId: Long): List<CharacterItemDetail> {
         val items = getItemsByCharacterId(characterId)
-        val itemsCrossRef = getCharacterItemsByCharacterId(characterId).associateBy { it.itemId }
+        val itemsCrossRef = getCharacterItemCrossRef(characterId).associateBy { it.itemId }
 
         return items.map { item ->
-            CharacterItemDetail(item, characterId, itemsCrossRef[item.id]?.quantity ?: 0)
+            CharacterItemDetail(
+                item,
+                characterId,
+                itemsCrossRef[item.id]?.quantity ?: 0,
+                itemsCrossRef[item.id]?.updatedAt ?: 0
+            )
         }
     }
 
     @Transaction()
     suspend fun getItemDetail(characterId: Long, itemId: Int): CharacterItemDetail {
         val item = getItemById(itemId)
-        val quantity = getCharacterItemsByCharacterId(characterId).find { it.itemId == itemId }?.quantity ?: 0
-        return CharacterItemDetail(item, characterId, quantity)
+        val quantity = getCharacterItemCrossRef(characterId).find { it.itemId == itemId }?.quantity ?: 0
+        val updatedAt = getCharacterItemCrossRef(characterId).find { it.itemId == itemId }?.updatedAt ?: 0
+        return CharacterItemDetail(item, characterId, quantity, updatedAt)
     }
 
     @Query("SELECT * FROM ITEM_TABLE WHERE id = :itemId ")
@@ -44,8 +49,7 @@ interface ItemDao {
 
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdate(item: Item)
+
 
     @Query("SELECT * FROM item_table WHERE id_game_session = :gameSessionId")
     suspend fun getItemsBySession(gameSessionId: Int): List<Item>
@@ -56,22 +60,21 @@ interface ItemDao {
     @Delete
     suspend fun deleteItemFromCharacter(characterItem: CharacterItemCrossRef)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(items: List<Item>)
 
     /** TRANSACCIÓN Para añadir un objeto a un personaje (son 2 pasos, primero insertar el item y luego la relación entre el personaje y el item) */
     @Transaction
-    suspend fun insertOrUpdateItemWithCharacter(item: Item, characterId: Long, quantity: Int) {
-        insertItem(item)
+    suspend fun insertOrUpdateItemWithCharacter(item: Item, characterId: Long, quantity: Int): List<CharacterItemDetail> {
         val crossRef = CharacterItemCrossRef(
             characterId = characterId,
             itemId = item.id,
-            quantity = quantity
+            quantity = quantity,
+            updatedAt = System.currentTimeMillis()
         )
         insertItemToCharacter(crossRef)
+        return getItemsDetailByCharacter(characterId)
     }
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertItem(item: Item)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItemToCharacter(crossRef: CharacterItemCrossRef)

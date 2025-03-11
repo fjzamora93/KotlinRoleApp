@@ -24,10 +24,7 @@ class UpsertItemToCharacter(
                 return Result.failure(Exception("Oro insuficiente"))
             }
             itemRepository.buyItem(character.id, item)
-            itemRepository.upsertItemToCharacter(character.id, item, quantity)
-
-            // Devolver el resultado actualizado
-            return itemRepository.getItemsByCharacterId(character.id)
+            return itemRepository.upsertItemToCharacter(character.id, item, quantity)
         } catch (e: Exception) {
             Result.failure(e)
         }

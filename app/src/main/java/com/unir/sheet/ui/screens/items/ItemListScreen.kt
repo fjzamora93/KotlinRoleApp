@@ -57,15 +57,14 @@ fun ItemListBody(
         modifier = modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        if (selectedCharacter != null)  {
-            Text(
-                text = "Oro disponible: ${selectedCharacter?.gold}",
-                style = CustomType.bodyMedium
-            )
-        }
+        Text(
+            text = "Oro disponible: ${selectedCharacter?.gold}",
+            style = CustomType.bodyMedium
+        )
 
 
-        items?.let {
+
+        items.let {
             it.forEach { item ->
                 ItemSummary(item)
             }

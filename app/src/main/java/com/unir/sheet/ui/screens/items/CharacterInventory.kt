@@ -80,12 +80,10 @@ fun CharacterInventoryBody(
             CircularProgressIndicator()
             Text("Cargando objetos...")
         } else {
-            if (inventoryItems != null) {
-                inventoryItems!!.forEach { details ->
+            inventoryItems.forEach { details ->
+                if (details.quantity > 0 ){
                     InventoryItemCard(item = details.item , quantity = details.quantity)
                 }
-            } else {
-                Text("No se encontraron objetos")
             }
         }
     }

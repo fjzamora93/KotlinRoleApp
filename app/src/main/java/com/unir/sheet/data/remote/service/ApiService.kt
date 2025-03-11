@@ -1,6 +1,6 @@
 package com.unir.sheet.data.remote.service
 
-import com.unir.sheet.data.model.CharacterWithItems
+import com.unir.sheet.data.model.CharacterItemDetail
 import com.unir.sheet.data.model.Skill
 import com.unir.sheet.data.remote.model.ApiCharacterItem
 import com.unir.sheet.data.remote.model.ApiCharacterRequest
@@ -51,6 +51,7 @@ interface ApiService {
 
 
     // ITEMS
+
     @GET("items-template")
     suspend fun getAllItems(): Response<List<ApiItem>>
 
@@ -76,6 +77,13 @@ interface ApiService {
         @Query("characterId") characterId: Long,
         @Query("itemId") itemId: Int
     ): Response<List<ApiCharacterItem> >
+
+    // Actualización de todas las relaciones entre un personaje y sus items
+    @PUT("custom-items/sync")
+    suspend fun updateItemsToCharacter(
+        @Body characterItems : List <ApiCharacterItem>
+    ) : Response<List<ApiCharacterItem>>
+
 
 
 
