@@ -1,15 +1,13 @@
 package com.unir.sheet.di
 
-import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.unir.sheet.data.local.AuthInterceptor
-import com.unir.sheet.data.local.SessionManager
+import com.unir.sheet.data.local.security.AuthInterceptor
+import com.unir.sheet.data.local.security.TokenManager
 import com.unir.sheet.data.remote.service.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,8 +33,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideAuthInterceptor(sessionManager: SessionManager): AuthInterceptor {
-        return AuthInterceptor(sessionManager)
+    fun provideAuthInterceptor(tokenManager: TokenManager): AuthInterceptor {
+        return AuthInterceptor(tokenManager)
     }
 
 

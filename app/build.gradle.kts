@@ -53,6 +53,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.security.crypto.ktx)
     val room_version = "2.6.1"
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -144,6 +145,8 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
 
 
-    // USO DE IMÁGENES
+    // SEGURIDAD Y TOKENS
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation("com.google.crypto.openpgp:openpgp-android:1.1.0")
 
 }
