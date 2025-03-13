@@ -11,18 +11,18 @@ import androidx.navigation.navArgument
 import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalUserViewModel
-import com.unir.sheet.ui.screens.MainScreen
-import com.unir.sheet.ui.screens.character.CharacterCreatorScreen
-import com.unir.sheet.ui.screens.character.CharacterListScreen
-import com.unir.sheet.ui.screens.character.characterDetail.CharacterDetailScreen
-import com.unir.sheet.ui.screens.items.CharacterInventoryScreen
-import com.unir.sheet.ui.screens.items.ItemListScreen
-import com.unir.sheet.ui.screens.character.skills.SkillListScreen
-import com.unir.sheet.ui.screens.character.spells.CharacterSpellScreen
-import com.unir.sheet.ui.screens.layout.FontsTemplateScreen
+import com.unir.character.ui.screens.MainScreen
+import com.unir.character.ui.screens.character.CharacterCreatorScreen
+import com.unir.character.ui.screens.character.CharacterListScreen
+import com.unir.character.ui.screens.character.characterDetail.CharacterDetailScreen
+import com.unir.character.ui.screens.items.CharacterInventoryScreen
+import com.unir.character.ui.screens.items.ItemListScreen
+import com.unir.character.ui.screens.character.skills.SkillListScreen
+import com.unir.character.ui.screens.character.spells.CharacterSpellScreen
+import com.unir.character.ui.screens.layout.FontsTemplateScreen
 import com.unir.auth.ui.screens.LoginScreen
 import com.unir.auth.ui.screens.UserProfileScreen
-import com.unir.sheet.viewmodels.CharacterViewModel
+import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserViewModel
 
 @Composable

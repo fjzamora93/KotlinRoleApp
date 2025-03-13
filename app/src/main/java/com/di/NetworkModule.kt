@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.unir.auth.security.AuthInterceptor
 import com.unir.auth.security.TokenManager
-import com.unir.sheet.data.remote.service.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -62,9 +61,10 @@ object NetworkModule {
             .build()
     }
 
-    @Singleton
-    @Provides
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
+//
+//    @Singleton
+//    @Provides
+//    fun provideApiService(retrofit: Retrofit): ApiService {
+//        return retrofit.create(ApiService::class.java)
+//    }
 }

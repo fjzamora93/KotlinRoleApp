@@ -1,15 +1,15 @@
 package com.unir.auth.data.repository
 
+import com.unir.auth.data.service.AuthApiService
 import com.unir.auth.security.TokenManager
 import com.unir.auth.data.model.User
-import com.unir.sheet.data.remote.model.UserDTO
+import com.unir.character.data.model.remote.UserDTO
 import com.unir.auth.data.model.LoginRequest
 import com.unir.auth.domain.repository.AuthRepository
-import com.unir.sheet.data.remote.service.ApiService
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val api: ApiService,
+    private val api: AuthApiService,
     private val tokenManager: TokenManager
 ) : AuthRepository {
     override suspend fun login(email: String, password: String): Result<User> {

@@ -32,9 +32,9 @@ import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalUserViewModel
 import com.navigation.ScreensRoutes
-import com.unir.sheet.ui.screens.components.BackButton
-import com.unir.sheet.ui.screens.layout.MainLayout
-import com.unir.sheet.viewmodels.CharacterViewModel
+import com.unir.character.ui.screens.components.BackButton
+import com.unir.character.ui.screens.layout.MainLayout
+import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.UserViewModel
 

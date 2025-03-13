@@ -2,7 +2,7 @@ package com.di
 
 import androidx.compose.runtime.compositionLocalOf
 import com.navigation.NavigationViewModel
-import com.unir.sheet.viewmodels.CharacterViewModel
+import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserViewModel
 
 

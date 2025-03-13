@@ -1,7 +1,7 @@
 package com.unir.auth.domain.repository
 
 import com.unir.auth.data.model.User
-import com.unir.sheet.data.remote.model.UserDTO
+import com.unir.character.data.model.remote.UserDTO
 
 interface AuthRepository {
     suspend fun login(email: String, password: String): Result<User>

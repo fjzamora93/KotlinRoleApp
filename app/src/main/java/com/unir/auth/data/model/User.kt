@@ -2,7 +2,7 @@ package com.unir.auth.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.unir.sheet.data.remote.model.UserDTO
+import com.unir.character.data.model.remote.UserDTO
 
 @Entity( tableName = "user")
 data class User(
