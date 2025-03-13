@@ -146,7 +146,5 @@ dependencies {
 
 
     // SEGURIDAD Y TOKENS
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
-    implementation("com.google.crypto.openpgp:openpgp-android:1.1.0")
-
+    implementation ("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 }

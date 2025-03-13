@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -38,8 +37,8 @@ import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
-import com.unir.sheet.ui.viewmodels.UserState
-import com.unir.sheet.ui.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.UserState
+import com.unir.auth.viewmodels.UserViewModel
 import com.unir.sheet.util.CustomType
 import com.unir.sheet.util.MedievalColours
 

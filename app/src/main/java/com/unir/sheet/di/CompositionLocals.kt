@@ -1,12 +1,9 @@
 package com.unir.sheet.di
 
 import androidx.compose.runtime.compositionLocalOf
-import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
-import com.unir.sheet.ui.viewmodels.UserState
-import com.unir.sheet.ui.viewmodels.UserViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.unir.auth.viewmodels.UserViewModel
 
 
 // CONSTANTES DE VIEWMODELS QUE VAN A SER COMPARTIDAS EN TODAS LAS PANTALLAS

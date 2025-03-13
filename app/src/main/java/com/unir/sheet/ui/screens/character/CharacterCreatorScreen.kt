@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,13 +34,12 @@ import com.unir.sheet.data.model.RolClass
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.di.LocalUserViewModel
-import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.layout.MainLayout
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
-import com.unir.sheet.ui.viewmodels.UserState
-import com.unir.sheet.ui.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.UserState
+import com.unir.auth.viewmodels.UserViewModel
 import com.unir.sheet.util.MedievalColours
 
 @Composable

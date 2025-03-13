@@ -2,8 +2,8 @@ package com.unir.sheet.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.unir.sheet.data.local.security.AuthInterceptor
-import com.unir.sheet.data.local.security.TokenManager
+import com.unir.auth.data.security.AuthInterceptor
+import com.unir.auth.data.security.TokenManager
 import com.unir.sheet.data.remote.service.ApiService
 import dagger.Module
 import dagger.Provides

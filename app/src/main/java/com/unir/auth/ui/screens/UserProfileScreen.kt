@@ -1,4 +1,4 @@
-package com.unir.sheet.ui.screens.userscreens
+package com.unir.auth.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,8 +30,8 @@ import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.layout.MainLayout
-import com.unir.sheet.ui.viewmodels.UserState
-import com.unir.sheet.ui.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.UserState
+import com.unir.auth.viewmodels.UserViewModel
 
 @Composable
 fun UserProfileScreen() {

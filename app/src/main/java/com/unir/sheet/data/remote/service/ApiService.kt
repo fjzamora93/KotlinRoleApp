@@ -1,6 +1,5 @@
 package com.unir.sheet.data.remote.service
 
-import com.unir.sheet.data.model.CharacterItemDetail
 import com.unir.sheet.data.model.Skill
 import com.unir.sheet.data.remote.model.ApiCharacterItem
 import com.unir.sheet.data.remote.model.ApiCharacterRequest
@@ -10,8 +9,8 @@ import com.unir.sheet.data.remote.model.ApiItem
 import com.unir.sheet.data.remote.model.ApiSkill
 import com.unir.sheet.data.remote.model.ApiSpell
 import com.unir.sheet.data.remote.model.ApiUser
-import com.unir.sheet.data.remote.model.LoginRequest
-import com.unir.sheet.data.remote.model.LoginResponse
+import com.unir.auth.data.model.LoginRequest
+import com.unir.auth.data.model.LoginResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -25,19 +24,26 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    // INICIAR SESIÓN
+    // ENDPOINTS AUTH
 
     @POST("auth/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
+    @POST("user/refresh-token")
+    suspend fun refreshAccessToken(@Body request: String): Response<LoginResponse>
+
     @POST("auth/signup")
     suspend fun signup(@Body request: LoginRequest): Response<LoginResponse>
 
-    @GET("user/me")
-    suspend fun getUser(@Header("Authorization") token: String): Response<ApiUser>
-
     @POST("user/logout")
     suspend fun logoutUser(@Header("Authorization") token: String): Response<Void>
+
+
+
+    // ENDPOINTS USER
+
+    @GET("user/me")
+    suspend fun getUser(@Header("Authorization") token: String): Response<ApiUser>
 
     @PUT("user/update")
     suspend fun updateUser(

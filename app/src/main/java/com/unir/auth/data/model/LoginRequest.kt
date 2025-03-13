@@ -1,4 +1,4 @@
-package com.unir.sheet.data.remote.model
+package com.unir.auth.data.model
 
 data class LoginRequest(
     val email: String,

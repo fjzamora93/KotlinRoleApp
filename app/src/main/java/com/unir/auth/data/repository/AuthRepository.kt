@@ -1,9 +1,9 @@
-package com.unir.sheet.data.repository
+package com.unir.auth.data.repository
 
-import com.unir.sheet.data.local.security.TokenManager
+import com.unir.auth.data.security.TokenManager
 import com.unir.sheet.data.model.User
 import com.unir.sheet.data.remote.model.ApiUser
-import com.unir.sheet.data.remote.model.LoginRequest
+import com.unir.auth.data.model.LoginRequest
 import com.unir.sheet.data.remote.service.ApiService
 import javax.inject.Inject
 

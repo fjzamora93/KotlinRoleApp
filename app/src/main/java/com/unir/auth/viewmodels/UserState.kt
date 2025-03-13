@@ -1,4 +1,4 @@
-package com.unir.sheet.ui.viewmodels
+package com.unir.auth.viewmodels
 
 import com.unir.sheet.data.model.User
 

@@ -15,9 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.di.LocalNavigationViewModel
@@ -31,8 +29,8 @@ import com.unir.sheet.ui.screens.components.NavigationButton
 import com.unir.sheet.ui.screens.components.RegularCard
 import com.unir.sheet.ui.screens.layout.MainLayout
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
-import com.unir.sheet.ui.viewmodels.UserState
-import com.unir.sheet.ui.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.UserState
+import com.unir.auth.viewmodels.UserViewModel
 import com.unir.sheet.util.CustomType
 import java.util.Locale
 

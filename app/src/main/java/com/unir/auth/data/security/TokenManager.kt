@@ -1,16 +1,18 @@
-package com.unir.sheet.data.local.security
+package com.unir.auth.data.security
+
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
-import androidx.security.crypto.MasterKey
 
 @Singleton
-class TokenManagerEncrypted @Inject constructor(
+class TokenManager @Inject constructor(
     @ApplicationContext private val context: Context) {
 
     private val masterKey = MasterKey.Builder(context)
@@ -53,3 +55,30 @@ class TokenManagerEncrypted @Inject constructor(
         prefs.edit().remove("refresh_token").apply()
     }
 }
+
+
+
+
+
+//CÓDIGO ANTIGUO - EL QUE FUNCIONA GUARDADO EN SHARED PREFERNECES
+//@Singleton
+//class TokenManager @Inject constructor(
+//    @ApplicationContext private val context: Context
+//) {
+//
+//
+//    private val prefs: SharedPreferences =
+//        context.getSharedPreferences("AuthPrefs", Context.MODE_PRIVATE)
+//
+//    fun saveToken(token: String) {
+//        prefs.edit().putString("token", token).apply()
+//    }
+//
+//    fun getToken(): String? {
+//        return prefs.getString("token", null)
+//    }
+//
+//    fun clearToken() {
+//        prefs.edit().remove("token").apply()
+//    }
+//}

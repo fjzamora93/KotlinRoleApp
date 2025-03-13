@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.Architecture
 import androidx.compose.material.icons.filled.EditOff
 import androidx.compose.material.icons.filled.FontDownload
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
@@ -43,8 +42,8 @@ import com.unir.sheet.di.LocalNavigationViewModel
 import com.unir.sheet.di.LocalUserViewModel
 import com.unir.sheet.ui.navigation.NavigationViewModel
 import com.unir.sheet.ui.navigation.ScreensRoutes
-import com.unir.sheet.ui.viewmodels.UserState
-import com.unir.sheet.ui.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.UserState
+import com.unir.auth.viewmodels.UserViewModel
 import com.unir.sheet.util.MedievalColours
 
 

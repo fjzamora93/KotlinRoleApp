@@ -1,9 +1,9 @@
-package com.unir.sheet.ui.viewmodels
+package com.unir.auth.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.sheet.data.model.User
-import com.unir.sheet.data.repository.AuthRepository
+import com.unir.auth.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

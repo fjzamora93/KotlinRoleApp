@@ -1,4 +1,4 @@
-package com.unir.sheet.data.local.security
+package com.unir.auth.data.security
 
 import android.util.Log
 import okhttp3.Interceptor
@@ -10,7 +10,7 @@ class AuthInterceptor @Inject constructor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
-        val token = tokenManager.getToken()
+        val token = tokenManager.getAccessToken()
         if (!token.isNullOrEmpty()) {
             requestBuilder.addHeader("Authorization", "Bearer $token")
             // Añadir log para verificar que el token se está añadiendo

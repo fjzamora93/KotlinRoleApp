@@ -2,8 +2,6 @@ package com.unir.sheet.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -22,10 +20,10 @@ import com.unir.sheet.ui.screens.items.ItemListScreen
 import com.unir.sheet.ui.screens.character.skills.SkillListScreen
 import com.unir.sheet.ui.screens.character.spells.CharacterSpellScreen
 import com.unir.sheet.ui.screens.layout.FontsTemplateScreen
-import com.unir.sheet.ui.screens.userscreens.LoginScreen
-import com.unir.sheet.ui.screens.userscreens.UserProfileScreen
+import com.unir.auth.ui.screens.LoginScreen
+import com.unir.auth.ui.screens.UserProfileScreen
 import com.unir.sheet.ui.viewmodels.CharacterViewModel
-import com.unir.sheet.ui.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.UserViewModel
 
 @Composable
 fun NavGraph(

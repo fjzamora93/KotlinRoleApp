@@ -2,8 +2,6 @@ package com.unir.sheet.domain.usecase.character
 
 import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.domain.repository.CharacterRepository
-import com.unir.sheet.domain.usecase.skill.AddDefaultSkills
-import com.unir.sheet.ui.viewmodels.UserState
 import javax.inject.Inject
 
 
