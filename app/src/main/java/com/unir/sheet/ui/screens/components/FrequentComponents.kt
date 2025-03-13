@@ -3,7 +3,7 @@ package com.unir.sheet.ui.screens.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.runtime.Composable
-import com.unir.sheet.di.LocalNavigationViewModel
+import com.di.LocalNavigationViewModel
 
 // BOTONES Y COMPONENTES DON FUNCIONES PREDEFINIDAS INCORPORADAS Y QUE ESTÁN EN VARIAS PARTES DE LA APP
 

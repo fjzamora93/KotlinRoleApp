@@ -8,7 +8,7 @@ import com.unir.sheet.data.remote.model.ApiGameSession
 import com.unir.sheet.data.remote.model.ApiItem
 import com.unir.sheet.data.remote.model.ApiSkill
 import com.unir.sheet.data.remote.model.ApiSpell
-import com.unir.sheet.data.remote.model.ApiUser
+import com.unir.sheet.data.remote.model.UserDTO
 import com.unir.auth.data.model.LoginRequest
 import com.unir.auth.data.model.LoginResponse
 import retrofit2.Response
@@ -43,13 +43,13 @@ interface ApiService {
     // ENDPOINTS USER
 
     @GET("user/me")
-    suspend fun getUser(@Header("Authorization") token: String): Response<ApiUser>
+    suspend fun getUser(@Header("Authorization") token: String): Response<UserDTO>
 
     @PUT("user/update")
     suspend fun updateUser(
         @Header("Authorization") token: String,
-        @Body user: ApiUser
-    ): Response<ApiUser>
+        @Body user: UserDTO
+    ): Response<UserDTO>
 
     @DELETE("user/delete")
     suspend fun deleteUser(@Header("Authorization") token: String): Response<Void>

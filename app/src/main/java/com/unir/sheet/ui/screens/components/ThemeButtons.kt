@@ -25,7 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
-import com.unir.sheet.util.MedievalColours
+import com.util.MedievalColours
 
 
 @Composable

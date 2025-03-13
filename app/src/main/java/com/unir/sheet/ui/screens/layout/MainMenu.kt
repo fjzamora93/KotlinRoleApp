@@ -38,13 +38,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-import com.unir.sheet.di.LocalNavigationViewModel
-import com.unir.sheet.di.LocalUserViewModel
-import com.unir.sheet.ui.navigation.NavigationViewModel
-import com.unir.sheet.ui.navigation.ScreensRoutes
+import com.di.LocalNavigationViewModel
+import com.di.LocalUserViewModel
+import com.navigation.NavigationViewModel
+import com.navigation.ScreensRoutes
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.UserViewModel
-import com.unir.sheet.util.MedievalColours
+import com.util.MedievalColours
 
 
 @Composable

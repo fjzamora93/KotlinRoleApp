@@ -23,11 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.unir.sheet.data.model.User
-import com.unir.sheet.di.LocalNavigationViewModel
-import com.unir.sheet.di.LocalUserViewModel
-import com.unir.sheet.ui.navigation.NavigationViewModel
-import com.unir.sheet.ui.navigation.ScreensRoutes
+import com.unir.auth.data.model.User
+import com.di.LocalNavigationViewModel
+import com.di.LocalUserViewModel
+import com.navigation.NavigationViewModel
+import com.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.layout.MainLayout
 import com.unir.auth.viewmodels.UserState

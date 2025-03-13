@@ -22,12 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.unir.sheet.data.model.Spell
-import com.unir.sheet.di.LocalCharacterViewModel
+import com.di.LocalCharacterViewModel
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.components.RegularCard
 import com.unir.sheet.ui.screens.layout.MainLayout
-import com.unir.sheet.ui.viewmodels.CharacterViewModel
-import com.unir.sheet.ui.viewmodels.SpellViewModel
+import com.unir.sheet.viewmodels.CharacterViewModel
+import com.unir.sheet.viewmodels.SpellViewModel
 
 
 @Composable

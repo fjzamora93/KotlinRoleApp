@@ -17,21 +17,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.unir.sheet.data.model.CharacterEntity
-import com.unir.sheet.di.LocalCharacterViewModel
-import com.unir.sheet.di.LocalNavigationViewModel
-import com.unir.sheet.di.LocalUserViewModel
-import com.unir.sheet.ui.navigation.NavigationViewModel
-import com.unir.sheet.ui.navigation.ScreensRoutes
+import com.di.LocalCharacterViewModel
+import com.di.LocalNavigationViewModel
+import com.di.LocalUserViewModel
+import com.navigation.NavigationViewModel
+import com.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.character.characterDetail.CharacterPortrait
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.components.MedievalDivider
 import com.unir.sheet.ui.screens.components.NavigationButton
 import com.unir.sheet.ui.screens.components.RegularCard
 import com.unir.sheet.ui.screens.layout.MainLayout
-import com.unir.sheet.ui.viewmodels.CharacterViewModel
+import com.unir.sheet.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.UserViewModel
-import com.unir.sheet.util.CustomType
+import com.util.CustomType
 import java.util.Locale
 
 

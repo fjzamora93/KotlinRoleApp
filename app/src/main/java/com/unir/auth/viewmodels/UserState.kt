@@ -1,6 +1,6 @@
 package com.unir.auth.viewmodels
 
-import com.unir.sheet.data.model.User
+import com.unir.auth.data.model.User
 
 sealed class UserState {
     object Idle : UserState()

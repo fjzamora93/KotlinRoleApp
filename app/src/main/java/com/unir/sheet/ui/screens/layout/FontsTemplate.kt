@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.unit.dp
-import com.unir.sheet.util.CustomType
+import com.util.CustomType
 
 @Composable
 fun FontsTemplateScreen(){

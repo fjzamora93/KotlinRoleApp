@@ -35,10 +35,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 import com.unir.sheet.R
-import com.unir.sheet.di.LocalNavigationViewModel
-import com.unir.sheet.ui.navigation.ScreensRoutes
+import com.di.LocalNavigationViewModel
+import com.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.layout.MainLayout
-import com.unir.sheet.util.MedievalColours
+import com.util.MedievalColours
 
 @Composable
 fun MainScreen() {

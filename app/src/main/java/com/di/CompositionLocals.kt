@@ -1,0 +1,25 @@
+package com.di
+
+import androidx.compose.runtime.compositionLocalOf
+import com.navigation.NavigationViewModel
+import com.unir.sheet.viewmodels.CharacterViewModel
+import com.unir.auth.viewmodels.UserViewModel
+
+
+// CONSTANTES DE VIEWMODELS QUE VAN A SER COMPARTIDAS EN TODAS LAS PANTALLAS
+
+
+val LocalNavigationViewModel = compositionLocalOf<NavigationViewModel> {
+    error("NavigationViewModel no está disponible. Asegúrate de proporcionarlo.")
+}
+
+
+val LocalCharacterViewModel = compositionLocalOf<CharacterViewModel> {
+    error("LocalCharacterViewModel no está disponible. Asegúrate de proporcionarlo.")
+}
+
+
+val LocalUserViewModel = compositionLocalOf<UserViewModel> {
+    error("No hay usuario disponible en el contexto actual.")
+}
+

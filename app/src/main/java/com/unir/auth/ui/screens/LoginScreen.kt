@@ -28,13 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.unir.sheet.di.LocalCharacterViewModel
-import com.unir.sheet.di.LocalNavigationViewModel
-import com.unir.sheet.di.LocalUserViewModel
-import com.unir.sheet.ui.navigation.ScreensRoutes
+import com.di.LocalCharacterViewModel
+import com.di.LocalNavigationViewModel
+import com.di.LocalUserViewModel
+import com.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.layout.MainLayout
-import com.unir.sheet.ui.viewmodels.CharacterViewModel
+import com.unir.sheet.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.UserViewModel
 

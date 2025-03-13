@@ -22,7 +22,7 @@ import com.unir.sheet.data.model.CharacterEntity
 import com.unir.sheet.ui.screens.components.MinusButton
 import com.unir.sheet.ui.screens.components.PlusButton
 import com.unir.sheet.ui.screens.components.RegularCard
-import com.unir.sheet.util.MedievalColours
+import com.util.MedievalColours
 
 
 @Composable

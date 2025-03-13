@@ -10,9 +10,9 @@ import androidx.compose.material.icons.filled.Brush
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
-import com.unir.sheet.di.LocalNavigationViewModel
-import com.unir.sheet.ui.navigation.NavigationViewModel
-import com.unir.sheet.ui.navigation.ScreensRoutes
+import com.di.LocalNavigationViewModel
+import com.navigation.NavigationViewModel
+import com.navigation.ScreensRoutes
 import com.unir.sheet.ui.screens.components.MenuMedievalButton
 
 

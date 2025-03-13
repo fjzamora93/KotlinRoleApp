@@ -1,6 +1,6 @@
 package com.unir.sheet.domain.repository
 
-import com.unir.sheet.data.model.User
+import com.unir.auth.data.model.User
 
 interface UserRepository {
 

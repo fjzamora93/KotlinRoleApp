@@ -13,20 +13,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.unir.sheet.data.model.Skill
-import com.unir.sheet.di.LocalCharacterViewModel
+import com.di.LocalCharacterViewModel
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.components.RegularCard
 import com.unir.sheet.ui.screens.layout.MainLayout
-import com.unir.sheet.ui.viewmodels.CharacterViewModel
-import com.unir.sheet.ui.viewmodels.SkillViewModel
+import com.unir.sheet.viewmodels.CharacterViewModel
+import com.unir.sheet.viewmodels.SkillViewModel
 
 
 @Composable

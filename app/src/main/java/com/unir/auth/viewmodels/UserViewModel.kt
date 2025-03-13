@@ -2,8 +2,8 @@ package com.unir.auth.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unir.sheet.data.model.User
-import com.unir.auth.data.repository.AuthRepository
+import com.unir.auth.data.model.User
+import com.unir.auth.data.repository.AuthRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepositoryImpl
 ) : ViewModel() {
 
     private val _userState = MutableStateFlow<UserState>(UserState.Idle)

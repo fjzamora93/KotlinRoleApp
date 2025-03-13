@@ -29,15 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.di.LocalCharacterViewModel
 
 import com.unir.sheet.data.model.Item
-import com.unir.sheet.di.LocalCharacterViewModel
 import com.unir.sheet.ui.screens.components.BackButton
 import com.unir.sheet.ui.screens.components.RegularCard
 import com.unir.sheet.ui.screens.layout.MainLayout
-import com.unir.sheet.ui.viewmodels.CharacterViewModel
-import com.unir.sheet.ui.viewmodels.ItemViewModel
-import com.unir.sheet.util.MedievalColours
+
+import com.unir.sheet.viewmodels.CharacterViewModel
+import com.unir.sheet.viewmodels.ItemViewModel
+import com.util.MedievalColours
 
 @Composable
 fun CharacterInventoryScreen(){
