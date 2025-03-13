@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens.layout
+package com.ui.layout
 
 
 import android.app.Activity
@@ -39,8 +39,8 @@ import com.navigation.ScreensRoutes
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.UserViewModel
-import com.util.CustomType
-import com.util.MedievalColours
+import com.ui.theme.CustomType
+import com.ui.theme.MedievalColours
 
 @Composable
 fun Header(

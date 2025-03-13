@@ -14,12 +14,12 @@ import com.di.LocalUserViewModel
 import com.unir.character.ui.screens.MainScreen
 import com.unir.character.ui.screens.character.CharacterCreatorScreen
 import com.unir.character.ui.screens.character.CharacterListScreen
-import com.unir.character.ui.screens.character.characterDetail.CharacterDetailScreen
+import com.unir.character.ui.screens.characterSheet.CharacterDetailScreen
 import com.unir.character.ui.screens.items.CharacterInventoryScreen
 import com.unir.character.ui.screens.items.ItemListScreen
-import com.unir.character.ui.screens.character.skills.SkillListScreen
-import com.unir.character.ui.screens.character.spells.CharacterSpellScreen
-import com.unir.character.ui.screens.layout.FontsTemplateScreen
+import com.unir.character.ui.screens.skills.SkillListScreen
+import com.unir.character.ui.screens.spells.CharacterSpellScreen
+import com.ui.layout.FontsTemplateScreen
 import com.unir.auth.ui.screens.LoginScreen
 import com.unir.auth.ui.screens.UserProfileScreen
 import com.unir.character.viewmodels.CharacterViewModel

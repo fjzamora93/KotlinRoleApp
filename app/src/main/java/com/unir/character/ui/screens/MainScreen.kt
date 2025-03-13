@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 
 import com.di.LocalNavigationViewModel
 import com.navigation.ScreensRoutes
-import com.unir.character.ui.screens.layout.MainLayout
+import com.ui.layout.MainLayout
 import com.unir.sheet.R
-import com.util.MedievalColours
+import com.ui.theme.MedievalColours
 
 @Composable
 fun MainScreen() {

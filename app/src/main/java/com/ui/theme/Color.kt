@@ -1,7 +1,5 @@
-package com.util
+package com.ui.theme
 
-import androidx.compose.foundation.background
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 

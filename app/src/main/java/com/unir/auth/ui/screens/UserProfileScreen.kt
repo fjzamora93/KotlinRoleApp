@@ -28,8 +28,8 @@ import com.di.LocalNavigationViewModel
 import com.di.LocalUserViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
-import com.unir.character.ui.screens.components.BackButton
-import com.unir.character.ui.screens.layout.MainLayout
+import com.ui.components.BackButton
+import com.ui.layout.MainLayout
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.UserViewModel
 

@@ -1,4 +1,4 @@
-package com.util
+package com.unir.character.domain
 
 object Constants {
 

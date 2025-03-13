@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens.components
+package com.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,7 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
-import com.util.MedievalColours
+import com.ui.theme.MedievalColours
 
 
 @Composable

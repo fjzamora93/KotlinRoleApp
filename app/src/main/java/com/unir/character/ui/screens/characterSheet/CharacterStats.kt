@@ -19,10 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 import com.unir.character.data.model.local.CharacterEntity
-import com.unir.character.ui.screens.components.MinusButton
-import com.unir.character.ui.screens.components.PlusButton
-import com.unir.character.ui.screens.components.RegularCard
-import com.util.MedievalColours
+import com.ui.components.MinusButton
+import com.ui.components.PlusButton
+import com.ui.components.RegularCard
+import com.ui.theme.MedievalColours
 
 
 @Composable

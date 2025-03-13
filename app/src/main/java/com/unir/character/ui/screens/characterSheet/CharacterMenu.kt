@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens.character.characterDetail
+package com.unir.character.ui.screens.characterSheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import com.di.LocalNavigationViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
-import com.unir.character.ui.screens.components.MenuMedievalButton
+import com.ui.components.MenuMedievalButton
 
 
 @Composable

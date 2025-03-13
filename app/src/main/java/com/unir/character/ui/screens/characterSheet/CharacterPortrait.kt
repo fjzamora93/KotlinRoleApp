@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens.character.characterDetail
+package com.unir.character.ui.screens.characterSheet
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

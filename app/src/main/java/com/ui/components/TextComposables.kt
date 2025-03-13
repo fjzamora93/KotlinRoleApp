@@ -1,10 +1,10 @@
-package com.unir.character.ui.screens.components
+package com.ui.components
 
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.util.CustomType
+import com.ui.theme.CustomType
 
 @Composable
 fun TitleLarge(text: String, modifier: Modifier = Modifier) {

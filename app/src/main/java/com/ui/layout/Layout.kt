@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens.layout
+package com.ui.layout
 
 
 import androidx.compose.foundation.layout.Box

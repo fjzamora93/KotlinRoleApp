@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens.components
+package com.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew

@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens.layout
+package com.ui.layout
 
 
 import androidx.compose.foundation.background
@@ -44,7 +44,7 @@ import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.UserViewModel
-import com.util.MedievalColours
+import com.ui.theme.MedievalColours
 
 
 @Composable

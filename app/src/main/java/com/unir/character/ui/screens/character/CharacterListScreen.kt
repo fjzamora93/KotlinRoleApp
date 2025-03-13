@@ -22,16 +22,16 @@ import com.di.LocalNavigationViewModel
 import com.di.LocalUserViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
-import com.unir.character.ui.screens.character.characterDetail.CharacterPortrait
-import com.unir.character.ui.screens.components.BackButton
-import com.unir.character.ui.screens.components.MedievalDivider
-import com.unir.character.ui.screens.components.NavigationButton
-import com.unir.character.ui.screens.components.RegularCard
-import com.unir.character.ui.screens.layout.MainLayout
+import com.unir.character.ui.screens.characterSheet.CharacterPortrait
+import com.ui.components.BackButton
+import com.ui.components.MedievalDivider
+import com.ui.components.NavigationButton
+import com.ui.components.RegularCard
+import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.UserViewModel
-import com.util.CustomType
+import com.ui.theme.CustomType
 import java.util.Locale
 
 

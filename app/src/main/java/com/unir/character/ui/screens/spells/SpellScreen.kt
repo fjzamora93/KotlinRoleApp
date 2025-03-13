@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens.character.spells
+package com.unir.character.ui.screens.spells
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,9 +23,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.unir.character.data.model.local.Spell
 import com.di.LocalCharacterViewModel
-import com.unir.character.ui.screens.components.BackButton
-import com.unir.character.ui.screens.components.RegularCard
-import com.unir.character.ui.screens.layout.MainLayout
+import com.ui.components.BackButton
+import com.ui.components.RegularCard
+import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.character.viewmodels.SpellViewModel
 

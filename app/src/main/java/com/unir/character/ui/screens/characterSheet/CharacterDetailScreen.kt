@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens.character.characterDetail
+package com.unir.character.ui.screens.characterSheet
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,9 +26,9 @@ import com.di.LocalNavigationViewModel
 import com.navigation.NavigationViewModel
 import com.unir.character.ui.screens.character.CharacterCreatorForm
 import com.unir.character.ui.screens.character.haracterDetail.StatSection
-import com.unir.character.ui.screens.components.BackButton
-import com.unir.character.ui.screens.components.TextBodyMedium
-import com.unir.character.ui.screens.layout.MainLayout
+import com.ui.components.BackButton
+import com.ui.components.TextBodyMedium
+import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 
 @Composable

@@ -8,7 +8,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.navigation.NavGraph
-import com.util.DefaultTheme
+import com.ui.theme.DefaultTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
