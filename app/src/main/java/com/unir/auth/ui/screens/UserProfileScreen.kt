@@ -25,13 +25,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unir.auth.data.model.User
 import com.di.LocalNavigationViewModel
-import com.di.LocalUserViewModel
+import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 import com.ui.components.BackButton
 import com.ui.layout.MainLayout
 import com.unir.auth.viewmodels.UserState
-import com.unir.auth.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.AuthViewModel
 
 @Composable
 fun UserProfileScreen() {
@@ -45,9 +45,9 @@ fun UserProfileScreen() {
 
 @Composable
 fun UserProfileBody(
-    userViewModel: UserViewModel = LocalUserViewModel.current
+    authViewModel: AuthViewModel = LocalAuthViewModel.current
 ) {
-    val userState by userViewModel.userState.collectAsState()
+    val userState by authViewModel.userState.collectAsState()
 
     when (userState) {
         is UserState.Loading -> CircularProgressIndicator()
@@ -64,7 +64,7 @@ fun UserProfileBody(
 @Composable
 fun UserProfileDetail(
     user: User,
-    viewModel: UserViewModel = hiltViewModel(),
+    viewModel: AuthViewModel = hiltViewModel(),
     navigation : NavigationViewModel = LocalNavigationViewModel.current
 ){
 

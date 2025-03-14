@@ -16,7 +16,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SkillViewModel  @Inject constructor(
     private val skillUseCases: SkillUseCases,
-    @ApplicationContext private val context: Context
 ) :  ViewModel() {
 
     private val _skillList = MutableStateFlow<List<Skill>>(emptyList())

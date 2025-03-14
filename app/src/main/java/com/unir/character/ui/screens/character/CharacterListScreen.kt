@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.unir.character.data.model.local.CharacterEntity
 import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
-import com.di.LocalUserViewModel
+import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 import com.unir.character.ui.screens.characterSheet.CharacterPortrait
@@ -30,7 +30,7 @@ import com.ui.components.RegularCard
 import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
-import com.unir.auth.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.AuthViewModel
 import com.ui.theme.CustomType
 import java.util.Locale
 
@@ -48,9 +48,9 @@ fun CharacterListScreen(){
 @Composable
 fun CharacterListBody(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
-    userViewModel: UserViewModel = LocalUserViewModel.current,
+    authViewModel: AuthViewModel = LocalAuthViewModel.current,
 ) {
-    val userState by userViewModel.userState.collectAsState()
+    val userState by authViewModel.userState.collectAsState()
     characterViewModel.getCharactersByUserId(userState.let { (it as UserState.Success).user.id!! })
 
     val characters by characterViewModel.characters.collectAsState()

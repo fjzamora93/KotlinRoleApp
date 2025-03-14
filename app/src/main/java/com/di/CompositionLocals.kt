@@ -3,7 +3,7 @@ package com.di
 import androidx.compose.runtime.compositionLocalOf
 import com.navigation.NavigationViewModel
 import com.unir.character.viewmodels.CharacterViewModel
-import com.unir.auth.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.AuthViewModel
 
 
 // CONSTANTES DE VIEWMODELS QUE VAN A SER COMPARTIDAS EN TODAS LAS PANTALLAS
@@ -19,7 +19,7 @@ val LocalCharacterViewModel = compositionLocalOf<CharacterViewModel> {
 }
 
 
-val LocalUserViewModel = compositionLocalOf<UserViewModel> {
+val LocalAuthViewModel = compositionLocalOf<AuthViewModel> {
     error("No hay usuario disponible en el contexto actual.")
 }
 

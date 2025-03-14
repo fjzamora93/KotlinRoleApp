@@ -30,13 +30,8 @@ object NetworkModule {
         return GsonBuilder().create()
     }
 
-    @Singleton
-    @Provides
-    fun provideAuthInterceptor(tokenManager: TokenManager): AuthInterceptor {
-        return AuthInterceptor(tokenManager)
-    }
 
-
+    // Incluimos el AUthInterceptor (que está dentro del package com.auth.di.AuthModule) para que pueda añadir el token a cada petición
     @Singleton
     @Provides
     fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
@@ -45,9 +40,9 @@ object NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(logging)
             .addInterceptor(authInterceptor)
-            .connectTimeout(30, TimeUnit.SECONDS) // Aumenta el tiempo de espera de conexión a 30 segundos
-            .readTimeout(30, TimeUnit.SECONDS)    // Aumenta el tiempo de espera de lectura a 30 segundos
-            .writeTimeout(30, TimeUnit.SECONDS)   // Aumenta el tiempo de espera de escritura a 30 segundos
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 
@@ -61,10 +56,5 @@ object NetworkModule {
             .build()
     }
 
-//
-//    @Singleton
-//    @Provides
-//    fun provideApiService(retrofit: Retrofit): ApiService {
-//        return retrofit.create(ApiService::class.java)
-//    }
+
 }

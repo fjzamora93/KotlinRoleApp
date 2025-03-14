@@ -14,6 +14,7 @@ import com.unir.character.data.service.SkillApiService
 import com.unir.character.data.service.SpellApiService
 import com.unir.character.domain.repository.CharacterRepository
 import com.unir.character.domain.repository.ItemRepository
+import com.unir.character.domain.repository.SkillRepository
 import com.unir.character.domain.repository.SpellRepository
 import dagger.Module
 import dagger.Provides
@@ -50,7 +51,7 @@ object RepositoryModule {
     fun provideSkillRepository(
         apiService: SkillApiService,
         skillDao: SkillDao
-    ): SkillRepositoryImpl {
+    ): SkillRepository {
         return SkillRepositoryImpl(apiService, skillDao)
     }
 

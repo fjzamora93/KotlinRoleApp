@@ -30,13 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
-import com.di.LocalUserViewModel
+import com.di.LocalAuthViewModel
 import com.navigation.ScreensRoutes
 import com.ui.components.BackButton
 import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
-import com.unir.auth.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.AuthViewModel
 
 
 @Composable
@@ -51,7 +51,7 @@ fun LoginScreen() {
 
 @Composable
 fun LoginBody(
-    viewModel: UserViewModel = LocalUserViewModel.current,
+    viewModel: AuthViewModel = LocalAuthViewModel.current,
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current
 ) {
     val userState by viewModel.userState.collectAsState()

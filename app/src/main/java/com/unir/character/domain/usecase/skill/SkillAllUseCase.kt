@@ -4,17 +4,18 @@ import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.RolClass
 import com.unir.character.data.model.local.Skill
 import com.unir.character.data.repository.SkillRepositoryImpl
+import com.unir.character.domain.repository.SkillRepository
 import javax.inject.Inject
 
-class GetAllSkillsUseCase @Inject constructor(private val repository: SkillRepositoryImpl) {
+class GetAllSkillsUseCase @Inject constructor(private val repository: SkillRepository) {
     suspend operator fun invoke(): Result<List<Skill>> = repository.getAllSkills()
 }
 
-class GetSkillsFromCharacterUseCase @Inject constructor(private val repository: SkillRepositoryImpl) {
+class GetSkillsFromCharacterUseCase @Inject constructor(private val repository: SkillRepository) {
     suspend operator fun invoke(characterId: Long): Result<List<Skill>> = repository.getSkillsFromCharacter(characterId)
 }
 
-class DeleteSkillFromCharacterUseCase @Inject constructor(private val repository: SkillRepositoryImpl) {
+class DeleteSkillFromCharacterUseCase @Inject constructor(private val repository: SkillRepository) {
     suspend operator fun invoke(characterId: Long, skillId: Int): Result<Unit> = repository.deleteSkillFromCharacter(characterId, skillId)
 }
 
@@ -23,7 +24,7 @@ class DeleteSkillFromCharacterUseCase @Inject constructor(private val repository
  *
  *
  * */
-class AddDefaultSkills @Inject constructor(private val repository: SkillRepositoryImpl) {
+class AddDefaultSkills @Inject constructor(private val repository: SkillRepository) {
     suspend operator fun invoke(
         character: CharacterEntity,
     ): Result<List<Skill> >{

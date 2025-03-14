@@ -33,13 +33,13 @@ import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.RolClass
 import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
-import com.di.LocalUserViewModel
+import com.di.LocalAuthViewModel
 import com.navigation.ScreensRoutes
 import com.ui.components.BackButton
 import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
-import com.unir.auth.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.AuthViewModel
 import com.ui.theme.MedievalColours
 
 @Composable
@@ -83,11 +83,11 @@ fun Body(
 @Composable
 fun CharacterCreatorForm(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
-    userViewModel: UserViewModel = LocalUserViewModel.current,
+    authViewModel: AuthViewModel = LocalAuthViewModel.current,
     isEditing: Boolean = false,
     onEditComplete: (Boolean) -> Unit = { }
 ){
-    val userState by userViewModel.userState.collectAsState()
+    val userState by authViewModel.userState.collectAsState()
 
     val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
 

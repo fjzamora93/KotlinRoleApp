@@ -10,10 +10,21 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 
-
+/**Clase encargada de gestionar el Access Token y el Refresk Token de la aplicación.
+ * En un principio, no has
+ *
+ * Métodos más importantes:
+ *
+ * - saveAccessToken: Guarda el Access Token en memoria.
+ * - getAccessToken: Obtiene el Access Token de memoria.
+ * - saveRefreshToken: Guarda el Refresh Token en almacenamiento seguro.
+ * - getRefreshToken: Obtiene el Refresh Token desde almacenamiento seguro.
+ * - clearTokens: Borra todos los tokens (Logout).
+ * */
 @Singleton
 class TokenManager @Inject constructor(
-    @ApplicationContext private val context: Context) {
+    @ApplicationContext private val context: Context
+) {
 
     private val masterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)

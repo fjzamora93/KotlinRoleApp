@@ -5,13 +5,17 @@ import com.unir.auth.security.TokenManager
 import com.unir.auth.data.model.User
 import com.unir.character.data.model.remote.UserDTO
 import com.unir.auth.data.model.LoginRequest
+import com.unir.auth.data.model.RefreshTokenRequest
 import com.unir.auth.domain.repository.AuthRepository
 import javax.inject.Inject
+
 
 class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApiService,
     private val tokenManager: TokenManager
 ) : AuthRepository {
+
+
     override suspend fun login(email: String, password: String): Result<User> {
         return try {
             val response = api.login(LoginRequest(email, password))
@@ -31,12 +35,13 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    // Registro
-    override suspend fun signup(email: String, password: String, confirmPassword: String): Result<User> {
+
+
+    // TODO: Mejorar el Sign UP para que haga un autologin (coordinarlo con el Backend)
+    // TODO: IMplementar el Doble Factor  al registrase (o mandar un email o algo)
+    override suspend fun signup(email: String, password: String): Result<User> {
         return try {
-            if (password != confirmPassword) {
-                return Result.failure(Exception("Las contraseñas no coinciden"))
-            }
+
             val newUserRequest = LoginRequest(email, password)
             val response = api.signup(newUserRequest)
 
@@ -56,7 +61,8 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    // Logout
+    // TODO: Aunque en el front se eliminan los tokens en el logout (aquí ya no hay que hacer nada),
+    //  es necesario reforzar la seguridad en el backend (crear lista negra)
     override suspend fun logout(): Result<Unit> {
         return try {
             val token = tokenManager.getAccessToken() ?: return Result.failure(Exception("No hay Access Token"))
@@ -73,68 +79,28 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    // Obtener usuario (usando Access Token)
-    override suspend fun getUser(): Result<User> {
-        return try {
-            val token = tokenManager.getAccessToken() ?: return Result.failure(Exception("No hay Access Token"))
-            val response = api.getUser("Bearer $token")
 
-            if (response.isSuccessful && response.body() != null) {
-                Result.success(response.body()!!.toUserEntity())
-            } else {
-                Result.failure(Exception("Error obteniendo usuario"))
+    // Método de autologin (condicionado al Use Case que va a forzar este método al crear el Screen)
+    override suspend fun autoLogin(): Result<User> {
+        return try {
+            // Recuperar el refresh token almacenado
+            val refreshToken = tokenManager.getRefreshToken()
+            if (refreshToken == null) {
+                return Result.failure(Exception("No hay refresh token almacenado"))
             }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
 
-    // Actualizar usuario
-    override suspend fun updateUser(user: UserDTO): Result<User> {
-        return try {
-            val token = tokenManager.getAccessToken() ?: return Result.failure(Exception("No hay Access Token"))
-            val response = api.updateUser("Bearer $token", user)
-
+            // Solicitar un nuevo access token usando el refresh token
+            val response = api.refreshAccessToken(RefreshTokenRequest(refreshToken))
             if (response.isSuccessful && response.body() != null) {
-                Result.success(response.body()!!.toUserEntity())
+                val refreshResponse = response.body()!!
+
+                // Guardar el nuevo access token
+                tokenManager.saveAccessToken(refreshResponse.accessToken)
+
+                // Devolver el usuario autenticado
+                Result.success(refreshResponse.user.toUserEntity())
             } else {
-                Result.failure(Exception("Error actualizando usuario"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    // Eliminar usuario
-    override suspend fun deleteUser(): Result<Unit> {
-        return try {
-            val token = tokenManager.getAccessToken() ?: return Result.failure(Exception("No hay Access Token"))
-            val response = api.deleteUser("Bearer $token")
-
-            if (response.isSuccessful) {
-                tokenManager.clearTokens() // Borra ambos tokens
-                Result.success(Unit)
-            } else {
-                Result.failure(Exception("Error eliminando usuario"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    // Renueva el Access Token usando el Refresh Token
-    override suspend fun refreshAccessToken(): Result<Boolean> {
-        return try {
-            val refreshToken = tokenManager.getRefreshToken() ?: return Result.failure(Exception("No hay Refresh Token"))
-
-            val response = api.refreshAccessToken(refreshToken) // Llamada API para obtener nuevo Access Token
-
-            if (response.isSuccessful && response.body() != null) {
-                val newAccessToken = response.body()!!.accessToken
-                tokenManager.saveAccessToken(newAccessToken) // Guardar el nuevo Access Token
-                Result.success(true)
-            } else {
-                Result.failure(Exception("Error renovando Access Token"))
+                Result.failure(Exception("Error en autologin. Introduce email y contraseña: ${response.message()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

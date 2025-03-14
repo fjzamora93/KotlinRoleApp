@@ -39,11 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import com.di.LocalNavigationViewModel
-import com.di.LocalUserViewModel
+import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 import com.unir.auth.viewmodels.UserState
-import com.unir.auth.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.AuthViewModel
 import com.ui.theme.MedievalColours
 
 
@@ -52,10 +52,10 @@ fun MainMenu(
     drawerState: DrawerState,
     onClose: () -> Unit,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
-    userViewModel: UserViewModel = LocalUserViewModel.current,
+    authViewModel: AuthViewModel = LocalAuthViewModel.current,
     content: @Composable () -> Unit,
 ) {
-    val user by userViewModel.userState.collectAsState()
+    val user by authViewModel.userState.collectAsState()
 
     ModalNavigationDrawer(
         drawerState = drawerState,

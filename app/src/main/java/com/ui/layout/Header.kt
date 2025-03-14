@@ -33,12 +33,12 @@ import androidx.compose.ui.unit.dp
 
 import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
-import com.di.LocalUserViewModel
+import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
-import com.unir.auth.viewmodels.UserViewModel
+import com.unir.auth.viewmodels.AuthViewModel
 import com.ui.theme.CustomType
 import com.ui.theme.MedievalColours
 
@@ -100,10 +100,10 @@ fun HeaderBody(
 fun CharacterThumbnail(
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
-    userViewModel: UserViewModel = LocalUserViewModel.current
+    authViewModel: AuthViewModel = LocalAuthViewModel.current
 ){
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
-    val userState by userViewModel.userState.collectAsState()
+    val userState by authViewModel.userState.collectAsState()
     val user = when (userState){
         is UserState.Success -> (userState as UserState.Success).user
         else -> null

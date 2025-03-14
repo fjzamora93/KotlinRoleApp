@@ -5,6 +5,8 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
+
+/** Añade el Access Token a todas las Request. Si no se puede añadir, aparecerá un log por consola */
 class AuthInterceptor @Inject constructor(
     private val tokenManager: TokenManager
 ) : Interceptor {
@@ -13,10 +15,8 @@ class AuthInterceptor @Inject constructor(
         val token = tokenManager.getAccessToken()
         if (!token.isNullOrEmpty()) {
             requestBuilder.addHeader("Authorization", "Bearer $token")
-            // Añadir log para verificar que el token se está añadiendo
             Log.d("AuthInterceptor", "Token añadido: Bearer $token")
         } else {
-            // Añadir log para verificar que el token no se está añadiendo
             Log.d("AuthInterceptor", "Token no encontrado")
         }
         return chain.proceed(requestBuilder.build())

@@ -7,6 +7,7 @@ import com.unir.character.data.dao.SpellDao
 import com.unir.character.data.repository.SkillRepositoryImpl
 import com.unir.character.domain.repository.CharacterRepository
 import com.unir.character.domain.repository.ItemRepository
+import com.unir.character.domain.repository.SkillRepository
 import com.unir.character.domain.repository.SpellRepository
 import com.unir.character.domain.usecase.character.CharacterUseCases
 import com.unir.character.domain.usecase.character.DeleteCharacterUseCase
@@ -69,7 +70,7 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideSkillUseCases(repository: SkillRepositoryImpl): SkillUseCases {
+    fun provideSkillUseCases(repository: SkillRepository): SkillUseCases {
         return SkillUseCases(
             getAllSkills = GetAllSkillsUseCase(repository),
             addDefaultSkills = AddDefaultSkills(repository),
