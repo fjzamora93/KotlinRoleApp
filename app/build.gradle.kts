@@ -147,4 +147,7 @@ dependencies {
 
     // SEGURIDAD Y TOKENS
     implementation ("androidx.security:security-crypto-ktx:1.1.0-alpha06")
+
+    //Navegación
+    implementation("androidx.navigation:navigation-compose:2.8.4")
 }

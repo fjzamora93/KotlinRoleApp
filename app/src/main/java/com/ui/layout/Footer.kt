@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.ui.components.navigationbar.NavigationBar
 import com.ui.theme.CustomType
 
 @Composable
@@ -31,6 +32,9 @@ fun Footer(modifier: Modifier = Modifier) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        NavigationBar()
+
         HorizontalDivider(
             Modifier
                 .background(Color(0xFFDDDDDD))
