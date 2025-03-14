@@ -1,6 +1,6 @@
 package com.unir.auth.data.service
 
-import com.unir.character.data.model.remote.UserDTO
+import com.unir.auth.data.model.UserDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

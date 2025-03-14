@@ -1,11 +1,10 @@
 package com.unir.auth.data.repository
 
 import com.unir.auth.data.model.User
-import com.unir.auth.data.service.AuthApiService
 import com.unir.auth.data.service.UserApiService
 import com.unir.auth.domain.repository.UserRepository
 import com.unir.auth.security.TokenManager
-import com.unir.character.data.model.remote.UserDTO
+import com.unir.auth.data.model.UserDTO
 import javax.inject.Inject
 
 class UserRepositoryImpl  @Inject constructor(

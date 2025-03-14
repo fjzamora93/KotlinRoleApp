@@ -1,7 +1,7 @@
 package com.unir.auth.domain.repository
 
 import com.unir.auth.data.model.User
-import com.unir.character.data.model.remote.UserDTO
+import com.unir.auth.data.model.UserDTO
 
 interface UserRepository {
     suspend fun getUser(): Result<User>

@@ -1,6 +1,5 @@
 package com.unir.auth.data.model
 
-import com.unir.character.data.model.remote.UserDTO
 import java.util.Date
 
 data class LoginResponse(

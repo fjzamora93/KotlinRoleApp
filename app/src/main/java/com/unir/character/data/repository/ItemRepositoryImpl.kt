@@ -15,6 +15,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+
+// TODO: ARREGLAR BUG QUE HAY AL OBTENER LOS ITEMS DE UN PERSONAJE. CUANDO SE ELIMINA LA BASE DE DATOS LOCAL, YA NO DEJA RECUPERAR LOS OBJETOS QUE HAY EN EL REMOTO
+// Realizar pruebas con postman para añadir objetos a un personaje y después ver si se sincronizan bien al llegar a la APlicación.
+
 class ItemRepositoryImpl @Inject constructor(
     private val apiService: ItemApiService,
     private val itemDao: ItemDao

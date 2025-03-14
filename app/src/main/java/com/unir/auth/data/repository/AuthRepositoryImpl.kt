@@ -1,17 +1,20 @@
 package com.unir.auth.data.repository
 
+import android.util.Log
+import com.unir.auth.data.dao.UserDao
 import com.unir.auth.data.service.AuthApiService
 import com.unir.auth.security.TokenManager
 import com.unir.auth.data.model.User
-import com.unir.character.data.model.remote.UserDTO
 import com.unir.auth.data.model.LoginRequest
 import com.unir.auth.data.model.RefreshTokenRequest
 import com.unir.auth.domain.repository.AuthRepository
+import java.io.IOException
 import javax.inject.Inject
 
 
 class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApiService,
+    private val userDao: UserDao,
     private val tokenManager: TokenManager
 ) : AuthRepository {
 
@@ -26,7 +29,10 @@ class AuthRepositoryImpl @Inject constructor(
                 tokenManager.saveAccessToken(loginResponse.accessToken)
                 tokenManager.saveRefreshToken(loginResponse.refreshToken)
 
-                Result.success(loginResponse.user.toUserEntity())
+                val onlineUser = loginResponse.user.toUserEntity()
+                userDao.upsertUser(onlineUser)
+
+                Result.success(onlineUser)
             } else {
                 Result.failure(Exception("Error en login: ${response.message()}"))
             }
@@ -79,14 +85,14 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
 
-    // Método de autologin (condicionado al Use Case que va a forzar este método al crear el Screen)
+    /** Método de autologin. A diferenica del login normal, el autologin no necesita enviar a la API ni el email ni la contraseña.
+     * Para completar la autentificación, le basta con enviar un RefreshToken y solicitar un nuevo AccessTOken.
+     * */
     override suspend fun autoLogin(): Result<User> {
         return try {
             // Recuperar el refresh token almacenado
             val refreshToken = tokenManager.getRefreshToken()
-            if (refreshToken == null) {
-                return Result.failure(Exception("No hay refresh token almacenado"))
-            }
+                ?: return Result.failure(Exception("No hay refresh token almacenado"))
 
             // Solicitar un nuevo access token usando el refresh token
             val response = api.refreshAccessToken(RefreshTokenRequest(refreshToken))
@@ -95,16 +101,36 @@ class AuthRepositoryImpl @Inject constructor(
 
                 // Guardar el nuevo access token
                 tokenManager.saveAccessToken(refreshResponse.accessToken)
+                val onlineUser = refreshResponse.user.toUserEntity()
 
-                // Devolver el usuario autenticado
-                Result.success(refreshResponse.user.toUserEntity())
+                //TODO: Cambia la forma de almacenar para que no se rompan las relaciones
+                userDao.upsertUser(onlineUser)
+                Result.success(onlineUser)
+
+            // Antes de lanzar el error, capturamos exactamente por qué no hay conexión
             } else {
-                Result.failure(Exception("Error en autologin. Introduce email y contraseña: ${response.message()}"))
+                val errorMessage = when (response.code()) {
+                    401 -> "Refresh token expired" // Or "Unauthorized"
+                    400 -> "Invalid refresh token" // Or "Bad Request"
+                    500 -> "Server error" // Or "Internal Server Error"
+                    else -> "Network error: ${response.message()}"
+                }
+                Log.e("AuthRepositoryImpl", "Error en autologin: $errorMessage")
+                throw IOException("Error en autologin: $errorMessage")
+            }
+        } catch (e: IOException) {
+            val offlineUser = userDao.getUser()
+            if (offlineUser != null) {
+                Result.success(offlineUser)
+            } else {
+                Result.failure(Exception("Error de conexión. No hay datos locales disponibles."))
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
+
 }
 
 
