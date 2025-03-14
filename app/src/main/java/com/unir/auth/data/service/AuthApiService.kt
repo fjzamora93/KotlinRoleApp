@@ -28,7 +28,7 @@ interface AuthApiService {
     suspend fun signup(@Body request: LoginRequest): Response<LoginResponse>
 
     @POST("auth/logout")
-    suspend fun logoutUser(@Header("Authorization") token: String): Response<Void>
+    suspend fun logoutUser(): Response<Void>
 
 
 }

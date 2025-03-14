@@ -1,5 +1,6 @@
 package com.unir.auth.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,10 +25,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
@@ -56,13 +59,28 @@ fun LoginBody(
 ) {
     val userState by viewModel.userState.collectAsState()
     val navigationViewModel = LocalNavigationViewModel.current
+    val context = LocalContext.current
 
     // En cuanto se complete el login sucederán dos cosas: 1. Se navegará a otra ruta. 2. Se deben cargar inmediatamente los personajes del usuario.
     LaunchedEffect(userState) {
-        if (userState is UserState.Success) {
-            navigationViewModel.navigate(ScreensRoutes.UserProfileScreen.route)
-            characterViewModel.getCharactersByUserId(userState.let { (it as UserState.Success).user.id!! })
+        when (userState) {
+
+            is UserState.LoggedOut -> {
+                Toast.makeText(context, "Sesión cerrada correctamente", Toast.LENGTH_SHORT).show()
+            }
+
+            is UserState.Success -> {
+                navigationViewModel.navigate(ScreensRoutes.UserProfileScreen.route)
+                characterViewModel.getCharactersByUserId(userState.let { (it as UserState.Success).user.id!! })
+            }
+
+            is UserState.Deleted -> {
+                Toast.makeText(context, "Cuenta eliminada", Toast.LENGTH_SHORT).show()
+            }
+
+            else -> Unit
         }
+
     }
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -71,111 +89,11 @@ fun LoginBody(
     ) {
         when (userState) {
             is UserState.Loading -> CircularProgressIndicator()
-            is UserState.Error -> {
-
-                    Text("Error: ${(userState as UserState.Error).message}")
-                    Button(onClick = { viewModel.login("email", "password") }) {
-                        Text("Reintentar")
-                    }
-            }
-    //        is UserState.LoggedOut -> Text("Sesión cerrada")
-    //        is UserState.Deleted -> Text("Cuenta eliminada")
-            else -> {
-                // Aquí manejamos el estado Idle o cualquier otro que no esté relacionado con el login
-                LoginForm(viewModel::login, viewModel::signup)
-            }
+            is UserState.Error -> Toast.makeText(context, (userState as UserState.Error).message, Toast.LENGTH_SHORT).show()
+            else -> Toast.makeText(context, "¡Hola!", Toast.LENGTH_SHORT).show()
         }
     }
+        LoginForm(viewModel::login, viewModel::signup)
+
 }
 
-
-
-
-@Composable
-fun LoginForm(
-    onLogin: (String, String) -> Unit,
-    onRegister: (String, String, String) -> Unit
-) {
-    var email by remember { mutableStateOf("test_6@mail.com") }
-    var password by remember { mutableStateOf("1234") }
-    var showRegister by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = if (showRegister) "Crear Cuenta" else "Iniciar Sesión",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        if (showRegister) {
-            var confirmPassword by remember { mutableStateOf("") }
-
-            TextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
-                label = { Text("Confirmar Contraseña") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = { onRegister(email, password, confirmPassword) },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
-            ) {
-                Text(text = "Registrarse", fontSize = 16.sp, color = Color.White)
-            }
-        } else {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = { onLogin(email, password) },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
-            ) {
-                Text(text = "Iniciar sesión", fontSize = 16.sp, color = Color.White)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Divider(modifier = Modifier.fillMaxWidth())
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "¿Eres nuevo?",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
-        )
-
-        TextButton(onClick = { showRegister = !showRegister }) {
-            Text(
-                text = if (showRegister) "Volver al login" else "Crear una cuenta",
-                fontSize = 16.sp,
-                color = Color.Blue
-            )
-        }
-    }
-}

@@ -65,11 +65,10 @@ class AuthRepositoryImpl @Inject constructor(
     //  es necesario reforzar la seguridad en el backend (crear lista negra)
     override suspend fun logout(): Result<Unit> {
         return try {
-            val token = tokenManager.getAccessToken() ?: return Result.failure(Exception("No hay Access Token"))
-            val response = api.logoutUser("Bearer $token")
+            val response = api.logoutUser()
 
             if (response.isSuccessful) {
-                tokenManager.clearTokens() // Borra ambos tokens
+                tokenManager.clearTokens()
                 Result.success(Unit)
             } else {
                 Result.failure(Exception("Error en logout: ${response.message()}"))

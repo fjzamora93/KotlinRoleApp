@@ -64,7 +64,7 @@ fun UserProfileBody(
 @Composable
 fun UserProfileDetail(
     user: User,
-    viewModel: AuthViewModel = hiltViewModel(),
+    viewModel: AuthViewModel = LocalAuthViewModel.current,
     navigation : NavigationViewModel = LocalNavigationViewModel.current
 ){
 

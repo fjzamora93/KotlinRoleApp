@@ -10,22 +10,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// TODO: MANEJAR CORRECTAMENTE LOS MENSAJES DE ERROR EN EL SCREEN CORRESPONDIENTE
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authUseCase: AuthUseCases,
 ) : ViewModel() {
 
-    // Estado de la autenticación: IDLE, LOADING, SUCCESS, ERROR
-    // TODO: MANEJAR CORRECTAMENTE LOS MENSAJES DE ERROR EN EL SCREEN CORRESPONDIENTE
+    // Estado de la autenticación: LoggedOut, IDLE, LOADING, SUCCESS, ERROR
     private val _userState = MutableStateFlow<UserState>(UserState.Idle)
     val userState: StateFlow<UserState> = _userState
 
 
     // Lanzar el autologin al inicializar el ViewModel
-    // TODO: Si falla, hacer que aparezca un Toast para que se haga el login manualmente
     init {
-        autologin()
+        if (_userState.value != UserState.LoggedOut) {
+            autologin()
+        }
     }
 
     fun login(email: String, password: String) {
