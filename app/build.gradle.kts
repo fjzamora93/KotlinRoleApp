@@ -150,4 +150,9 @@ dependencies {
 
     //Navegación
     implementation("androidx.navigation:navigation-compose:2.8.4")
+
+
+    // Temas y estilos
+    implementation("io.github.vanpra.compose-material-dialogs:core:0.9.0")
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
 }

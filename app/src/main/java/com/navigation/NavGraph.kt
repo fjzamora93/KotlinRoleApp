@@ -44,7 +44,7 @@ fun NavGraph(
         // El NavHost define qué Screen se va a renderizar ante cada Ruta, dependiendo del LaunchedEffect de arriba
         NavHost(
             navController = navController,
-            startDestination = ScreensRoutes.MainScreen.route
+            startDestination = ScreensRoutes.LoginScreen.route
         ) {
 
             // Pantalla de inicio

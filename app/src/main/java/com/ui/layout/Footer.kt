@@ -33,7 +33,7 @@ fun Footer(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        NavigationBar()
+
 
         HorizontalDivider(
             Modifier

@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -41,19 +42,19 @@ val navigationItems = listOf(
         route = ScreensRoutes.MainScreen.route
     ),
     NavigationItem(
-        title = "Profile",
+        title = "Perfil",
         icon = Icons.Default.Person,
-        route = ScreensRoutes.MainScreen.route
+        route = ScreensRoutes.LoginScreen.route
     ),
     NavigationItem(
-        title = "Cart",
-        icon = Icons.Default.ShoppingCart,
-        route = ScreensRoutes.MainScreen.route
+        title = "Personajes",
+        icon = Icons.Default.Create,
+        route = ScreensRoutes.CharacterListScreen.route
     ),
     NavigationItem(
         title = "Setting",
         icon = Icons.Default.Settings,
-        route = ScreensRoutes.MainScreen.route
+        route = ScreensRoutes.FontTemplateScreen.route
     )
 )
 
@@ -62,6 +63,7 @@ val navigationItems = listOf(
 fun NavigationBar(
     containerColor: Color = Color.White,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
+    modifier: Modifier = Modifier
 ) {
     val selectedNavigationIndex = rememberSaveable {
         mutableIntStateOf(0)
@@ -74,7 +76,8 @@ fun NavigationBar(
             .background(containerColor)
             .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+
     ) {
         navigationItems.forEachIndexed { index, item ->
             NavigationBarItem(
