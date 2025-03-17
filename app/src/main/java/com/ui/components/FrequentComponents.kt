@@ -11,7 +11,7 @@ import com.di.LocalNavigationViewModel
 fun BackButton() {
     val navigationViewModel = LocalNavigationViewModel.current
 
-    NavigationButton(
+    CustomIconButton(
         text = "",
         icon = Icons.Default.ArrowBackIosNew,
         onClick = {

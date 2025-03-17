@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MonetizationOn
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -30,9 +31,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.di.LocalCharacterViewModel
+import com.di.LocalNavigationViewModel
+import com.navigation.NavigationViewModel
+import com.navigation.ScreensRoutes
 
 import com.unir.character.data.model.local.Item
 import com.ui.components.BackButton
+import com.ui.components.CustomIconButton
 import com.ui.components.RegularCard
 import com.ui.layout.MainLayout
 
@@ -58,6 +63,7 @@ fun CharacterInventoryScreen(){
 @Composable
 fun CharacterInventoryBody(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
     itemViewModel: ItemViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
@@ -76,6 +82,13 @@ fun CharacterInventoryBody(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
     ){
+
+        CustomIconButton(
+            text = "",
+            icon = Icons.Default.ShoppingBag,
+            onClick = { navigationViewModel.navigate(ScreensRoutes.ItemListScreen.route) }
+        )
+
         CurrentGold()
         if (isLoading) {
             CircularProgressIndicator()

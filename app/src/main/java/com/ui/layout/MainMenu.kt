@@ -95,12 +95,6 @@ fun MainMenu(
                             icon = Icons.Default.Person
                         )
 
-                        MenuOption(
-                            text = "Items",
-                            onClick = { navigationViewModel.navigate(ScreensRoutes.ItemListScreen.route) },
-                            icon = Icons.Default.Architecture
-                        )
-
 
                         MenuOption(
                             text = "Creación personaje",

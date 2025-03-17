@@ -1,31 +1,26 @@
 package com.unir.character.ui.screens.character
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.unir.character.data.model.local.CharacterEntity
 import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
-import com.navigation.ScreensRoutes
 import com.unir.character.ui.screens.characterSheet.CharacterPortrait
 import com.ui.components.BackButton
-import com.ui.components.MedievalDivider
-import com.ui.components.NavigationButton
+import com.ui.components.CustomIconButton
 import com.ui.components.RegularCard
 import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
@@ -57,12 +52,10 @@ fun CharacterListBody(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text("Lista de personajes: ", style = CustomType.titleLarge)
         characters?.let {
             it.forEach { character ->
                 CharacterSummary(
                     character,
-                    onDestroyItem = { characterViewModel.deleteCharacter(character) }
                 )
             }
         }
@@ -74,10 +67,11 @@ fun CharacterListBody(
 fun CharacterSummary(
     character: CharacterEntity,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
-    onDestroyItem: () -> Unit = {}
-){
-    var claseToString = character.rolClass.toString().lowercase(Locale.ROOT)
+    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current
 
+    ){
+    var claseToString = character.rolClass.toString().lowercase(Locale.ROOT)
+    var raceToString = character.race.toString().lowercase(Locale.ROOT)
     RegularCard(){
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -91,33 +85,27 @@ fun CharacterSummary(
 
             Column(modifier = Modifier.weight(2f).wrapContentHeight() ){
                 Text(
-                    text = "${character.name} - ${claseToString}",
-                    style = CustomType.titleMedium
+                    text = "${character.name}",
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = " ${character.level} - ${raceToString}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Text(
+                    text = " ${claseToString}",
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
-        }
 
-
-        MedievalDivider()
-
-        Row(
-
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-
-            NavigationButton(
-                text = "Eliminar",
+            CustomIconButton(
+                text = "",
                 icon = Icons.Default.Delete,
-                onClick = { onDestroyItem() })
-
-            NavigationButton(
-                text = "Seleccionar",
-                icon = Icons.Default.RemoveRedEye,
-                onClick = {
-                    navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(character.id!!))
-                })
+                onClick = { characterViewModel.deleteCharacter(character) }
+            )
         }
+
     }
 
 }
