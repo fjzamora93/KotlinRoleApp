@@ -12,8 +12,8 @@ import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.unir.character.ui.screens.MainScreen
-import com.unir.character.ui.screens.character.CharacterCreatorScreen
-import com.unir.character.ui.screens.character.CharacterListScreen
+import com.unir.character.ui.screens.characterform.CharacterCreatorScreen
+import com.unir.character.ui.screens.characterSheet.CharacterListScreen
 import com.unir.character.ui.screens.characterSheet.CharacterDetailScreen
 import com.unir.character.ui.screens.items.CharacterInventoryScreen
 import com.unir.character.ui.screens.items.ItemListScreen
@@ -24,6 +24,7 @@ import com.unir.auth.ui.screens.LoginScreen
 import com.unir.auth.ui.screens.UserProfileScreen
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.AuthViewModel
+import com.unir.character.ui.screens.characterform.CharacterEditorScreen
 
 @Composable
 fun NavGraph(
@@ -55,6 +56,10 @@ fun NavGraph(
             // Pantalla de creación del personaje
             composable(ScreensRoutes.CharacterCreatorScreen.route) {
                 CharacterCreatorScreen()
+            }
+
+            composable(ScreensRoutes.CharacterEditorScreen.route) {
+                CharacterEditorScreen()
             }
 
             composable(ScreensRoutes.CharacterListScreen.route) {

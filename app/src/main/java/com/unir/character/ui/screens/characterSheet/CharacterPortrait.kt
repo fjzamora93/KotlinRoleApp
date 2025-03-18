@@ -23,8 +23,7 @@ import java.util.Locale
 fun CharacterPortrait(
     character: CharacterEntity,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
-    onClick : () -> Unit = {
-        navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(character.id!!)) }
+    onClick : () -> Unit = {  }
 ) {
     val imageName = "${character.race}_${character.rolClass}_${character.gender}.png".lowercase()
     val imageResId = rememberImageResource(imageName)

@@ -129,7 +129,7 @@ data class CharacterEntity(
                 this.wisdom += 1
                 this.charisma -= 2
             }
-            Race.TEFLIN -> {
+            Race.HALFLING -> {
                 // Los Medianos (Halflings) suelen ser ágiles y carismáticos, pero débiles físicamente
                 this.strength -= 1
                 this.dexterity += 2
@@ -198,47 +198,7 @@ data class CharacterEntity(
 }
 
 
-enum class RolClass {
-    NULL, WARRIOR, BARD, ROGUE, EXPLORER, CLERIC, PALADIN, SORCERER, WIZARD, DRUID, MONK, WARLOCK, BARBARIAN;
 
-    companion object {
-        fun getString(rolClass: RolClass): String {
-            return when (rolClass) {
-                NULL -> "None"
-                WARRIOR -> "Guerrero"
-                BARD -> "Bardo"
-                ROGUE -> "Pícaro"
-                EXPLORER -> "Explorador"
-                CLERIC -> "Clérigo"
-                PALADIN -> "Paladín"
-                SORCERER -> "Hechicero"
-                WIZARD -> "Mago"
-                DRUID -> "Druida"
-                MONK -> "Monje"
-                WARLOCK -> "Brujo"
-                BARBARIAN -> "Bárbaro"
-            }
-        }
-    }
-}
-
-enum class Race {
-    HUMAN, ELF, DWARF, TEFLIN, DRAGONBORN, ORC, OTHER;
-
-    companion object {
-        fun getString(race: Race): String {
-            return when (race) {
-                HUMAN -> "Humano"
-                ELF -> "Elfo"
-                DWARF -> "Enano"
-                TEFLIN -> "Mediano"
-                DRAGONBORN -> "Dragonborn"
-                ORC -> "Orco"
-                OTHER -> "Otro"
-            }
-        }
-    }
-}
 
 
 

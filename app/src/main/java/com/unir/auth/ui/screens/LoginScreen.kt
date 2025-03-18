@@ -36,6 +36,7 @@ import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.ScreensRoutes
 import com.ui.components.BackButton
+import com.ui.components.CustomCircularProgressIndicator
 import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
@@ -88,7 +89,7 @@ fun LoginBody(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         when (userState) {
-            is UserState.Loading -> CircularProgressIndicator()
+            is UserState.Loading -> CustomCircularProgressIndicator()
             is UserState.Error -> Toast.makeText(context, (userState as UserState.Error).message, Toast.LENGTH_SHORT).show()
             else -> Toast.makeText(context, "¡Hola!", Toast.LENGTH_SHORT).show()
         }

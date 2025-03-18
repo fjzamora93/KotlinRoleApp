@@ -57,7 +57,10 @@ fun MainLayout(
                 )
 
                 // CONTENIDO DEL SCREEN. MODIFICAR SI FUESE NECESARIO.
-                LazyColumn(){
+                LazyColumn(Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                ){
                     item {
                         content()
                         //Footer(Modifier.fillMaxWidth())

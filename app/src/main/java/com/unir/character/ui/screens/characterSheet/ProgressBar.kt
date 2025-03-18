@@ -25,6 +25,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.unir.character.data.model.local.CharacterEntity
+
+
+@Composable
+fun ProgressBarSection(
+    character: CharacterEntity,
+    onCharacterUpdate: (CharacterEntity) -> Unit
+){
+    ProgressBar(
+        label = "HP",
+        maxValue = character.hp,
+        localValue = character.currentHp,
+        onValueChanged = { newHp -> onCharacterUpdate(character.copy(currentHp = newHp)) }
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    ProgressBar(
+        label = "AP",
+        maxValue = character.ap,
+        localValue = character.currentAp,
+        onValueChanged = { newHp -> onCharacterUpdate(character.copy(currentHp = newHp)) }
+    )
+}
 
 
 @Composable
