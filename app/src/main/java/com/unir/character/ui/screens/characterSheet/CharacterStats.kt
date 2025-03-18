@@ -36,49 +36,50 @@ fun StatSection(
     editableCharacter: CharacterEntity,
     onCharacterChange: (CharacterEntity) -> Unit
 ) {
+    Column(modifier = Modifier.padding(16.dp)){
 
+        Row(verticalAlignment = Alignment.CenterVertically) {
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+            NumberBox(
+                modifier = Modifier.weight(1f),
+                label = "Fuerza",
+                value = editableCharacter.strength,
+            )
 
-        NumberBox(
-            modifier = Modifier.weight(1f),
-            label = "Fuerza",
-            value = editableCharacter.strength,
-        )
+            NumberBox(
+                modifier = Modifier.weight(1f),
+                label = "Destreza",
+                value = editableCharacter.dexterity,
+            )
 
-        NumberBox(
-            modifier = Modifier.weight(1f),
-            label = "Destreza",
-            value = editableCharacter.dexterity,
-        )
+            NumberBox(
+                modifier = Modifier.weight(1f),
+                label = "Constitucion",
+                value = editableCharacter.constitution,
+            )
+        }
 
-        NumberBox(
-            modifier = Modifier.weight(1f),
-            label = "Constitucion",
-            value = editableCharacter.constitution,
-        )
-    }
+        Spacer(modifier = Modifier.height(16.dp).width(10.dp))
 
-    Spacer(modifier = Modifier.height(16.dp).width(10.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            NumberBox(
+                modifier = Modifier.weight(1f),
+                label = "Inteligencia",
+                value = editableCharacter.intelligence,
+            )
+            NumberBox(
+                modifier = Modifier.weight(1f),
+                label = "Sabiduría",
+                value = editableCharacter.wisdom,
+            )
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        NumberBox(
-            modifier = Modifier.weight(1f),
-            label = "Inteligencia",
-            value = editableCharacter.intelligence,
-        )
-        NumberBox(
-            modifier = Modifier.weight(1f),
-            label = "Sabiduría",
-            value = editableCharacter.wisdom,
-        )
+            NumberBox(
+                modifier = Modifier.weight(1f),
+                label = "Carisma",
+                value = editableCharacter.charisma,
+            )
 
-        NumberBox(
-            modifier = Modifier.weight(1f),
-            label = "Carisma",
-            value = editableCharacter.charisma,
-        )
-
+        }
     }
 }
 
@@ -130,78 +131,4 @@ fun NumberBox(
     }
     Spacer(modifier = Modifier.height(16.dp).width(10.dp))
 
-}
-
-
-@Composable
-fun HitPointsBar(
-    label: String = "",
-    maxValue: Int = 20,
-    localValue: Int = 10,
-    onValueChanged: (Int) -> Unit
-) {
-    // Calcular el progreso asegurando que maxValue no sea 0
-    val progress = if (maxValue > 0) localValue.toFloat() / maxValue.toFloat() else 1f
-
-    // Contenedor principal
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-            .padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Fila con botones y texto centrado
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Botón de restar (-)
-            IconButton(
-                onClick = { if (localValue > 0) onValueChanged(localValue - 1) }
-            ) {
-                Icon(imageVector = Icons.Default.Remove, contentDescription = "Restar")
-            }
-
-            // Texto central (Label y valores)
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "$localValue / $maxValue",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            // Botón de sumar (+)
-            IconButton(
-                onClick = { if (localValue < maxValue) onValueChanged(localValue + 1) }
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Sumar")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Barra azul del indicador
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(6.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .background(Color.Gray.copy(alpha = 0.3f)) // Fondo gris claro
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(progress)
-                    .background(MaterialTheme.colorScheme.primary) // Azul según el tema
-            )
-        }
-    }
 }

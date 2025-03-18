@@ -16,12 +16,16 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LocalLibrary
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -37,18 +41,18 @@ import com.navigation.ScreensRoutes
 
 val navigationItems = listOf(
     NavigationItem(
-        title = "Home",
-        icon = Icons.Default.Home,
+        title = "Escenarios",
+        icon = Icons.Default.LocalLibrary,
         route = ScreensRoutes.MainScreen.route
     ),
     NavigationItem(
         title = "Perfil",
         icon = Icons.Default.Person,
-        route = ScreensRoutes.LoginScreen.route
+        route = ScreensRoutes.UserProfileScreen.route
     ),
     NavigationItem(
         title = "Personajes",
-        icon = Icons.Default.Create,
+        icon = Icons.Default.SupervisedUserCircle,
         route = ScreensRoutes.CharacterListScreen.route
     ),
     NavigationItem(
@@ -65,11 +69,8 @@ fun NavigationBar(
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
     modifier: Modifier = Modifier
 ) {
-    val selectedNavigationIndex = rememberSaveable {
-        mutableIntStateOf(0)
-    }
+    val currentRoute by navigationViewModel.currentRoute.collectAsState()
 
-    // Usar un Row para organizar los ítems horizontalmente
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -77,33 +78,28 @@ fun NavigationBar(
             .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
-
     ) {
-        navigationItems.forEachIndexed { index, item ->
+        navigationItems.forEach { item ->
+            val isSelected = currentRoute == item.route // Comparamos con la ruta actual
+
             NavigationBarItem(
-                selected = selectedNavigationIndex.intValue == index,
+                selected = isSelected,
                 onClick = {
-                    selectedNavigationIndex.intValue = index
-                    navigationViewModel.navigate(item.route)
+                    navigationViewModel.navigate(item.route) // Navegamos a la nueva ruta
                 },
                 icon = {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.title,
-                        tint = if (selectedNavigationIndex.intValue == index)
-                            Color.Black // Color cuando está seleccionado
-                        else Color.Gray // Color cuando no está seleccionado
+                        tint = if (isSelected) Color.Black else Color.Gray
                     )
                 },
                 label = {
                     Text(
                         text = item.title,
-                        color = if (selectedNavigationIndex.intValue == index)
-                            Color.Black // Color cuando está seleccionado
-                        else Color.Gray // Color cuando no está seleccionado
+                        color = if (isSelected) Color.Black else Color.Gray
                     )
                 },
-
             )
         }
     }

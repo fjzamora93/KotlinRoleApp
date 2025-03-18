@@ -3,6 +3,8 @@ package com.navigation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class NavigationViewModel : ViewModel() {
 
@@ -10,6 +12,8 @@ class NavigationViewModel : ViewModel() {
     private val _routeStack = mutableListOf<String>()
     val routeStack: List<String> get() = _routeStack
 
+    private val _currentRoute = MutableStateFlow<String?>(null)
+    val currentRoute: StateFlow<String?> = _currentRoute
 
     private val _navigationEvent = MutableLiveData<NavigationEvent?>()
     val navigationEvent: LiveData<NavigationEvent?> = _navigationEvent
@@ -17,6 +21,7 @@ class NavigationViewModel : ViewModel() {
     fun navigate(route: String) {
         _routeStack.add(route)
         _navigationEvent.value = NavigationEvent.Navigate(route)
+        _currentRoute.value = route
     }
 
 

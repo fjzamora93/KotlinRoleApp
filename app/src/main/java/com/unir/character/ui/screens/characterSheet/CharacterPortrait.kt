@@ -23,6 +23,8 @@ import java.util.Locale
 fun CharacterPortrait(
     character: CharacterEntity,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
+    onClick : () -> Unit = {
+        navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(character.id!!)) }
 ) {
     val imageName = "${character.race}_${character.rolClass}_${character.gender}.png".lowercase()
     val imageResId = rememberImageResource(imageName)
@@ -56,13 +58,7 @@ fun CharacterPortrait(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
-            .clickable(onClick = {
-                navigationViewModel.navigate(
-                    ScreensRoutes.CharacterDetailScreen.createRoute(
-                        character.id!!
-                    )
-                )
-            })
+            .clickable(onClick = { onClick() })
     )
 }
 

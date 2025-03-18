@@ -98,7 +98,7 @@ fun MinusButton(
 @Composable
 fun MenuMedievalButton(
     onClick: () -> Unit,
-    modifier: Modifier = medievalButtonStyleSquare(size = 90.dp),
+    modifier: Modifier = medievalButtonStyleSquare(size = 40.dp),
     icon: ImageVector = Icons.Default.Add,
     text: String = ""
 ){

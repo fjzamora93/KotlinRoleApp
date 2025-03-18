@@ -42,14 +42,6 @@ fun SkillSection(
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        SkillItem(skillName = "Atletismo", skillValue = 11)
-        Spacer(modifier = Modifier.height(10.dp))
-        SkillItem(skillName = "Sigilo", skillValue = 12)
-        Spacer(modifier = Modifier.height(10.dp))
-        SkillItem(skillName = "Atletismo", skillValue = 14)
-        Spacer(modifier = Modifier.height(10.dp))
-        SkillItem(skillName = "Sigilo", skillValue = 8)
-        Spacer(modifier = Modifier.height(10.dp))
 
         skillList.forEach{
             skill ->
