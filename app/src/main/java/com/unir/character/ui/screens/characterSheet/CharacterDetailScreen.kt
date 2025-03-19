@@ -1,5 +1,6 @@
 package com.unir.character.ui.screens.characterSheet
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -35,6 +37,9 @@ import com.ui.components.CustomCircularProgressIndicator
 import com.ui.layout.MenuOption
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.ui.screens.characterform.haracterDetail.StatSection
+import com.unir.character.ui.screens.common.ProgressBarSection
+import com.unir.character.ui.screens.dialogues.CharacterDialog
+import com.unir.character.ui.screens.dialogues.SwitchDialogue
 import com.unir.character.ui.screens.layout.CharacterLayout
 import com.unir.character.ui.screens.skills.SkillSection
 import com.unir.character.viewmodels.CharacterViewModel
@@ -74,7 +79,7 @@ fun DetailCharacterBody(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     onClick : () -> Unit = {}
 ) {
-
+    var activeDialog by remember { mutableStateOf<CharacterDialog?>(null) }
     var characterState by remember { mutableStateOf(character) }
     Row(
         modifier = Modifier
@@ -90,10 +95,10 @@ fun DetailCharacterBody(
         ) {
             // Armadura (icono a la izquierda, número y texto a la derecha)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.Outlined.Security, contentDescription = "Armadura", Modifier.size(60.dp))
+                Icon(imageVector = Icons.Outlined.Security, contentDescription = "Armadura", Modifier.size(60.dp).clickable { activeDialog = CharacterDialog.Armour  })
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(horizontalAlignment = Alignment.Start) {
-                    Text(text = "15", fontSize = 20.sp)
+                    Text(text = "15", style = MaterialTheme.typography.headlineMedium)
                     Text(text = "Armadura", fontSize = 12.sp)
                 }
             }
@@ -102,7 +107,7 @@ fun DetailCharacterBody(
 
             // INICIATIVA
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.Default.WorkspacePremium, contentDescription = "Iniciativa", Modifier.size(60.dp))
+                Icon(imageVector = Icons.Default.WorkspacePremium, contentDescription = "Iniciativa", Modifier.size(60.dp).clickable { activeDialog = CharacterDialog.Initiative  })
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(horizontalAlignment = Alignment.Start) {
                     Text(text = "+4", fontSize = 20.sp)
@@ -139,6 +144,11 @@ fun DetailCharacterBody(
         editableCharacter = character,
     )
 
-
+    activeDialog?.let {
+        SwitchDialogue(
+            activeDialog = it,
+            onDismiss = { activeDialog = null }
+        )
+    }
 }
 

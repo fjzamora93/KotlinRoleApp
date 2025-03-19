@@ -153,6 +153,7 @@ dependencies {
 
 
     // Temas y estilos
+    implementation("com.chargemap.compose:numberpicker:1.0.3")
     implementation("io.github.vanpra.compose-material-dialogs:core:0.9.0")
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
     implementation("androidx.compose.material:material-icons-extended:1.5.0")

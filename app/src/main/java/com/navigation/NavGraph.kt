@@ -58,9 +58,7 @@ fun NavGraph(
                 CharacterCreatorScreen()
             }
 
-            composable(ScreensRoutes.CharacterEditorScreen.route) {
-                CharacterEditorScreen()
-            }
+
 
             composable(ScreensRoutes.CharacterListScreen.route) {
                 CharacterListScreen()
@@ -93,6 +91,17 @@ fun NavGraph(
             composable (ScreensRoutes.UserProfileScreen.route){
                 UserProfileScreen()
             }
+            //Pantalla de edición
+            composable(
+                ScreensRoutes.CharacterEditorScreen.route,
+                arguments = listOf(navArgument("characterId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val characterId = backStackEntry.arguments?.getLong("characterId") ?: 0
+                CharacterEditorScreen(characterId = characterId)
+            }
+
+
+
 
             // Pantalla de detalle del personaje
             composable(

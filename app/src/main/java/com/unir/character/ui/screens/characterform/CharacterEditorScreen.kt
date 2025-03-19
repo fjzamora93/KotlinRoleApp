@@ -1,19 +1,28 @@
 package com.unir.character.ui.screens.characterform
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,23 +30,30 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 import com.ui.layout.MainLayout
+import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.Race
 import com.unir.character.data.model.local.RolClass
+import com.unir.character.ui.screens.common.DropDownText
+import com.unir.character.ui.screens.common.InlineProgressBar
+import com.unir.character.ui.screens.common.NumberRangeDropDown
 import com.unir.character.viewmodels.CharacterViewModel
 
 
 @Composable
-fun CharacterEditorScreen(){
+fun CharacterEditorScreen(characterId: Long){
     MainLayout(){
         Column{
-            CharacterEditForm()
+            CharacterEditForm(characterId)
         }
     }
 }
@@ -55,114 +71,143 @@ fun CharacterEditorScreen(){
  * */
 @Composable
 fun CharacterEditForm(
+    characterId: Long,
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
-    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
 ) {
-    val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
+    LaunchedEffect(characterId) {
+        characterViewModel.getCharacterById(characterId)
+    }
 
-    // Crear una copia mutable del personaje al iniciar el formulario
+    val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
     var characterToUpdate by remember(editableCharacter) {
         mutableStateOf(editableCharacter?.copy())
     }
 
     characterToUpdate?.let { character ->
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
-            TextField(
-                value = character.name,
-                onValueChange = { newName ->
-                    characterToUpdate = character.copy(name = newName)
-                },
-                label = { Text("Nombre") }
-            )
+            Row(){
+                TextField(
+                    value = character.name,
+                    onValueChange = { newName ->
+                        characterToUpdate = character.copy(name = newName)
+                    },
+                    label = { Text("Nombre") },
+                    modifier = Modifier.weight(2.0f)
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Clase", style = MaterialTheme.typography.labelMedium)
-            DropDown(
-                options = RolClass.getListOf(),
-                selectedOption = RolClass.getString(character.rolClass), // Mostrar la opción actual
-                onValueChange = { selectedOption ->
-                    characterToUpdate = character.copy(rolClass = RolClass.getClass(selectedOption))
-                }
-            )
+                Spacer(modifier = Modifier.width(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Raza", style = MaterialTheme.typography.labelMedium)
-            DropDown(
-                options = Race.getListOf(),
-                selectedOption = Race.getString(character.race), // Mostrar la opción actual
-                onValueChange = { selectedOption ->
-                    characterToUpdate = character.copy(race = Race.getRace(selectedOption))
-                }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            NumberPicker(
-                state = remember { mutableIntStateOf(character.charisma) },
-                onStateChanged = {result ->
-                    characterToUpdate = character.copy(charisma = result)
-                    println(result)
-                }
-            )
-
-            Button(
-                onClick = {
-                    characterToUpdate?.let { updatedCharacter ->
-                        characterViewModel.updateCharacter(updatedCharacter)
-                        navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(updatedCharacter.id))
+                NumberRangeDropDown(
+                    validRange = 1..12,
+                    selectedValue = character.level,
+                    modifier = Modifier.weight(1f),
+                    label = "Nivel",
+                    onValueChange = { newLevel ->
+                        characterToUpdate = character.copy(level = newLevel)
                     }
-                }
-            ) {
-                Text("Guardar")
-            }
-        }
-    }
-}
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropDown(
-    options: List<String>,
-    selectedOption: String, // Valor seleccionado que viene desde fuera
-    onValueChange: (String) -> Unit // Función para notificar cambios
-) {
-    // Estado para controlar si el menú está expandido o no
-    var expanded by remember { mutableStateOf(false) }
-
-    // ExposedDropdownMenuBox es el contenedor del dropdown
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
-    ) {
-        // TextField que muestra la opción seleccionada
-        TextField(
-            value = selectedOption, // Usar el valor que viene desde fuera
-            onValueChange = {}, // No se permite editar manualmente
-            readOnly = true, // Hacer el TextField de solo lectura
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            },
-            modifier = Modifier.menuAnchor()
-        )
-
-        // Menú desplegable
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            options.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(text = option) },
-                    onClick = {
-                        onValueChange(option) // Notificar al componente padre sobre el cambio
-                        expanded = false // Cerrar el menú
-                    }
                 )
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                DropDownText(
+                    options = RolClass.getListOf(),
+                    selectedOption = RolClass.getString(character.rolClass), // Mostrar la opción actual
+                    onValueChange = { selectedOption ->
+                        characterToUpdate = character.copy(rolClass = RolClass.getClass(selectedOption))
+                    },
+                    label = "Clase",
+                    modifier = Modifier.weight(1.0f).padding(end = 16.dp)
+
+                )
+
+                DropDownText(
+                    options = Race.getListOf(),
+                    selectedOption = Race.getString(character.race),
+                    label = "Raza",
+                    onValueChange = { selectedOption ->
+                        characterToUpdate = character.copy(race = Race.getRace(selectedOption))
+                    },
+                    modifier = Modifier.weight(1.0f)
+
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TextField(
+                value = character.description,
+                onValueChange = { desc ->
+                    characterToUpdate = character.copy(description = desc)
+                },
+                label = { Text("Descripción") },
+                modifier = Modifier.fillMaxWidth(),
+                maxLines = 5,
+                singleLine = false
+            )
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SkillSectionForm(
+                character = characterToUpdate!!,
+                onValueChange = { updatedCharacter -> characterToUpdate = updatedCharacter }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            StatSectionForm(
+                character = characterToUpdate!!,
+                onValueChange = { updatedCharacter -> characterToUpdate = updatedCharacter }
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                Button(
+                    colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.primary),
+                    onClick = {
+                        characterToUpdate?.let { updatedCharacter ->
+                            characterViewModel.updateCharacter(updatedCharacter)
+                            navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(updatedCharacter.id))
+                        }
+                    }
+                ) {
+                    Text("Guardar")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.error),
+                    onClick = {
+                        characterViewModel.deleteCharacter(character)
+                    }
+                ) {
+                    Text("Eliminar")
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Button(
+                    colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.scrim),
+                    onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(character.id)) }
+                ) {
+                    Text("Cancelar")
+                }
+
+            }
+
         }
     }
 }
+

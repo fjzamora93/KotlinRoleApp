@@ -22,16 +22,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
+import com.di.LocalCharacterViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 import com.ui.layout.MenuOption
 import com.unir.auth.viewmodels.AuthViewModel
+import com.unir.character.viewmodels.CharacterViewModel
 
 
 @Composable
@@ -39,11 +44,11 @@ fun CharacterMenu(
     drawerState: DrawerState,
     onClose: () -> Unit,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
-    authViewModel: AuthViewModel = LocalAuthViewModel.current,
+    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     content: @Composable () -> Unit,
 ) {
-    val user by authViewModel.userState.collectAsState()
 
+    val character by characterViewModel.selectedCharacter.collectAsState()
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -71,7 +76,7 @@ fun CharacterMenu(
 
                     MenuOption(
                         text = "Editar personaje",
-                        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.route) },
+                        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.createRoute(character!!.id)) },
                         icon = Icons.Default.EditOff
                     )
 
@@ -89,14 +94,12 @@ fun CharacterMenu(
                         icon = Icons.Default.FontDownload
                     )
 
-
-
-
-
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = onClose) {
                         Text("Cerrar")
                     }
+
+
                 }
             }
         },

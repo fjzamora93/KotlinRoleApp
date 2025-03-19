@@ -3,12 +3,16 @@ package com.navigation
 sealed class ScreensRoutes(val route: String) {
     object MainScreen : ScreensRoutes("MainScreen")
     object CharacterCreatorScreen : ScreensRoutes("CharacterCreatorScreen")
-    object CharacterEditorScreen: ScreensRoutes("CharacterEditorScreen")
     object CharacterListScreen : ScreensRoutes("CharacterListScreen")
     object CharacterSpellScreen : ScreensRoutes("CharacterSpellScreen")
     object CharacterDetailScreen : ScreensRoutes("CharacterDetailScreen/{characterId}") {
         fun createRoute(characterId: Long) = "CharacterDetailScreen/$characterId"
     }
+    object CharacterEditorScreen: ScreensRoutes("CharacterEditorScreen/{characterId}"){
+        fun createRoute(characterId: Long) = "CharacterEditorScreen/$characterId"
+    }
+
+
     object SkillListScreen : ScreensRoutes("SkillListScreen")
 
     // TEST Y TEMPLATES
