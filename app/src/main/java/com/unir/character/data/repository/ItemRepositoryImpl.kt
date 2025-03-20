@@ -154,7 +154,7 @@ class ItemRepositoryImpl @Inject constructor(
             val localItemsDetails: List<CharacterItemDetail> = itemDao.getItemsDetailByCharacter(characterId)
 
             // 2. Sincronizar con la API
-            val response = apiService.updateItemsToCharacter(localItemsDetails.map {  it.toCharacterApiCharacterItem() })
+            val response = apiService.updateItemsToCharacter(localItemsDetails.map {  it.toCharacterItemDTO() })
 
             // 3. Verificar si la respuesta fue exitosa
             if (!response.isSuccessful) {

@@ -10,9 +10,9 @@ data class ItemDTO(
     val goldValue: Int,
     val category: String,
     val dice: Int,
+    val diceAmount: Int,
     val statValue: Int,
     val statType: String,
-
     val gameSession: Int?,
 
     ){
@@ -30,7 +30,7 @@ data class ItemDTO(
             dice = this.dice,
             statValue = this.statValue,
             statType = this.statType,
-
+            diceAmount = this.diceAmount,
             gameSession = this.gameSession,
 
             )

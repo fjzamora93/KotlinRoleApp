@@ -47,16 +47,8 @@ class SkillRepositoryImpl @Inject constructor(
 
 
     override suspend fun addDefaultSkills(characterId: Long, skillIds: List<Int>): Result<List<Skill>> {
-
-
-
-        val defaultSkills : List<Skill> =  skillDao.updateCharacterSkills(characterId, skillIds)
-        println("Asignando habilidades $defaultSkills al personaje $characterId")
-        CoroutineScope(Dispatchers.IO).launch {
-            apiService.addDefaultSkills(characterId, skillIds)
-        }
         return try {
-            Result.success(defaultSkills)
+            Result.success(emptyList() )
         } catch (e: Exception) {
             Result.failure(e)
         }

@@ -2,7 +2,11 @@ package com.unir.character.data.repository
 
 import android.util.Log
 import com.unir.character.data.dao.CharacterDao
+import com.unir.character.data.dao.SkillDao
 import com.unir.character.data.model.local.CharacterEntity
+import com.unir.character.data.model.local.CharacterSkillCrossRef
+import com.unir.character.data.model.local.CharacterWithSkills
+import com.unir.character.data.model.remote.toSkill
 import com.unir.character.data.service.CharacterApiService
 import com.unir.character.domain.repository.CharacterRepository
 import kotlinx.coroutines.CoroutineScope
@@ -51,11 +55,30 @@ class CharacterRepositoryImpl @Inject constructor(
                         localCharacter == null || remoteCharacter.updatedAt > localCharacter.updatedAt
                     }
 
-                    // Insertar solo los personajes más recientes
+
                     if (charactersToInsert.isNotEmpty()) {
                         val remoteEntities = charactersToInsert.map { it.toCharacterEntity() }
-                        println(remoteEntities)
                         characterDao.insertAll(remoteEntities)
+
+                        // Obtener todas las habilidades de los personajes
+                        val skillsToInsert = charactersToInsert.flatMap { it.skills.map { skillWrapper ->
+                            skillWrapper.skill.toSkill()
+                        } }.distinctBy { it.id }
+
+                        characterDao.insertAllSkills(skillsToInsert) // Insertar habilidades
+
+                        // Insertar las relaciones de habilidades
+                        val characterSkillsToInsert = charactersToInsert.flatMap { character ->
+                            character.skills.map { skillWrapper ->
+                                CharacterSkillCrossRef(
+                                    characterId = character.id,
+                                    skillId = skillWrapper.skill.id,
+                                    value = skillWrapper.value
+                                )
+                            }
+                        }
+
+                        characterDao.insertAllCharacterSkills(characterSkillsToInsert)
                     }
                 }
             }
@@ -67,11 +90,9 @@ class CharacterRepositoryImpl @Inject constructor(
 
 
     /** LOs personajes por id los buscará directamente en el DAO. Si no lo encuentra, levantará una excepción  */
-    override suspend fun getCharacterById(id: Long): Result<CharacterEntity> {
+    override suspend fun getCharacterById(id: Long): Result<CharacterWithSkills> {
         return try {
-            val character = characterDao.getCharacterById(id) ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
-
-
+            val character = characterDao.getCharacterWithSkills(id) ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
             Result.success(character)
         } catch (e: Exception) {
             Result.failure(e)

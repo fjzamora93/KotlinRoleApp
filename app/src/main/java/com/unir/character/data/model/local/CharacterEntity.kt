@@ -20,9 +20,8 @@ data class CharacterEntity(
     var name: String = "",
     var description: String = "",
     var rolClass: RolClass = RolClass.WARRIOR,
-    var gender: Gender = Gender.MALE,
     var race: Race = Race.HUMAN,
-    var size: Int = 11,
+    var armor: Int = 0,
     var age: Int = 23,
     var gold: Int = 50,
 
@@ -65,9 +64,8 @@ data class CharacterEntity(
             updatedAt = this.updatedAt,
             description = this.description,
             race = this.race.name,
-            gender = this.gender.name,
             level = this.level,
-            size = this.size,
+            armor = this.armor,
             age = this.age,
             gold = this.gold,
             strength = this.strength,
@@ -80,126 +78,13 @@ data class CharacterEntity(
             gameSessionId = this.gameSessionId,
             userId = this.userId,
             roleClass = this.rolClass.name,
+            skills = emptyList()
         )
     }
 
-
-
-    fun completeCharacter(){
-        println("Procedemos a completar la ficha del personaje...")
-        calculateStatsBasedOnClass()
-        applyRaceBonuses()
-        calculateHp()
-    }
-
-
-
-    fun applyRaceBonuses() {
-        when (this.race) {
-            Race.HUMAN -> {
-                // Los Humanos no tienen bonificaciones ni penalizaciones, por lo que no es necesario modificar nada
-            }
-            Race.ELF -> {
-                // Los Elfos tienen bonificaciones a Destreza y Sabiduría, pero penalizan en Fuerza
-                this.strength -= 1
-                this.dexterity += 2
-                this.constitution -= 1
-                this.wisdom += 1
-            }
-            Race.DWARF -> {
-                // Los Enanos son fuertes y resistentes, pero menos ágiles
-                this.strength += 2
-                this.dexterity -= 1
-                this.constitution += 2
-                this.charisma -= 1
-            }
-            Race.ORC -> {
-                // Los Orcos son fuertes, pero su inteligencia y sabiduría suelen ser más bajas
-                this.strength += 2
-                this.constitution += 1
-                this.intelligence -= 2
-                this.wisdom -= 1
-            }
-            Race.DRAGONBORN -> {
-                // Los Dragones son poderosos en muchos aspectos, pero no tanto en lo social
-                this.strength += 3
-                this.dexterity += 1
-                this.constitution += 2
-                this.intelligence += 2
-                this.wisdom += 1
-                this.charisma -= 2
-            }
-            Race.HALFLING -> {
-                // Los Medianos (Halflings) suelen ser ágiles y carismáticos, pero débiles físicamente
-                this.strength -= 1
-                this.dexterity += 2
-                this.wisdom += 1
-                this.charisma += 1
-            }
-            Race.OTHER -> {
-                // Para razas personalizadas, puedes agregar reglas adicionales o dejarlas en base
-            }
-        }
-    }
-
-
-    fun calculateStatsBasedOnClass() {
-        when (this.rolClass) {
-            RolClass.WIZARD, RolClass.WARLOCK, RolClass.SORCERER -> {
-                intelligence = 15 // Atributo principal
-                wisdom = 12       // Secundario
-                strength = 8      // Débil
-            }
-            RolClass.BARD -> {
-                charisma = 15     // Atributo principal
-                dexterity = 14    // Secundario fuerte
-                intelligence = 12 // Secundario bajo
-                strength = 8      // Débil
-            }
-            RolClass.CLERIC, RolClass.DRUID -> {
-                wisdom = 15       // Atributo principal
-                constitution = 13 // Secundario fuerte
-                strength = 12     // Secundario bajo
-                dexterity = 8     // Débil
-            }
-            RolClass.WARRIOR, RolClass.PALADIN -> {
-                strength = 15     // Atributo principal
-                constitution = 14 // Secundario fuerte
-                dexterity = 12    // Secundario bajo
-                intelligence = 8  // Débil
-            }
-            RolClass.ROGUE -> {
-                dexterity = 15    // Atributo principal
-                intelligence = 13 // Secundario fuerte
-                charisma = 12     // Secundario bajo
-                strength = 8      // Débil
-            }
-            else -> {
-                // Default: distribuidos más neutros
-                strength = 11
-                dexterity = 11
-                constitution = 11
-                intelligence = 11
-                wisdom = 11
-                charisma = 11
-            }
-        }
-    }
-
-
-
-    fun calculateHp(){
-        this.hp = (this.size + this.constitution) / 2
-        this.ap = this.intelligence + this.wisdom / 2
-    }
 
 
 
 }
 
 
-
-
-
-
-enum class Gender{MALE, FEMALE, NEUTRAL}

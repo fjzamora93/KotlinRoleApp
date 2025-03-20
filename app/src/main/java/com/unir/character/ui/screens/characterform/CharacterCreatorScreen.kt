@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.unir.character.data.model.local.Gender
 import com.unir.character.data.model.local.Race
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.RolClass
@@ -92,7 +91,6 @@ fun CharacterCreatorForm(
     val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
 
     var name by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf(Gender.MALE) }
     var rolClass by remember { mutableStateOf(RolClass.WARRIOR) }
     var race by remember { mutableStateOf(Race.HUMAN) }
     var size by remember { mutableIntStateOf(11) }
@@ -102,10 +100,9 @@ fun CharacterCreatorForm(
         if (isEditing && editableCharacter != null) {
             println("TENEMOS UN PESONAJE EXISTENTE CON ID" + editableCharacter!!.id)
             name = editableCharacter!!.name
-            gender = editableCharacter!!.gender
             rolClass = editableCharacter!!.rolClass
             race = editableCharacter!!.race
-            size = editableCharacter!!.size
+            size = editableCharacter!!.armor
             age = editableCharacter!!.age
         }
     }

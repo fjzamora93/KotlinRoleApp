@@ -1,5 +1,7 @@
 package com.unir.character.data.model.remote
 
+import com.unir.character.data.model.local.CharacterSkillCrossRef
+
 data class CharacterRequest(
     val id: Long,
     val updatedAt: Long,
@@ -8,9 +10,8 @@ data class CharacterRequest(
     val name: String,
     val description: String,
     val race: String,
-    val gender: String,
     val level: Int,
-    val size: Int,
+    val armor: Int,
     val age: Int,
     val gold: Int,
     val strength: Int,
@@ -23,6 +24,6 @@ data class CharacterRequest(
     val gameSessionId: Int?,
     val userId: Int?,
     val roleClass: String,
-
+    val skills: List<CharacterSkillCrossRef>
 
 )

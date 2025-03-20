@@ -23,5 +23,6 @@ import androidx.room.ForeignKey
 )
 data class CharacterSkillCrossRef(
     val characterId: Long,
-    val skillId: Int
+    val skillId: Int,
+    val value: Int
 )

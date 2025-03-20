@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.character.data.model.local.CharacterEntity
+import com.unir.character.data.model.local.SkillWithValue
 import com.unir.character.domain.usecase.character.CharacterUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,9 +29,15 @@ class CharacterViewModel @Inject constructor(
     private val _loadingState = MutableStateFlow(false)
     val loadingState: StateFlow<Boolean> get() = _loadingState
 
-    // Generalmente usaríamos State para ambos, pero en este caso LiveData funciona mejor (con State no va a cambiar bien)
+    // PERSONAJE EN USO
     private val _selectedCharacter = MutableStateFlow<CharacterEntity?>(null)
     val selectedCharacter: MutableStateFlow<CharacterEntity?> = _selectedCharacter
+
+    // HABILIDADES DEL PEROSNAJE
+    private val _skills = MutableStateFlow<List<SkillWithValue>>(emptyList())
+    val skills: StateFlow<List<SkillWithValue>> get() = _skills.asStateFlow()
+
+
 
     // Función para actualizar un personaje
     fun updateCharacter(characterEntity: CharacterEntity) {
@@ -55,9 +62,13 @@ class CharacterViewModel @Inject constructor(
         viewModelScope.launch {
             val result = characterUseCases.getCharacterById(characterId)
             result.onSuccess { rolCharacter ->
-                _selectedCharacter.value = rolCharacter
+                if (rolCharacter != null) {
+                    _selectedCharacter.value = rolCharacter.character
+                    _skills.value = rolCharacter.skillsWithValues
+                }
                 _loadingState.value = false
-                println("Personaje encontrado: ${rolCharacter?.name}")
+                println("Personaje encontrado: ${rolCharacter?.character?.name}")
+                println("HABILIDADES: ${skills.value}")
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message

@@ -27,7 +27,7 @@ fun CharacterPortrait(
     onClick : () -> Unit = {  },
     size:Int = 120,
     ) {
-    val imageName = "${character.race}_${character.rolClass}_${character.gender}.png".lowercase()
+    val imageName = "${character.race}_${character.rolClass}_male.png".lowercase()
     val imageResId = rememberImageResource(imageName)
 
     println("ImagenResource: $imageName")

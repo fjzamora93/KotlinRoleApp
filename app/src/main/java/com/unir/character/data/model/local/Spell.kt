@@ -18,6 +18,9 @@ data class Spell(
     var name: String = "",
     var description: String = "",
     var dice: Int = 0,
+
+    @ColumnInfo(name = "diceAmount") val diceAmount: Int = 1,
+
     var level: Int = 0,
     var cost: Int = 0,
     var imgUrl: String = "",

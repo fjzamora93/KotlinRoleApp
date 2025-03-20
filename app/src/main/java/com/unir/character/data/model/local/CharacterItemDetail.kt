@@ -9,7 +9,7 @@ data class CharacterItemDetail(
     val quantity: Int,
     val updatedAt: Long
 ){
-    fun toCharacterApiCharacterItem(): ApiCharacterItem {
+    fun toCharacterItemDTO(): ApiCharacterItem {
         return ApiCharacterItem(
             customItem = this.item.toApiItem(),
             characterId = this.characterId,

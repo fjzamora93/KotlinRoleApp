@@ -20,20 +20,22 @@ data class Item(
     @ColumnInfo(name = "goldValue") val goldValue: Int = 0,
     @ColumnInfo(name = "category") val category: String,
     @ColumnInfo(name = "dice") val dice: Int,
+    @ColumnInfo(name = "diceAmount") val diceAmount: Int = 1,
     @ColumnInfo(name = "statType") val statType: String,
     @ColumnInfo(name = "statValue") val statValue: Int,
 
     ){
     fun toApiItem(): ItemDTO {
         return ItemDTO(
-            id = this.id ?: 0,
+            id = this.id,
             gameSession = this.gameSession,
             name = this.name,
             description = this.description,
-            imgUrl = this.imgUrl ?: "",
+            imgUrl = this.imgUrl,
             goldValue = this.goldValue,
             category = this.category,
             dice = this.dice,
+            diceAmount = this.diceAmount,
             statValue = this.statValue,
             statType = this.statType
         )

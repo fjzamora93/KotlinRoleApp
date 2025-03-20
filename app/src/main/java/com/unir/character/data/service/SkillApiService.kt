@@ -1,7 +1,7 @@
 package com.unir.character.data.service
 
 import com.unir.character.data.model.local.Skill
-import com.unir.character.data.model.remote.ApiSkill
+import com.unir.character.data.model.remote.SkillDTO
 import com.unir.character.data.model.remote.CharacterResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -14,10 +14,10 @@ import retrofit2.http.Query
 interface SkillApiService {
 
     @GET("skills")
-    suspend fun getAllSkills(): Response<List<ApiSkill>>
+    suspend fun getAllSkills(): Response<List<SkillDTO>>
 
     @GET("skills/{characterId}")
-    suspend fun getSkillsByCharacterId(@Path("id") id: Long): Response<List<ApiSkill>>
+    suspend fun getSkillsByCharacterId(@Path("id") id: Long): Response<List<SkillDTO>>
 
     // AÑADIR HABILIDAD A UN PERSONAJE
     @POST("skills")

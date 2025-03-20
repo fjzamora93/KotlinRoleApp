@@ -7,6 +7,7 @@ data class SpellDTO(
     val name: String,
     val description: String,
     val dice: Int,
+    val diceAmount: Int,
     val level: Int,
     val cost: Int,
     val imgUrl: String?
@@ -19,6 +20,7 @@ data class SpellDTO(
             name = this.name,
             description = this.description,
             dice = this.dice,
+            diceAmount = this.diceAmount,
             level = this.level,
             cost = this.cost,
             imgUrl = this.imgUrl ?: ""

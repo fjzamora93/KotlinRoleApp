@@ -2,7 +2,7 @@ package com.unir.character.data.model.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.unir.character.data.model.remote.ApiSkill
+import com.unir.character.data.model.remote.SkillDTO
 
 @Entity(tableName = "SkillTable")
 data class Skill(
@@ -10,8 +10,8 @@ data class Skill(
     var name: String = "",
     var description: String = "",
 ){
-    fun toApiSkill(): ApiSkill {
-        return ApiSkill(
+    fun toApiSkill(): SkillDTO {
+        return SkillDTO(
             id = this.id,
             name = this.name,
             description = this.description)
