@@ -2,36 +2,41 @@ package com.unir.character.domain.usecase.skill
 
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.CharacterSkillCrossRef
+import com.unir.character.data.model.local.Skill
 import com.unir.character.data.model.local.SkillValue
 import com.unir.character.domain.repository.SkillRepository
+import com.unir.character.domain.usecase.character.generateutils.adjustCharacterSkills
+import com.unir.character.domain.usecase.character.generateutils.calculateSkills
+import com.unir.character.domain.usecase.character.generateutils.calculateTestResult
+import com.unir.character.ui.screens.skills.PersonalityTestForm
 import javax.inject.Inject
 
 class GenerateSkillValues @Inject constructor(private val repository: SkillRepository) {
     suspend operator fun invoke(
         character: CharacterEntity,
+        form: PersonalityTestForm,
+        skillList: List<Skill>
     ): Result<List<SkillValue>> {
         return try {
 
-            var habilidad1 = CharacterSkillCrossRef(
-                characterId = character.id,
-                skillId = 1,
-                value = character.strength - 2
+            // El primer paso simplemente calcula a las skills a partir de los stats
+            var characterSkillCrossRef = calculateSkills(
+                character = character,
+                form = form,
+                skillList = skillList
             )
 
-            var habilidad2 = CharacterSkillCrossRef(
-                characterId = character.id,
-                skillId = 2,
-                value = character.strength - 2
+            // El segundo paso es hacer los ajustes en función de la clase
+            characterSkillCrossRef = adjustCharacterSkills(
+                character = character,
+                skillCrossRefList = characterSkillCrossRef
             )
 
-            var habilidad3 = CharacterSkillCrossRef(
-                characterId = character.id,
-                skillId = 2,
-                value = character.strength - 2
+            characterSkillCrossRef = calculateTestResult(
+                form = form,
+                skillCrossRefList = characterSkillCrossRef
             )
-
-            val skillList = listOf(habilidad1, habilidad2, habilidad3)
-            repository.generateSkills(skillList, character.id)
+            repository.generateSkills(characterSkillCrossRef, character.id)
 
         } catch (e: Exception) {
             Result.failure(e)

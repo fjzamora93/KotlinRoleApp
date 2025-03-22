@@ -44,11 +44,10 @@ fun CharacterPortrait(
             RolClass.EXPLORER -> painterResource(id = R.drawable.human_explorer_male)
             RolClass.CLERIC -> painterResource(id = R.drawable.human_cleric_male)
             RolClass.PALADIN -> painterResource(id = R.drawable.human_warrior_male)
-            RolClass.SORCERER, RolClass.WARLOCK -> painterResource(id = R.drawable.human_wizard_male)
             RolClass.WIZARD -> painterResource(id = R.drawable.human_wizard_male)
             RolClass.DRUID -> painterResource(id = R.drawable.human_warrior_male)
-            RolClass.MONK -> painterResource(id = R.drawable.human_warrior_male)
             RolClass.BARBARIAN -> painterResource(id = R.drawable.human_warrior_male)
+            RolClass.WARLOCK -> painterResource(id = R.drawable.human_wizard_male)
         }
     }
 

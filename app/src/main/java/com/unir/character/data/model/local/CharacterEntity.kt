@@ -3,6 +3,7 @@ package com.unir.character.data.model.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.unir.character.data.model.remote.CharacterRequest
 
@@ -45,7 +46,10 @@ data class CharacterEntity(
     var currentHp: Int = hp,
     var ap: Int = 1, // calculada a partir de inteligencia, sabiduría o pow
     var currentAp: Int = ap,
-    var level: Int = 1,
+
+    @ColumnInfo(name = "_level")
+    var _level: Int = 1,
+
 
     ){
 
@@ -54,6 +58,53 @@ data class CharacterEntity(
         if (id == 0L) {
             this.id = "$userId${System.currentTimeMillis()}".toLong()
         }
+    }
+
+    @get:Ignore
+    var level: Int
+        get() = _level
+        set(value) {
+            if (value > 0) {  // Evita valores negativos o cero
+                _level = value
+                recalculateStats()
+            }
+        }
+
+    private fun recalculateStats() {
+        // Lógica para recalcular los stats cuando cambia el nivel
+        hp = 10 + (_level * 2)  // Ejemplo: aumenta 2 puntos de vida por nivel
+        ap = 1 + (_level / 5)    // Ejemplo: cada 5 niveles, gana 1 punto de acción extra
+    }
+
+    private fun calculateHealthPoints(): Int {
+        val baseHealth = when (rolClass) {
+            RolClass.WARRIOR, RolClass.BARBARIAN -> 12
+            RolClass.PALADIN,  RolClass.EXPLORER -> 10
+            RolClass.ROGUE, RolClass.CLERIC, RolClass.DRUID, RolClass.WARLOCK -> 8
+             RolClass.WIZARD, RolClass.BARD -> 6
+            else -> 6
+        }
+        val constitutionBonus = (constitution - 10) / 2
+        val raceBonus = when (race) {
+            Race.DWARF, Race.ORC -> 2
+            Race.DRAGONBORN, Race.HUMAN -> 1
+            Race.ELF, Race.HALFLING -> -1
+            else -> 0
+        }
+        return (baseHealth + constitutionBonus + raceBonus) * _level
+    }
+
+    private fun calculateActionPoints(): Int {
+        val baseAp = when (rolClass) {
+            RolClass.WIZARD,  RolClass.WARLOCK -> 6
+            RolClass.CLERIC, RolClass.DRUID, RolClass.BARD -> 5
+            RolClass.EXPLORER, RolClass.ROGUE -> 4
+            RolClass.WARRIOR, RolClass.PALADIN, RolClass.BARBARIAN -> 3
+            else -> 3
+        }
+        val wisdomBonus = (wisdom - 10) / 2
+        val intelligenceBonus = (intelligence - 10) / 2
+        return (baseAp + wisdomBonus + intelligenceBonus).coerceAtLeast(1) * _level
     }
 
     fun toApiRequest(): CharacterRequest {
@@ -74,6 +125,12 @@ data class CharacterEntity(
             intelligence = this.intelligence,
             wisdom = this.wisdom,
             charisma = this.charisma,
+
+            hp = this.hp,
+            currentHp = this.currentHp,
+            ap = this.ap,
+            currentAp = this.currentAp,
+
             imgUrl = null,
             gameSessionId = this.gameSessionId,
             userId = this.userId,
@@ -81,10 +138,6 @@ data class CharacterEntity(
             skills = emptyList()
         )
     }
-
-
-
-
 }
 
 

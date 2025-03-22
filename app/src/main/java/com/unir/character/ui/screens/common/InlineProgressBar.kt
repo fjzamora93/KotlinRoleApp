@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -26,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
+import com.ui.components.DefaultRow
 
 @Composable
 fun InlineProgressBar(
@@ -37,42 +38,24 @@ fun InlineProgressBar(
 ) {
     val progress = if (maxValue > 0) localValue.toFloat() / maxValue.toFloat() else 1f
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Box(
+    DefaultRow {
+        InlineStat(
+            localValue = localValue,
+            label = label,
             modifier = Modifier
-                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
-                .padding(6.dp)
-        ) {
-            Text(
-                text = "$localValue",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        // Texto con el label y el valor actual
-        Text(
-            text = "$label",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.weight(1f)
+                .weight(1f) // Permite que los otros elementos tengan espacio
+                .wrapContentWidth(Alignment.Start)
         )
 
-        // Botón de restar (-)
+        // 🔹 Botón de restar (-)
         IconButton(onClick = { if (localValue > 0) onValueChanged(localValue - 1) }) {
             Icon(imageVector = Icons.Default.Remove, contentDescription = "Restar")
         }
 
-        // Barra de progreso
+        // 🔹 Barra de progreso con tamaño fijo
         Box(
             modifier = Modifier
-                .weight(1f)
+                .width(100.dp)
                 .height(6.dp)
                 .clip(RoundedCornerShape(4.dp))
                 .background(Color.Gray.copy(alpha = 0.3f)) // Fondo gris claro
@@ -85,11 +68,9 @@ fun InlineProgressBar(
             )
         }
 
-        // Botón de sumar (+)
+        // 🔹 Botón de sumar (+)
         IconButton(onClick = { if (localValue < maxValue) onValueChanged(localValue + 1) }) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "Sumar")
         }
-
-
     }
 }

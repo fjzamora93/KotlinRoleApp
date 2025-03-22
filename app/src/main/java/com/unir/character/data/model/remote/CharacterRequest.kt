@@ -20,6 +20,13 @@ data class CharacterRequest(
     val intelligence: Int,
     val wisdom: Int,
     val charisma: Int,
+
+    val hp: Int,
+    val currentHp: Int,
+    val ap: Int,
+    val currentAp: Int,
+
+
     val imgUrl: String?,
     val gameSessionId: Int?,
     val userId: Int?,

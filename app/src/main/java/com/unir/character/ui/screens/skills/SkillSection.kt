@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ui.components.DefaultRow
 import com.unir.character.data.model.local.CharacterEntity
+import com.unir.character.ui.screens.common.InlineStat
 import com.unir.character.ui.screens.dialogues.CharacterDialog
 import com.unir.character.viewmodels.ItemViewModel
 import com.unir.character.viewmodels.SkillViewModel
@@ -50,57 +52,12 @@ fun SkillSection(
 
     var isEditing by remember { mutableStateOf(false) }
 
-    var pointsAvailable by remember {
-        mutableIntStateOf(skillList.sumOf { it.value })
-    }
+    val pointsAvailable by skillViewModel.pointsAvailable.collectAsState()
 
-
-    Column(modifier = Modifier.padding(16.dp)) {
-        DefaultRow{
-
-            Text(
-                text = "Puntos disponibles: $pointsAvailable",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-
-            if (isEditing) {
-                Icon(
-                    imageVector = Icons.Default.Send,
-                    contentDescription = "Confirmar",
-                    Modifier.size(30.dp).clickable { isEditing != isEditing  }
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Distribuir habilidades",
-                    Modifier.size(30.dp).clickable { isEditing != isEditing  }
-                )
-            }
-
-        }
-
-        skillList.forEach{
-            skill ->
-                SkillItem(skillName = skill.skill.name, skillValue = skill.value)
-                Spacer(modifier = Modifier.height(10.dp))
-        }
-    }
-}
-
-
-@Composable
-fun SkillSectionBody(
-    skillViewModel: SkillViewModel = hiltViewModel(),
-    editableCharacter: CharacterEntity
-){
-    skillViewModel.getSkillsFromCharacter(editableCharacter)
-    val skillList by skillViewModel.skillList.collectAsState()
-
-    DefaultRow{
+    DefaultRow {
 
         Text(
-            text = "Puntos de habilidad disponibles: ",
+            text = "Puntos de habilidad disponibles: $pointsAvailable",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -109,15 +66,33 @@ fun SkillSectionBody(
         Icon(
             imageVector = Icons.Default.Settings,
             contentDescription = "Distribuir habilidades",
-            Modifier.size(30.dp).clickable {  }
+            Modifier
+                .size(30.dp)
+                .clickable { isEditing = !isEditing }
         )
 
     }
 
-    skillList.forEach{
-            skill ->
-        SkillItem(skillName = skill.skill.name, skillValue = skill.value)
-        Spacer(modifier = Modifier.height(10.dp))
+    if (!isEditing){
+        DefaultRow {
+            Column{
+                skillList.forEach { skill ->
+                    DefaultRow {
+                        InlineStat(
+                            localValue = skill.value,
+                            label = skill.skill.name,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            }
+        }
+
+    } else {
+        SkillForm(
+            skillList = skillList, character = editableCharacter,
+            onConfirm = { isEditing = !isEditing  }
+        )
     }
 
 }
@@ -125,7 +100,7 @@ fun SkillSectionBody(
 
 
 
-        @Composable
+@Composable
 fun SkillItem(
     skillName: String,
     skillValue: Int,

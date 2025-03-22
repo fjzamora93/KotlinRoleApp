@@ -7,7 +7,7 @@ import com.unir.character.domain.usecase.character.CharacterUseCases
 import com.unir.character.domain.usecase.character.DeleteCharacterUseCase
 import com.unir.character.domain.usecase.character.GetCharacterByIdUseCase
 import com.unir.character.domain.usecase.character.GetCharactersByUserIdUseCase
-import com.unir.character.domain.usecase.character.UpdateCharacterUseCase
+import com.unir.character.domain.usecase.character.CreateNewCharacterUseCase
 import com.unir.character.domain.usecase.item.DestroyItemUseCase
 import com.unir.character.domain.usecase.item.FetchTemplateItemsUseCase
 import com.unir.character.domain.usecase.item.GetItemsByCharacterId
@@ -44,7 +44,7 @@ object UseCaseModule {
         return CharacterUseCases(
             getCharactersByUserId = GetCharactersByUserIdUseCase(characterRepository),
             getCharacterById = GetCharacterByIdUseCase(characterRepository),
-            updateCharacter = UpdateCharacterUseCase(characterRepository),
+            updateCharacter = CreateNewCharacterUseCase(characterRepository),
             deleteCharacter = DeleteCharacterUseCase(characterRepository)
         )
     }

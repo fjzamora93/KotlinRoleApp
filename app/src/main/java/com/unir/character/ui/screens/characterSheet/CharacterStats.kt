@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 import com.unir.character.data.model.local.CharacterEntity
+import com.unir.character.ui.screens.common.NumberBox
 
 
 @Composable
@@ -74,51 +75,3 @@ fun StatSection(
 }
 
 
-
-@Composable
-fun NumberBox(
-    label: String,
-    value: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(8.dp))
-            .padding(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-
-        Box(
-            modifier = Modifier
-                .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp))
-                .padding(12.dp)
-        ) {
-            Text(
-                text = "+1",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Box(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
-                .padding(horizontal = 20.dp, vertical = 8.dp)
-        ) {
-            Text(
-                text = value.toString(),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        }
-    }
-    Spacer(modifier = Modifier.height(16.dp).width(10.dp))
-
-}

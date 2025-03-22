@@ -2,7 +2,7 @@ package com.unir.character.data.model.local
 
 
 enum class RolClass {
-    NULL, WARRIOR, BARD, ROGUE, EXPLORER, CLERIC, PALADIN, SORCERER, WIZARD, DRUID, MONK, WARLOCK, BARBARIAN;
+    NULL, WARRIOR, BARD, ROGUE, EXPLORER, CLERIC, PALADIN, WIZARD, DRUID, WARLOCK, BARBARIAN;
 
     companion object {
 
@@ -19,10 +19,8 @@ enum class RolClass {
                 EXPLORER -> "Explorador"
                 CLERIC -> "Clérigo"
                 PALADIN -> "Paladín"
-                SORCERER -> "Hechicero"
                 WIZARD -> "Mago"
                 DRUID -> "Druida"
-                MONK -> "Monje"
                 WARLOCK -> "Brujo"
                 BARBARIAN -> "Bárbaro"
             }

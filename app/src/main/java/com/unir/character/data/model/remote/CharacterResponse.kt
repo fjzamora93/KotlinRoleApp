@@ -22,6 +22,13 @@ data class CharacterResponse(
     val intelligence: Int,
     val wisdom: Int,
     val charisma: Int,
+
+    val hp: Int,
+    val currentHp: Int,
+    val ap: Int,
+    val currentAp: Int,
+
+
     val imgUrl: String?,
     val gameSessionId: Int?,
     val roleClass: RoleClassDTO?,
@@ -48,11 +55,11 @@ data class CharacterResponse(
             intelligence = this.intelligence,
             wisdom = this.wisdom,
             charisma = this.charisma,
-            hp = (this.constitution + this.armor) / 2,
-            currentHp = this.constitution * 2,
-            ap = (this.intelligence + this.wisdom) / 2,
-            currentAp = this.intelligence / 2,
-            level = 1
+            hp = this.hp,
+            currentHp = this.currentHp,
+            ap = this.ap,
+            currentAp = this.currentAp,
+            _level = 1
         )
     }
 

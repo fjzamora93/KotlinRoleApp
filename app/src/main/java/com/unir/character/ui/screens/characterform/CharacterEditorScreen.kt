@@ -32,7 +32,7 @@ import com.unir.character.data.model.local.Race
 import com.unir.character.data.model.local.RolClass
 import com.unir.character.ui.screens.common.DropDownText
 import com.unir.character.ui.screens.common.NumberRangeDropDown
-import com.unir.character.ui.screens.skills.SkillSectionForm
+import com.unir.character.ui.screens.skills.SkillForm
 import com.unir.character.viewmodels.CharacterViewModel
 
 
@@ -93,7 +93,7 @@ fun CharacterEditForm(
                     modifier = Modifier.weight(1f),
                     label = "Nivel",
                     onValueChange = { newLevel ->
-                        characterToUpdate = character.copy(level = newLevel)
+                        characterToUpdate = character.copy(_level = newLevel)
                     }
 
                 )
@@ -141,13 +141,6 @@ fun CharacterEditForm(
                 singleLine = false
             )
 
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            SkillSectionForm(
-                character = characterToUpdate!!,
-                onValueChange = { updatedCharacter -> characterToUpdate = updatedCharacter }
-            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
