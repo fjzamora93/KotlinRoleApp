@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.Skill
+import com.unir.character.data.model.local.SkillValue
 import com.unir.character.domain.usecase.skill.SkillUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -14,38 +15,75 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SkillViewModel  @Inject constructor(
+class SkillViewModel @Inject constructor(
     private val skillUseCases: SkillUseCases,
-) :  ViewModel() {
+) : ViewModel() {
 
-    private val _skillList = MutableStateFlow<List<Skill>>(emptyList())
-    val skillList: StateFlow<List<Skill>> get() = _skillList
+    private val _skillList = MutableStateFlow<List<SkillValue>>(emptyList())
+    val skillList: StateFlow<List<SkillValue>> get() = _skillList
 
+    private val _isValid = MutableStateFlow(false)
+    val isValid: StateFlow<Boolean> get() = _isValid
 
-    fun getAllSKills(){
+    // Para manejar errores
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> get() = _errorMessage
+
+    init {
+        fetchSkills()
+    }
+
+    fun getSkillsFromCharacter(character: CharacterEntity) {
         viewModelScope.launch {
-            val result = skillUseCases.getAllSkills()
-            result.onSuccess {
-                _skillList.value = it
-                println("Skills: ${skillList.value}")
-            }.onFailure {
-                println("Error ${it.message} al obtener las skills")
+            val result = skillUseCases.getSkillsFromCharacter(character.id)
+            result.onSuccess { skills ->
+                _skillList.value = skills
+                _errorMessage.value = null // Limpiar el mensaje de error
+                println("Skills en el ViewModel: ${skillList.value}")
+            }.onFailure { error ->
+                _errorMessage.value = "Error al obtener las habilidades: ${error.message}"
+                println("Error: ${error.message}")
             }
         }
     }
 
-    fun getSkillsFromCharacter(
-        character: CharacterEntity,
-    ){
+    fun updateSkills(character: CharacterEntity, skillList: List<SkillValue>) {
         viewModelScope.launch {
-            val result = skillUseCases.addDefaultSkills(character)
+            val result = skillUseCases.updateSkills(character, skillList)
             result.onSuccess {
-                _skillList.value = it
-                println("Skills en el viewMOdel: ${skillList.value}")
-            }.onFailure {
-                println("Error ${it.message} al obtener las skills")
+                _errorMessage.value = null // Limpiar el mensaje de error
+                println("Habilidades actualizadas correctamente")
+            }.onFailure { error ->
+                _errorMessage.value = "Error al actualizar las habilidades: ${error.message}"
+                println("Error: ${error.message}")
             }
         }
     }
 
+    fun validateSkills(character: CharacterEntity, skillValue: SkillValue) {
+        viewModelScope.launch {
+            val result = skillUseCases.validateSkillValue(character, skillValue)
+            result.onSuccess { isValid ->
+                _isValid.value = isValid
+                _errorMessage.value = null // Limpiar el mensaje de error
+                println("Validación de habilidad: $isValid")
+            }.onFailure { error ->
+                _errorMessage.value = "Error al validar la habilidad: ${error.message}"
+                println("Error: ${error.message}")
+            }
+        }
+    }
+
+    private fun fetchSkills(){
+        viewModelScope.launch {
+            val result = skillUseCases.fetchSkills()
+            result.onSuccess { skills ->
+                _errorMessage.value = null
+                println("Skills en el ViewModel: ${skillList.value}")
+            }.onFailure { error ->
+                _errorMessage.value = "Error al obtener las habilidades: ${error.message}"
+                println("Error: ${error.message}")
+            }
+        }
+    }
 }

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.character.data.model.local.CharacterEntity
-import com.unir.character.data.model.local.SkillWithValue
 import com.unir.character.domain.usecase.character.CharacterUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,10 +32,6 @@ class CharacterViewModel @Inject constructor(
     private val _selectedCharacter = MutableStateFlow<CharacterEntity?>(null)
     val selectedCharacter: MutableStateFlow<CharacterEntity?> = _selectedCharacter
 
-    // HABILIDADES DEL PEROSNAJE
-    private val _skills = MutableStateFlow<List<SkillWithValue>>(emptyList())
-    val skills: StateFlow<List<SkillWithValue>> get() = _skills.asStateFlow()
-
 
 
     // Función para actualizar un personaje
@@ -63,12 +58,10 @@ class CharacterViewModel @Inject constructor(
             val result = characterUseCases.getCharacterById(characterId)
             result.onSuccess { rolCharacter ->
                 if (rolCharacter != null) {
-                    _selectedCharacter.value = rolCharacter.character
-                    _skills.value = rolCharacter.skillsWithValues
+                    _selectedCharacter.value = rolCharacter
                 }
                 _loadingState.value = false
-                println("Personaje encontrado: ${rolCharacter?.character?.name}")
-                println("HABILIDADES: ${skills.value}")
+                println("Personaje encontrado: ${rolCharacter?.name}")
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message

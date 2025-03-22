@@ -24,6 +24,6 @@ data class CharacterRequest(
     val gameSessionId: Int?,
     val userId: Int?,
     val roleClass: String,
-    val skills: List<CharacterSkillCrossRef>
+    var skills: List<CharacterSkillCrossRef>
 
 )

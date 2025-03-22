@@ -3,6 +3,7 @@ package com.unir.character.data.model.remote
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.Race
 import com.unir.character.data.model.local.RolClass
+import com.unir.character.data.model.local.SkillValue
 
 data class CharacterResponse(
     val id: Long,
@@ -25,7 +26,7 @@ data class CharacterResponse(
     val gameSessionId: Int?,
     val roleClass: RoleClassDTO?,
     val items: List<ItemDTO>,
-    val skills: List<CharacterSkillResponseDTO>
+    val skills: List<SkillValue>
 ) {
     fun toCharacterEntity(): CharacterEntity {
         return CharacterEntity(

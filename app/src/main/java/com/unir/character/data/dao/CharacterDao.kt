@@ -8,9 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.CharacterSkillCrossRef
-import com.unir.character.data.model.local.CharacterWithSkills
 import com.unir.character.data.model.local.Skill
-import com.unir.character.data.model.local.SkillWithValue
 
 
 @Dao
@@ -44,25 +42,13 @@ interface CharacterDao {
 
 
 
-    // OBTENCIÓN LOCAL DEL PERSONAJE CON SUS RELACIONES
-    @Query("SELECT * FROM character_skill_table WHERE characterId = :characterId")
-    suspend fun getCharacterSkills(characterId: Long): List<CharacterSkillCrossRef>
 
     @Query("SELECT * FROM SkillTable WHERE id = :skillId")
     suspend fun getSkillById(skillId: Int): Skill?
 
-    suspend fun getCharacterWithSkills(characterId: Long): CharacterWithSkills? {
-        val character = getCharacterById(characterId) ?: return null
-        val characterSkills = getCharacterSkills(characterId)
-
-        val skillsWithValues = characterSkills.mapNotNull { crossRef ->
-            val skill = getSkillById(crossRef.skillId)
-            skill?.let { SkillWithValue(it, crossRef.value) }
-        }
-
-        return CharacterWithSkills(character, skillsWithValues)
-    }
-
+    // OBTENER HABILIDADES DE PERSONAJE
+    @Query("SELECT * FROM character_skill_table WHERE characterId = :characterId")
+    suspend fun getCharacterSkills(characterId: Long): List<CharacterSkillCrossRef>
 
 
 }

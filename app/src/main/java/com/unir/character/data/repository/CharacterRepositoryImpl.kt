@@ -5,7 +5,6 @@ import com.unir.character.data.dao.CharacterDao
 import com.unir.character.data.dao.SkillDao
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.CharacterSkillCrossRef
-import com.unir.character.data.model.local.CharacterWithSkills
 import com.unir.character.data.model.remote.toSkill
 import com.unir.character.data.service.CharacterApiService
 import com.unir.character.domain.repository.CharacterRepository
@@ -62,7 +61,7 @@ class CharacterRepositoryImpl @Inject constructor(
 
                         // Obtener todas las habilidades de los personajes
                         val skillsToInsert = charactersToInsert.flatMap { it.skills.map { skillWrapper ->
-                            skillWrapper.skill.toSkill()
+                            skillWrapper.skill
                         } }.distinctBy { it.id }
 
                         characterDao.insertAllSkills(skillsToInsert) // Insertar habilidades
@@ -90,22 +89,25 @@ class CharacterRepositoryImpl @Inject constructor(
 
 
     /** LOs personajes por id los buscará directamente en el DAO. Si no lo encuentra, levantará una excepción  */
-    override suspend fun getCharacterById(id: Long): Result<CharacterWithSkills> {
+    override suspend fun getCharacterById(id: Long): Result<CharacterEntity> {
         return try {
-            val character = characterDao.getCharacterWithSkills(id) ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
+            val character = characterDao.getCharacterById(id) ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
             Result.success(character)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    // Comienza con intentar guardarlo en la API, mientras que devuelve la inserción local
+    // IMPORTANTE: Añadir siempre las Skills para que lleguen correctamente al backend
     override suspend fun saveCharacter(character: CharacterEntity): Result<CharacterEntity> {
         return try {
             characterDao.insertCharacter(character)
+            val skillsCrossRef = characterDao.getCharacterSkills(character.id)
+
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val apiCharacter = character.toApiRequest()
+                    apiCharacter.skills = skillsCrossRef
                     apiService.saveCharacter(apiCharacter)
                 } catch (e: Exception) {
                     Log.e("API Error", "Fallo al guardar en la API", e)

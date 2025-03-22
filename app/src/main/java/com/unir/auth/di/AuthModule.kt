@@ -1,6 +1,5 @@
 package com.unir.auth.di
 
-import com.data.MyDatabase
 import com.unir.auth.data.dao.UserDao
 import com.unir.auth.data.repository.AuthRepositoryImpl
 import com.unir.auth.data.service.AuthApiService
@@ -12,13 +11,6 @@ import com.unir.auth.domain.usecase.auth.PostLogoutUseCase
 import com.unir.auth.domain.usecase.auth.PostSignupUseCase
 import com.unir.auth.security.AuthInterceptor
 import com.unir.auth.security.TokenManager
-import com.unir.character.data.dao.ItemDao
-import com.unir.character.data.repository.SkillRepositoryImpl
-import com.unir.character.domain.usecase.skill.AddDefaultSkills
-import com.unir.character.domain.usecase.skill.DeleteSkillFromCharacterUseCase
-import com.unir.character.domain.usecase.skill.GetAllSkillsUseCase
-import com.unir.character.domain.usecase.skill.GetSkillsFromCharacterUseCase
-import com.unir.character.domain.usecase.skill.SkillUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

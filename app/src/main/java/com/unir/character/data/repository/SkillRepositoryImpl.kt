@@ -1,7 +1,9 @@
 package com.unir.character.data.repository
 
 import com.unir.character.data.dao.SkillDao
+import com.unir.character.data.model.local.CharacterSkillCrossRef
 import com.unir.character.data.model.local.Skill
+import com.unir.character.data.model.local.SkillValue
 import com.unir.character.data.model.remote.toSkill
 import com.unir.character.data.service.SkillApiService
 import com.unir.character.domain.repository.SkillRepository
@@ -16,12 +18,12 @@ class SkillRepositoryImpl @Inject constructor(
     private val skillDao: SkillDao
 ) : SkillRepository {
 
-    override suspend fun getAllSkills(): Result<List<Skill>> {
+    override suspend fun fetchAllSkills(): Result<List<Skill>> {
         return try {
             val response = apiService.getAllSkills()
             if (response.isSuccessful) {
                 val skills = response.body()?.map { it.toSkill() } ?: emptyList()
-                skillDao.insertAll(skills)
+                skillDao.insertOrUpdateSkills(skills)
                 Result.success(skills)
             } else {
                 Result.failure(Exception("Error al obtener habilidades: ${response.code()}"))
@@ -31,7 +33,9 @@ class SkillRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getSkillsFromCharacter(characterId: Long): Result<List<Skill>> {
+
+    // MÉTODO PARA OBTENERLAS DE LA API
+     override suspend fun fetchCharacterSkillsFromApi(characterId: Long): Result<List<Skill>> {
         return try {
             val response = apiService.getSkillsByCharacterId(characterId)
             if (response.isSuccessful) {
@@ -45,38 +49,32 @@ class SkillRepositoryImpl @Inject constructor(
         }
     }
 
-
-    override suspend fun addDefaultSkills(characterId: Long, skillIds: List<Int>): Result<List<Skill>> {
+    override suspend fun getSkillsFromCharacter(characterId: Long): Result<List<SkillValue>> {
         return try {
-            Result.success(emptyList() )
+            val skillsWithValues = skillDao.getSkillsWithValues(characterId)
+            Result.success(skillsWithValues)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-
-
-    override suspend fun addSkillToCharacter(characterId: Long, skillId: Int): Result<Unit> {
+    override suspend fun generateSkills(
+        skillsCrossRef : List<CharacterSkillCrossRef>,
+        characterId: Long
+    ) : Result<List<SkillValue>>  {
         return try {
-            val response = apiService.addSkillToCharacter(characterId, skillId.toLong())
-            if (response.isSuccessful) {
-                Result.success(Unit)
-            } else {
-                Result.failure(Exception("Error al añadir habilidad: ${response.code()}"))
-            }
+            skillDao.insertCharacterSkills(skillsCrossRef)
+            val skillsWithValues = skillDao.getSkillsWithValues(characterId)
+            Result.success(skillsWithValues)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun deleteSkillFromCharacter(characterId: Long, skillId: Int): Result<Unit> {
+    override suspend fun saveSkills(characterId: Long, skills: List<SkillValue>): Result<Unit> {
         return try {
-            val response = apiService.deleteSkillFromCharacter(characterId.toLong(), skillId.toLong())
-            if (response.isSuccessful) {
-                Result.success(Unit)
-            } else {
-                Result.failure(Exception("Error al eliminar habilidad: ${response.code()}"))
-            }
+            skillDao.insertSkills(characterId, skills)
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }

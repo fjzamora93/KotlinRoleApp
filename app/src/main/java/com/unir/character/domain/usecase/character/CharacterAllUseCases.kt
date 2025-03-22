@@ -1,7 +1,6 @@
 package com.unir.character.domain.usecase.character
 
 import com.unir.character.data.model.local.CharacterEntity
-import com.unir.character.data.model.local.CharacterWithSkills
 import com.unir.character.domain.repository.CharacterRepository
 import javax.inject.Inject
 
@@ -26,7 +25,7 @@ class GetCharactersByUserIdUseCase @Inject constructor(
 class GetCharacterByIdUseCase @Inject constructor(
     private val repository: CharacterRepository
 ) {
-    suspend operator fun invoke(id: Long): Result<CharacterWithSkills?> {
+    suspend operator fun invoke(id: Long): Result<CharacterEntity?> {
         val result = repository.getCharacterById(id)
         return if (result.isSuccess) {
             Result.success(result.getOrNull())
