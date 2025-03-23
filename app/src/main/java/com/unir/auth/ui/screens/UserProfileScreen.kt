@@ -28,7 +28,7 @@ import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
-import com.ui.components.BackButton
+import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.AuthViewModel

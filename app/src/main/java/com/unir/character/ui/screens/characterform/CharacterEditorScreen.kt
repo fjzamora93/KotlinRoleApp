@@ -27,37 +27,162 @@ import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
+import com.ui.components.DefaultColumn
+import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
+import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.Race
 import com.unir.character.data.model.local.RolClass
 import com.unir.character.ui.screens.common.DropDownText
 import com.unir.character.ui.screens.common.NumberRangeDropDown
-import com.unir.character.ui.screens.skills.SkillForm
+import com.unir.character.ui.screens.skills.PersonalityTest
+import com.unir.character.ui.screens.skills.PersonalityTestForm
 import com.unir.character.viewmodels.CharacterViewModel
 
 
 @Composable
 fun CharacterEditorScreen(characterId: Long){
-    MainLayout(){
-        Column{
-            CharacterEditForm(characterId)
+    MainLayout {
+        CharacterEditForm(characterId)
+
+    }
+}
+
+
+@Composable
+fun CharacterEditForm(
+    characterId: Long = 0,
+    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
+) {
+    LaunchedEffect(characterId) {
+        if (characterId != 0L) {
+            characterViewModel.getCharacterById(characterId)
+        }
+    }
+
+    val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
+    var form by remember { mutableStateOf(PersonalityTestForm()) }
+
+    var characterToUpdate by remember(characterId) {
+        mutableStateOf(
+            if (characterId == 0L) {
+                CharacterEntity()
+            } else {
+                editableCharacter?.copy() ?: CharacterEntity()
+            }
+        )
+    }
+
+    DefaultColumn {
+        Row(){
+            TextField(
+                value = characterToUpdate.name,
+                onValueChange = { newName ->
+                    characterToUpdate = characterToUpdate.copy(name = newName)
+                },
+                label = { Text("Nombre") },
+                modifier = Modifier.weight(2.0f)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            NumberRangeDropDown(
+                validRange = 1..12,
+                selectedValue = characterToUpdate.level,
+                modifier = Modifier.weight(1f),
+                label = "Nivel",
+                onValueChange = { newLevel ->
+                    characterToUpdate = characterToUpdate.copy(_level = newLevel)
+                }
+
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            DropDownText(
+                options = RolClass.getListOf(),
+                selectedOption = RolClass.getString(characterToUpdate.rolClass), // Mostrar la opción actual
+                onValueChange = { selectedOption ->
+                    characterToUpdate = characterToUpdate.copy(rolClass = RolClass.getClass(selectedOption))
+                },
+                label = "Clase",
+                modifier = Modifier
+                    .weight(1.0f)
+                    .padding(end = 16.dp)
+
+            )
+
+            DropDownText(
+                options = Race.getListOf(),
+                selectedOption = Race.getString(characterToUpdate.race),
+                label = "Raza",
+                onValueChange = { selectedOption ->
+                    characterToUpdate = characterToUpdate.copy(race = Race.getRace(selectedOption))
+                },
+                modifier = Modifier.weight(1.0f)
+
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextField(
+            value = characterToUpdate.description,
+            onValueChange = { desc ->
+                characterToUpdate = characterToUpdate.copy(description = desc)
+            },
+            label = { Text("Trasfondo") },
+            modifier = Modifier.fillMaxWidth(),
+            maxLines = 5,
+            singleLine = false
+        )
+
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        StatSectionForm(
+            character = characterToUpdate,
+            onValueChange = { updatedCharacter -> characterToUpdate = updatedCharacter }
+        )
+
+        PersonalityTest( onValueChange = { form = it })
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            BackButton()
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.primary),
+                onClick = {
+                    characterViewModel.saveCharacter(characterToUpdate, form)
+                    navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(characterToUpdate.id))
+                }
+            ) {
+                Text("Guardar")
+            }
         }
     }
 }
 
-/**TODO: PENDIENTE DE AÑADIR AL FORMULARIO
- * - Imagen
- * - Nivel
- * - Stats
- * - Skills
- * - Armadura
- * - Iniciativa
- * - Puntos de golpe.
- * - Puntos de magia
- *
- * */
+
+
+
+
+
+
+
+
+// COPIA DE SEGURIDAD DEL FORMULARIO
 @Composable
-fun CharacterEditForm(
+fun CharacterEditorFormCOPIASEGURIDAD(
     characterId: Long,
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
@@ -73,7 +198,9 @@ fun CharacterEditForm(
 
     characterToUpdate?.let { character ->
         Column(
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
             Row(){
                 TextField(
@@ -112,7 +239,9 @@ fun CharacterEditForm(
                         characterToUpdate = character.copy(rolClass = RolClass.getClass(selectedOption))
                     },
                     label = "Clase",
-                    modifier = Modifier.weight(1.0f).padding(end = 16.dp)
+                    modifier = Modifier
+                        .weight(1.0f)
+                        .padding(end = 16.dp)
 
                 )
 
@@ -157,7 +286,7 @@ fun CharacterEditForm(
                     colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.primary),
                     onClick = {
                         characterToUpdate?.let { updatedCharacter ->
-                            characterViewModel.updateCharacter(updatedCharacter)
+                            characterViewModel.saveCharacter(updatedCharacter)
                             navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(updatedCharacter.id))
                         }
                     }

@@ -36,9 +36,9 @@ import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 
 import com.unir.character.data.model.local.Item
-import com.ui.components.BackButton
-import com.ui.components.CustomIconButton
+import com.ui.components.buttons.CustomIconButton
 import com.ui.components.RegularCard
+import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
 
 import com.unir.character.viewmodels.CharacterViewModel
@@ -166,7 +166,7 @@ fun CurrentGold(
                     goldText = newValue
                     val currentCharacter = characterViewModel.selectedCharacter.value
                     currentCharacter!!.gold = newValue.toIntOrNull() ?: 0
-                    characterViewModel.updateCharacter(currentCharacter)
+                    characterViewModel.saveCharacter(currentCharacter)
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

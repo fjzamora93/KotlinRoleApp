@@ -96,11 +96,6 @@ fun MainMenu(
                         )
 
 
-                        MenuOption(
-                            text = "Creación personaje",
-                            onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterCreatorScreen.route) },
-                            icon = Icons.Default.EditOff
-                        )
 
                         MenuOption(
                             text = "Tipografías y fuentes",

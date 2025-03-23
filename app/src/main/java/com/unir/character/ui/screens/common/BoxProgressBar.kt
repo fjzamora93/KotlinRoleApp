@@ -46,7 +46,7 @@ fun ProgressBarSection(
         label = "AP",
         maxValue = character.ap,
         localValue = character.currentAp,
-        onValueChanged = { newHp -> onCharacterUpdate(character.copy(currentHp = newHp)) }
+        onValueChanged = { newAp -> onCharacterUpdate(character.copy(currentAp = newAp)) }
     )
 }
 

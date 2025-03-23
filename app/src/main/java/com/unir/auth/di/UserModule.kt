@@ -2,8 +2,12 @@ package com.unir.auth.di
 
 import com.data.MyDatabase
 import com.unir.auth.data.dao.UserDao
+import com.unir.auth.data.repository.AuthRepositoryImpl
+import com.unir.auth.data.repository.UserRepositoryImpl
 import com.unir.auth.data.service.AuthApiService
 import com.unir.auth.data.service.UserApiService
+import com.unir.auth.domain.repository.AuthRepository
+import com.unir.auth.domain.repository.UserRepository
 import com.unir.auth.security.AuthInterceptor
 import com.unir.auth.security.TokenManager
 import com.unir.character.data.dao.ItemDao
@@ -29,5 +33,14 @@ object UserModule {
     @Provides
     fun provideUserApiService(retrofit: Retrofit): UserApiService {
         return retrofit.create(UserApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserRepository(
+        api: UserApiService,
+        tokenManager: TokenManager
+    ): UserRepository {
+        return UserRepositoryImpl(api, tokenManager)
     }
 }

@@ -2,15 +2,12 @@ package com.unir.character.ui.screens.characterSheet
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,9 +30,7 @@ import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
-import com.ui.components.BackButton
-import com.ui.components.CustomIconButton
-import com.ui.components.RegularCard
+import com.ui.components.buttons.MaxWidthButton
 import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
@@ -58,24 +53,26 @@ fun CharacterListScreen(){
 fun CharacterListBody(
     characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     authViewModel: AuthViewModel = LocalAuthViewModel.current,
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
 ) {
     val userState by authViewModel.userState.collectAsState()
     characterViewModel.getCharactersByUserId(userState.let { (it as UserState.Success).user.id!! })
 
     val characters by characterViewModel.characters.collectAsState()
+
+    MaxWidthButton(
+        label = "Crear personaje",
+        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.createRoute(0)) },
+    )
+
     Column(
+        modifier = Modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         characters.let {
-            it.forEach { character ->
-                CharacterSummary(
-                    character,
-                )
-                Divider()
-
-            }
+            it.forEach { character -> CharacterSummary(character) }
         }
-        BackButton()
+
     }
 }
 
@@ -104,11 +101,11 @@ fun CharacterSummary(
         Column(modifier = Modifier.weight(2f)) {
             Text(
                 text = "${character.name} | ${character.level}",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleMedium
             )
             Text(
                 text = "$claseToString | $raceToString",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleSmall
             )
         }
 
@@ -122,6 +119,8 @@ fun CharacterSummary(
         }
 
     }
+
+    Divider()
     if (showBottomSheet) {
         CharacterOptionsBottomSheet(
             onDismiss = { showBottomSheet = false },

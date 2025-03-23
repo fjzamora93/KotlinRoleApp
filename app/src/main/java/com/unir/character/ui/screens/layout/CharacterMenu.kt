@@ -76,14 +76,15 @@ fun CharacterMenu(
 
                     MenuOption(
                         text = "Editar personaje",
-                        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.createRoute(character!!.id)) },
+                        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.createRoute(
+                            character?.id ?: 0)) },
                         icon = Icons.Default.EditOff
                     )
 
 
                     MenuOption(
                         text = "Conectarse a mesa de juego",
-                        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterCreatorScreen.route) },
+                        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterListScreen.route) },
                         icon = Icons.Default.GpsFixed
                     )
 

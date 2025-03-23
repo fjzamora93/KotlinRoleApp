@@ -1,6 +1,7 @@
 package com.unir.character.data.repository
 
 import com.unir.character.data.dao.SkillDao
+import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.CharacterSkillCrossRef
 import com.unir.character.data.model.local.Skill
 import com.unir.character.data.model.local.SkillValue
@@ -18,7 +19,19 @@ class SkillRepositoryImpl @Inject constructor(
     private val skillDao: SkillDao
 ) : SkillRepository {
 
-    override suspend fun fetchAllSkills(): Result<List<Skill>> {
+    override suspend fun getSkills(): Result<List<Skill>> {
+        return try {
+
+            val skills : List<Skill>  = skillDao.getSkills()
+            Result.success(skills)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
+    override suspend fun fetchSkillsFromApi(): Result<List<Skill>> {
         return try {
             val response = apiService.getAllSkills()
             if (response.isSuccessful) {
@@ -28,6 +41,21 @@ class SkillRepositoryImpl @Inject constructor(
             } else {
                 Result.failure(Exception("Error al obtener habilidades: ${response.code()}"))
             }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // TODO: MODIFICAR para que se realice en una sola transacción (y no dos separadas)
+    // En caso de que la transacción del Dao haya tenido éxito, debe realizarse la petición a la API.
+    override suspend fun saveCharacterWithSKills(
+        character: CharacterEntity,
+        skillCrossRef: List<CharacterSkillCrossRef>
+    ): Result<CharacterEntity> {
+        return try {
+            val insertedCharacter = skillDao.insertCharacterWithSkills(character, skillCrossRef)
+            Result.success(insertedCharacter)
+
         } catch (e: Exception) {
             Result.failure(e)
         }

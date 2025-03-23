@@ -6,12 +6,18 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.CharacterSkillCrossRef
 import com.unir.character.data.model.local.Skill
 import com.unir.character.data.model.local.SkillValue
 
 @Dao
 interface SkillDao {
+
+
+    @Query("SELECT * FROM SkillTable")
+    suspend fun getSkills(): List<Skill>
+
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) // Ignora si ya existe
     suspend fun insertSkill(skill: Skill): Long
@@ -60,5 +66,23 @@ interface SkillDao {
         }
     }
 
+
+    @Insert
+    suspend fun insertCharacter(character: CharacterEntity): Long
+
+    @Transaction
+    suspend fun insertCharacterWithSkills(
+        character: CharacterEntity,
+        skillsCrossRef: List<CharacterSkillCrossRef>
+    ): CharacterEntity {
+        // 1. Insertar el personaje
+        val characterId = insertCharacter(character)
+
+        // 2. Insertar las relaciones CharacterSkillCrossRef
+        insertCharacterSkills(skillsCrossRef)
+
+        // 3. Devolver el personaje con el ID generado
+        return character.copy(id = characterId)
+    }
 
 }

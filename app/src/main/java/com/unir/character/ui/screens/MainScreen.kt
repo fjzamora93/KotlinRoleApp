@@ -97,7 +97,7 @@ fun MainScreenBody(modifier: Modifier = Modifier) {
 
         // Botón para iniciar
         Button(
-            onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterCreatorScreen.route)  },
+            onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterListScreen.route)  },
             colors = ButtonDefaults.buttonColors(
                 MedievalColours.Bronze,
                 MedievalColours.WoodenDark

@@ -21,10 +21,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.unir.character.data.model.local.Item
 import com.di.LocalCharacterViewModel
-import com.ui.components.BackButton
-import com.ui.components.MenuMedievalButton
+import com.ui.components.buttons.MenuMedievalButton
 import com.ui.components.RegularCard
-import com.ui.components.medievalButtonStyleSquare
+import com.ui.components.buttons.BackButton
+import com.ui.components.buttons.medievalButtonStyleSquare
 import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.character.viewmodels.ItemViewModel

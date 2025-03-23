@@ -29,6 +29,7 @@ import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
+import com.ui.components.DefaultColumn
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.Race
 import com.unir.character.data.model.local.RolClass
@@ -40,79 +41,109 @@ import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.character.viewmodels.SkillViewModel
 
 data class PersonalityTestForm(
-    val combatStyle: String,
-    val sociability: String,
-    val hobbies: String,
-    val afraid: String,
-    val proeficiency: String
+    var combatStyle: String = "",
+    var sociability: String= "",
+    var hobbies: String= "",
+    var afraid: String = "",
+    var proeficiency: String = "",
 )
 
 
-
-
 @Composable
-fun PersonalityTestFormScreen(
-    viewModel: SkillViewModel = hiltViewModel(),
-    character: CharacterEntity
+fun PersonalityTest(
+    onValueChange: (PersonalityTestForm) -> Unit,
 ) {
-    // Estado para almacenar las respuestas
-    var combatStyle by remember { mutableStateOf("") }
-    var sociability by remember { mutableStateOf("") }
-    var hobbies by remember { mutableStateOf("") }
-    var afraid by remember { mutableStateOf("") }
-    var proeficiency by remember { mutableStateOf("") }
+    // Estado para almacenar el formulario completo
+    var form by remember {
+        mutableStateOf(
+            PersonalityTestForm()
+        )
+    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
 
+    DefaultColumn {
         // Pregunta 1: Estilo de combate
         Text("¿Qué estilo de combate tiene tu personaje?")
         DropDownText(
             options = PersonalityTestOptions.combatOptions,
-            selectedOption = combatStyle,
+            selectedOption = form.combatStyle,
             onValueChange = { selectedOption ->
-                combatStyle = selectedOption
+                val updatedForm = form.copy(combatStyle = selectedOption)
+                form = updatedForm
+                onValueChange(updatedForm)
             },
             label = "Estilo de combate",
             modifier = Modifier
-                .weight(1.0f)
+                .fillMaxWidth()
                 .padding(end = 16.dp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         // Pregunta 2: Sociabilidad
+        Spacer(modifier = Modifier.height(16.dp))
         Text("A la hora de relacionarse con otros personajes...")
         DropDownText(
             options = PersonalityTestOptions.sociabilityOptions,
-            selectedOption = sociability,
+            selectedOption = form.sociability,
             onValueChange = { selectedOption ->
-                sociability = selectedOption
+                val updatedForm = form.copy(sociability = selectedOption)
+                form = updatedForm
+                onValueChange(updatedForm)
             },
             label = "Sociabilidad",
             modifier = Modifier
-                .weight(1.0f)
+                .fillMaxWidth()
                 .padding(end = 16.dp)
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        // Pregunta 3: Hobbies
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("¿Cuáles son los hobbies de tu personaje?")
+        DropDownText(
+            options = PersonalityTestOptions.hobbiesOptions,
+            selectedOption = form.hobbies,
+            onValueChange = { selectedOption ->
+                val updatedForm = form.copy(hobbies = selectedOption)
+                form = updatedForm
+                onValueChange(updatedForm)
+            },
+            label = "Aficiones",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 16.dp)
+        )
 
-        // Botón para enviar el formulario
-        Button(
-            onClick = {
-                // Crear el objeto con las respuestas y enviarlo al ViewModel
-                val formData = PersonalityTestForm(
-                    combatStyle, sociability, hobbies, afraid, proeficiency
-                )
-                viewModel.submitPersonalityTest(character, formData)
-            }
-        ) {
-            Text("Enviar respuestas")
-        }
+        // Pregunta 4: Miedos
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("¿A qué le tiene miedo tu personaje?")
+        DropDownText(
+            options = PersonalityTestOptions.afraidOptions,
+            selectedOption = form.afraid,
+            onValueChange = { selectedOption ->
+                val updatedForm = form.copy(afraid = selectedOption)
+                form = updatedForm
+                onValueChange(updatedForm)
+            },
+            label = "Miedos",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 16.dp)
+        )
+
+        // Pregunta 5: Talentos
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("¿Cuál es la especialidad de tu personaje?")
+        DropDownText(
+            options = PersonalityTestOptions.proeficiencyOptions,
+            selectedOption = form.proeficiency,
+            onValueChange = { selectedOption ->
+                val updatedForm = form.copy(proeficiency = selectedOption)
+                form = updatedForm
+                onValueChange(updatedForm)
+            },
+            label = "Talentos",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 16.dp)
+        )
     }
 }
-
-

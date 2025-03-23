@@ -35,8 +35,8 @@ import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.ScreensRoutes
-import com.ui.components.BackButton
 import com.ui.components.CustomCircularProgressIndicator
+import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState

@@ -1,13 +1,17 @@
 package com.unir.character.di
+import com.unir.auth.domain.repository.AuthRepository
+import com.unir.auth.domain.repository.UserRepository
 import com.unir.character.domain.repository.CharacterRepository
 import com.unir.character.domain.repository.ItemRepository
 import com.unir.character.domain.repository.SkillRepository
 import com.unir.character.domain.repository.SpellRepository
 import com.unir.character.domain.usecase.character.CharacterUseCases
+import com.unir.character.domain.usecase.character.CreateCharacterUseCase
 import com.unir.character.domain.usecase.character.DeleteCharacterUseCase
 import com.unir.character.domain.usecase.character.GetCharacterByIdUseCase
 import com.unir.character.domain.usecase.character.GetCharactersByUserIdUseCase
-import com.unir.character.domain.usecase.character.CreateNewCharacterUseCase
+import com.unir.character.domain.usecase.character.SaveCharacterUseCase
+import com.unir.character.domain.usecase.character.UpdateCharacterUseCase
 import com.unir.character.domain.usecase.item.DestroyItemUseCase
 import com.unir.character.domain.usecase.item.FetchTemplateItemsUseCase
 import com.unir.character.domain.usecase.item.GetItemsByCharacterId
@@ -36,16 +40,25 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
 
+
+
+
     @Provides
     @Singleton
     fun provideCharacterUseCases(
         characterRepository: CharacterRepository,
+        createCharacterUseCase: CreateCharacterUseCase,
+        updateCharacterUseCase: UpdateCharacterUseCase,
+        userRepository: UserRepository,
+        skillRepository: SkillRepository
     ): CharacterUseCases {
         return CharacterUseCases(
             getCharactersByUserId = GetCharactersByUserIdUseCase(characterRepository),
             getCharacterById = GetCharacterByIdUseCase(characterRepository),
-            updateCharacter = CreateNewCharacterUseCase(characterRepository),
-            deleteCharacter = DeleteCharacterUseCase(characterRepository)
+            saveCharacter = SaveCharacterUseCase(createCharacterUseCase, updateCharacterUseCase),
+            deleteCharacter = DeleteCharacterUseCase(characterRepository),
+            updateCharacter = UpdateCharacterUseCase(characterRepository),
+            createCharacter = CreateCharacterUseCase(skillRepository, userRepository)
         )
     }
 

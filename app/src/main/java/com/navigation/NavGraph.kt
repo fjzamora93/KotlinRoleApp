@@ -12,7 +12,6 @@ import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.unir.character.ui.screens.MainScreen
-import com.unir.character.ui.screens.characterform.CharacterCreatorScreen
 import com.unir.character.ui.screens.characterSheet.CharacterListScreen
 import com.unir.character.ui.screens.characterSheet.CharacterDetailScreen
 import com.unir.character.ui.screens.items.CharacterInventoryScreen
@@ -47,47 +46,46 @@ fun NavGraph(
             startDestination = ScreensRoutes.LoginScreen.route
         ) {
 
-            // Pantalla de inicio
+            // USUARIO Y FUNCIONALIDAD GENERAL
             composable(ScreensRoutes.MainScreen.route) {
                 MainScreen()
             }
-
-            // Pantalla de creación del personaje
-            composable(ScreensRoutes.CharacterCreatorScreen.route) {
-                CharacterCreatorScreen()
+            composable (ScreensRoutes.LoginScreen.route){
+                LoginScreen()
+            }
+            composable (ScreensRoutes.UserProfileScreen.route){
+                UserProfileScreen()
             }
 
 
 
-            composable(ScreensRoutes.CharacterListScreen.route) {
-                CharacterListScreen()
-            }
-
-            composable(ScreensRoutes.ItemListScreen.route) {
-                ItemListScreen()
-            }
-
+            // HECHIZOS, OBJETOS, INVENTARIO
             composable(ScreensRoutes.FontTemplateScreen.route) {
                 FontsTemplateScreen()
             }
-
+            composable(ScreensRoutes.ItemListScreen.route) {
+                ItemListScreen()
+            }
             composable(ScreensRoutes.InventoryScreen.route) {
                 CharacterInventoryScreen()
             }
-
             composable(ScreensRoutes.CharacterSpellScreen.route) {
                 CharacterSpellScreen()
             }
 
 
-            composable (ScreensRoutes.LoginScreen.route){
-                LoginScreen()
-            }
 
-            composable (ScreensRoutes.UserProfileScreen.route){
-                UserProfileScreen()
+            //PERSONAJE
+            composable(ScreensRoutes.CharacterListScreen.route) {
+                CharacterListScreen()
             }
-            //Pantalla de edición
+            composable(
+                ScreensRoutes.CharacterDetailScreen.route,
+                arguments = listOf(navArgument("characterId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val characterId = backStackEntry.arguments?.getLong("characterId") ?: 0
+                CharacterDetailScreen(characterId = characterId)
+            }
             composable(
                 ScreensRoutes.CharacterEditorScreen.route,
                 arguments = listOf(navArgument("characterId") { type = NavType.LongType })
@@ -97,16 +95,6 @@ fun NavGraph(
             }
 
 
-
-
-            // Pantalla de detalle del personaje
-            composable(
-                ScreensRoutes.CharacterDetailScreen.route,
-                arguments = listOf(navArgument("characterId") { type = NavType.LongType })
-            ) { backStackEntry ->
-                val characterId = backStackEntry.arguments?.getLong("characterId") ?: 0
-                CharacterDetailScreen(characterId = characterId)
-            }
         }
     }
 }

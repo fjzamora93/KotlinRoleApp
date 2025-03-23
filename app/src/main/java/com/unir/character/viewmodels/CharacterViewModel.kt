@@ -3,8 +3,10 @@ package com.unir.character.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unir.auth.data.model.User
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.domain.usecase.character.CharacterUseCases
+import com.unir.character.ui.screens.skills.PersonalityTestForm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,15 +36,18 @@ class CharacterViewModel @Inject constructor(
 
 
 
-    // Función para actualizar un personaje
-    fun updateCharacter(characterEntity: CharacterEntity) {
+    // Función para guardar un personaje
+    fun saveCharacter(
+        characterEntity: CharacterEntity,
+        form : PersonalityTestForm = PersonalityTestForm()
+    ) {
         _loadingState.value = true
         viewModelScope.launch {
-            val result = characterUseCases.updateCharacter(characterEntity)
-            result.onSuccess {
-                _selectedCharacter.value = characterEntity
+            val result = characterUseCases.saveCharacter(characterEntity, form)
+            result.onSuccess { savedCharacter ->
+                _selectedCharacter.value = savedCharacter
                 _loadingState.value = false
-                println("Personaje actualizado: ${characterEntity.name}")
+                println("Personaje creado / actualizado: ${characterEntity.name}")
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message

@@ -13,9 +13,9 @@ data class CharacterEntity(
 
     // DATOS DE USUARIO Y SESIÓN
     @ColumnInfo(name = "userId")
-    var userId: Int,
+    var userId: Int = 0,
     var gameSessionId: Int? = null,
-    val updatedAt: Long,
+    var updatedAt: Long = 0L,
 
     // Datos del personaje
     var name: String = "",
@@ -53,12 +53,6 @@ data class CharacterEntity(
 
     ){
 
-    // Asignamos el ID único cuando se crea el objeto
-    init {
-        if (id == 0L) {
-            this.id = "$userId${System.currentTimeMillis()}".toLong()
-        }
-    }
 
     @get:Ignore
     var level: Int
@@ -71,7 +65,6 @@ data class CharacterEntity(
         }
 
     private fun recalculateStats() {
-        // Lógica para recalcular los stats cuando cambia el nivel
         hp = 10 + (_level * 2)  // Ejemplo: aumenta 2 puntos de vida por nivel
         ap = 1 + (_level / 5)    // Ejemplo: cada 5 niveles, gana 1 punto de acción extra
     }
@@ -79,9 +72,9 @@ data class CharacterEntity(
     private fun calculateHealthPoints(): Int {
         val baseHealth = when (rolClass) {
             RolClass.WARRIOR, RolClass.BARBARIAN -> 12
-            RolClass.PALADIN,  RolClass.EXPLORER -> 10
-            RolClass.ROGUE, RolClass.CLERIC, RolClass.DRUID, RolClass.WARLOCK -> 8
-             RolClass.WIZARD, RolClass.BARD -> 6
+            RolClass.PALADIN,  RolClass.EXPLORER, RolClass.CLERIC -> 10
+            RolClass.ROGUE,  RolClass.DRUID, RolClass.WARLOCK -> 8
+            RolClass.WIZARD, RolClass.BARD -> 6
             else -> 6
         }
         val constitutionBonus = (constitution - 10) / 2
