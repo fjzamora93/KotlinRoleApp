@@ -2,7 +2,6 @@ package com.unir.auth.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unir.auth.domain.repository.AuthRepository
 import com.unir.auth.domain.usecase.auth.AuthUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

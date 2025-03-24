@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
-import androidx.compose.material.icons.filled.Architecture
-import androidx.compose.material.icons.filled.EditOff
 import androidx.compose.material.icons.filled.FontDownload
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person

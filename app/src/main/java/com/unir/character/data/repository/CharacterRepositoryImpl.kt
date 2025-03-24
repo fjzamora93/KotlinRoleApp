@@ -16,8 +16,6 @@ import javax.inject.Inject
 
 
 /**
- * LAS CLASES DE ESTE REPOSITORIO DEBEN IMPLEMENTAR LA INTERFAZ DEL REPOSITORIO domain.repository.CharacterRepository
- *
  * Además, deben aplicar la lógica para decidir si la petición se va a realizar al repositorio remoto o al local.
  * */
 class CharacterRepositoryImpl @Inject constructor(
@@ -40,7 +38,9 @@ class CharacterRepositoryImpl @Inject constructor(
         }
     }
 
-    /** MÉTODO QUE REALIZARÁ EL FETCH EN PARALELO, MIENTRAS SE DEVUELVE AL USUARIO LOS DATOS LOCALES */
+    /** TODO: AJUSTAR LA SINCRONIZACIÓN REMOTA, AHORA MISMO NO OBTIENE LAS HABILIDADES CORRECTAMENTE, SOLO EL PERSONAJE
+     * TODO : LAS HABILIDADES QUE SE DEVUELVAN CUANDO SE ACCEDA AL DETALLE, NO EN LA LISTA COMPLETA. El fetch genérico solo necesita al character, no sus skills
+      */
     private suspend fun fetchAndUpdateCharacters(userId: Int) {
         try {
             val remoteResponse = apiService.getCharactersByUserId(userId)
@@ -54,30 +54,9 @@ class CharacterRepositoryImpl @Inject constructor(
                         localCharacter == null || remoteCharacter.updatedAt > localCharacter.updatedAt
                     }
 
-
                     if (charactersToInsert.isNotEmpty()) {
                         val remoteEntities = charactersToInsert.map { it.toCharacterEntity() }
                         characterDao.insertAll(remoteEntities)
-
-                        // Obtener todas las habilidades de los personajes
-                        val skillsToInsert = charactersToInsert.flatMap { it.skills.map { skillWrapper ->
-                            skillWrapper.skill
-                        } }.distinctBy { it.id }
-
-                        characterDao.insertAllSkills(skillsToInsert) // Insertar habilidades
-
-                        // Insertar las relaciones de habilidades
-                        val characterSkillsToInsert = charactersToInsert.flatMap { character ->
-                            character.skills.map { skillWrapper ->
-                                CharacterSkillCrossRef(
-                                    characterId = character.id,
-                                    skillId = skillWrapper.skill.id,
-                                    value = skillWrapper.value
-                                )
-                            }
-                        }
-
-                        characterDao.insertAllCharacterSkills(characterSkillsToInsert)
                     }
                 }
             }
@@ -137,6 +116,18 @@ class CharacterRepositoryImpl @Inject constructor(
         }
     }
 
+    // TODO: Añadir a la cola de sincronización para la actualización remota
+    override suspend fun saveCharacterWithSKills(
+        character: CharacterEntity,
+        skillCrossRef: List<CharacterSkillCrossRef>
+    ): Result<CharacterEntity> {
+        return try{
+            characterDao.insertCharacterWithSkills(character, skillCrossRef)
+            Result.success(character)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 
 }

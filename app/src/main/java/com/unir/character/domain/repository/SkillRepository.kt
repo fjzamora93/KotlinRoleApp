@@ -12,7 +12,7 @@ interface SkillRepository {
     suspend fun fetchCharacterSkillsFromApi(characterId: Long): Result<List<Skill>>
     suspend fun getSkillsFromCharacter(characterId: Long) : Result<List<SkillValue>>
     suspend fun saveSkills(characterId: Long, skills: List<SkillValue>): Result<Unit>
-    suspend fun saveCharacterWithSKills(character: CharacterEntity, skillCrossRef: List<CharacterSkillCrossRef>) : Result<CharacterEntity>
+
     suspend fun generateSkills(
         skillsCrossRef : List<CharacterSkillCrossRef>,
         characterId: Long

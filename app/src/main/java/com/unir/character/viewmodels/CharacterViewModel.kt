@@ -3,7 +3,7 @@ package com.unir.character.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unir.auth.data.model.User
+import com.unir.auth.viewmodels.UserViewModel
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.domain.usecase.character.CharacterUseCases
 import com.unir.character.ui.screens.skills.PersonalityTestForm
@@ -34,6 +34,27 @@ class CharacterViewModel @Inject constructor(
     private val _selectedCharacter = MutableStateFlow<CharacterEntity?>(null)
     val selectedCharacter: MutableStateFlow<CharacterEntity?> = _selectedCharacter
 
+    init{
+        viewModelScope.launch {
+            getCharactersByUser()
+        }
+    }
+
+    // Función para obtener todos los personajes de un usuario. EL usuario se obtiene en el caso de uso, no en el viewmodel
+    fun getCharactersByUser() {
+        _loadingState.value = true
+        viewModelScope.launch {
+            val result = characterUseCases.getCharactersByUserId()
+            result.onSuccess { charactersList ->
+                _characters.value = charactersList
+                _loadingState.value = false
+            }.onFailure {
+                _loadingState.value = false
+                _errorMessage.value = it.message
+                println("Error al obtener los personajes")
+            }
+        }
+    }
 
 
     // Función para guardar un personaje
@@ -75,24 +96,6 @@ class CharacterViewModel @Inject constructor(
         }
     }
 
-    // Función para obtener todos los personajes
-    fun getCharactersByUserId(userId: Int) {
-        _loadingState.value = true
-        viewModelScope.launch {
-            val result = characterUseCases.getCharactersByUserId(userId)
-            result.onSuccess { charactersList ->
-                _characters.value = charactersList
-                _loadingState.value = false
-            }.onFailure {
-                _loadingState.value = false
-                _errorMessage.value = it.message
-                println("Error al obtener los personajes")
-            }
-        }
-    }
-
-
-
 
 
     fun deleteCharacter(characterEntity: CharacterEntity) {
@@ -100,8 +103,7 @@ class CharacterViewModel @Inject constructor(
         viewModelScope.launch {
             val result = characterUseCases.deleteCharacter(characterEntity)
             result.onSuccess {
-                val updatedCharacters = _characters.value.filter { it.id != characterEntity.id }
-                _characters.value = updatedCharacters
+                _characters.value = _characters.value.toList().filter { it.id != characterEntity.id }
                 _loadingState.value = false
                 println("Personaje eliminado: ${characterEntity.name}")
             }.onFailure {

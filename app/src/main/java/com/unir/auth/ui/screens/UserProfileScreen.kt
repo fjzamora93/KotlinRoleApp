@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.unir.auth.data.model.User
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
@@ -30,7 +29,6 @@ import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
-import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.AuthViewModel
 
 @Composable
@@ -50,11 +48,11 @@ fun UserProfileBody(
     val userState by authViewModel.userState.collectAsState()
 
     when (userState) {
-        is UserState.Loading -> CircularProgressIndicator()
-        is UserState.Success -> UserProfileDetail(user = (userState as UserState.Success).user)
-        is UserState.Error -> Text("Error: ${(userState as UserState.Error).message}")
-        is UserState.LoggedOut -> Text("Sesión cerrada")
-        is UserState.Deleted -> Text("Cuenta eliminada")
+        is com.unir.auth.viewmodels.UserState.Loading -> CircularProgressIndicator()
+        is com.unir.auth.viewmodels.UserState.Success -> UserProfileDetail(user = (userState as com.unir.auth.viewmodels.UserState.Success).user)
+        is com.unir.auth.viewmodels.UserState.Error -> Text("Error: ${(userState as com.unir.auth.viewmodels.UserState.Error).message}")
+        is com.unir.auth.viewmodels.UserState.LoggedOut -> Text("Sesión cerrada")
+        is com.unir.auth.viewmodels.UserState.Deleted -> Text("Cuenta eliminada")
         else -> Text("Usuario no registrado")
     }
 }
@@ -63,7 +61,7 @@ fun UserProfileBody(
 
 @Composable
 fun UserProfileDetail(
-    user: User,
+    user: com.unir.auth.data.model.User,
     viewModel: AuthViewModel = LocalAuthViewModel.current,
     navigation : NavigationViewModel = LocalNavigationViewModel.current
 ){

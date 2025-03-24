@@ -38,7 +38,6 @@ interface SkillDao {
 
 
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacterSkills(skills: List<CharacterSkillCrossRef>)
 
@@ -47,6 +46,7 @@ interface SkillDao {
         val crossRefs = skills.map { it.toCrossRef(characterId) }
         insertCharacterSkills(crossRefs)
     }
+
 
     // OBTENCIÓN DE TODAS LAS HABILIDADES DE UN PERSONAJE (TRNSACCIÓN EN TRES FASES)
     @Query("SELECT * FROM character_skill_table WHERE characterId = :characterId")
@@ -66,23 +66,5 @@ interface SkillDao {
         }
     }
 
-
-    @Insert
-    suspend fun insertCharacter(character: CharacterEntity): Long
-
-    @Transaction
-    suspend fun insertCharacterWithSkills(
-        character: CharacterEntity,
-        skillsCrossRef: List<CharacterSkillCrossRef>
-    ): CharacterEntity {
-        // 1. Insertar el personaje
-        val characterId = insertCharacter(character)
-
-        // 2. Insertar las relaciones CharacterSkillCrossRef
-        insertCharacterSkills(skillsCrossRef)
-
-        // 3. Devolver el personaje con el ID generado
-        return character.copy(id = characterId)
-    }
 
 }

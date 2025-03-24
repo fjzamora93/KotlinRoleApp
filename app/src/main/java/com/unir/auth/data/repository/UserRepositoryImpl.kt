@@ -29,10 +29,10 @@ class UserRepositoryImpl  @Inject constructor(
     }
 
     // Actualizar usuario
-    override suspend fun updateUser(user: UserDTO): Result<User> {
+    override suspend fun updateUser(user: User): Result<User> {
         return try {
             val token = tokenManager.getAccessToken() ?: return Result.failure(Exception("No hay Access Token"))
-            val response = api.updateUser("Bearer $token", user)
+            val response = api.updateUser("Bearer $token", user.toUserApi())
 
             if (response.isSuccessful && response.body() != null) {
                 Result.success(response.body()!!.toUserEntity())

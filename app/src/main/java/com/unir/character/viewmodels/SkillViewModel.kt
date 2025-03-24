@@ -1,15 +1,12 @@
 package com.unir.character.viewmodels
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unir.character.data.model.local.CharacterEntity
-import com.unir.character.data.model.local.Skill
 import com.unir.character.data.model.local.SkillValue
 import com.unir.character.domain.usecase.skill.SkillUseCases
 import com.unir.character.domain.usecase.skill.ValidateSkillValue
 import com.unir.character.ui.screens.skills.PersonalityTestForm
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

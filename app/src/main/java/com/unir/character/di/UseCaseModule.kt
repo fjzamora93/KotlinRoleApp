@@ -1,6 +1,5 @@
 package com.unir.character.di
-import com.unir.auth.domain.repository.AuthRepository
-import com.unir.auth.domain.repository.UserRepository
+import com.unir.auth.domain.usecase.user.UserUseCase
 import com.unir.character.domain.repository.CharacterRepository
 import com.unir.character.domain.repository.ItemRepository
 import com.unir.character.domain.repository.SkillRepository
@@ -9,7 +8,7 @@ import com.unir.character.domain.usecase.character.CharacterUseCases
 import com.unir.character.domain.usecase.character.CreateCharacterUseCase
 import com.unir.character.domain.usecase.character.DeleteCharacterUseCase
 import com.unir.character.domain.usecase.character.GetCharacterByIdUseCase
-import com.unir.character.domain.usecase.character.GetCharactersByUserIdUseCase
+import com.unir.character.domain.usecase.character.GetCharactersByUserUseCase
 import com.unir.character.domain.usecase.character.SaveCharacterUseCase
 import com.unir.character.domain.usecase.character.UpdateCharacterUseCase
 import com.unir.character.domain.usecase.item.DestroyItemUseCase
@@ -19,11 +18,12 @@ import com.unir.character.domain.usecase.item.GetItemsBySessionUseCase
 import com.unir.character.domain.usecase.item.ItemUseCases
 import com.unir.character.domain.usecase.item.SellItemUseCase
 import com.unir.character.domain.usecase.item.UpsertItemToCharacter
-import com.unir.character.domain.usecase.skill.FetchSkills
+import com.unir.character.domain.usecase.skill.FetchSkillsUseCase
 import com.unir.character.domain.usecase.skill.GenerateSkillValues
-import com.unir.character.domain.usecase.skill.SaveSkills
+import com.unir.character.domain.usecase.skill.SaveSkillsUseCase
 
 import com.unir.character.domain.usecase.skill.GetSkillsFromCharacterUseCase
+import com.unir.character.domain.usecase.skill.GetSkillsUseCase
 import com.unir.character.domain.usecase.skill.SkillUseCases
 import com.unir.character.domain.usecase.skill.UpdateSkills
 import com.unir.character.domain.usecase.skill.ValidateSkillValue
@@ -49,16 +49,16 @@ object UseCaseModule {
         characterRepository: CharacterRepository,
         createCharacterUseCase: CreateCharacterUseCase,
         updateCharacterUseCase: UpdateCharacterUseCase,
-        userRepository: UserRepository,
-        skillRepository: SkillRepository
+        skillUseCase: SkillUseCases,
+        userUseCase : UserUseCase
     ): CharacterUseCases {
         return CharacterUseCases(
-            getCharactersByUserId = GetCharactersByUserIdUseCase(characterRepository),
+            getCharactersByUserId = GetCharactersByUserUseCase(characterRepository, userUseCase),
             getCharacterById = GetCharacterByIdUseCase(characterRepository),
             saveCharacter = SaveCharacterUseCase(createCharacterUseCase, updateCharacterUseCase),
             deleteCharacter = DeleteCharacterUseCase(characterRepository),
             updateCharacter = UpdateCharacterUseCase(characterRepository),
-            createCharacter = CreateCharacterUseCase(skillRepository, userRepository)
+            createCharacter = CreateCharacterUseCase(characterRepository, skillUseCase, userUseCase)
         )
     }
 
@@ -82,12 +82,13 @@ object UseCaseModule {
     @Singleton
     fun provideSkillUseCases(repository: SkillRepository): SkillUseCases {
         return SkillUseCases(
-            saveSkills = SaveSkills(repository),
+            saveSkills = SaveSkillsUseCase(repository),
             getSkillsFromCharacter = GetSkillsFromCharacterUseCase(repository),
             validateSkillValue = ValidateSkillValue(),
             updateSkills = UpdateSkills(repository),
             generateSkillValues = GenerateSkillValues(repository),
-            fetchSkills = FetchSkills(repository)
+            fetchSkills = FetchSkillsUseCase(repository),
+            getSkills = GetSkillsUseCase(repository)
         )
     }
 

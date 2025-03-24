@@ -8,6 +8,15 @@ import com.unir.auth.data.service.AuthApiService
 import com.unir.auth.data.service.UserApiService
 import com.unir.auth.domain.repository.AuthRepository
 import com.unir.auth.domain.repository.UserRepository
+import com.unir.auth.domain.usecase.auth.AuthUseCases
+import com.unir.auth.domain.usecase.auth.PostAutologinUseCase
+import com.unir.auth.domain.usecase.auth.PostLoginUseCase
+import com.unir.auth.domain.usecase.auth.PostLogoutUseCase
+import com.unir.auth.domain.usecase.auth.PostSignupUseCase
+import com.unir.auth.domain.usecase.user.DeleteUserUseCase
+import com.unir.auth.domain.usecase.user.GetUserUseCase
+import com.unir.auth.domain.usecase.user.UpdateUserUseCase
+import com.unir.auth.domain.usecase.user.UserUseCase
 import com.unir.auth.security.AuthInterceptor
 import com.unir.auth.security.TokenManager
 import com.unir.character.data.dao.ItemDao
@@ -42,5 +51,16 @@ object UserModule {
         tokenManager: TokenManager
     ): UserRepository {
         return UserRepositoryImpl(api, tokenManager)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideUserUseCases(repository: UserRepository): UserUseCase {
+        return UserUseCase(
+            getUser = GetUserUseCase(repository),
+            updateUser = UpdateUserUseCase(repository),
+            deleteUser = DeleteUserUseCase(repository)
+        )
     }
 }

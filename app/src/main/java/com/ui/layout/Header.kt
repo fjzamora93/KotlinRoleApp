@@ -14,12 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.Backpack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,7 +36,6 @@ import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
-import com.ui.theme.CustomType
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.AuthViewModel

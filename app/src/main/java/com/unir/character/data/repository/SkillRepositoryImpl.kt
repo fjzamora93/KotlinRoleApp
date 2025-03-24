@@ -46,20 +46,7 @@ class SkillRepositoryImpl @Inject constructor(
         }
     }
 
-    // TODO: MODIFICAR para que se realice en una sola transacción (y no dos separadas)
-    // En caso de que la transacción del Dao haya tenido éxito, debe realizarse la petición a la API.
-    override suspend fun saveCharacterWithSKills(
-        character: CharacterEntity,
-        skillCrossRef: List<CharacterSkillCrossRef>
-    ): Result<CharacterEntity> {
-        return try {
-            val insertedCharacter = skillDao.insertCharacterWithSkills(character, skillCrossRef)
-            Result.success(insertedCharacter)
 
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
 
 
     // MÉTODO PARA OBTENERLAS DE LA API
