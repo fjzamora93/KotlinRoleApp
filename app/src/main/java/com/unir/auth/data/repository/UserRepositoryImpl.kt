@@ -1,5 +1,6 @@
 package com.unir.auth.data.repository
 
+import com.unir.auth.data.dao.UserDao
 import com.unir.auth.data.model.User
 import com.unir.auth.data.service.UserApiService
 import com.unir.auth.domain.repository.UserRepository
@@ -9,24 +10,52 @@ import javax.inject.Inject
 
 class UserRepositoryImpl  @Inject constructor(
     private val api: UserApiService,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val userDao: UserDao
 ) : UserRepository {
 
     // Obtener usuario (usando Access Token)
     override suspend fun getUser(): Result<User> {
         return try {
-            val token = tokenManager.getAccessToken() ?: return Result.failure(Exception("No hay Access Token"))
+            // Intentar obtener el token de acceso
+            val token = tokenManager.getAccessToken()
+
+            if (token.isNullOrEmpty()) {
+                // Si no hay token, intentar obtener el usuario desde la base de datos local
+                val localUser = userDao.getUser()
+                if (localUser != null) {
+                    println("USUARIO LOCAL: $localUser")
+                    return Result.success(localUser)
+                } else {
+                    // Si no hay usuario local, devolver un error adecuado
+                    return Result.failure(Exception("No se encontró el usuario local ni el token"))
+                }
+            }
+
+            // Si hay token, intentar obtener el usuario desde la API
             val response = api.getUser("Bearer $token")
+            println("Tratando de obtener usuario desde API")
 
             if (response.isSuccessful && response.body() != null) {
-                Result.success(response.body()!!.toUserEntity())
+                return Result.success(response.body()!!.toUserEntity())
             } else {
-                Result.failure(Exception("Error obteniendo usuario"))
+                // Si la API falla, intenta obtener el usuario local
+                val localUser = userDao.getUser()
+                if (localUser != null) {
+                    println("USUARIO LOCAL: $localUser")
+                    return Result.success(localUser)
+                } else {
+                    // Si no hay usuario local, devolver un error adecuado
+                    return Result.failure(Exception("Error obteniendo usuario desde la API y no hay usuario local"))
+                }
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            // Manejo de cualquier excepción que ocurra durante el proceso
+            println("Error: ${e.message}")
+            return Result.failure(e)
         }
     }
+
 
     // Actualizar usuario
     override suspend fun updateUser(user: User): Result<User> {

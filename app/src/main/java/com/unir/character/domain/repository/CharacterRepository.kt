@@ -10,4 +10,5 @@ interface CharacterRepository {
     suspend fun deleteCharacter(character: CharacterEntity): Result<Unit>
     suspend fun saveCharacterWithSKills(character: CharacterEntity, skillCrossRef: List<CharacterSkillCrossRef>) : Result<CharacterEntity>
 
+    suspend fun getActiveCharacter(): Result<CharacterEntity>
 }

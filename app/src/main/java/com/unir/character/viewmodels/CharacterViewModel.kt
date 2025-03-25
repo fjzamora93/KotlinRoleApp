@@ -35,9 +35,7 @@ class CharacterViewModel @Inject constructor(
     val selectedCharacter: MutableStateFlow<CharacterEntity?> = _selectedCharacter
 
     init{
-        viewModelScope.launch {
-            getCharactersByUser()
-        }
+        getCharactersByUser()
     }
 
     // Función para obtener todos los personajes de un usuario. EL usuario se obtiene en el caso de uso, no en el viewmodel
@@ -51,7 +49,7 @@ class CharacterViewModel @Inject constructor(
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message
-                println("Error al obtener los personajes")
+                println("Error al obtener los personajes. ${_errorMessage.value}")
             }
         }
     }

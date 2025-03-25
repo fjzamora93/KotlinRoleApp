@@ -48,9 +48,10 @@ object UserModule {
     @Provides
     fun provideUserRepository(
         api: UserApiService,
-        tokenManager: TokenManager
+        tokenManager: TokenManager,
+        userDao: UserDao
     ): UserRepository {
-        return UserRepositoryImpl(api, tokenManager)
+        return UserRepositoryImpl(api, tokenManager, userDao)
     }
 
 

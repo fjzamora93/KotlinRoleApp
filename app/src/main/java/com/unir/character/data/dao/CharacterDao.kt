@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.CharacterSkillCrossRef
 import com.unir.character.data.model.local.Skill
@@ -23,6 +24,9 @@ interface CharacterDao {
     @Query("SELECT * FROM character_entity_table WHERE userId = :userId")
     suspend fun getCharactersByUserId(userId: Int): List<CharacterEntity>
 
+    @Update
+    suspend fun updateCharacter(character: CharacterEntity)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacter(character: CharacterEntity) : Long
 
@@ -33,7 +37,8 @@ interface CharacterDao {
     suspend fun deleteCharacter(character: CharacterEntity)
 
 
-
+    @Query("SELECT * FROM character_entity_table ORDER BY updatedAt DESC LIMIT 1")
+    suspend fun getLastCharacter(): CharacterEntity?
 
 
     // OBTENER HABILIDADES DE PERSONAJE

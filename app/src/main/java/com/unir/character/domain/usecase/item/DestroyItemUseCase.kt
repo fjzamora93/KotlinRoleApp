@@ -27,7 +27,7 @@ class DestroyItemUseCase @Inject constructor(
             quantity -= 1
             println("La cantidad que se va a modificar es... $quantity")
 
-            return itemRepository.upsertItemToCharacter(character.id, item, quantity)
+            return itemRepository.addItemToCharacter(character.id, item, quantity)
 
 
         } catch (e: Exception) {

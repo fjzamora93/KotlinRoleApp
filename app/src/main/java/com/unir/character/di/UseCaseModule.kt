@@ -7,17 +7,18 @@ import com.unir.character.domain.repository.SpellRepository
 import com.unir.character.domain.usecase.character.CharacterUseCases
 import com.unir.character.domain.usecase.character.CreateCharacterUseCase
 import com.unir.character.domain.usecase.character.DeleteCharacterUseCase
+import com.unir.character.domain.usecase.character.GetActiveCharacterIdUseCase
 import com.unir.character.domain.usecase.character.GetCharacterByIdUseCase
 import com.unir.character.domain.usecase.character.GetCharactersByUserUseCase
 import com.unir.character.domain.usecase.character.SaveCharacterUseCase
 import com.unir.character.domain.usecase.character.UpdateCharacterUseCase
 import com.unir.character.domain.usecase.item.DestroyItemUseCase
 import com.unir.character.domain.usecase.item.FetchTemplateItemsUseCase
-import com.unir.character.domain.usecase.item.GetItemsByCharacterId
+import com.unir.character.domain.usecase.item.GetItemsByCharacter
 import com.unir.character.domain.usecase.item.GetItemsBySessionUseCase
 import com.unir.character.domain.usecase.item.ItemUseCases
 import com.unir.character.domain.usecase.item.SellItemUseCase
-import com.unir.character.domain.usecase.item.UpsertItemToCharacter
+import com.unir.character.domain.usecase.item.AddItemToCharacterUseCase
 import com.unir.character.domain.usecase.skill.FetchSkillsUseCase
 import com.unir.character.domain.usecase.skill.GenerateSkillValues
 import com.unir.character.domain.usecase.skill.SaveSkillsUseCase
@@ -58,7 +59,8 @@ object UseCaseModule {
             saveCharacter = SaveCharacterUseCase(createCharacterUseCase, updateCharacterUseCase),
             deleteCharacter = DeleteCharacterUseCase(characterRepository),
             updateCharacter = UpdateCharacterUseCase(characterRepository),
-            createCharacter = CreateCharacterUseCase(characterRepository, skillUseCase, userUseCase)
+            createCharacter = CreateCharacterUseCase(characterRepository, skillUseCase, userUseCase),
+            getActiveCharacter = GetActiveCharacterIdUseCase(characterRepository)
         )
     }
 
@@ -66,21 +68,25 @@ object UseCaseModule {
     @Singleton
     fun provideItemUseCases(
         itemRepository: ItemRepository,
-        characterRepository: CharacterRepository
+        characterRepository: CharacterRepository,
+        characterUseCase: CharacterUseCases
     ): ItemUseCases {
         return ItemUseCases(
             fetchTemplateItems = FetchTemplateItemsUseCase(itemRepository),
-            getItemsByCharacterId = GetItemsByCharacterId(itemRepository),
-            getItemsBySession = GetItemsBySessionUseCase(itemRepository),
+            getItemsByCharacter = GetItemsByCharacter(itemRepository, characterUseCase),
+            getItemsBySession = GetItemsBySessionUseCase(itemRepository, characterUseCase),
             sellItem = SellItemUseCase(characterRepository, itemRepository),
             destroyItem = DestroyItemUseCase(itemRepository),
-            upsertItemToCharacter = UpsertItemToCharacter(characterRepository, itemRepository)
+            upsertItemToCharacter = AddItemToCharacterUseCase(characterUseCase, itemRepository)
         )
     }
 
+    // !! Las habilidades ya se están inyectando dentro del CHaracter, evitar dependencias circualares.
     @Provides
     @Singleton
-    fun provideSkillUseCases(repository: SkillRepository): SkillUseCases {
+    fun provideSkillUseCases(
+        repository: SkillRepository,
+    ): SkillUseCases {
         return SkillUseCases(
             saveSkills = SaveSkillsUseCase(repository),
             getSkillsFromCharacter = GetSkillsFromCharacterUseCase(repository),
@@ -94,7 +100,10 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideSpellUseCases(spellRepository: SpellRepository): SpellUseCases {
+    fun provideSpellUseCases(
+        spellRepository: SpellRepository,
+        characterUseCase: CharacterUseCases
+    ): SpellUseCases {
         return SpellUseCases(
             getAllSpells = GetAllSpellsUseCase(spellRepository),
             getSpellsByLevelAndRoleClass = GetSpellsByLevelAndRoleClassUseCase(spellRepository)

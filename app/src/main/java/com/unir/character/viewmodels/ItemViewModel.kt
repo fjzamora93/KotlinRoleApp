@@ -30,28 +30,32 @@ class ItemViewModel @Inject constructor(
     val loadingState: StateFlow<Boolean> get() = _loadingState
 
 
-    fun getItemsByCharacterId(characterId: Long) {
+    // AL cargar el itemVIewModel, que se carguen los items directamente
+    init {
+        getItemsByCharacter()
+        getItemsBySession()
+    }
+
+    fun getItemsByCharacter() {
         _loadingState.value = true
         viewModelScope.launch {
-            val result = itemUseCases.getItemsByCharacterId(characterId)
+            val result = itemUseCases.getItemsByCharacter()
             result.onSuccess { items ->
                 _itemsByCharacter.value = items
                 _loadingState.value = false
                 println("Inventario del personaje en el viewModel: ${_itemList.value}")
             }.onFailure {
                 _loadingState.value = false
-                println("Error ${it.message} al obtener los items del personaje con ID $characterId")
+                println("Error ${it.message}")
             }
         }
     }
 
-    fun upsertItemToCharacter(
-        currentCharacter: CharacterEntity,
+    fun addItemToCharacter(
         currentItem: Item,
     ){
         viewModelScope.launch {
-            println("AÑADIENDO ${currentItem.name} AL PERSONAJE: ${currentCharacter.name}")
-            val result = itemUseCases.upsertItemToCharacter(currentCharacter, currentItem)
+            val result = itemUseCases.upsertItemToCharacter(currentItem)
             result.onSuccess { items ->
                 _itemsByCharacter.value = items
                 println("El objeto se ha añadido correctamente")
@@ -81,9 +85,9 @@ class ItemViewModel @Inject constructor(
     }
 
 
-    fun getItemsBySession(sessionId: Int) {
+    fun getItemsBySession() {
         viewModelScope.launch {
-            val result = itemUseCases.getItemsBySession(sessionId)
+            val result = itemUseCases.getItemsBySession()
             result.onSuccess {
                     items ->
                 _itemList.value = items

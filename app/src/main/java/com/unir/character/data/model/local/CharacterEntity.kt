@@ -14,7 +14,7 @@ data class CharacterEntity(
     // DATOS DE USUARIO Y SESIÓN
     @ColumnInfo(name = "userId")
     var userId: Int = 0,
-    var gameSessionId: Int? = null,
+    var gameSessionId: Int = 0,
     var updatedAt: Long = 0L,
 
     // Datos del personaje

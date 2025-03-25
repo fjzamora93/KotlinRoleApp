@@ -24,6 +24,11 @@ class CharacterRepositoryImpl @Inject constructor(
 
     ) : CharacterRepository {
 
+        private lateinit var activeCharacter : CharacterEntity
+
+    override suspend fun getActiveCharacter() : Result<CharacterEntity> {
+        return Result.success(activeCharacter)
+    }
 
     /** Este método hace el fetch en segundo plano, pero la vista no se va a refrescar automáticamente, habría que refrescarla manualmente */
     override suspend fun getCharactersByUserId(userId: Int): Result<List<CharacterEntity>> {
@@ -49,39 +54,42 @@ class CharacterRepositoryImpl @Inject constructor(
                 if (!remoteCharacters.isNullOrEmpty()) {
                     val localCharacters = characterDao.getCharactersByUserId(userId)
                     val localCharacterMap = localCharacters.associateBy { it.id }
+
                     val charactersToInsert = remoteCharacters.filter { remoteCharacter ->
                         val localCharacter = localCharacterMap[remoteCharacter.id]
                         localCharacter == null || remoteCharacter.updatedAt > localCharacter.updatedAt
                     }
 
                     if (charactersToInsert.isNotEmpty()) {
-                        val remoteEntities = charactersToInsert.map { it.toCharacterEntity() }
-                        characterDao.insertAll(remoteEntities)
+                        characterDao.insertAll(charactersToInsert.map { it.toCharacterEntity() })
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e("Error al insertar los remotos en la local", "No se pudieron insertar los personajes", e)
+            Log.e("Error", "No se pudieron sincronizar los personajes", e)
         }
     }
 
 
 
-    /** LOs personajes por id los buscará directamente en el DAO. Si no lo encuentra, levantará una excepción  */
+
     override suspend fun getCharacterById(id: Long): Result<CharacterEntity> {
         return try {
             val character = characterDao.getCharacterById(id) ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
+            activeCharacter = character
+            Log.i("CharacterRepositoryImpl", "Personaje activo: $activeCharacter")
             Result.success(character)
         } catch (e: Exception) {
             Result.failure(e)
         }
-    }
+    } /** LOs personajes por id los buscará directamente en el DAO. Si no lo encuentra, levantará una excepción  */
+
 
     // IMPORTANTE: Añadir siempre las Skills para que lleguen correctamente al backend
     override suspend fun saveCharacter(character: CharacterEntity): Result<CharacterEntity> {
         return try {
-            characterDao.insertCharacter(character)
             val skillsCrossRef = characterDao.getCharacterSkills(character.id)
+            characterDao.updateCharacter(character)
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {

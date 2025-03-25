@@ -62,20 +62,14 @@ fun CharacterInventoryScreen(){
 
 @Composable
 fun CharacterInventoryBody(
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
     itemViewModel: ItemViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-    val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
     val inventoryItems by itemViewModel.itemsByCharacter.collectAsState()
     val isLoading by itemViewModel.loadingState.collectAsState(false)
 
-    LaunchedEffect(currentCharacter?.id) {
-        currentCharacter?.id?.let { id ->
-            itemViewModel.getItemsByCharacterId(id)
-        }
-    }
+
 
     Column(
         modifier = modifier.padding(16.dp),

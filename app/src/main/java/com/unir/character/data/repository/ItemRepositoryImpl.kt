@@ -106,7 +106,7 @@ class ItemRepositoryImpl @Inject constructor(
     }
 
     // Al llamar a este método el updatedAT se fija automáticamente.
-    override suspend fun upsertItemToCharacter(
+    override suspend fun addItemToCharacter(
         characterId: Long,
         item: Item,
         quantity: Int,

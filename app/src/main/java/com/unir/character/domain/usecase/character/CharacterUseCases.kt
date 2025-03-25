@@ -7,5 +7,6 @@ data class CharacterUseCases(
     val saveCharacter: SaveCharacterUseCase,
     val deleteCharacter: DeleteCharacterUseCase,
     val updateCharacter: UpdateCharacterUseCase,
-    val createCharacter: CreateCharacterUseCase
+    val createCharacter: CreateCharacterUseCase,
+    val getActiveCharacter: GetActiveCharacterIdUseCase
 )

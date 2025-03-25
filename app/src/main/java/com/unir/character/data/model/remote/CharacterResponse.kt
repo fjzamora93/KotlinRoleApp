@@ -30,7 +30,7 @@ data class CharacterResponse(
 
 
     val imgUrl: String?,
-    val gameSessionId: Int?,
+    val gameSessionId: Int,
     val roleClass: RoleClassDTO?,
     val items: List<ItemDTO>,
     val skills: List<SkillValue>

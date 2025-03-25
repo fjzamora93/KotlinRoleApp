@@ -51,7 +51,7 @@ fun ItemListBody(
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
-    itemViewModel.getItemsBySession(selectedCharacter!!.gameSessionId!!)
+    itemViewModel.getItemsBySession()
     val items by itemViewModel.itemList.collectAsState()
     Column(
         modifier = modifier.padding(16.dp),
@@ -89,7 +89,7 @@ fun ItemSummary(
                 // Botón de comprar
                 MenuMedievalButton(
                     onClick = {
-                        itemViewModel.upsertItemToCharacter(currentCharacter!!, item)
+                        itemViewModel.addItemToCharacter(item)
                     },
                     modifier = medievalButtonStyleSquare(size = 50.dp),
                     icon = Icons.Default.MonetizationOn,
