@@ -7,7 +7,7 @@ import com.unir.character.domain.repository.CharacterRepository
 import com.unir.character.domain.usecase.character.generateutils.configureCharacterSkills
 import com.unir.character.domain.usecase.character.generateutils.generateStats
 import com.unir.character.domain.usecase.skill.SkillUseCases
-import com.unir.character.ui.screens.skills.PersonalityTestForm
+import com.unir.character.ui.screens.characterform.components.PersonalityTestForm
 import javax.inject.Inject
 
 class CreateCharacterUseCase @Inject constructor(

@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.unir.character.data.model.local.Spell
-import com.di.LocalCharacterViewModel
 import com.ui.components.RegularCard
 import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
@@ -47,7 +46,7 @@ fun CharacterSpellScreen(){
 
 @Composable
 fun CharacterSpellBody(
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
     spellViewModel: SpellViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {

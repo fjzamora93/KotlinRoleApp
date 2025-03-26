@@ -5,7 +5,7 @@ import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.SkillValue
 import com.unir.character.domain.usecase.skill.SkillUseCases
 import com.unir.character.domain.usecase.skill.ValidateSkillValue
-import com.unir.character.ui.screens.skills.PersonalityTestForm
+import com.unir.character.ui.screens.characterform.components.PersonalityTestForm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

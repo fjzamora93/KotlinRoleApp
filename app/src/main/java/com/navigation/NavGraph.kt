@@ -8,19 +8,17 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.unir.character.ui.screens.MainScreen
 import com.unir.character.ui.screens.characterSheet.CharacterListScreen
 import com.unir.character.ui.screens.characterSheet.CharacterDetailScreen
-import com.unir.character.ui.screens.items.CharacterInventoryScreen
+import com.unir.character.ui.screens.items.components.CharacterInventoryScreen
 import com.unir.character.ui.screens.items.ItemListScreen
 import com.unir.character.ui.screens.spells.CharacterSpellScreen
 import com.ui.layout.FontsTemplateScreen
 import com.unir.auth.ui.screens.LoginScreen
 import com.unir.auth.ui.screens.UserProfileScreen
-import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.AuthViewModel
 import com.unir.character.ui.screens.characterform.CharacterEditorScreen
 
@@ -30,11 +28,9 @@ fun NavGraph(
 ) {
     // Proveer instancias GLOBALES en el árbol de composables dentro de NavGraph (la navegación, el usuario, un carrito de la compra... lo que va a ser común)
     val navigationViewModel: NavigationViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-    val characterViewModel: CharacterViewModel = hiltViewModel()
     val authViewModel: AuthViewModel = hiltViewModel()
     CompositionLocalProvider(
         LocalNavigationViewModel provides navigationViewModel,
-        LocalCharacterViewModel provides characterViewModel,
         LocalAuthViewModel provides authViewModel,
     ) {
         // (LAUNCHEDEFECT) Llamamos a la función que va a detectar cualquier eventos de navegación

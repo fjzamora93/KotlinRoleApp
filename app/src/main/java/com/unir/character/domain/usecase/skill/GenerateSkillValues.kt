@@ -1,14 +1,13 @@
 package com.unir.character.domain.usecase.skill
 
 import com.unir.character.data.model.local.CharacterEntity
-import com.unir.character.data.model.local.CharacterSkillCrossRef
 import com.unir.character.data.model.local.Skill
 import com.unir.character.data.model.local.SkillValue
 import com.unir.character.domain.repository.SkillRepository
 import com.unir.character.domain.usecase.character.generateutils.adjustCharacterSkills
 import com.unir.character.domain.usecase.character.generateutils.calculateSkills
 import com.unir.character.domain.usecase.character.generateutils.calculateTestResult
-import com.unir.character.ui.screens.skills.PersonalityTestForm
+import com.unir.character.ui.screens.characterform.components.PersonalityTestForm
 import javax.inject.Inject
 
 class GenerateSkillValues @Inject constructor(private val repository: SkillRepository) {

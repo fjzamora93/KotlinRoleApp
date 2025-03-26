@@ -31,24 +31,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.di.LocalCharacterViewModel
 import com.ui.components.CustomCircularProgressIndicator
 import com.ui.layout.MenuOption
 import com.unir.character.data.model.local.CharacterEntity
-import com.unir.character.ui.screens.characterform.haracterDetail.StatSection
+import com.unir.character.ui.screens.characterSheet.components.StatSection
 import com.unir.character.ui.screens.common.ProgressBarSection
-import com.unir.character.ui.screens.dialogues.CharacterDialog
-import com.unir.character.ui.screens.dialogues.SwitchDialogue
-import com.unir.character.ui.screens.layout.CharacterLayout
-import com.unir.character.ui.screens.skills.SkillSection
+import com.unir.character.ui.screens.common.dialogues.CharacterDialog
+import com.unir.character.ui.screens.common.dialogues.SwitchDialogue
+import com.unir.character.ui.screens.common.layout.CharacterLayout
+import com.unir.character.ui.screens.characterSheet.components.SkillSection
 import com.unir.character.viewmodels.CharacterViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun CharacterDetailScreen(
     characterId : Long,
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
 ){
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -76,7 +76,7 @@ fun CharacterDetailScreen(
 @Composable
 fun DetailCharacterBody(
     character: CharacterEntity,
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
     onClick : () -> Unit = {}
 ) {
     var activeDialog by remember { mutableStateOf<CharacterDialog?>(null) }
@@ -93,9 +93,14 @@ fun DetailCharacterBody(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+
+
             // Armadura (icono a la izquierda, número y texto a la derecha)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.Outlined.Security, contentDescription = "Armadura", Modifier.size(60.dp).clickable { activeDialog = CharacterDialog.Armour  })
+                Icon(imageVector = Icons.Outlined.Security, contentDescription = "Armadura",
+                    Modifier
+                        .size(60.dp)
+                        .clickable { activeDialog = CharacterDialog.Armour })
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(horizontalAlignment = Alignment.Start) {
                     Text(text = "15", style = MaterialTheme.typography.headlineMedium)
@@ -107,7 +112,10 @@ fun DetailCharacterBody(
 
             // INICIATIVA
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.Default.WorkspacePremium, contentDescription = "Iniciativa", Modifier.size(60.dp).clickable { activeDialog = CharacterDialog.Initiative  })
+                Icon(imageVector = Icons.Default.WorkspacePremium, contentDescription = "Iniciativa",
+                    Modifier
+                        .size(60.dp)
+                        .clickable { activeDialog = CharacterDialog.Initiative })
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(horizontalAlignment = Alignment.Start) {
                     Text(text = "+4", fontSize = 20.sp)
@@ -122,6 +130,7 @@ fun DetailCharacterBody(
         ) {
             ProgressBarSection(character = characterState) { updatedCharacter ->
                 characterState = updatedCharacter
+                characterViewModel.saveCharacter(updatedCharacter)
             }
         }
     }

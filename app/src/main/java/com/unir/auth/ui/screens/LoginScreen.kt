@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.di.LocalCharacterViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.ScreensRoutes
@@ -36,7 +36,7 @@ fun LoginScreen() {
 @Composable
 fun LoginBody(
     viewModel: AuthViewModel = LocalAuthViewModel.current,
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current
+    characterViewModel: CharacterViewModel = hiltViewModel()
 ) {
     val userState by viewModel.userState.collectAsState()
     val navigationViewModel = LocalNavigationViewModel.current

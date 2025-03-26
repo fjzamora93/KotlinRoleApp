@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unir.character.data.model.local.CharacterEntity
-import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
@@ -30,10 +29,10 @@ import com.navigation.ScreensRoutes
 import com.ui.components.buttons.MaxWidthButton
 import com.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
-import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.AuthViewModel
 import com.unir.character.data.model.local.Race
 import com.unir.character.data.model.local.RolClass
+import com.unir.character.ui.screens.characterSheet.components.CharacterPortrait
 import com.unir.character.ui.screens.common.BottomDialogueMenu
 
 
@@ -48,7 +47,7 @@ fun CharacterListScreen(){
 
 @Composable
 fun CharacterListBody(
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
     authViewModel: AuthViewModel = LocalAuthViewModel.current,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
 ) {

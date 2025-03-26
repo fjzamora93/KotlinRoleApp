@@ -1,7 +1,7 @@
 package com.unir.character.domain.usecase.character.generateutils
 
 import com.unir.character.data.model.local.CharacterSkillCrossRef
-import com.unir.character.ui.screens.skills.PersonalityTestForm
+import com.unir.character.ui.screens.characterform.components.PersonalityTestForm
 
 
 fun calculateTestResult(

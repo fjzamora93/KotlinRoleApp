@@ -47,6 +47,8 @@ data class CharacterEntity(
     var ap: Int = 1, // calculada a partir de inteligencia, sabiduría o pow
     var currentAp: Int = ap,
 
+    var imgUrl: String = "",
+
     @ColumnInfo(name = "_level")
     var _level: Int = 1,
 
@@ -124,7 +126,7 @@ data class CharacterEntity(
             ap = this.ap,
             currentAp = this.currentAp,
 
-            imgUrl = null,
+            imgUrl = this.imgUrl,
             gameSessionId = this.gameSessionId,
             userId = this.userId,
             roleClass = this.rolClass.name,

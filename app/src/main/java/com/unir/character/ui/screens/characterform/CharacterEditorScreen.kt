@@ -1,5 +1,6 @@
 package com.unir.character.ui.screens.characterform
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,8 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -23,11 +28,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.di.LocalCharacterViewModel
+import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.di.LocalNavigationViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
 import com.ui.components.DefaultColumn
+import com.ui.components.DefaultRow
 import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
 import com.unir.character.data.model.local.CharacterEntity
@@ -35,8 +42,11 @@ import com.unir.character.data.model.local.Race
 import com.unir.character.data.model.local.RolClass
 import com.unir.character.ui.screens.common.DropDownText
 import com.unir.character.ui.screens.common.NumberRangeDropDown
-import com.unir.character.ui.screens.skills.PersonalityTest
-import com.unir.character.ui.screens.skills.PersonalityTestForm
+import com.unir.character.ui.screens.characterform.components.PersonalityTest
+import com.unir.character.ui.screens.characterform.components.PersonalityTestForm
+import com.unir.character.ui.screens.characterform.components.PortraitGridComponent
+import com.unir.character.ui.screens.characterform.components.StatSectionForm
+import com.unir.character.ui.screens.common.dialogues.SwitchDialogue
 import com.unir.character.viewmodels.CharacterViewModel
 
 
@@ -52,7 +62,7 @@ fun CharacterEditorScreen(characterId: Long){
 @Composable
 fun CharacterEditForm(
     characterId: Long = 0,
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
 ) {
     LaunchedEffect(characterId) {
@@ -63,6 +73,7 @@ fun CharacterEditForm(
 
     val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
     var form by remember { mutableStateOf(PersonalityTestForm()) }
+    var isEditingPortrait by remember { mutableStateOf(false) }
 
     var characterToUpdate by remember(characterId) {
         mutableStateOf(
@@ -75,6 +86,36 @@ fun CharacterEditForm(
     }
 
     DefaultColumn {
+
+        if (characterId == 0L) {
+            DefaultRow{
+                Text("Seleccionar Avatar")
+                IconButton(
+                    onClick = { isEditingPortrait = true }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.AccountCircle,
+                        contentDescription = "Seleccionar Avatar"
+                    )
+                }
+
+                if (isEditingPortrait) {
+                    Dialog(onDismissRequest = { isEditingPortrait = false }) {
+                        PortraitGridComponent(
+                            onPortraitSelected = { portraitString ->
+                                characterToUpdate = characterToUpdate.copy(imgUrl = portraitString)
+                                isEditingPortrait = false
+                            },
+                            onBackPressed = { isEditingPortrait = false }
+                        )
+
+                    }
+                }
+
+            }
+        }
+
+
         Row(){
             TextField(
                 value = characterToUpdate.name,
@@ -184,7 +225,7 @@ fun CharacterEditForm(
 @Composable
 fun CharacterEditorFormCOPIASEGURIDAD(
     characterId: Long,
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
 ) {
     LaunchedEffect(characterId) {

@@ -30,8 +30,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.di.LocalCharacterViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.NavigationViewModel
@@ -61,7 +61,7 @@ fun Header(
 fun HeaderBody(
     modifier: Modifier = Modifier,
     onClickMenu : () -> Unit,
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
     sectionTitle: String = "Título de la sección"
 ){
     val activity = LocalContext.current as Activity
@@ -96,7 +96,7 @@ fun HeaderBody(
 @Composable
 fun UserThombnail(
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
     authViewModel: AuthViewModel = LocalAuthViewModel.current
 ){
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()

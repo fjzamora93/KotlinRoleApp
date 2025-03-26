@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.unir.character.data.model.local.Item
-import com.di.LocalCharacterViewModel
 import com.ui.components.buttons.MenuMedievalButton
 import com.ui.components.RegularCard
 import com.ui.components.buttons.BackButton
@@ -47,7 +46,7 @@ fun ItemListScreen(){
 @Composable
 fun ItemListBody(
     itemViewModel: ItemViewModel = hiltViewModel(),
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
@@ -76,7 +75,7 @@ fun ItemListBody(
 fun ItemSummary(
     item: Item,
     itemViewModel: ItemViewModel = hiltViewModel(),
-    characterViewModel: CharacterViewModel = LocalCharacterViewModel.current
+    characterViewModel: CharacterViewModel =hiltViewModel(),
 ) {
 
     RegularCard() {

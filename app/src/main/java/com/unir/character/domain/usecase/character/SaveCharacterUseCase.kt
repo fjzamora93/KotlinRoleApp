@@ -2,9 +2,7 @@ package com.unir.character.domain.usecase.character
 
 import android.util.Log
 import com.unir.character.data.model.local.CharacterEntity
-import com.unir.character.domain.repository.CharacterRepository
-import com.unir.character.domain.usecase.character.generateutils.generateStats
-import com.unir.character.ui.screens.skills.PersonalityTestForm
+import com.unir.character.ui.screens.characterform.components.PersonalityTestForm
 import javax.inject.Inject
 
 

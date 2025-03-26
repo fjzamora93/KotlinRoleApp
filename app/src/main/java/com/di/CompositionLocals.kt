@@ -14,10 +14,6 @@ val LocalNavigationViewModel = compositionLocalOf<NavigationViewModel> {
 }
 
 
-val LocalCharacterViewModel = compositionLocalOf<CharacterViewModel> {
-    error("LocalCharacterViewModel no está disponible. Asegúrate de proporcionarlo.")
-}
-
 
 val LocalAuthViewModel = compositionLocalOf<AuthViewModel> {
     error("No hay usuario disponible en el contexto actual.")

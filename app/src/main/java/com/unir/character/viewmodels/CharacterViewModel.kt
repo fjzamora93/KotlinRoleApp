@@ -3,10 +3,9 @@ package com.unir.character.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unir.auth.viewmodels.UserViewModel
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.domain.usecase.character.CharacterUseCases
-import com.unir.character.ui.screens.skills.PersonalityTestForm
+import com.unir.character.ui.screens.characterform.components.PersonalityTestForm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -79,10 +78,13 @@ class CharacterViewModel @Inject constructor(
     fun getCharacterById(characterId: Long) {
         _loadingState.value = true
         viewModelScope.launch {
+            println("Personaje anterior: ${_selectedCharacter.value}")
             val result = characterUseCases.getCharacterById(characterId)
             result.onSuccess { rolCharacter ->
                 if (rolCharacter != null) {
                     _selectedCharacter.value = rolCharacter
+                    println("Cambiando personaje en uso: ${_selectedCharacter.value}")
+
                 }
                 _loadingState.value = false
                 println("Personaje encontrado: ${rolCharacter?.name}")
