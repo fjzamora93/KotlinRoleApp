@@ -19,11 +19,11 @@ fun calculateSkills(
         // Calculamos el valor según el tag de la habilidad
         var value : Int
         when (skill.tag) {
-            "STR" -> value = character.strength - 2
-            "DEX" -> value = character.dexterity - 2
-            "INT" -> value = character.constitution - 2
-            "CAR" -> value = character.charisma - 2
-            else -> value = 7
+            "STR" -> value = character.strength - 3
+            "DEX" -> value = character.dexterity - 3
+            "INT" -> value = character.constitution - 3
+            "CAR" -> value = character.charisma - 3
+            else -> value = 5
         }
 
         // Creamos el objeto CharacterSkillCrossRef y lo agregamos a la lista
@@ -36,6 +36,8 @@ fun calculateSkills(
         // Agregamos la referencia cruzada a la lista
         skillCrossRefList.add(skillCrossRef)
     }
+
+
 
     // Devolvemos la lista con todas las referencias cruzadas
     return skillCrossRefList

@@ -33,8 +33,11 @@ class GenerateSkillValues @Inject constructor(private val repository: SkillRepos
 
             characterSkillCrossRef = calculateTestResult(
                 form = form,
-                skillCrossRefList = characterSkillCrossRef
+                originalCrossRef = characterSkillCrossRef
             )
+
+
+
             repository.generateSkills(characterSkillCrossRef, character.id)
 
         } catch (e: Exception) {

@@ -21,62 +21,73 @@ import javax.inject.Inject
  *
  *
  * */
-
-
 class ValidateSkillValue @Inject constructor() {
-
-    /**
-     * Realiza la validación de los puntos de habilidades.
-     *
-     * @param character El personaje cuyas habilidades se están validando.
-     * @param skillValues La lista de habilidades con sus valores.
-     * @return Un [Result] que contiene un [SkillValidationResult] con los puntos disponibles y un mensaje de error si la validación falla.
-     */
     suspend operator fun invoke(
         character: CharacterEntity,
         skillValues: List<SkillValue>
     ): Result<SkillValidationResult> {
-        return try {
-            // Calcular los puntos totales a repartir
-            val puntosTotales = calculateTotalPoints(character.level)
+        val correctedSkills = skillValues.toMutableList()
+        val corrections = mutableListOf<String>()
 
-            // Calcular los puntos repartidos
-            val puntosRepartidos = skillValues.sumOf { it.value }
 
-            // Calcular los puntos disponibles
-            val puntosDisponibles = puntosTotales - puntosRepartidos
 
-            // Validar si los puntos repartidos son válidos
-            if (puntosRepartidos <= puntosTotales) {
-                Result.success(SkillValidationResult.Success(puntosDisponibles))
-            } else {
-                Result.success(
-                    SkillValidationResult.Error(
-                    message = "Has excedido el límite de puntos. Te faltan ${-puntosDisponibles} puntos por asignar.",
-                    puntosDisponibles = puntosDisponibles
-                ))
+
+        skillValues.forEachIndexed { index, skillValue ->
+            val originalValue = skillValue.value
+            when {
+                originalValue < 5 -> {
+                    correctedSkills[index] = skillValue.copy(value = 5)
+                    corrections.add("${skillValue.skill.name} ($originalValue → 5)")
+                }
+                originalValue > 15 -> {
+                    correctedSkills[index] = skillValue.copy(value = 15)
+                    corrections.add("${skillValue.skill.name} ($originalValue → 15)")
+                }
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
-    }
 
-    /**
-     * Calcula los puntos totales a repartir basados en el nivel del personaje.
-     *
-     * @param level El nivel del personaje.
-     * @return Los puntos totales a repartir.
-     */
-    private fun calculateTotalPoints(level: Int): Int {
-        return 3 * level + 100 // Fórmula para calcular los puntos totales
-    }
+         if (corrections.isNotEmpty()) {
+             return Result.success(SkillValidationResult.Error(
+                message = "Correcciones: ${corrections.joinToString()}",
+                puntosDisponibles = calculateAvailablePoints(character, correctedSkills),
+                correctedSkills = correctedSkills
+            ))
+        }
 
-    /**
-     * Resultado de la validación.
-     */
-    sealed class SkillValidationResult {
-        data class Success(val puntosDisponibles: Int) : SkillValidationResult()
-        data class Error(val message: String, val puntosDisponibles: Int) : SkillValidationResult()
-    }
 
+
+
+        return Result.success(SkillValidationResult.Success(
+            puntosDisponibles = calculateAvailablePoints(character, skillValues)
+        ))
+    }
 }
+
+/**
+ * Calcula los puntos totales a repartir basados en el nivel del personaje. NO ESTÁN INCLUIDOS LOS PUNTOS DE ARMAS.
+ *
+ * @param level El nivel del personaje.
+ * @return Los puntos totales a repartir.
+ */
+
+
+private fun calculateAvailablePoints(character: CharacterEntity, skillValues: List<SkillValue>): Int {
+    val regularPoints = 175
+    val weaponPoints = 34 // 5 de cada grupo de armas y 14 para el arma principal
+    val totalPoints = 3 * character.level + regularPoints + weaponPoints
+    return totalPoints - skillValues.sumOf { it.value }
+}
+
+/**
+ * Resultado de la validación.
+ */
+sealed class SkillValidationResult {
+    data class Success(val puntosDisponibles: Int) : SkillValidationResult()
+    data class Error(
+        val message: String,
+        val puntosDisponibles: Int,
+        val correctedSkills: List<SkillValue> // Agregamos esta propiedad para pasar las habilidades corregidas
+    ) : SkillValidationResult()
+}
+
+

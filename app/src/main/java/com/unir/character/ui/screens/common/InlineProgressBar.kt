@@ -32,6 +32,8 @@ import com.ui.components.DefaultRow
 @Composable
 fun InlineProgressBar(
     label: String = "",
+    limit: Int = 0,
+    minValue:Int = 0,
     maxValue: Int = 20,
     localValue: Int = 10,
     onValueChanged: (Int) -> Unit
@@ -48,7 +50,10 @@ fun InlineProgressBar(
         )
 
         // 🔹 Botón de restar (-)
-        IconButton(onClick = { if (localValue > 0) onValueChanged(localValue - 1) }) {
+        IconButton(onClick = {
+            if (localValue > minValue) onValueChanged(localValue - 1)
+            else onValueChanged(minValue)
+        }) {
             Icon(imageVector = Icons.Default.Remove, contentDescription = "Restar")
         }
 
@@ -69,8 +74,14 @@ fun InlineProgressBar(
         }
 
         // 🔹 Botón de sumar (+)
-        IconButton(onClick = { if (localValue < maxValue) onValueChanged(localValue + 1) }) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "Sumar")
+        if (limit > 0 ){
+            IconButton(onClick = {
+                if (localValue < maxValue) onValueChanged(localValue + 1)
+                else onValueChanged(maxValue)
+            }) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Sumar")
+            }
         }
+
     }
 }

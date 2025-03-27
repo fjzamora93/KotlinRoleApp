@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.CharacterSkillCrossRef
 import com.unir.character.data.model.local.Skill
@@ -27,10 +28,10 @@ interface CharacterDao {
     @Update
     suspend fun updateCharacter(character: CharacterEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertCharacter(character: CharacterEntity) : Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertAll(characters: List<CharacterEntity>)
 
     @Delete
@@ -49,7 +50,7 @@ interface CharacterDao {
 
     /** TRANSACCIÓN ÚNICA PARA INSERTAR UN PERSONAJE CON SUS HABILIDADES */
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertCharacterSkills(skills: List<CharacterSkillCrossRef>)
 
     @Transaction

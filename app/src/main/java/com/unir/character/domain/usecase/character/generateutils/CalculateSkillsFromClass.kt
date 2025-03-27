@@ -8,20 +8,23 @@ fun adjustCharacterSkills(
     character: CharacterEntity, skillCrossRefList: List<CharacterSkillCrossRef>
 ) : List<CharacterSkillCrossRef>  {
 
-    var n : Int = 2
+    var minus : Int = 4
+    var plus : Int = 2
 
     when (character.rolClass) {
 
         RolClass.WARRIOR, RolClass.BARBARIAN -> {
             skillCrossRefList.forEach { skillCrossRef ->
                 when (skillCrossRef.skillId) {
-                    13 -> skillCrossRef.value -= n // CURACIÓN
-                    14 -> skillCrossRef.value -= n // PERCEPCIÓN
-                    15 -> skillCrossRef.value -= n // MITOS Y LEYENDA
+                    13 -> skillCrossRef.value -= minus // CURACIÓN
+                    14 -> skillCrossRef.value -= minus // PERCEPCIÓN
+                    15 -> skillCrossRef.value -= minus // MITOS Y LEYENDA
+                    10 -> skillCrossRef.value -= minus // SIGILO
 
-                    1 -> skillCrossRef.value += n // SUPERVIVENCIA
-                    5 -> skillCrossRef.value += n // Intimidar
-                    3 -> skillCrossRef.value += n // Atletismo
+
+                    1 -> skillCrossRef.value += plus // SUPERVIVENCIA
+                    5 -> skillCrossRef.value += plus // Intimidar
+                    3 -> skillCrossRef.value += plus // Atletismo
                     else -> {} // Otras habilidades se mantienen igual
                 }
             }
@@ -31,13 +34,14 @@ fun adjustCharacterSkills(
             // Paladín (fuerza, magia y carisma)
             skillCrossRefList.forEach { skillCrossRef ->
                 when (skillCrossRef.skillId) {
-                    6 -> skillCrossRef.value -= n // ACROBACIAS
-                    9 -> skillCrossRef.value -= n // ESQUIVAR
-                    10 -> skillCrossRef.value -= n // SIGILO
+                    6 -> skillCrossRef.value -= minus // ACROBACIAS
+                    9 -> skillCrossRef.value -= minus // ESQUIVAR
+                    10 -> skillCrossRef.value -= minus // SIGILO
+                    12 -> skillCrossRef.value -= minus // NATURALEZA
 
-                    14 -> skillCrossRef.value += n // SUPERVIVENCIA
-                    18 -> skillCrossRef.value += n // Intimidar
-                    3 -> skillCrossRef.value += n // Atletismo
+                    14 -> skillCrossRef.value += plus // SUPERVIVENCIA
+                    18 -> skillCrossRef.value += plus // Intimidar
+                    3 -> skillCrossRef.value += plus // Atletismo
                     else -> {}
                 }
             }
@@ -47,13 +51,16 @@ fun adjustCharacterSkills(
             // Bardo (carisma, magia y habilidades sociales)
             skillCrossRefList.forEach { skillCrossRef ->
                 when (skillCrossRef.skillId) {
-                    17 -> skillCrossRef.value += n // INTERPRETAR
-                    8 -> skillCrossRef.value += n // DEDOS ÁGILES
-                    9 -> skillCrossRef.value += n // ESQUIVAR
+                    17 -> skillCrossRef.value += plus // INTERPRETAR
+                    8 -> skillCrossRef.value += plus // DEDOS ÁGILES
+                    9 -> skillCrossRef.value += plus // ESQUIVAR
 
-                    3 -> skillCrossRef.value -= n // ATLETISMO
-                    10 -> skillCrossRef.value -= n // SIGILO
-                    1 -> skillCrossRef.value -= n // SUPERVIVENCIA
+
+                    3 -> skillCrossRef.value -= minus // ATLETISMO
+                    10 -> skillCrossRef.value -= minus // SIGILO
+                    1 -> skillCrossRef.value -= minus // SUPERVIVENCIA
+                    7 -> skillCrossRef.value -= minus // PESCA Y CAZA
+
                     else -> {}
                 }
             }
@@ -63,13 +70,14 @@ fun adjustCharacterSkills(
             // Pícaro (sigilo, destreza, manipulación)
             skillCrossRefList.forEach { skillCrossRef ->
                 when (skillCrossRef.skillId) {
-                    10 -> skillCrossRef.value += n // Sigilo (clave para pícaro)
-                    8 -> skillCrossRef.value += n // DEDOS ÁGILES
-                    16 -> skillCrossRef.value += n // ENGAÑAR
+                    10 -> skillCrossRef.value += plus // Sigilo (clave para pícaro)
+                    8 -> skillCrossRef.value += plus // DEDOS ÁGILES
+                    16 -> skillCrossRef.value += plus // ENGAÑAR
 
-                    13 -> skillCrossRef.value -= n // CURACIÓN
-                    11 -> skillCrossRef.value -= n // ALERTA
-                    1 -> skillCrossRef.value -= n // SUPERVIVENCIA
+                    13 -> skillCrossRef.value -= minus // CURACIÓN
+                    11 -> skillCrossRef.value -= minus // ALERTA
+                    1 -> skillCrossRef.value -= minus // SUPERVIVENCIA
+                    15 -> skillCrossRef.value -= minus // MITOS Y LEYENDA
                     else -> {}
                 }
             }
@@ -79,13 +87,14 @@ fun adjustCharacterSkills(
             // Explorador (habilidades físicas y de supervivencia)
             skillCrossRefList.forEach { skillCrossRef ->
                 when (skillCrossRef.skillId) {
-                    7 -> skillCrossRef.value += n // PESCA Y CAZA
-                    1 -> skillCrossRef.value += n // SUPERVIVENCIA
-                    11 -> skillCrossRef.value += n // ALERTA
+                    7 -> skillCrossRef.value += plus // PESCA Y CAZA
+                    1 -> skillCrossRef.value += plus // SUPERVIVENCIA
+                    11 -> skillCrossRef.value += plus // ALERTA
 
-                    19 -> skillCrossRef.value -= n // NEGOCIAR
-                    16 -> skillCrossRef.value -= n // ENGAÑAR
-                    15 -> skillCrossRef.value -= n // MITOS Y LEYENDA
+                    19 -> skillCrossRef.value -= minus // NEGOCIAR
+                    16 -> skillCrossRef.value -= minus // ENGAÑAR
+                    15 -> skillCrossRef.value -= minus // MITOS Y LEYENDA
+                    13 -> skillCrossRef.value -= minus // CURACIÓN
 
                     else -> {}
                 }
@@ -96,13 +105,14 @@ fun adjustCharacterSkills(
             // Clérigo (magia, curación y carisma)
             skillCrossRefList.forEach { skillCrossRef ->
                 when (skillCrossRef.skillId) {
-                    1 -> skillCrossRef.value -= n // SUPERVIVENCIA
-                    6 -> skillCrossRef.value -= n // ACROBACIAS
-                    10 -> skillCrossRef.value -= n // SIGILO
+                    1 -> skillCrossRef.value -= minus // SUPERVIVENCIA
+                    6 -> skillCrossRef.value -= minus // ACROBACIAS
+                    10 -> skillCrossRef.value -= minus // SIGILO
+                    19 -> skillCrossRef.value -= minus // NEGOCIAR
 
-                    13 -> skillCrossRef.value += n // CURACIÓN
-                    14 -> skillCrossRef.value += n // PERCEPCIÓN
-                    15 -> skillCrossRef.value += n // MITOS Y LEYENDAS
+                    13 -> skillCrossRef.value += plus // CURACIÓN
+                    14 -> skillCrossRef.value += plus // PERCEPCIÓN
+                    15 -> skillCrossRef.value += plus // MITOS Y LEYENDAS
 
                     else -> {}
                 }
@@ -115,13 +125,14 @@ fun adjustCharacterSkills(
             // Hechicero (magia, carisma)
             skillCrossRefList.forEach { skillCrossRef ->
                 when (skillCrossRef.skillId) {
-                    10 -> skillCrossRef.value -= n // sigilo
-                    6 -> skillCrossRef.value -= n // ACROBACIAS
-                    3 -> skillCrossRef.value -= n // atletismo
+                    10 -> skillCrossRef.value -= minus // sigilo
+                    6 -> skillCrossRef.value -= minus // ACROBACIAS
+                    3 -> skillCrossRef.value -= minus // atletismo
+                    19 -> skillCrossRef.value -= minus // NEGOCIAR
 
-                    11 -> skillCrossRef.value += n // ALERTA
-                    14 -> skillCrossRef.value += n // PERCEPCIÓN
-                    15 -> skillCrossRef.value += n // MITOS Y LEYENDAS
+                    11 -> skillCrossRef.value += plus // ALERTA
+                    14 -> skillCrossRef.value += plus // PERCEPCIÓN
+                    15 -> skillCrossRef.value += plus // MITOS Y LEYENDAS
                     else -> {}
                 }
             }
@@ -132,13 +143,14 @@ fun adjustCharacterSkills(
             // Druida (magia, naturaleza)
             skillCrossRefList.forEach { skillCrossRef ->
                 when (skillCrossRef.skillId) {
-                    2 -> skillCrossRef.value -= n // ARTESANÍA
-                    6 -> skillCrossRef.value -= n // ACROBACIAS
-                    19 -> skillCrossRef.value -= n // PESCA Y CAZA
+                    2 -> skillCrossRef.value -= minus // ARTESANÍA
+                    6 -> skillCrossRef.value -= minus // ACROBACIAS
+                    19 -> skillCrossRef.value -= minus // PESCA Y CAZA
+                    16 -> skillCrossRef.value -= minus // ENGAÑAR
 
-                    7 -> skillCrossRef.value += n // PESCA Y CAZA
-                    13 -> skillCrossRef.value += n // curación
-                    12 -> skillCrossRef.value += n // naturaleza
+                    7 -> skillCrossRef.value += plus // PESCA Y CAZA
+                    13 -> skillCrossRef.value += plus // curación
+                    12 -> skillCrossRef.value += plus // naturaleza
                     else -> {}
                 }
             }

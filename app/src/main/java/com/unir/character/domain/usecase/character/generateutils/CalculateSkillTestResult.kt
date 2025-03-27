@@ -6,268 +6,98 @@ import com.unir.character.ui.screens.characterform.components.PersonalityTestFor
 
 fun calculateTestResult(
     form: PersonalityTestForm,
-    skillCrossRefList: List<CharacterSkillCrossRef> // Lista donde se almacenan las referencias cruzadas
-): List<CharacterSkillCrossRef> {
-    var n: Int = 3
+    originalCrossRef: List<CharacterSkillCrossRef>
+): MutableList<CharacterSkillCrossRef> {
+    val n = 4
 
-    // Combat Style (responde a habilidades relacionadas con combate, STR, DEX)
-    when (form.combatStyle) {
-        "Combate a distancia" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 21 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-        }
-        "Dagas, cuchillos y espadas cortas" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 22 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-        }
-        "Lanzas, varas largas o guadañas" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 23 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-        }
-        "Armas pesadas como mazas o martillos" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 24 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-        }
-        "Espadas" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 25 }
-            skillCrossRef?.let {
-                it.value += n
+    // Creamos una copia mutable de la lista original para hacer modificaciones
+    val skillCrossRefList = originalCrossRef.toMutableList()
+    val skillMap = skillCrossRefList.associateBy { it.skillId }.toMutableMap()
+
+    fun modifySkill(skillId: Int, newValue: Int? = null, delta: Int = 0, divideByTwo: Boolean = false) {
+        skillMap[skillId]?.apply {
+            when {
+                newValue != null -> value = newValue // Asignación directa si se especifica
+                divideByTwo -> value /= 2
+                else -> value += delta
             }
         }
     }
 
-    // Sociability (relacionado con Carisma (CAR))
-    when (form.sociability) {
-        "No confío ni siquiera en mi sombra" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 16 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-        }
-        "Me encanta dramatizar, ¿a quién no?" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 17 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-        }
-        "Diplomacia ante todo" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 18 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-        }
+    // Mapa de estilos de combate (ID de habilidad por estilo)
+    val combatSkills = mapOf(
+        "Combate a distancia" to 21,
+        "Dagas, cuchillos y espadas cortas" to 22,
+        "Lanzas, varas largas o guadañas" to 23,
+        "Armas pesadas como mazas o martillos" to 24,
+        "Espadas" to 25
+    )
 
-        "Lo mío es la seducción" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 20 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-        }
-        // INTIMIDAR - Bajamos todas las que no son INTIMIDAR
-        "¿Hablar? Mejor partirles la boca" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 5 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-
-            (16..18).forEach { skillId ->
-                val skillCrossRef = skillCrossRefList.find { it.skillId == skillId }
-                skillCrossRef?.let {
-                    it.value /= 2
-                }
-            }
-        }
+    // 1. Primero establecemos TODAS las habilidades de combate a 7
+    combatSkills.values.forEach { skillId ->
+        modifySkill(skillId, newValue = 5)
     }
 
-    // Hobbies (relacionado con habilidades de DEX y posiblemente INT)
-    when (form.hobbies) {
-        "Estoy en contacto con la naturaleza" -> {
-            val skillCrossRef1 = skillCrossRefList.find { it.skillId == 1 }
-            skillCrossRef1?.let {
-                it.value += n
-            }
-            val skillCrossRef12 = skillCrossRefList.find { it.skillId == 12 }
-            skillCrossRef12?.let {
-                it.value += n
-            }
-        }
-        "Me gusta crear mis propias herramientas" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 2}
-            skillCrossRef?.let {
-                it.value += n
-            }
-        }
-        "Procuro mantener mi cuerpo activo" -> {
-            val skillCrossRef3 = skillCrossRefList.find { it.skillId == 3 }
-            skillCrossRef3?.let {
-                it.value += n
-            }
-        }
-
-        "Soy una rata de biblioteca" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 15 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-
-        }
-        "Intento estar siempre rodeado de gente" -> {
-            val skillCrossRef = skillCrossRefList.find { it.skillId == 20 }
-            skillCrossRef?.let {
-                it.value += n
-            }
-            val skillCrossRef18 = skillCrossRefList.find { it.skillId == 18 }
-            skillCrossRef18?.let {
-                it.value += n
-            }
-        }
+    // 2. Luego establecemos la habilidad seleccionada a 14
+    combatSkills[form.combatStyle]?.let { selectedSkillId ->
+        modifySkill(selectedSkillId, newValue = 14)
     }
 
-    // Afraid (relacionado con habilidades de STR, DEX, CAR, etc.)
-    when (form.afraid) {
-        "No me gustan las criaturas más grandes que yo" -> {
-            // Reducción de habilidades relacionadas con supervivencia y fuerza
-            val survivalSkill = skillCrossRefList.find { it.skillId == 1 }
-            survivalSkill?.let {
-                it.value -= n
-            }
+    // Resto de la lógica original (sociability, hobbies, etc.)
+    // Sociability
+    val sociabilitySkills = mapOf(
+        "No confío ni siquiera en mi sombra" to 16,
+        "Me encanta dramatizar, ¿a quién no?" to 17,
+        "Diplomacia ante todo" to 18,
+        "Lo mío es la seducción" to 20
+    )
+    sociabilitySkills[form.sociability]?.let { modifySkill(it, delta = n) }
 
-            val natureSkill = skillCrossRefList.find { it.skillId == 12 }
-            natureSkill?.let {
-                it.value -= n
-            }
-        }
-
-        "El agua... de hecho no sé nadar" -> {
-            // Reducción de habilidades relacionadas con agua y combate
-            val swimmingSkill = skillCrossRefList.find { it.skillId == 4 }
-            swimmingSkill?.let {
-                it.value /= 2
-            }
-
-            val intimidateSkill = skillCrossRefList.find { it.skillId == 5 } // Intimidar
-            intimidateSkill?.let {
-                it.value -= n
-            }
-        }
-
-        "Odio al mundo y socializar con otras personas" -> {
-            (16..20).forEach { skillId ->
-                val skillCrossRef = skillCrossRefList.find { it.skillId == skillId }
-                skillCrossRef?.let {
-                    it.value /= 2
-                }
-            }
-        }
-
-        "No me gusta el combate, estoy siempre lo más alejado posible" -> {
-            // Reducción de habilidades de combate
-            val athleticsSkill = skillCrossRefList.find { it.skillId == 3 } // Atletismo
-            athleticsSkill?.let {
-                it.value -= n
-            }
-
-            val intimidateSkill = skillCrossRefList.find { it.skillId == 5 } // Intimidar
-            intimidateSkill?.let {
-                it.value -= n
-            }
-
-            for (skillId in 22..25) {
-                val skill = skillCrossRefList.find { it.skillId == skillId }
-                skill?.let {
-                    it.value /= 2
-                }
-            }
-
-            val esquivarSkill = skillCrossRefList.find { it.skillId == 9 } // Atletismo
-            esquivarSkill?.let {
-                it.value += n
-            }
-
-        }
-
-        "Soy algo torpe. Muy torpe." -> {
-            for (skillId in 6..8) {
-                val skill = skillCrossRefList.find { it.skillId == skillId }
-                skill?.let {
-                    it.value -= n
-                }
-            }
-        }
+    if (form.sociability == "¿Hablar? Mejor partirles la boca") {
+        modifySkill(5, delta = n)
+        (16..18).forEach { modifySkill(it, divideByTwo = true) }
     }
 
+    // Hobbies
+    val hobbiesSkills = mapOf(
+        "Estoy en contacto con la naturaleza" to listOf(1, 12),
+        "Me gusta crear mis propias herramientas" to listOf(2),
+        "Procuro mantener mi cuerpo activo" to listOf(3),
+        "Soy una rata de biblioteca" to listOf(15),
+        "Intento estar siempre rodeado de gente" to listOf(18, 20)
+    )
+    hobbiesSkills[form.hobbies]?.forEach { modifySkill(it, delta = n) }
 
-    // Proficiency (relacionado con habilidades pasivas, tal vez DEX, INT o CAR)
-    when (form.proeficiency) {
-        // "Puedo pasar inadvertido en cualquier lugar"
-        "Puedo pasar inadvertido en cualquier lugar" -> {
-            // Modificar habilidades relacionadas con el sigilo o la evasión
-            val stealthSkill = skillCrossRefList.find { it.skillId == 10 } // Sigilo (CAR)
-            stealthSkill?.let {
-                it.value += n  // Aumentar habilidad de sigilo
-            }
-
-        }
-
-        // "Tengo un don natural para realizar sanaciones"
-        "Tengo un don natural para realizar sanaciones" -> {
-            // Aumentar habilidad de curación
-            val healingSkill = skillCrossRefList.find { it.skillId == 13 } // Curación (INT)
-            healingSkill?.let {
-                it.value += n  // Aumentar habilidad de curación
-            }
-
-            val combatSkill = skillCrossRefList.find { it.skillId == 5 } // Intimidar (FUE)
-            combatSkill?.let {
-                it.value -= n
-            }
-        }
-
-        // "Siempre alerta, nunca desprevenido"
-        "Siempre alerta, nunca desprevenido" -> {
-            // Aumentar habilidad de alerta
-            val alertSkill = skillCrossRefList.find { it.skillId == 11 } // Alerta (INT)
-            alertSkill?.let {
-                it.value += n  // Aumentar habilidad de alerta
-            }
-
-        }
-
-        // "Estoy atento a los detalles, no se me escapa nada"
-        "Estoy atento a los detalles, no se me escapa nada" -> {
-            // Aumentar habilidad de percepción
-            val perceptionSkill = skillCrossRefList.find { it.skillId == 14 } // Percepción (INT)
-            perceptionSkill?.let {
-                it.value += n  // Aumentar habilidad de percepción
-            }
-
-        }
-
-        // "Me basto y me sobro con mi belleza"
-        "Me basto y me sobro con mi belleza" -> {
-            // Aumentar habilidades relacionadas con el carisma
-            val seductionSkill = skillCrossRefList.find { it.skillId == 20 } // Seducir (CAR)
-            seductionSkill?.let {
-                it.value += n
-            }
-
-            // Reducir habilidades relacionadas con la agresividad
-            val intimidateSkill = skillCrossRefList.find { it.skillId == 5 }
-            intimidateSkill?.let {
-                it.value /= 2
-            }
-        }
+    // Afraid
+    val afraidModifications = mapOf(
+        "No me gustan las criaturas más grandes que yo" to listOf(1 to -n, 12 to -n),
+        "El agua... de hecho no sé nadar" to listOf(4 to 0, 5 to -n),
+        "Odio al mundo y socializar con otras personas" to (16..20).map { it to 0 },
+        "No me gusta el combate, estoy siempre lo más alejado posible" to
+                (listOf(3 to -n, 5 to -n, 9 to n) + (22..25).map { it to 0 }),
+        "Soy algo torpe. Muy torpe." to (6..8).map { it to -n }
+    )
+    afraidModifications[form.afraid]?.forEach { (skillId, delta) ->
+        modifySkill(skillId, delta = delta, divideByTwo = delta == 0)
     }
 
+    // Proficiency
+    val proficiencySkills = mapOf(
+        "Puedo pasar inadvertido en cualquier lugar" to 10,
+        "Tengo un don natural para realizar sanaciones" to 13,
+        "Siempre alerta, nunca desprevenido" to 11,
+        "Estoy atento a los detalles, no se me escapa nada" to 14,
+        "Me basto y me sobro con mi belleza" to 20
+    )
+    proficiencySkills[form.proeficiency]?.let { modifySkill(it, delta = n) }
 
-    // Devolvemos la lista con las referencias cruzadas modificadas
+    // REDUCE INTIMIDACIÓN
+    if (form.proeficiency == "Tengo un don natural para realizar sanaciones") {
+        modifySkill(5, delta = -n)
+    }
+    if (form.proeficiency == "Me basto y me sobro con mi belleza") {
+        modifySkill(5, divideByTwo = true)
+    }
+
     return skillCrossRefList
 }

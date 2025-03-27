@@ -28,8 +28,18 @@ fun configureCharacterSkills(
     // Modificamos las skills con el test de personalidad
     characterSkillCrossRef = calculateTestResult(
         form = form,
-        skillCrossRefList = characterSkillCrossRef
+        originalCrossRef = characterSkillCrossRef
     )
+
+    characterSkillCrossRef.forEach { skill ->
+        if (skill.value < 5) {
+            skill.value = 5
+        }
+
+        if (skill.value > 14) {
+            skill.value = 14
+        }
+    }
 
     return characterSkillCrossRef
 }

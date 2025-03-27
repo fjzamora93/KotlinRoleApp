@@ -18,36 +18,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ui.components.DefaultRow
-
 @Composable
 fun InlineStat(
     localValue: Int = 10,
-    label : String,
-    modifier: Modifier = Modifier
-){
-
+    label: String,
+    modifier: Modifier = Modifier.padding(bottom = 8.dp)
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Box(
             modifier = Modifier
                 .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
                 .padding(6.dp)
         ) {
-            Text(
-                text = "$localValue",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Text("$localValue", style = MaterialTheme.typography.bodyMedium)
         }
-        Spacer(modifier = Modifier.width(16.dp))
 
-        // Texto con el label y el valor actual
+        Spacer(Modifier.width(8.dp))
+
         Text(
-            text = "$label",
+            text = label,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = modifier
+            modifier = Modifier.weight(1f)
         )
-
-
+    }
 }
 
 

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.unir.character.data.model.local.Spell
 
 @Dao
@@ -20,10 +21,10 @@ interface SpellDao {
     @Query("SELECT * FROM spellTable WHERE id = :id")
     suspend fun getSpellById(id: String): Spell?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertSpell(spell: Spell)
 
-    @Update
+    @Upsert
     suspend fun updateSpell(spell: Spell)
 
     @Delete

@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.CharacterSkillCrossRef
 import com.unir.character.data.model.local.Skill
@@ -19,7 +20,7 @@ interface SkillDao {
     suspend fun getSkills(): List<Skill>
 
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE) // Ignora si ya existe
+    @Upsert
     suspend fun insertSkill(skill: Skill): Long
 
     @Update
@@ -38,7 +39,7 @@ interface SkillDao {
 
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertCharacterSkills(skills: List<CharacterSkillCrossRef>)
 
     @Transaction
