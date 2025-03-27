@@ -22,39 +22,10 @@ import javax.inject.Inject
  *
  * */
 class ValidateSkillValue @Inject constructor() {
-    suspend operator fun invoke(
+     operator fun invoke(
         character: CharacterEntity,
         skillValues: List<SkillValue>
     ): Result<SkillValidationResult> {
-        val correctedSkills = skillValues.toMutableList()
-        val corrections = mutableListOf<String>()
-
-
-
-
-        skillValues.forEachIndexed { index, skillValue ->
-            val originalValue = skillValue.value
-            when {
-                originalValue < 5 -> {
-                    correctedSkills[index] = skillValue.copy(value = 5)
-                    corrections.add("${skillValue.skill.name} ($originalValue → 5)")
-                }
-                originalValue > 15 -> {
-                    correctedSkills[index] = skillValue.copy(value = 15)
-                    corrections.add("${skillValue.skill.name} ($originalValue → 15)")
-                }
-            }
-        }
-
-         if (corrections.isNotEmpty()) {
-             return Result.success(SkillValidationResult.Error(
-                message = "Correcciones: ${corrections.joinToString()}",
-                puntosDisponibles = calculateAvailablePoints(character, correctedSkills),
-                correctedSkills = correctedSkills
-            ))
-        }
-
-
 
 
         return Result.success(SkillValidationResult.Success(

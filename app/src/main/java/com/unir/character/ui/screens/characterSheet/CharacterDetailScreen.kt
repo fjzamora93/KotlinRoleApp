@@ -145,7 +145,6 @@ fun DetailCharacterBody(
     StatSection(
         editableCharacter = character,
         onCharacterChange = {
-            characterViewModel.saveCharacter(it)
         }
     )
 

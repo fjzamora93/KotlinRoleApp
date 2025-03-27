@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
+import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -61,7 +63,7 @@ fun SkillSection(
     DefaultRow {
 
         Text(
-            text = "Puntos de habilidad disponibles: $pointsAvailable",
+            text = "Puntos disponibles: $pointsAvailable",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -89,11 +91,21 @@ fun SkillSection(
 
 
             Column(
-                modifier = Modifier.weight(1f).padding(end = 4.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 4.dp)
             ) {
                 Text(text = "Físicas", style= MaterialTheme.typography.titleSmall)
 
-                skillList.filter { it.skill.tag == "STR" }.forEach { skill ->
+                skillList.filter { it.skill.tag == "STR" }.forEachIndexed() { index, skill ->
+//                    if (pointsAvailable > 0) {
+//                        IconButton(onClick = { skillViewModel.updateSkillValue(index, skill.value + 1, editableCharacter) }) {
+//                            Icon(
+//                                imageVector = Icons.Default.Add,
+//                                contentDescription = "Incrementar"
+//                            )
+//                        }
+//                    }
                     InlineStat(
                         localValue = skill.value,
                         label = skill.skill.name.split("(")[0],
@@ -106,7 +118,9 @@ fun SkillSection(
 
             // Columna DES
             Column(
-                modifier = Modifier.weight(1f).padding(start = 30.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 30.dp)
             ) {
                 Text(text = "Habilidad", style= MaterialTheme.typography.titleSmall)
 
@@ -120,7 +134,9 @@ fun SkillSection(
         }
 
         Divider(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             color = Color.Gray,
             thickness = 1.dp
         )
@@ -136,16 +152,23 @@ fun SkillSection(
 
 
             Column(
-                modifier = Modifier.weight(1f).padding(end = 4.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 4.dp)
             ) {
                 Text(text = "Conocimiento", style= MaterialTheme.typography.titleSmall)
 
-                skillList.filter { it.skill.tag == "INT" }.forEach { skill ->
-                    InlineStat(
-                        localValue = skill.value,
-                        label = skill.skill.name.split("(")[0],
-                    )
+                skillList.filter { it.skill.tag == "INT" }.forEachIndexed { index, skill ->
+                    Row(verticalAlignment = Alignment.CenterVertically){
 
+
+                        InlineStat(
+                            localValue = skill.value,
+                            label = skill.skill.name.split("(")[0],
+                        )
+
+
+                    }
                 }
             }
 
@@ -154,7 +177,9 @@ fun SkillSection(
 
             // Columna DES
             Column(
-                modifier = Modifier.weight(1f).padding(start = 30.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 30.dp)
             ) {
                 Text(text = "Sociales", style= MaterialTheme.typography.titleSmall)
 
@@ -167,18 +192,18 @@ fun SkillSection(
             }
         }
 
-        Column(
-            modifier = Modifier.padding(start = 30.dp)
-        ) {
-            Text(text = "Combate", style= MaterialTheme.typography.titleSmall)
-
-            skillList.filter { it.skill.tag == "COMBAT" }.forEach { skill ->
-                InlineStat(
-                    localValue = skill.value,
-                    label = skill.skill.name.split("(")[0],
-                )
-            }
-        }
+//        Column(
+//            modifier = Modifier.padding(start = 30.dp)
+//        ) {
+//            Text(text = "Combate", style= MaterialTheme.typography.titleSmall)
+//
+//            skillList.filter { it.skill.tag == "COMBAT" }.forEach { skill ->
+//                InlineStat(
+//                    localValue = skill.value,
+//                    label = skill.skill.name.split("(")[0],
+//                )
+//            }
+//        }
 
 
 

@@ -34,7 +34,6 @@ class SkillViewModel @Inject constructor(
 
     init {
         fetchSkills()
-
     }
 
     fun getSkillsFromCharacter(character: CharacterEntity) {
@@ -78,7 +77,6 @@ class SkillViewModel @Inject constructor(
                     is SkillValidationResult.Error -> {
                         _isValid.value = false
                         _errorMessage.value = validationResult.message
-                        // Actualizar la lista con los valores corregidos
                         _skillList.value = validationResult.correctedSkills
 
                         // Recalcular puntos disponibles
@@ -91,9 +89,12 @@ class SkillViewModel @Inject constructor(
             }
         }
     }
-    fun updateSkillValue(index: Int, newValue: Int) {
+
+    // Recibe un índice
+    fun updateSkillValue(index: Int, newValue: Int, character:CharacterEntity) {
         _skillList.value = _skillList.value.toMutableList().apply {
             this[index] = this[index].copy(value = newValue)
+            updateSkills(character, this)
         }
     }
 
