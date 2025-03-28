@@ -1,4 +1,4 @@
-package com.unir.auth.ui.screens
+package com.unir.auth.ui.screens.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

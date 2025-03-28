@@ -1,6 +1,5 @@
 package com.unir.character.ui.screens.characterform
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,8 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.di.LocalNavigationViewModel
 import com.navigation.NavigationViewModel
 import com.navigation.ScreensRoutes
-import com.ui.components.DefaultColumn
-import com.ui.components.DefaultRow
+import com.ui.components.common.DefaultColumn
+import com.ui.components.common.DefaultRow
 import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
 import com.unir.character.data.model.local.CharacterEntity
@@ -46,7 +45,6 @@ import com.unir.character.ui.screens.characterform.components.PersonalityTest
 import com.unir.character.ui.screens.characterform.components.PersonalityTestForm
 import com.unir.character.ui.screens.characterform.components.PortraitGridComponent
 import com.unir.character.ui.screens.characterform.components.StatSectionForm
-import com.unir.character.ui.screens.common.dialogues.SwitchDialogue
 import com.unir.character.viewmodels.CharacterViewModel
 
 

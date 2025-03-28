@@ -1,4 +1,4 @@
-package com.ui.components
+package com.ui.components.common
 
 
 import androidx.compose.material3.Text

@@ -35,10 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 import com.di.LocalNavigationViewModel
-import com.navigation.ScreensRoutes
 import com.ui.layout.MainLayout
 import com.unir.sheet.R
-import com.ui.theme.MedievalColours
 
 @Composable
 fun MainScreen() {
@@ -95,17 +93,16 @@ fun MainScreenBody(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Botón para iniciar
+        // Botón para ROMPER la aplicación
         Button(
-            onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterListScreen.route)  },
+            onClick = { throw Exception("Rompemos la app!")  },
             colors = ButtonDefaults.buttonColors(
-                MedievalColours.Bronze,
-                MedievalColours.WoodenDark
+                Color.Red
             ),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            Text("¡Comenzar aventura!")
+            Text("¡ROMPER APLICACIÓN!", style= MaterialTheme.typography.bodyLarge.copy(color = Color.White))
         }
 
         Spacer(modifier = Modifier.height(24.dp))

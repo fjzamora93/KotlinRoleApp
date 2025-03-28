@@ -21,7 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.unir.character.data.model.local.Item
 import com.ui.components.buttons.MenuMedievalButton
-import com.ui.components.RegularCard
+import com.ui.components.common.RegularCard
 import com.ui.components.buttons.BackButton
 import com.ui.components.buttons.medievalButtonStyleSquare
 import com.ui.layout.MainLayout

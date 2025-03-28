@@ -35,7 +35,7 @@ import com.navigation.ScreensRoutes
 
 import com.unir.character.data.model.local.Item
 import com.ui.components.buttons.CustomIconButton
-import com.ui.components.RegularCard
+import com.ui.components.common.RegularCard
 import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
 

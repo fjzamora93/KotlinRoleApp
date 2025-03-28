@@ -15,9 +15,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
 import com.navigation.ScreensRoutes
-import com.ui.components.CustomCircularProgressIndicator
+import com.ui.components.common.CustomCircularProgressIndicator
 import com.ui.components.buttons.BackButton
 import com.ui.layout.MainLayout
+import com.unir.auth.ui.screens.components.LoginForm
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.AuthViewModel

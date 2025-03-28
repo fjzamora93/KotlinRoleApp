@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ui.components.DefaultRow
+
 @Composable
 fun InlineStat(
     localValue: Int = 10,
