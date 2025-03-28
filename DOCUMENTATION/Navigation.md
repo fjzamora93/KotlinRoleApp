@@ -1,4 +1,4 @@
-# Sistema de navegación (NavGraph)
+# Sistema de navegación (NavGraph--
 
 Toda la navegación está centralizada en el directorio Navigation (com.Navigation).
 
