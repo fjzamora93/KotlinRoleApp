@@ -9,7 +9,7 @@ Instalamos todas las dependencias en el graddle, a nivel de aplicación y a nive
 Adicionalmente, nos descargaremos el documento google-services.json y lo dejamos dentro de la carpeta de app del proyecto.
 
 
-# 2. Añadir el context a MyApplication
+# 2. Añadir el context a MyApplication 
 
 Se hace para tener un contexto global accesible en toda la aplicación. Al asignar context = this en onCreate(), se permite acceder al contexto de la aplicación desde cualquier parte del código sin necesidad de pasarlo como parámetro. Esto es útil para Firebase y otras configuraciones que requieren un contexto persistente.
 
@@ -31,7 +31,7 @@ class MyApplication: Application() {
 
 
 
-## Configuración del NavGraph (para FirebaseAuth)
+## Configuración del NavGraph (solo para FirebaseAuth)
 
 En el caso de que vayamos a utilizar el sistema de AUtentificación de Firebase, será necesario pasar como parámetro el auth dentro el NavGraph a las vistas que necesiten dicha autentificación (generalmente login y signup).
 
@@ -66,27 +66,31 @@ fun NavGraph(
 
 ## Crear repositorio y acceder a los datos
 
-A la hora de trabajar con Firebase, tendremos acceso a dos tipo sde bases de datos:
+A la hora de trabajar con Firebase, tendremos acceso a dos tipos de bases de datos:
 
 **Firebase.database**: es la Realtime basada en documetos de json.
 **Firebase.firestore**: Es la base de datos basada en documentos.
 
 Por lo general, utilizaremos el FIrebase.firestore, pero existe como opción el otro sistema.
 
+Siempre que queramos acceder a una colección de firebase, bastará con crear una instancia. A partir de esa instancia, tendremos acceso a los métodos básicos para realizar cualquier consulta, inserción, actualización o borrado.
 
 ```
 
 class SceneRepository(private val firebaseConfigManager: FirebaseConfigManager) {
 
-    private val database = Firebase.database
-    private var db: FirebaseFirestore = Firebase.firestore
+// para trabajar con JSON
+    private val database = Firebase.database 
+    
+// para trabajar con documentos
+    private var db: FirebaseFirestore = Firebase.firestore 
 
 ```
 
 
 ## Llamar al repositoro desde el ViewMOdel o UseCase
 
-A partir de aquí, todo es tan sencillo como simplemente llamar al repositorio y acceder a los datos cuando lo necesitemos.
+A partir de aquí, todo es tan sencillo como simplemente llamar al repositorio y acceder a los datos cuando lo necesitemos desde el repositorio que hayamos habilitado para cada tipo de colección.
 
 
 ```
@@ -154,59 +158,4 @@ class FirebaseConfigManager {
 ```
 
 
-
-
-```
-// 
-
-```
-
-
-
-
-
-```
-// 
-
-```
-
-
-
-
-
-
-```
-// 
-
-```
-
-
-
-
-
-
-```
-// 
-
-```
-
-
-
-
-
-
-```
-// 
-
-```
-
-
-
-
-
-
-```
-// 
-
-```
 

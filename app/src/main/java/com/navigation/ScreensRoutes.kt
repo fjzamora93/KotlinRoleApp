@@ -1,7 +1,6 @@
 package com.navigation
 
 sealed class ScreensRoutes(val route: String) {
-    object MainScreen : ScreensRoutes("MainScreen")
     object CharacterListScreen : ScreensRoutes("CharacterListScreen")
     object CharacterSpellScreen : ScreensRoutes("CharacterSpellScreen")
     object CharacterDetailScreen : ScreensRoutes("CharacterDetailScreen/{characterId}") {
@@ -29,4 +28,10 @@ sealed class ScreensRoutes(val route: String) {
     // AUTH
     object LoginScreen: ScreensRoutes("LoginScreen")
     object UserProfileScreen: ScreensRoutes("UserProfileScreen")
+
+
+    // ADVENTURE
+    object AdventureMainScreen: ScreensRoutes("AdventureMainScreen")
+    object TemplateAdventureScreen: ScreensRoutes("TemplateAdventureScreen")
+
 }

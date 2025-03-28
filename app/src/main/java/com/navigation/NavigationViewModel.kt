@@ -50,7 +50,7 @@ class NavigationViewModel : ViewModel() {
             println("La ruta ANTERIOR es... $previousRoute El tamaño es : ${_routeStack.size}")
             _navigationEvent.value = NavigationEvent.Navigate(previousRoute)
         } else {
-            this.navigate(ScreensRoutes.MainScreen.route)
+            this.navigate(ScreensRoutes.AdventureMainScreen.route)
             println("No hay más pantallas para retroceder.")
         }
     }

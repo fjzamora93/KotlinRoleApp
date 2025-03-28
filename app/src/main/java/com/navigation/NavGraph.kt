@@ -10,13 +10,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
-import com.unir.adventure.ui.MainScreen
+import com.unir.adventure.ui.AdventureMainScreen
 import com.unir.character.ui.screens.characterSheet.CharacterListScreen
 import com.unir.character.ui.screens.characterSheet.CharacterDetailScreen
 import com.unir.character.ui.screens.items.components.CharacterInventoryScreen
 import com.unir.character.ui.screens.items.ItemListScreen
 import com.unir.character.ui.screens.spells.CharacterSpellScreen
 import com.ui.layout.FontsTemplateScreen
+import com.unir.adventure.ui.TemplateAdventureScreen
 import com.unir.auth.ui.screens.LoginScreen
 import com.unir.auth.ui.screens.UserProfileScreen
 import com.unir.auth.viewmodels.AuthViewModel
@@ -43,8 +44,8 @@ fun NavGraph(
         ) {
 
             // USUARIO Y FUNCIONALIDAD GENERAL
-            composable(ScreensRoutes.MainScreen.route) {
-                MainScreen()
+            composable(ScreensRoutes.AdventureMainScreen.route) {
+                AdventureMainScreen()
             }
             composable (ScreensRoutes.LoginScreen.route){
                 LoginScreen()
@@ -88,6 +89,12 @@ fun NavGraph(
             ) { backStackEntry ->
                 val characterId = backStackEntry.arguments?.getLong("characterId") ?: 0
                 CharacterEditorScreen(characterId = characterId)
+            }
+
+
+            // ADVENTURE
+            composable(ScreensRoutes.TemplateAdventureScreen.route) {
+                TemplateAdventureScreen()
             }
 
 

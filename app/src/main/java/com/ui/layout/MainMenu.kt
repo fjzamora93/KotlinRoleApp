@@ -69,7 +69,7 @@ fun MainMenu(
 
                     MenuOption(
                         text = "Menú principal",
-                        onClick = { navigationViewModel.navigate(ScreensRoutes.MainScreen.route) },
+                        onClick = { navigationViewModel.navigate(ScreensRoutes.AdventureMainScreen.route) },
                         icon = Icons.Default.Home
                     )
 

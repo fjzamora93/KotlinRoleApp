@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 class SceneRepository @Inject constructor(){
 
-    private val database = Firebase.database //! NO UTILIZAR -> Eesta es la base de datos de JSON
-    private var db: FirebaseFirestore = Firebase.firestore // Base de datos güena, la de FIrebase
+    private val database = Firebase.database //!!! NO UTILIZAR -> Eesta es la base de datos de JSON
+    private var db: FirebaseFirestore = Firebase.firestore // Base de datos DOCUMENTOS, la que se usa con FIrebase
 
 
     // C - Crear un nuevo documento en la colección "scene"
