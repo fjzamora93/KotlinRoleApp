@@ -15,13 +15,10 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
-/** Repositorio para acceder a los datos... Ahora mismo la lógica está desplazada al ViewModel */
-//TODO : Refactorizar y traer aquí el acceso a los datos de Firebase
 class SceneRepository @Inject constructor(){
 
-    private val database = Firebase.database
-    private var db: FirebaseFirestore = Firebase.firestore
-
+    private val database = Firebase.database //! NO UTILIZAR -> Eesta es la base de datos de JSON
+    private var db: FirebaseFirestore = Firebase.firestore // Base de datos güena, la de FIrebase
 
 
     // C - Crear un nuevo documento en la colección "scene"
