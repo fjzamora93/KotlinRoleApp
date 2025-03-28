@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "455269672501",
+    "project_id": "myapp-e8585",
+    "storage_bucket": "myapp-e8585.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455269672501:android:8fea191c8cb8d2c6e9337c",
+        "android_client_info": {
+          "package_name": "com.unir.sheet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY3VzjCVVpKb-5wG0zerdeCB4EHWsNlTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
