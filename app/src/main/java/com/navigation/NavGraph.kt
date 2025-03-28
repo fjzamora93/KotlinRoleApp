@@ -10,7 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.di.LocalNavigationViewModel
 import com.di.LocalAuthViewModel
-import com.unir.character.ui.screens.MainScreen
+import com.unir.adventure.ui.MainScreen
 import com.unir.character.ui.screens.characterSheet.CharacterListScreen
 import com.unir.character.ui.screens.characterSheet.CharacterDetailScreen
 import com.unir.character.ui.screens.items.components.CharacterInventoryScreen

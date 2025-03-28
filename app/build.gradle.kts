@@ -4,7 +4,7 @@ plugins {
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
 
-    id("com.google.gms.google-services")
+    alias(libs.plugins.googleServices)
     alias(libs.plugins.crashlytics)
 }
 
@@ -152,8 +152,7 @@ dependencies {
     implementation ("androidx.security:security-crypto-ktx:1.1.0-alpha06")
 
     //Navegación
-    implementation("androidx.navigation:navigation-compose:2.8.4")
-
+    implementation(libs.androidx.navigation.compose)
 
     // Temas y estilos
     implementation("com.chargemap.compose:numberpicker:1.0.3")
@@ -166,5 +165,11 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.realtime)
+    implementation(libs.firebase.config)
+
+    //coli
+    implementation(libs.coil)
 
 }

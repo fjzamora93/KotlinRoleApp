@@ -1,4 +1,4 @@
-package com.unir.character.ui.screens
+package com.unir.adventure.ui
 
 
 import android.util.Log
@@ -33,10 +33,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.di.LocalNavigationViewModel
 import com.ui.layout.MainLayout
+import com.unir.adventure.data.model.Scene
+import com.unir.adventure.viewmodels.SceneViewModel
 import com.unir.sheet.R
+import java.time.LocalDateTime
 
 @Composable
 fun MainScreen() {
@@ -56,7 +60,11 @@ fun MainScreen() {
 }
 
 @Composable
-fun MainScreenBody(modifier: Modifier = Modifier) {
+fun MainScreenBody(
+    modifier: Modifier = Modifier,
+    sceneViewModel: SceneViewModel = hiltViewModel(),
+
+    ) {
     val navigationViewModel = LocalNavigationViewModel.current
     Column(
         modifier = modifier,
@@ -95,14 +103,14 @@ fun MainScreenBody(modifier: Modifier = Modifier) {
 
         // Botón para ROMPER la aplicación
         Button(
-            onClick = { throw Exception("Rompemos la app!")  },
+            onClick = { sceneViewModel.addScene(Scene(LocalDateTime.now().toString(), "Descripcion"))  },
             colors = ButtonDefaults.buttonColors(
                 Color.Red
             ),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            Text("¡ROMPER APLICACIÓN!", style= MaterialTheme.typography.bodyLarge.copy(color = Color.White))
+            Text("¡Añadir escenario a FIreBase!", style= MaterialTheme.typography.bodyLarge.copy(color = Color.White))
         }
 
         Spacer(modifier = Modifier.height(24.dp))
