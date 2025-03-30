@@ -70,24 +70,30 @@ fun CharacterEditForm(
     }
 
     val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
+    val loadingState by characterViewModel.loadingState.collectAsState()
+
     var form by remember { mutableStateOf(PersonalityTestForm()) }
     var isEditingPortrait by remember { mutableStateOf(false) }
+    val saveState by characterViewModel.saveState.collectAsState()
+    var characterToUpdate by remember { mutableStateOf(CharacterEntity()) }
+    LaunchedEffect(editableCharacter) {
+        if (editableCharacter != null) {
+            characterToUpdate = editableCharacter!!.copy()
+        }
+    }
 
-    var characterToUpdate by remember(characterId) {
-        mutableStateOf(
-            if (characterId == 0L) {
-                CharacterEntity()
-            } else {
-                editableCharacter?.copy() ?: CharacterEntity()
-            }
-        )
+    // Tan pronto se haya guardado un personaje, navegar a la pantalla de detalles (tiene un retardo)
+    LaunchedEffect(saveState) {
+        saveState?.let { id ->
+            navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(id))
+        }
     }
 
     DefaultColumn {
 
         if (characterId == 0L) {
             DefaultRow{
-                Text("Seleccionar Avatar")
+                Text("Seleccionar Avatar", style = MaterialTheme.typography.titleMedium, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                 IconButton(
                     onClick = { isEditingPortrait = true }
                 ) {
@@ -190,7 +196,10 @@ fun CharacterEditForm(
             onValueChange = { updatedCharacter -> characterToUpdate = updatedCharacter }
         )
 
-        PersonalityTest( onValueChange = { form = it })
+        // Test de personalidad solo para nuevos personajes
+        if (characterId == 0L) {
+            PersonalityTest(onValueChange = { form = it })
+        }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -202,7 +211,6 @@ fun CharacterEditForm(
                 colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.primary),
                 onClick = {
                     characterViewModel.saveCharacter(characterToUpdate, form)
-                    navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(characterToUpdate.id))
                 }
             ) {
                 Text("Guardar")
@@ -213,149 +221,4 @@ fun CharacterEditForm(
 
 
 
-
-
-
-
-
-
-// COPIA DE SEGURIDAD DEL FORMULARIO
-@Composable
-fun CharacterEditorFormCOPIASEGURIDAD(
-    characterId: Long,
-    characterViewModel: CharacterViewModel = hiltViewModel(),
-    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
-) {
-    LaunchedEffect(characterId) {
-        characterViewModel.getCharacterById(characterId)
-    }
-
-    val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
-    var characterToUpdate by remember(editableCharacter) {
-        mutableStateOf(editableCharacter?.copy())
-    }
-
-    characterToUpdate?.let { character ->
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Row(){
-                TextField(
-                    value = character.name,
-                    onValueChange = { newName ->
-                        characterToUpdate = character.copy(name = newName)
-                    },
-                    label = { Text("Nombre") },
-                    modifier = Modifier.weight(2.0f)
-                )
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                NumberRangeDropDown(
-                    validRange = 1..12,
-                    selectedValue = character.level,
-                    modifier = Modifier.weight(1f),
-                    label = "Nivel",
-                    onValueChange = { newLevel ->
-                        characterToUpdate = character.copy(_level = newLevel)
-                    }
-
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                DropDownText(
-                    options = RolClass.getListOf(),
-                    selectedOption = RolClass.getString(character.rolClass), // Mostrar la opción actual
-                    onValueChange = { selectedOption ->
-                        characterToUpdate = character.copy(rolClass = RolClass.getClass(selectedOption))
-                    },
-                    label = "Clase",
-                    modifier = Modifier
-                        .weight(1.0f)
-                        .padding(end = 16.dp)
-
-                )
-
-                DropDownText(
-                    options = Race.getListOf(),
-                    selectedOption = Race.getString(character.race),
-                    label = "Raza",
-                    onValueChange = { selectedOption ->
-                        characterToUpdate = character.copy(race = Race.getRace(selectedOption))
-                    },
-                    modifier = Modifier.weight(1.0f)
-
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = character.description,
-                onValueChange = { desc ->
-                    characterToUpdate = character.copy(description = desc)
-                },
-                label = { Text("Descripción") },
-                modifier = Modifier.fillMaxWidth(),
-                maxLines = 5,
-                singleLine = false
-            )
-
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            StatSectionForm(
-                character = characterToUpdate!!,
-                onValueChange = { updatedCharacter -> characterToUpdate = updatedCharacter }
-            )
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                Button(
-                    colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.primary),
-                    onClick = {
-                        characterToUpdate?.let { updatedCharacter ->
-                            characterViewModel.saveCharacter(updatedCharacter)
-                            navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(updatedCharacter.id))
-                        }
-                    }
-                ) {
-                    Text("Guardar")
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.error),
-                    onClick = {
-                        characterViewModel.deleteCharacter(character)
-                    }
-                ) {
-                    Text("Eliminar")
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Button(
-                    colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.scrim),
-                    onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(character.id)) }
-                ) {
-                    Text("Cancelar")
-                }
-
-            }
-
-        }
-    }
-}
 
