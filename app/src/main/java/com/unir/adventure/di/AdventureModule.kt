@@ -1,6 +1,6 @@
 package com.unir.adventure.di
 
-import com.data.FirebaseConfigManager
+import com.unir.core.data.FirebaseConfigManager
 import com.unir.adventure.data.repository.SceneRepository
 import dagger.Module
 import dagger.Provides

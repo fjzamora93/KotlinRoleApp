@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.ui.components.common.CustomCircularProgressIndicator
-import com.ui.layout.MenuOption
+import com.unir.core.ui.components.common.CustomCircularProgressIndicator
+import com.unir.core.ui.layout.MenuOption
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.ui.screens.characterSheet.components.CombatSkillSection
 import com.unir.character.ui.screens.characterSheet.components.StatSection

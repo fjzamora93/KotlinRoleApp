@@ -35,7 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ui.components.common.DefaultRow
+import com.unir.core.ui.components.common.DefaultRow
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.ui.screens.common.InlineStat
 import com.unir.character.viewmodels.SkillViewModel

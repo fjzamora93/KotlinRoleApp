@@ -1,6 +1,6 @@
 package com.unir.auth.di
 
-import com.data.MyDatabase
+import com.unir.core.data.MyDatabase
 import com.unir.auth.data.dao.UserDao
 import com.unir.auth.data.repository.AuthRepositoryImpl
 import com.unir.auth.data.repository.UserRepositoryImpl

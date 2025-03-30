@@ -29,19 +29,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.di.LocalNavigationViewModel
-import com.navigation.NavigationViewModel
-import com.navigation.ScreensRoutes
+import com.unir.core.di.LocalNavigationViewModel
+import com.unir.core.navigation.NavigationViewModel
+import com.unir.core.navigation.ScreensRoutes
 
 import com.unir.character.data.model.local.Item
-import com.ui.components.buttons.CustomIconButton
-import com.ui.components.common.RegularCard
-import com.ui.components.buttons.BackButton
-import com.ui.layout.MainLayout
+import com.unir.core.ui.components.buttons.CustomIconButton
+import com.unir.core.ui.components.common.RegularCard
+import com.unir.core.ui.components.buttons.BackButton
+import com.unir.core.ui.layout.MainLayout
 
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.character.viewmodels.ItemViewModel
-import com.ui.theme.MedievalColours
+import com.unir.core.ui.theme.MedievalColours
 
 @Composable
 fun CharacterInventoryScreen(){

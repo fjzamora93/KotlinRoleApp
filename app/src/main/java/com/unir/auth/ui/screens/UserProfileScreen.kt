@@ -22,13 +22,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.unir.auth.data.model.User
-import com.di.LocalNavigationViewModel
-import com.di.LocalAuthViewModel
-import com.navigation.NavigationViewModel
-import com.navigation.ScreensRoutes
-import com.ui.components.buttons.BackButton
-import com.ui.layout.MainLayout
+import com.unir.core.di.LocalNavigationViewModel
+import com.unir.core.di.LocalAuthViewModel
+import com.unir.core.navigation.NavigationViewModel
+import com.unir.core.navigation.ScreensRoutes
+import com.unir.core.ui.components.buttons.BackButton
+import com.unir.core.ui.layout.MainLayout
 import com.unir.auth.viewmodels.AuthViewModel
 
 @Composable

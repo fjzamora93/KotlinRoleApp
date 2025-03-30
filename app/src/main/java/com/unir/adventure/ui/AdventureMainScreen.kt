@@ -40,15 +40,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.di.LocalNavigationViewModel
-import com.navigation.NavigationViewModel
-import com.navigation.ScreensRoutes
-import com.ui.layout.MainLayout
+import com.unir.core.di.LocalNavigationViewModel
+import com.unir.core.navigation.NavigationViewModel
+import com.unir.core.navigation.ScreensRoutes
+import com.unir.core.ui.layout.MainLayout
 import com.unir.adventure.data.model.Scene
 import com.unir.adventure.viewmodels.SceneViewModel
-import com.unir.character.data.model.local.CharacterEntity
 import com.unir.sheet.R
-import java.time.LocalDateTime
 
 @Composable
 fun AdventureMainScreen() {

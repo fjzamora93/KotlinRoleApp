@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ui.components.common.DefaultColumn
+import com.unir.core.ui.components.common.DefaultColumn
 import com.unir.character.ui.screens.common.DropDownText
 import com.unir.character.ui.screens.common.dialogues.PersonalityTestOptions
 

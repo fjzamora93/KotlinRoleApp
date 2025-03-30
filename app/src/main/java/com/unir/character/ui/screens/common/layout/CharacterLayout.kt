@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ui.components.navigationbar.NavigationBar
+import com.unir.core.ui.components.navigationbar.NavigationBar
 import kotlinx.coroutines.launch
 
 

@@ -22,20 +22,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.di.LocalNavigationViewModel
-import com.di.LocalAuthViewModel
-import com.navigation.NavigationViewModel
-import com.navigation.ScreensRoutes
-import com.ui.layout.MenuOption
-import com.unir.auth.viewmodels.AuthViewModel
+import com.unir.core.di.LocalNavigationViewModel
+import com.unir.core.navigation.NavigationViewModel
+import com.unir.core.navigation.ScreensRoutes
+import com.unir.core.ui.layout.MenuOption
 import com.unir.character.viewmodels.CharacterViewModel
 
 
@@ -76,7 +71,8 @@ fun CharacterMenu(
 
                     MenuOption(
                         text = "Editar personaje",
-                        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.createRoute(
+                        onClick = { navigationViewModel.navigate(
+                            ScreensRoutes.CharacterEditorScreen.createRoute(
                             character?.id ?: 0)) },
                         icon = Icons.Default.EditOff
                     )

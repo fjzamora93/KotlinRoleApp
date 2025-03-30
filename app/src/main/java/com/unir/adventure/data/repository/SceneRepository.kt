@@ -1,7 +1,7 @@
 package com.unir.adventure.data.repository
 
 import com.MyApplication.Companion.context
-import com.data.FirebaseConfigManager
+import com.unir.core.data.FirebaseConfigManager
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 import com.google.firebase.firestore.DocumentReference

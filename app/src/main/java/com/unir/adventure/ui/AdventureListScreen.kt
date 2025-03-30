@@ -30,8 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ui.components.common.DefaultRow
-import com.ui.layout.MainLayout
+import com.unir.core.ui.components.common.DefaultRow
+import com.unir.core.ui.layout.MainLayout
 import com.unir.adventure.viewmodels.SceneViewModel
 import com.unir.sheet.R
 

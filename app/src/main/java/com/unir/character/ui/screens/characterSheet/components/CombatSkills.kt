@@ -42,7 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ui.components.common.DefaultRow
+import com.unir.core.ui.components.common.DefaultRow
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.Skill
 import com.unir.character.ui.screens.common.InlineStat

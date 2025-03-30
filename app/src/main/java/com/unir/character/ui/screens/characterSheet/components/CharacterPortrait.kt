@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.RolClass
-import com.di.LocalNavigationViewModel
-import com.navigation.NavigationViewModel
+import com.unir.core.di.LocalNavigationViewModel
+import com.unir.core.navigation.NavigationViewModel
 import com.unir.sheet.R
 import java.util.Locale
 

@@ -20,14 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.unir.character.data.model.local.Item
-import com.ui.components.buttons.MenuMedievalButton
-import com.ui.components.common.RegularCard
-import com.ui.components.buttons.BackButton
-import com.ui.components.buttons.medievalButtonStyleSquare
-import com.ui.layout.MainLayout
+import com.unir.core.ui.components.buttons.MenuMedievalButton
+import com.unir.core.ui.components.common.RegularCard
+import com.unir.core.ui.components.buttons.BackButton
+import com.unir.core.ui.components.buttons.medievalButtonStyleSquare
+import com.unir.core.ui.layout.MainLayout
 import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.character.viewmodels.ItemViewModel
-import com.ui.theme.CustomType
+import com.unir.core.ui.theme.CustomType
 
 @Composable
 fun ItemListScreen(){

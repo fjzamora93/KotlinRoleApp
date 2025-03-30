@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ui.components.common.DefaultRow
+import com.unir.core.ui.components.common.DefaultRow
 
 @Composable
 fun InlineProgressBar(

@@ -1,6 +1,6 @@
 package com.unir.character.di
 
-import com.data.MyDatabase
+import com.unir.core.data.MyDatabase
 import com.unir.character.data.dao.CharacterDao
 import com.unir.character.data.dao.ItemDao
 import com.unir.character.data.dao.SkillDao

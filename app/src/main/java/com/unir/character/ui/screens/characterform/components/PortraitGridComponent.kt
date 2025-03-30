@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.ui.components.common.DefaultRow
+import com.unir.core.ui.components.common.DefaultRow
 
 
 @Composable
