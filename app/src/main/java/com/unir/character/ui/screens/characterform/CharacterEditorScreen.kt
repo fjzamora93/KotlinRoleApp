@@ -65,6 +65,7 @@ fun CharacterEditForm(
 ) {
     LaunchedEffect(characterId) {
         if (characterId != 0L) {
+            println("Cargando personaje con ID: $characterId")
             characterViewModel.getCharacterById(characterId)
         }
     }
@@ -81,6 +82,12 @@ fun CharacterEditForm(
                 editableCharacter?.copy() ?: CharacterEntity()
             }
         )
+    }
+
+    LaunchedEffect(editableCharacter) {
+        if (editableCharacter != null) {
+            characterToUpdate = editableCharacter!!.copy()
+        }
     }
 
     DefaultColumn {
