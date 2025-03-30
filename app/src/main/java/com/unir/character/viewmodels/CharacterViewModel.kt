@@ -29,6 +29,10 @@ class CharacterViewModel @Inject constructor(
     private val _loadingState = MutableStateFlow(false)
     val loadingState: StateFlow<Boolean> get() = _loadingState
 
+    // Estado de confirmación de guardado
+    private val _saveState = MutableStateFlow<Long?>(null)
+    val saveState: StateFlow<Long?> = _saveState
+
     // PERSONAJE EN USO
     private val _selectedCharacter = MutableStateFlow<CharacterEntity?>(null)
     val selectedCharacter: MutableStateFlow<CharacterEntity?> = _selectedCharacter
@@ -65,6 +69,7 @@ class CharacterViewModel @Inject constructor(
             result.onSuccess { savedCharacter ->
                 _selectedCharacter.value = savedCharacter
                 _loadingState.value = false
+                _saveState.value = savedCharacter.id
                 println("Personaje creado / actualizado: ${characterEntity.name}")
             }.onFailure {
                 _loadingState.value = false
