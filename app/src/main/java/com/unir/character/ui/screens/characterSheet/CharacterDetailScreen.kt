@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ui.components.common.CustomCircularProgressIndicator
 import com.ui.layout.MenuOption
 import com.unir.character.data.model.local.CharacterEntity
+import com.unir.character.ui.screens.characterSheet.components.CombatSkillSection
 import com.unir.character.ui.screens.characterSheet.components.StatSection
 import com.unir.character.ui.screens.common.ProgressBarSection
 import com.unir.character.ui.screens.common.dialogues.CharacterDialog
@@ -142,14 +143,16 @@ fun DetailCharacterBody(
         icon = Icons.Default.Apps,
     )
 
+    CombatSkillSection()
+
+    SkillSection(
+        editableCharacter = character,
+    )
+
     StatSection(
         editableCharacter = character,
         onCharacterChange = {
         }
-    )
-
-    SkillSection(
-        editableCharacter = character,
     )
 
     activeDialog?.let {

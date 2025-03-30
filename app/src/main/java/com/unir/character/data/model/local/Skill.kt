@@ -19,6 +19,19 @@ data class Skill(
             tag = this.tag
         )
     }
+
+
+    // DEvuelve el string con el nombre del icono (asegurarse de que coincida con el de la carpeta DRawable)
+    fun getIcon(): String {
+        return when (this.id) {
+            21 -> "weapon_bow"
+            22 -> "weapon_dagger"
+            23 -> "weapon_spear"
+            24 -> "weapon_axe"
+            25 -> "weapon_sword"
+            else -> "weapon_sword"
+        }
+    }
 }
 
 // NO ES NECESARIO, LAS SKILLS SE CARGAN DESDE LA API
