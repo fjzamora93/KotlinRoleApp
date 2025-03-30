@@ -65,6 +65,7 @@ fun CharacterEditForm(
 ) {
     LaunchedEffect(characterId) {
         if (characterId != 0L) {
+            println("Cargando personaje con ID: $characterId")
             characterViewModel.getCharacterById(characterId)
         }
     }
@@ -86,6 +87,12 @@ fun CharacterEditForm(
     LaunchedEffect(saveState) {
         saveState?.let { id ->
             navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(id))
+        }
+    }
+
+    LaunchedEffect(editableCharacter) {
+        if (editableCharacter != null) {
+            characterToUpdate = editableCharacter!!.copy()
         }
     }
 
