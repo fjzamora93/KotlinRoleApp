@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,12 +38,13 @@ import com.unir.core.ui.components.common.CustomCircularProgressIndicator
 import com.unir.core.ui.layout.MenuOption
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.ui.screens.characterSheet.components.CombatSkillSection
+import com.unir.character.ui.screens.characterSheet.components.SkillSection
 import com.unir.character.ui.screens.characterSheet.components.StatSection
 import com.unir.character.ui.screens.common.ProgressBarSection
 import com.unir.character.ui.screens.common.dialogues.CharacterDialog
 import com.unir.character.ui.screens.common.dialogues.SwitchDialogue
 import com.unir.character.ui.screens.common.layout.CharacterLayout
-import com.unir.character.ui.screens.characterSheet.components.SkillSection
+import com.unir.character.ui.screens.characterSheet.components.SkillSectionBody
 import com.unir.character.viewmodels.CharacterViewModel
 import kotlinx.coroutines.launch
 
@@ -145,9 +147,10 @@ fun DetailCharacterBody(
 
     CombatSkillSection()
 
-    SkillSection(
-        editableCharacter = character,
-    )
+    HorizontalDivider(Modifier.padding(16.dp))
+
+
+    SkillSection()
 
     StatSection(
         editableCharacter = character,

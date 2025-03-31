@@ -32,6 +32,10 @@ data class Skill(
             else -> "weapon_sword"
         }
     }
+
+
+
+
 }
 
 // NO ES NECESARIO, LAS SKILLS SE CARGAN DESDE LA API
@@ -79,5 +83,14 @@ val initialSkills = listOf(
     Skill(24, "Armas pesadas (FUE)", "Habilidad para manejar armas pesadas a dos manos como mazas, mandobles, martillos u hachas.", SkillTags.COMBAT),
     Skill(25, "Espadas (FUE)", "Manejo de todo tipo de espadas para el combate cuerpo a cuerpo.", SkillTags.COMBAT)
 )
-
+fun tagToString(tag: String): String {
+    return when (tag) {
+        SkillTags.STRENGTH -> "Fuerza"
+        SkillTags.DEXTERITY -> "Destreza"
+        SkillTags.INTELLIGENCE -> "Conocimiento"
+        SkillTags.CHARISMA -> "Sociales"
+        SkillTags.COMBAT -> "Combate"
+        else -> {""}
+    }
+}
 
