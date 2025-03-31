@@ -9,6 +9,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.unir.core.navigation.NavGraph
+import com.unir.core.ui.theme.DefaultTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
             val navHostController: NavHostController = rememberNavController()
 
-            MaterialTheme {
+            DefaultTheme {
                 NavGraph(
                     navController = navHostController,
                 )

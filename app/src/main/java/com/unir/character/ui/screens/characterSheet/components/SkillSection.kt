@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
+import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -38,207 +38,159 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.unir.core.ui.components.common.DefaultRow
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.ui.screens.common.InlineStat
+import com.unir.character.viewmodels.CharacterViewModel
 import com.unir.character.viewmodels.SkillViewModel
 
 
 @Composable
 fun SkillSection(
+    characterViewModel: CharacterViewModel = hiltViewModel(),
+    ){
+    val character by characterViewModel.selectedCharacter.collectAsState()
+    var isEditing by remember { mutableStateOf(false) }
+
+
+    character?.let {
+        Column(){
+            if (!isEditing) {
+                SkillSectionBody(
+                    editableCharacter = it,
+                    onEdit = { isEditing = !isEditing }
+                )
+
+            } else {
+                SkillForm(
+                    character = it,
+                    onEdit = { isEditing = !isEditing  }
+                )
+            }
+        }
+
+    }
+}
+
+
+
+@Composable
+fun SkillSectionBody(
     skillViewModel: SkillViewModel = hiltViewModel(),
-    editableCharacter: CharacterEntity
+    editableCharacter: CharacterEntity,
+    onEdit: () -> Unit = {},
 ) {
     skillViewModel.getSkillsFromCharacter(editableCharacter)
     val skillList by skillViewModel.skillList.collectAsState()
-
-    var isEditing by remember { mutableStateOf(false) }
-
     val pointsAvailable by skillViewModel.pointsAvailable.collectAsState()
+
+
 
     LaunchedEffect(editableCharacter, skillList) {
         skillViewModel.validateSkills(editableCharacter, skillList)
     }
 
-    DefaultRow {
 
+    DefaultRow {
         Text(
             text = "Puntos disponibles: $pointsAvailable",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-
-
         Icon(
             imageVector = Icons.Default.Settings,
-            contentDescription = "Distribuir habilidades",
+            contentDescription = "settings",
             Modifier
                 .size(30.dp)
-                .clickable { isEditing = !isEditing }
-        )
-
-    }
-
-    if (!isEditing){
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-
-            // Columna SGTR
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-            ) {
-                Text(text = "Físicas", style= MaterialTheme.typography.titleSmall)
-
-                skillList.filter { it.skill.tag == "STR" }.forEachIndexed() { index, skill ->
-                    InlineStat(
-                        localValue = skill.value,
-                        label = skill.skill.name.split("(")[0],
-                    )
-
-                }
-            }
-
-
-
-            // Columna DES
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-            ) {
-                Text(text = "Habilidad", style= MaterialTheme.typography.titleSmall)
-
-                skillList.filter { it.skill.tag == "DEX" }.forEach { skill ->
-                    InlineStat(
-                        localValue = skill.value,
-                        label = skill.skill.name.split("(")[0],
-                    )
-                }
-            }
-        }
-
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            color = Color.Gray,
-            thickness = 1.dp
-        )
-
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-
-            // COLUMNA INT
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-            ) {
-                Text(text = "Conocimiento", style= MaterialTheme.typography.titleSmall)
-
-                skillList.filter { it.skill.tag == "INT" }.forEachIndexed { index, skill ->
-                    Row(verticalAlignment = Alignment.CenterVertically){
-
-
-                        InlineStat(
-                            localValue = skill.value,
-                            label = skill.skill.name.split("(")[0],
-                        )
-
-
-                    }
-                }
-            }
-
-
-            // Columna CHA
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-            ) {
-                Text(text = "Sociales", style= MaterialTheme.typography.titleSmall)
-
-                skillList.filter { it.skill.tag == "CHA" }.forEach { skill ->
-                    InlineStat(
-                        localValue = skill.value,
-                        label = skill.skill.name.split("(")[0],
-                    )
-                }
-            }
-        }
-
-
-    } else {
-        SkillForm(
-            character = editableCharacter,
-            onConfirm = { isEditing = !isEditing  }
+                .clickable { onEdit() }
         )
     }
 
-}
 
-
-
-
-@Composable
-fun SkillItem(
-    skillName: String,
-    skillValue: Int,
-    modifier: Modifier = Modifier
-) {
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .height(IntrinsicSize.Min)
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        // Círculo con el número
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .background(MaterialTheme.colorScheme.primary, CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = skillValue.toString(),
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
-            )
 
+
+        // Columna SGTR
+        Column(
+            modifier = Modifier.weight(1f).padding(8.dp)
+        ) {
+            Text(text = "Físicas", style= MaterialTheme.typography.titleSmall)
+
+            skillList.filter { it.skill.tag == "STR" }.forEachIndexed() { index, skill ->
+                InlineStat(
+                    localValue = skill.value,
+                    label = skill.skill.name.split("(")[0],
+                )
+
+            }
         }
 
-        Spacer(modifier = Modifier.width(8.dp)) // Espaciado entre el círculo y la barra
-
-        // Barra de progreso con el nombre de la habilidad
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(36.dp) // Altura de la barra
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.secondaryContainer),
-            contentAlignment = Alignment.CenterStart
+        // Columna DES
+        Column(
+            modifier = Modifier.weight(1f).padding(8.dp)
         ) {
-            Text(
-                text = skillName,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(start = 16.dp)
-            )
+            Text(text = "Habilidad", style= MaterialTheme.typography.titleSmall)
+
+            skillList.filter { it.skill.tag == "DEX" }.forEach { skill ->
+                InlineStat(
+                    localValue = skill.value,
+                    label = skill.skill.name.split("(")[0],
+                )
+            }
         }
     }
+
+    Divider(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        thickness = 1.dp
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        // COLUMNA INT
+        Column(
+            modifier = Modifier.weight(1f).padding(8.dp)
+        ) {
+            Text(text = "Conocimiento", style= MaterialTheme.typography.titleSmall)
+            skillList.filter { it.skill.tag == "INT" }.forEachIndexed { index, skill ->
+                Row(verticalAlignment = Alignment.CenterVertically){
+
+
+                    InlineStat(
+                        localValue = skill.value,
+                        label = skill.skill.name.split("(")[0],
+                    )
+
+
+                }
+            }
+        }
+
+
+        // Columna CHA
+        Column(
+            modifier = Modifier.weight(1f).padding(8.dp)
+        ) {
+            Text(text = "Sociales", style= MaterialTheme.typography.titleSmall)
+            skillList.filter { it.skill.tag == "CHA" }.forEach { skill ->
+                InlineStat(
+                    localValue = skill.value,
+                    label = skill.skill.name.split("(")[0],
+                )
+            }
+        }
+    }
+
 }
+
+
+
 

@@ -7,10 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.runtime.Composable
@@ -74,17 +75,17 @@ fun UserProfileDetail(
     ) {
         Text(
             text = "Perfil de Usuario",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Nombre: ${user.id}",
-            fontSize = 18.sp
+            style = MaterialTheme.typography.titleSmall
         )
         Text(
             text = "Email: ${user.email}",
-            fontSize = 18.sp
+            style = MaterialTheme.typography.titleSmall
         )
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -98,13 +99,11 @@ fun UserProfileDetail(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                 contentDescription = "Cerrar sesión",
-                tint = Color.White
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = "Cerrar sesión",
                 fontSize = 16.sp,
-                color = Color.White
             )
         }
 

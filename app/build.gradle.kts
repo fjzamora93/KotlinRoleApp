@@ -73,10 +73,14 @@ dependencies {
 
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material:1.7.7")
-    implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
+    implementation(platform(libs.androidx.compose.bom))
 
+    // Para soporte de tema oscuro
+    implementation("androidx.compose.material3:material3:1.2.1") // Usa la versión más reciente
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
+
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
     implementation ("androidx.compose.foundation:foundation:1.4.0")
 
 
