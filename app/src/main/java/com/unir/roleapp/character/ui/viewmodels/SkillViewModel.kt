@@ -80,6 +80,11 @@ class SkillViewModel @Inject constructor(
                         // Recalcular puntos disponibles
                         _pointsAvailable.value = validationResult.puntosDisponibles
                     }
+
+                    else -> {
+                        _isValid.value = false
+                        _errorMessage.value = "Error al validar las habilidades"
+                    }
                 }
             }.onFailure { error ->
                 _isValid.value = false

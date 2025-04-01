@@ -2,17 +2,21 @@ package com.roleapp.character.ui.screens.characterSheet.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -78,6 +82,10 @@ fun SkillSectionBody(
         skillViewModel.validateSkills(editableCharacter, skillList)
     }
 
+    LaunchedEffect(Unit) {
+        skillViewModel.getSkillsFromCharacter(editableCharacter)
+    }
+
 
     DefaultRow {
         Text(
@@ -102,11 +110,23 @@ fun SkillSectionBody(
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        if (skillList.isEmpty()) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                IconButton(onClick = { skillViewModel.getSkillsFromCharacter(editableCharacter) }) {
+                    Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+                }
+            }
 
+        }
 
         // Columna SGTR
         Column(
-            modifier = Modifier.weight(1f).padding(8.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp)
         ) {
             Text(text = "Físicas", style= MaterialTheme.typography.titleSmall)
 
@@ -121,7 +141,9 @@ fun SkillSectionBody(
 
         // Columna DES
         Column(
-            modifier = Modifier.weight(1f).padding(8.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp)
         ) {
             Text(text = "Habilidad", style= MaterialTheme.typography.titleSmall)
 
@@ -135,7 +157,9 @@ fun SkillSectionBody(
     }
 
     Divider(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         thickness = 1.dp
     )
 
@@ -148,7 +172,9 @@ fun SkillSectionBody(
     ) {
         // COLUMNA INT
         Column(
-            modifier = Modifier.weight(1f).padding(8.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp)
         ) {
             Text(text = "Conocimiento", style= MaterialTheme.typography.titleSmall)
             skillList.filter { it.skill.tag == "INT" }.forEachIndexed { index, skill ->
@@ -168,7 +194,9 @@ fun SkillSectionBody(
 
         // Columna CHA
         Column(
-            modifier = Modifier.weight(1f).padding(8.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp)
         ) {
             Text(text = "Sociales", style= MaterialTheme.typography.titleSmall)
             skillList.filter { it.skill.tag == "CHA" }.forEach { skill ->

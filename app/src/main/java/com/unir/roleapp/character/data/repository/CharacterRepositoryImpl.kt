@@ -88,11 +88,14 @@ class CharacterRepositoryImpl @Inject constructor(
                             value = skillDTO.value
                         )
                     }
+
+                    // TODO: Comprobar que el personaje local es el más actualizado, en caso contrario, actualizar el remoto.
                     if (apiCharacter.updatedAt >= localCharacter.updatedAt){
                         characterDao.insertCharacterWithSkills(apiCharacter.toCharacterEntity(), crossRefSkills)
                     }
 
-                    activeCharacter = apiCharacter.toCharacterEntity()
+                    // !! No devolver el localcharacter aún, ya que puede haberse actualizado.
+                    activeCharacter = withContext(Dispatchers.IO) { characterDao.getCharacterById(id)!! }
                     return Result.success(activeCharacter)
                 }
             }
