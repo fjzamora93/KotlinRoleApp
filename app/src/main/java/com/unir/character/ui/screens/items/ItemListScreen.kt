@@ -25,8 +25,8 @@ import com.unir.core.ui.components.common.RegularCard
 import com.unir.core.ui.components.buttons.BackButton
 import com.unir.core.ui.components.buttons.medievalButtonStyleSquare
 import com.unir.core.ui.layout.MainLayout
-import com.unir.character.viewmodels.CharacterViewModel
-import com.unir.character.viewmodels.ItemViewModel
+import com.unir.character.ui.viewmodels.CharacterViewModel
+import com.unir.character.ui.viewmodels.ItemViewModel
 import com.unir.core.ui.theme.CustomType
 
 @Composable

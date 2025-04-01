@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,7 +28,7 @@ import com.unir.core.navigation.NavigationViewModel
 import com.unir.core.navigation.ScreensRoutes
 import com.unir.core.ui.components.buttons.MaxWidthButton
 import com.unir.core.ui.layout.MainLayout
-import com.unir.character.viewmodels.CharacterViewModel
+import com.unir.character.ui.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.AuthViewModel
 import com.unir.character.data.model.local.Race
 import com.unir.character.data.model.local.RolClass

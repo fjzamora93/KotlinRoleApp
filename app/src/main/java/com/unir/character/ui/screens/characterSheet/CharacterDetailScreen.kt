@@ -44,8 +44,7 @@ import com.unir.character.ui.screens.common.ProgressBarSection
 import com.unir.character.ui.screens.common.dialogues.CharacterDialog
 import com.unir.character.ui.screens.common.dialogues.SwitchDialogue
 import com.unir.character.ui.screens.common.layout.CharacterLayout
-import com.unir.character.ui.screens.characterSheet.components.SkillSectionBody
-import com.unir.character.viewmodels.CharacterViewModel
+import com.unir.character.ui.viewmodels.CharacterViewModel
 import kotlinx.coroutines.launch
 
 @Composable

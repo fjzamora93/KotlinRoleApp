@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.unir.character.viewmodels.CharacterViewModel
+import com.unir.character.ui.viewmodels.CharacterViewModel
 import com.unir.character.ui.screens.characterSheet.components.CharacterPortrait
 import com.unir.character.ui.screens.characterform.components.PortraitGridComponent
 

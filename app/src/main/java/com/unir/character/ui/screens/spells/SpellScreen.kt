@@ -25,8 +25,8 @@ import com.unir.character.data.model.local.Spell
 import com.unir.core.ui.components.common.RegularCard
 import com.unir.core.ui.components.buttons.BackButton
 import com.unir.core.ui.layout.MainLayout
-import com.unir.character.viewmodels.CharacterViewModel
-import com.unir.character.viewmodels.SpellViewModel
+import com.unir.character.ui.viewmodels.CharacterViewModel
+import com.unir.character.ui.viewmodels.SpellViewModel
 
 
 @Composable

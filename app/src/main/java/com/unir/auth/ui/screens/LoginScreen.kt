@@ -19,7 +19,7 @@ import com.unir.core.ui.components.common.CustomCircularProgressIndicator
 import com.unir.core.ui.components.buttons.BackButton
 import com.unir.core.ui.layout.MainLayout
 import com.unir.auth.ui.screens.components.LoginForm
-import com.unir.character.viewmodels.CharacterViewModel
+import com.unir.character.ui.viewmodels.CharacterViewModel
 import com.unir.auth.viewmodels.UserState
 import com.unir.auth.viewmodels.AuthViewModel
 

@@ -29,7 +29,7 @@ data class CharacterResponse(
     val currentAp: Int,
 
 
-    val imgUrl: String?,
+    val imgUrl: String,
     val gameSessionId: Int,
     val roleClass: RoleClassDTO?,
     val items: List<ItemDTO>,
@@ -44,6 +44,7 @@ data class CharacterResponse(
 
             name = this.name,
             description = this.description,
+            imgUrl = this.imgUrl,
             rolClass = RolClass.valueOf(this.roleClass?.name ?: "WARRIOR"),
             race = Race.valueOf(this.race),
             armor = this.armor,

@@ -31,7 +31,7 @@ import com.unir.core.di.LocalNavigationViewModel
 import com.unir.core.navigation.NavigationViewModel
 import com.unir.core.navigation.ScreensRoutes
 import com.unir.core.ui.layout.MenuOption
-import com.unir.character.viewmodels.CharacterViewModel
+import com.unir.character.ui.viewmodels.CharacterViewModel
 
 
 @Composable

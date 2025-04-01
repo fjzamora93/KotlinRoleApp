@@ -2,16 +2,15 @@ package com.unir.character.data.repository
 
 import android.util.Log
 import com.unir.character.data.dao.CharacterDao
-import com.unir.character.data.dao.SkillDao
 import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.CharacterSkillCrossRef
-import com.unir.character.data.model.remote.toSkill
 import com.unir.character.data.service.CharacterApiService
 import com.unir.character.domain.repository.CharacterRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -88,23 +87,82 @@ class CharacterRepositoryImpl @Inject constructor(
     // IMPORTANTE: Añadir siempre las Skills para que lleguen correctamente al backend
     override suspend fun saveCharacter(character: CharacterEntity): Result<CharacterEntity> {
         return try {
+            // 1. Obtener skills primero
             val skillsCrossRef = characterDao.getCharacterSkills(character.id)
-            characterDao.updateCharacter(character)
 
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val apiCharacter = character.toApiRequest()
-                    apiCharacter.skills = skillsCrossRef
-                    apiService.saveCharacter(apiCharacter)
-                } catch (e: Exception) {
-                    Log.e("API Error", "Fallo al guardar en la API", e)
+            // 2. Intentar guardar en API usando tu función existente
+            val apiResult = upsertCharacterToApi(character, skillsCrossRef)
+
+            when {
+                apiResult.isSuccess -> {
+                    val apiEntity = apiResult.getOrThrow()
+                    // Actualizar localmente con datos de la API
+                    characterDao.updateCharacter(apiEntity)
+                    Log.d("Sync", "Retornando personaje desde API")
+                    Result.success(apiEntity)
+                }
+                else -> {
+                    // Fallback a local
+                    characterDao.updateCharacter(character)
+                    Log.w("Sync", "Retornando personaje desde base de datos local (fallo API: ${apiResult.exceptionOrNull()?.message})")
+                    Result.success(character)
                 }
             }
-            Result.success(character)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
+    override suspend fun saveCharacterWithSKills(
+        character: CharacterEntity,
+        skillCrossRef: List<CharacterSkillCrossRef>
+    ): Result<CharacterEntity> {
+        return try {
+            // 1. Intentar guardar en API usando tu función existente
+            val apiResult = upsertCharacterToApi(character, skillCrossRef)
+
+            // 2. Guardar localmente en cualquier caso (con datos de API si tuvo éxito)
+            characterDao.insertCharacterWithSkills(character, skillCrossRef)
+
+            // 3. Retornar el resultado apropiado
+            if (apiResult.isSuccess) {
+                Log.d("Sync", "Retornando personaje con skills desde API")
+                apiResult
+            } else {
+                Log.w("Sync", "Retornando personaje con skills desde local (fallo API: ${apiResult.exceptionOrNull()?.message})")
+                Result.success(character)
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private suspend fun upsertCharacterToApi(
+        character: CharacterEntity,
+        skillsCrossRef: List<CharacterSkillCrossRef>
+    ): Result<CharacterEntity> = withContext(Dispatchers.IO) {
+        try {
+            val characterRequest = character.toApiRequest().apply {
+                this.characterSkills = skillsCrossRef
+            }
+
+            Log.d("CharacterRepositoryImpl", "CharacterRepositoryImpl.upsertCharacterToApi: $characterRequest")
+
+            val response = apiService.saveCharacter(characterRequest)
+
+            if (!response.isSuccessful || response.body() == null) {
+                Log.e("API Error", "Fallo al guardar en la API")
+                return@withContext Result.failure(Exception("No ha sido posible guardar al personaje en la API"))
+            }
+
+            Result.success(response.body()!!.toCharacterEntity())
+        } catch (e: Exception) {
+            Log.e("API Error", "Fallo al guardar en la API", e)
+            Result.failure(e)
+        }
+    }
+
+
 
 
 
@@ -123,19 +181,5 @@ class CharacterRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
-
-    // TODO: Añadir a la cola de sincronización para la actualización remota
-    override suspend fun saveCharacterWithSKills(
-        character: CharacterEntity,
-        skillCrossRef: List<CharacterSkillCrossRef>
-    ): Result<CharacterEntity> {
-        return try{
-            characterDao.insertCharacterWithSkills(character, skillCrossRef)
-            Result.success(character)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
 
 }
