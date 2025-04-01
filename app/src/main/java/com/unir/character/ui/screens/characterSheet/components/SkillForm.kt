@@ -55,7 +55,7 @@ import com.unir.character.data.model.local.Skill
 import com.unir.character.data.model.local.SkillTags
 import com.unir.character.data.model.local.tagToString
 import com.unir.character.ui.screens.common.InlineProgressBar
-import com.unir.character.viewmodels.SkillViewModel
+import com.unir.character.ui.viewmodels.SkillViewModel
 import com.unir.core.ui.components.common.DefaultRow
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

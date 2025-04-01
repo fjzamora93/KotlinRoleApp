@@ -130,7 +130,7 @@ data class CharacterEntity(
             gameSessionId = this.gameSessionId,
             userId = this.userId,
             roleClass = this.rolClass.name,
-            skills = emptyList()
+            characterSkills = emptyList()
         )
     }
 }

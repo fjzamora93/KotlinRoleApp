@@ -1,7 +1,6 @@
 package com.unir.character.ui.screens.characterform
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,7 +44,7 @@ import com.unir.character.ui.screens.characterform.components.PersonalityTest
 import com.unir.character.ui.screens.characterform.components.PersonalityTestForm
 import com.unir.character.ui.screens.characterform.components.PortraitGridComponent
 import com.unir.character.ui.screens.characterform.components.StatSectionForm
-import com.unir.character.viewmodels.CharacterViewModel
+import com.unir.character.ui.viewmodels.CharacterViewModel
 
 
 @Composable
