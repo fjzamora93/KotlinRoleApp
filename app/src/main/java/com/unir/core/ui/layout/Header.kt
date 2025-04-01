@@ -62,10 +62,11 @@ fun HeaderBody(
     modifier: Modifier = Modifier,
     onClickMenu : () -> Unit,
     characterViewModel: CharacterViewModel = hiltViewModel(),
-    sectionTitle: String = "Título de la sección"
+    navigationViewModel : NavigationViewModel = LocalNavigationViewModel.current
 ){
     val activity = LocalContext.current as Activity
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
+    val navTitle by navigationViewModel.navTitle.collectAsState()
 
     Row(
         modifier = modifier
@@ -78,7 +79,7 @@ fun HeaderBody(
         UserThombnail()
 
         Text(
-            text = sectionTitle,
+            text = navTitle ?: "",
             style = MaterialTheme.typography.titleLarge,
         )
 

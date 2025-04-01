@@ -1,4 +1,6 @@
 package com.unir.core.di
+import com.unir.auth.data.service.AuthApiService
+import com.unir.auth.data.service.UserApiService
 import com.unir.character.data.service.CharacterApiService
 import com.unir.character.data.service.ItemApiService
 import com.unir.character.data.service.SkillApiService
@@ -13,6 +15,20 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiServiceModule {
+
+
+    @Singleton
+    @Provides
+    fun provideAuthApiService(retrofit: Retrofit): AuthApiService {
+        return retrofit.create(AuthApiService::class.java)
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideUserApiService(retrofit: Retrofit): UserApiService {
+        return retrofit.create(UserApiService::class.java)
+    }
 
     @Singleton
     @Provides

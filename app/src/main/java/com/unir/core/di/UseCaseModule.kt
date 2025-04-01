@@ -1,4 +1,14 @@
 package com.unir.core.di
+import com.unir.auth.domain.repository.AuthRepository
+import com.unir.auth.domain.repository.UserRepository
+import com.unir.auth.domain.usecase.auth.AuthUseCases
+import com.unir.auth.domain.usecase.auth.PostAutologinUseCase
+import com.unir.auth.domain.usecase.auth.PostLoginUseCase
+import com.unir.auth.domain.usecase.auth.PostLogoutUseCase
+import com.unir.auth.domain.usecase.auth.PostSignupUseCase
+import com.unir.auth.domain.usecase.user.DeleteUserUseCase
+import com.unir.auth.domain.usecase.user.GetUserUseCase
+import com.unir.auth.domain.usecase.user.UpdateUserUseCase
 import com.unir.auth.domain.usecase.user.UserUseCase
 import com.unir.character.domain.repository.CharacterRepository
 import com.unir.character.domain.repository.ItemRepository
@@ -107,6 +117,30 @@ object UseCaseModule {
         return SpellUseCases(
             getAllSpells = GetAllSpellsUseCase(spellRepository),
             getSpellsByLevelAndRoleClass = GetSpellsByLevelAndRoleClassUseCase(spellRepository)
+        )
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideAuthUseCases(repository: AuthRepository): AuthUseCases {
+        return AuthUseCases(
+            postLogin = PostLoginUseCase(repository),
+            postSignup = PostSignupUseCase(repository),
+            postLogout = PostLogoutUseCase(repository),
+            postAutologin = PostAutologinUseCase(repository)
+        )
+    }
+
+
+
+    @Provides
+    @Singleton
+    fun provideUserUseCases(repository: UserRepository): UserUseCase {
+        return UserUseCase(
+            getUser = GetUserUseCase(repository),
+            updateUser = UpdateUserUseCase(repository),
+            deleteUser = DeleteUserUseCase(repository)
         )
     }
 }

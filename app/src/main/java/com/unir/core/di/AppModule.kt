@@ -1,6 +1,8 @@
 package com.unir.core.di
 
 import android.content.Context
+import com.unir.auth.security.AuthInterceptor
+import com.unir.auth.security.TokenManager
 import com.unir.core.data.MyDatabase
 import dagger.Module
 import dagger.Provides
@@ -21,6 +23,13 @@ object AppModule {
     fun provideDatabase(@ApplicationContext context: Context): MyDatabase {
         return MyDatabase.getDatabase(context)
     }
+
+    @Singleton
+    @Provides
+    fun provideAuthInterceptor(tokenManager: TokenManager): AuthInterceptor {
+        return AuthInterceptor(tokenManager)
+    }
+
 
 
 }

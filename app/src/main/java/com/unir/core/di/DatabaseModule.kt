@@ -1,5 +1,6 @@
 package com.unir.core.di
 
+import com.unir.auth.data.dao.UserDao
 import com.unir.core.data.MyDatabase
 import com.unir.character.data.dao.CharacterDao
 import com.unir.character.data.dao.ItemDao
@@ -37,5 +38,12 @@ object DatabaseModule {
     @Singleton
     fun provideSpellDao(database: MyDatabase): SpellDao {
         return database.getSpellDao()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideUserDao(database: MyDatabase): UserDao {
+        return database.getUserDao()
     }
 }

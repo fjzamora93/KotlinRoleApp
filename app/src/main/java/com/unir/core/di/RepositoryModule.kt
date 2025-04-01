@@ -1,5 +1,13 @@
 package com.unir.core.di
 import com.unir.adventure.data.repository.SceneRepository
+import com.unir.auth.data.dao.UserDao
+import com.unir.auth.data.repository.AuthRepositoryImpl
+import com.unir.auth.data.repository.UserRepositoryImpl
+import com.unir.auth.data.service.AuthApiService
+import com.unir.auth.data.service.UserApiService
+import com.unir.auth.domain.repository.AuthRepository
+import com.unir.auth.domain.repository.UserRepository
+import com.unir.auth.security.TokenManager
 import com.unir.core.data.MyDatabase
 import com.unir.character.data.dao.ItemDao
 import com.unir.character.data.dao.SkillDao
@@ -65,4 +73,25 @@ object RepositoryModule {
     fun provideSceneRepository(): SceneRepository {
         return SceneRepository()
     }
+
+    @Singleton
+    @Provides
+    fun provideUserRepository(
+        api: UserApiService,
+        tokenManager: TokenManager,
+        userDao: UserDao
+    ): UserRepository {
+        return UserRepositoryImpl(api, tokenManager, userDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAuthRepository(
+        api: AuthApiService,
+        userDao: UserDao,
+        tokenManager: TokenManager
+    ): AuthRepository {
+        return AuthRepositoryImpl(api, userDao, tokenManager)
+    }
+
 }
