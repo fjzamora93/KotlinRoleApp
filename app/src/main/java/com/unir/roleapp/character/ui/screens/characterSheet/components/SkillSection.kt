@@ -49,7 +49,6 @@ fun SkillSection(
         Column(){
             if (!isEditing) {
                 SkillSectionBody(
-                    editableCharacter = it,
                     onEdit = { isEditing = !isEditing }
                 )
 
@@ -69,145 +68,150 @@ fun SkillSection(
 @Composable
 fun SkillSectionBody(
     skillViewModel: SkillViewModel = hiltViewModel(),
-    editableCharacter: CharacterEntity,
+    characterViewModel: CharacterViewModel = hiltViewModel(),
     onEdit: () -> Unit = {},
 ) {
+    val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
+
+    editableCharacter?.let{ editableCharacter->
+
+
     skillViewModel.getSkillsFromCharacter(editableCharacter)
-    val skillList by skillViewModel.skillList.collectAsState()
-    val pointsAvailable by skillViewModel.pointsAvailable.collectAsState()
+        val skillList by skillViewModel.skillList.collectAsState()
+        val pointsAvailable by skillViewModel.pointsAvailable.collectAsState()
 
 
 
-    LaunchedEffect(editableCharacter, skillList) {
-        skillViewModel.validateSkills(editableCharacter, skillList)
-    }
+        LaunchedEffect(editableCharacter, skillList) {
+            skillViewModel.validateSkills(editableCharacter, skillList)
+        }
 
-    LaunchedEffect(editableCharacter) {
-        skillViewModel.getSkillsFromCharacter(editableCharacter)
-    }
-
-
-    DefaultRow {
-        Text(
-            text = "Puntos disponibles: $pointsAvailable",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Icon(
-            imageVector = Icons.Default.Settings,
-            contentDescription = "settings",
-            Modifier
-                .size(30.dp)
-                .clickable { onEdit() }
-        )
-    }
+        LaunchedEffect(editableCharacter) {
+            skillViewModel.getSkillsFromCharacter(editableCharacter)
+        }
 
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        if (skillList.isEmpty()) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                IconButton(onClick = { skillViewModel.getSkillsFromCharacter(editableCharacter) }) {
-                    Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+        DefaultRow {
+            Text(
+                text = "Puntos disponibles: $pointsAvailable",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Icon(
+                imageVector = Icons.Default.Settings,
+                contentDescription = "settings",
+                Modifier
+                    .size(30.dp)
+                    .clickable { onEdit() }
+            )
+        }
+
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            if (skillList.isEmpty()) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    IconButton(onClick = { skillViewModel.getSkillsFromCharacter(editableCharacter) }) {
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
+                    }
                 }
-            }
-
-        }
-
-        // Columna SGTR
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
-        ) {
-            Text(text = "Físicas", style= MaterialTheme.typography.titleSmall)
-
-            skillList.filter { it.skill.tag == "STR" }.forEachIndexed() { index, skill ->
-                InlineStat(
-                    localValue = skill.value,
-                    label = skill.skill.name.split("(")[0],
-                )
 
             }
-        }
 
-        // Columna DES
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
-        ) {
-            Text(text = "Habilidad", style= MaterialTheme.typography.titleSmall)
+            // Columna SGTR
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+            ) {
+                Text(text = "Físicas", style= MaterialTheme.typography.titleSmall)
 
-            skillList.filter { it.skill.tag == "DEX" }.forEach { skill ->
-                InlineStat(
-                    localValue = skill.value,
-                    label = skill.skill.name.split("(")[0],
-                )
-            }
-        }
-    }
-
-    Divider(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        thickness = 1.dp
-    )
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        // COLUMNA INT
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
-        ) {
-            Text(text = "Conocimiento", style= MaterialTheme.typography.titleSmall)
-            skillList.filter { it.skill.tag == "INT" }.forEachIndexed { index, skill ->
-                Row(verticalAlignment = Alignment.CenterVertically){
-
-
+                skillList.filter { it.skill.tag == "STR" }.forEachIndexed() { index, skill ->
                     InlineStat(
                         localValue = skill.value,
                         label = skill.skill.name.split("(")[0],
                     )
 
+                }
+            }
 
+            // Columna DES
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+            ) {
+                Text(text = "Habilidad", style= MaterialTheme.typography.titleSmall)
+
+                skillList.filter { it.skill.tag == "DEX" }.forEach { skill ->
+                    InlineStat(
+                        localValue = skill.value,
+                        label = skill.skill.name.split("(")[0],
+                    )
                 }
             }
         }
 
-
-        // Columna CHA
-        Column(
+        Divider(
             modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
+                .fillMaxWidth()
+                .padding(16.dp),
+            thickness = 1.dp
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Sociales", style= MaterialTheme.typography.titleSmall)
-            skillList.filter { it.skill.tag == "CHA" }.forEach { skill ->
-                InlineStat(
-                    localValue = skill.value,
-                    label = skill.skill.name.split("(")[0],
-                )
+            // COLUMNA INT
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+            ) {
+                Text(text = "Conocimiento", style= MaterialTheme.typography.titleSmall)
+                skillList.filter { it.skill.tag == "INT" }.forEachIndexed { index, skill ->
+                    Row(verticalAlignment = Alignment.CenterVertically){
+
+
+                        InlineStat(
+                            localValue = skill.value,
+                            label = skill.skill.name.split("(")[0],
+                        )
+
+
+                    }
+                }
+            }
+
+
+            // Columna CHA
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp)
+            ) {
+                Text(text = "Sociales", style= MaterialTheme.typography.titleSmall)
+                skillList.filter { it.skill.tag == "CHA" }.forEach { skill ->
+                    InlineStat(
+                        localValue = skill.value,
+                        label = skill.skill.name.split("(")[0],
+                    )
+                }
             }
         }
     }
-
 }
 
 
