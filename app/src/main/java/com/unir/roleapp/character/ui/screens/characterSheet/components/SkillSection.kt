@@ -82,7 +82,7 @@ fun SkillSectionBody(
         skillViewModel.validateSkills(editableCharacter, skillList)
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(editableCharacter) {
         skillViewModel.getSkillsFromCharacter(editableCharacter)
     }
 

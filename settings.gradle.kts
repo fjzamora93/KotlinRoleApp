@@ -1,9 +1,14 @@
 pluginManagement {
+    plugins {
+        id("org.jetbrains.kotlin.android") version "1.9.21" // Versión explícita
+    }
     repositories {
         google {
-            google()
-            mavenCentral()
-            gradlePluginPortal()
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
         }
         mavenCentral()
         gradlePluginPortal()
