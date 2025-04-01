@@ -33,7 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.unir.core.ui.components.common.DefaultRow
 import com.unir.core.ui.layout.MainLayout
 import com.unir.adventure.ui.viewmodels.SceneViewModel
-import com.unir.sheet.R
+import com.unir.roleapp.R
 
 
 // TODO: NO HAY POR QUÉ USAR EL MAIN LAYOUT (que lo que tiene dentro es un Scaffold). Como alternativa, podemos crear un nuevo Scaffold.

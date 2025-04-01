@@ -6,7 +6,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.unir.sheet.R
 
 // NO UTILIZAR! MEJOR UTILIZAR TIPOGRAFÍAS POR DEFECTO O DE ALGÚN TEMA QUE SE HAYA ELEGIDO
 val CustomType = Typography(

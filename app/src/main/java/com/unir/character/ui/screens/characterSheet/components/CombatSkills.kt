@@ -47,7 +47,6 @@ import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.Skill
 import com.unir.character.ui.screens.common.InlineStat
 import com.unir.character.ui.viewmodels.SkillViewModel
-import com.unir.sheet.R
 
 @Composable
 fun CombatSkillSection(

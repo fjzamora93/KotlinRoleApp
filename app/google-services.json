@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:455269672501:android:63f423594b7de246e9337c",
+        "android_client_info": {
+          "package_name": "com.unir.roleapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY3VzjCVVpKb-5wG0zerdeCB4EHWsNlTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:455269672501:android:8fea191c8cb8d2c6e9337c",
         "android_client_info": {
           "package_name": "com.unir.sheet"

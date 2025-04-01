@@ -15,7 +15,7 @@ import com.unir.character.data.model.local.CharacterEntity
 import com.unir.character.data.model.local.RolClass
 import com.unir.core.di.LocalNavigationViewModel
 import com.unir.core.navigation.NavigationViewModel
-import com.unir.sheet.R
+import com.unir.roleapp.R
 import java.util.Locale
 
 @Composable
