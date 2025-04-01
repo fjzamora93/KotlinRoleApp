@@ -71,17 +71,46 @@ class CharacterRepositoryImpl @Inject constructor(
 
 
 
-
+    // TODO: AÑADIR VALIDACIÓN DE CUÁNDO FUE LA ÚLTIMA MODIFICACIÓN, PORQUE SI NO, SIEMPRE SOBREESCRIBE LA API
     override suspend fun getCharacterById(id: Long): Result<CharacterEntity> {
         return try {
-            val character = characterDao.getCharacterById(id) ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
-            activeCharacter = character
-            Log.i("CharacterRepositoryImpl", "Personaje activo: $activeCharacter")
-            Result.success(character)
+            val localCharacter = characterDao.getCharacterById(id) ?: throw NoSuchElementException("No se encontró el personaje con ID $id")
+
+            val characterResponse = apiService.getCharacterById(id)
+            if (characterResponse.isSuccessful) {
+                Log.d("CharacterRepositoryImpl", "CharacterRepositoryImpl.getCharacterById(): ${characterResponse.body()}")
+                characterResponse.body()?.let { apiCharacter ->
+
+                    val crossRefSkills = apiCharacter.skills.map { skillDTO ->
+                        CharacterSkillCrossRef(
+                            characterId = apiCharacter.id,
+                            skillId = skillDTO.skill.id,
+                            value = skillDTO.value
+                        )
+                    }
+                    if (apiCharacter.updatedAt >= localCharacter.updatedAt){
+                        characterDao.insertCharacterWithSkills(apiCharacter.toCharacterEntity(), crossRefSkills)
+                    }
+
+                    activeCharacter = apiCharacter.toCharacterEntity()
+                    return Result.success(activeCharacter)
+                }
+            }
+
+            // Si la API no devolvió un resultado válido, intenta devolver el local
+            activeCharacter = localCharacter
+            Result.success(localCharacter)
         } catch (e: Exception) {
+            // En caso de error, intenta recuperar el personaje local antes de fallar completamente
+            characterDao.getCharacterById(id)?.let {
+                activeCharacter = it
+                return Result.success(it)
+            }
             Result.failure(e)
         }
-    } /** LOs personajes por id los buscará directamente en el DAO. Si no lo encuentra, levantará una excepción  */
+    }
+
+
 
 
     // IMPORTANTE: Añadir siempre las Skills para que lleguen correctamente al backend

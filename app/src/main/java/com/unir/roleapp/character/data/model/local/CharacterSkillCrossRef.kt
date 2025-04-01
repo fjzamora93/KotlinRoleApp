@@ -20,8 +20,7 @@ import androidx.room.Index
             childColumns = ["skillId"],
             onDelete = ForeignKey.CASCADE
         )
-    ],
-    indices = [Index("skillId")]
+    ]
 )
 data class CharacterSkillCrossRef(
     val characterId: Long,
