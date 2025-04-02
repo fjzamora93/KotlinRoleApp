@@ -86,8 +86,14 @@ fun SkillSectionBody(
             skillViewModel.validateSkills(editableCharacter, skillList)
         }
 
+        // TODO DISPARAR ESTO CUANDO SE ACTUALICE EL CHARACTER
         LaunchedEffect(editableCharacter) {
+            println("SkillSectionBody: $editableCharacter, \n\n $skillList")
+
+            // JUSTO EN ESTE MOMENTO LA LISTA SIGUE VACÍA... AÚN NO SE HA CARGADO LA LISTA DE HABILIDADES
             skillViewModel.getSkillsFromCharacter(editableCharacter)
+
+            // LUego de esto.. parece que sí se han actualizado en el view model y se pueden ver en la pantalla si ya están en la base de datos
         }
 
 
