@@ -5,6 +5,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import androidx.room.Upsert
+import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.data.model.local.CharacterSkillCrossRef
 import com.roleapp.character.data.model.local.Skill
 import com.roleapp.character.data.model.local.SkillValue
@@ -37,12 +38,16 @@ interface SkillDao {
 
 
     @Upsert
-    suspend fun insertCharacterSkills(skills: List<CharacterSkillCrossRef>)
+    suspend fun upsertCharacterSkills(skills: List<CharacterSkillCrossRef>)
+
+    @Query("UPDATE character_entity_table SET updatedAt = :timestamp WHERE id = :characterId")
+    suspend fun updateCharacterTimestamp(characterId: Long, timestamp: Long = System.currentTimeMillis())
 
     @Transaction
-    suspend fun insertSkills(characterId: Long, skills: List<SkillValue>) {
-        val crossRefs = skills.map { it.toCrossRef(characterId) }
-        insertCharacterSkills(crossRefs)
+    suspend fun insertSkills(character: CharacterEntity, skills: List<SkillValue>) {
+        val crossRefs = skills.map { it.toCrossRef(character.id) }
+        upsertCharacterSkills(crossRefs)
+        updateCharacterTimestamp(character.id)
     }
 
 

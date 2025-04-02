@@ -57,9 +57,10 @@ object RepositoryModule {
     @Singleton
     fun provideSkillRepository(
         apiService: SkillApiService,
+        characterApiService: CharacterApiService,
         skillDao: SkillDao
     ): SkillRepository {
-        return SkillRepositoryImpl(apiService, skillDao)
+        return SkillRepositoryImpl(apiService, characterApiService,skillDao)
     }
 
     @Provides

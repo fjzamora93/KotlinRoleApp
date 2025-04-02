@@ -11,7 +11,7 @@ class UpdateSkills @Inject constructor(private val repository: SkillRepository) 
         skillList: List<SkillValue>
     ): Result<Unit> {
         return try {
-            repository.saveSkills(character.id, skillList)
+            repository.saveSkills(character, skillList)
         } catch (e: Exception) {
             Result.failure(e)
         }

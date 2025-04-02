@@ -15,6 +15,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -97,6 +98,7 @@ fun SkillSectionBody(
         }
 
 
+
         DefaultRow {
             Text(
                 text = "Puntos disponibles: $pointsAvailable",
@@ -121,13 +123,9 @@ fun SkillSectionBody(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             if (skillList.isEmpty()) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()
                 ) {
-                    IconButton(onClick = { skillViewModel.getSkillsFromCharacter(editableCharacter) }) {
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
-                    }
+                    CircularProgressIndicator()
                 }
 
             }

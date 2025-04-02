@@ -91,6 +91,7 @@ class CharacterRepositoryImpl @Inject constructor(
 
                     // TODO: Comprobar que el personaje local es el más actualizado, en caso contrario, actualizar el remoto.
                     if (apiCharacter.updatedAt >= localCharacter.updatedAt){
+                        println("LA VERSIÓN MÁS ACTUAL DEL PERSONAJE ES LA REMOTA... ACTUALIZANDO")
                         characterDao.insertCharacterWithSkills(apiCharacter.toCharacterEntity(), crossRefSkills)
                     }
 
