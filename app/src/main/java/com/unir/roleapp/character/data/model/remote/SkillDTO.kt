@@ -1,0 +1,19 @@
+package com.roleapp.character.data.model.remote
+
+import com.roleapp.character.data.model.local.Skill
+
+data class SkillDTO(
+    val id: Int,
+    val name: String,
+    val description: String,
+    val tag: String
+)
+
+fun SkillDTO.toSkill(): Skill {
+    return Skill(
+        id = this.id,
+        name = this.name,
+        description = this.description,
+        tag = this.tag
+    )
+}
