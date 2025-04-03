@@ -154,6 +154,19 @@ fun AdventureScreenBody(
         }
         Spacer(modifier = Modifier.height(24.dp))
 
+        Button(
+            onClick = {navigationViewModel.navigate(ScreensRoutes.AiTestScreen.route) },
+            colors = ButtonDefaults.buttonColors(Color.Black),
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.padding(horizontal = 24.dp)
+        ) {
+            Text(
+                "Test Generador IA",
+                style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
+            )
+        }
+
+
         // Decoración: Imagen con temática de rol
         Image(
             painter = painterResource(id = R.drawable.fantasy_landscape),

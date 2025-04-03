@@ -22,6 +22,7 @@ import com.roleapp.auth.ui.screens.LoginScreen
 import com.roleapp.auth.ui.screens.UserProfileScreen
 import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.character.ui.screens.characterform.CharacterEditorScreen
+import com.unir.roleapp.adventure.ai.screens.SceneTestScreen
 
 @Composable
 fun NavGraph(
@@ -95,6 +96,11 @@ fun NavGraph(
             // ADVENTURE
             composable(ScreensRoutes.TemplateAdventureScreen.route) {
                 TemplateAdventureScreen()
+            }
+
+            // TEST
+            composable(ScreensRoutes.AiTestScreen.route){
+                SceneTestScreen()
             }
 
 

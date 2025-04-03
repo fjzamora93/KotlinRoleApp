@@ -34,4 +34,7 @@ sealed class ScreensRoutes(val route: String) {
     object AdventureMainScreen: ScreensRoutes("AdventureMainScreen")
     object TemplateAdventureScreen: ScreensRoutes("TemplateAdventureScreen")
 
+    // TEST
+    object AiTestScreen  : ScreensRoutes("AiTestScreen")
+
 }
