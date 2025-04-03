@@ -118,4 +118,18 @@ class CharacterViewModel @Inject constructor(
             }
         }
     }
+
+    fun getActiveCharacter(){
+        _loadingState.value = true
+        viewModelScope.launch {
+            val result = characterUseCases.getActiveCharacter()
+            result.onSuccess {
+                _selectedCharacter.value = it
+                _loadingState.value = false
+            }.onFailure {
+                _loadingState.value = false
+                _errorMessage.value = it.message
+            }
+        }
+    }
 }

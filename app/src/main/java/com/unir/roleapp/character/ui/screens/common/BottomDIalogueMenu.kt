@@ -17,8 +17,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BottomDialogueMenu(
     onDismiss: () -> Unit,
-    onEdit: () -> Unit,
-    onDelete: () -> Unit
+    onFirstOption: () -> Unit,
+    onSecondOption: () -> Unit,
+    firstLabel: String = "Editar",
+    secondLable: String = "Eliminar",
+    title: String = "Opciones"
 ) {
     ModalBottomSheet(
         onDismissRequest = { onDismiss() }
@@ -29,27 +32,27 @@ fun BottomDialogueMenu(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Opciones del personaje",
+                text = title,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
             TextButton(
                 onClick = {
-                    onEdit()
+                    onFirstOption()
                     onDismiss()
                 }
             ) {
-                Text("Editar")
+                Text(firstLabel)
             }
 
             TextButton(
                 onClick = {
-                    onDelete()
+                    onSecondOption()
                     onDismiss()
                 }
             ) {
-                Text("Eliminar")
+                Text(secondLable)
             }
 
             TextButton(

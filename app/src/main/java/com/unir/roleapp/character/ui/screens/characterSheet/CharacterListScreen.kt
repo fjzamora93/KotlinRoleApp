@@ -121,8 +121,8 @@ fun CharacterSummary(
     if (showBottomSheet) {
         BottomDialogueMenu(
             onDismiss = { showBottomSheet = false },
-            onEdit = { navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.createRoute(character.id)) },
-            onDelete = { characterViewModel.deleteCharacter(character) }
+            onFirstOption = { navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.createRoute(character.id)) },
+            onSecondOption = { characterViewModel.deleteCharacter(character) }
         )
     }
 }

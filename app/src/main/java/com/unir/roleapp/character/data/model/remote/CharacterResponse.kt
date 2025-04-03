@@ -23,6 +23,7 @@ data class CharacterResponse(
     val wisdom: Int,
     val charisma: Int,
 
+    val level: Int,
     val hp: Int,
     val currentHp: Int,
     val ap: Int,
@@ -60,7 +61,7 @@ data class CharacterResponse(
             currentHp = this.currentHp,
             ap = this.ap,
             currentAp = this.currentAp,
-            _level = 1
+            _level = level
         )
     }
 

@@ -63,16 +63,22 @@ fun CharacterDetailScreen(
     }
 
 
-    CharacterLayout(onToggleMenu = { coroutineScope.launch { drawerState.open() } }) {
+    CharacterLayout { onClickDrawer ->
         selectedCharacter?.let { character ->
             DetailCharacterBody(
                 character = character,
-                onClick = { coroutineScope.launch { drawerState.open() } }
+                onClick = { onClickDrawer() }
             )
         } ?: CustomCircularProgressIndicator()
     }
 
+
 }
+
+
+
+
+
 
 
 @Composable

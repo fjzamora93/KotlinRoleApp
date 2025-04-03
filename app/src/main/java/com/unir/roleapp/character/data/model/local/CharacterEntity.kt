@@ -110,7 +110,7 @@ data class CharacterEntity(
             updatedAt = this.updatedAt,
             description = this.description,
             race = this.race.name,
-            level = this.level,
+            level = this._level,
             armor = this.armor,
             age = this.age,
             gold = this.gold,
