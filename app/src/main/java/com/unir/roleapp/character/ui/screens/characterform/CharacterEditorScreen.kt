@@ -140,7 +140,7 @@ fun CharacterEditForm(
 
             NumberRangeDropDown(
                 validRange = 1..12,
-                selectedValue = characterToUpdate.level,
+                selectedValue = characterToUpdate._level,
                 modifier = Modifier.weight(1f),
                 label = "Nivel",
                 onValueChange = { newLevel ->

@@ -8,9 +8,16 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.core.ui.components.navigationbar.NavigationBar
 import kotlinx.coroutines.launch
 
@@ -18,11 +25,15 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CharacterLayout(
-    onToggleMenu: () -> Unit,
-    content: @Composable () -> Unit
-){
+    content: @Composable (onClickDrawer: () -> Unit) -> Unit
+    ){
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
+
+    val onClickDrawer: () -> Unit = {
+        coroutineScope.launch { drawerState.open() }
+    }
+
 
     CharacterMenu(drawerState = drawerState, onClose = { coroutineScope.launch { drawerState.close() } }) {
         Scaffold(bottomBar = { NavigationBar() }) { innerPadding ->
@@ -37,7 +48,7 @@ fun CharacterLayout(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     item {
-                        content()
+                        content(onClickDrawer)
                     }
                 }
             }
