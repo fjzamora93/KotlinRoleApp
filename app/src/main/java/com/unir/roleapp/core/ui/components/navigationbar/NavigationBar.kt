@@ -42,9 +42,9 @@ val navigationItems = listOf(
         route = ScreensRoutes.AdventureMainScreen.route
     ),
     NavigationItem(
-        title = "Perfil",
-        icon = Icons.Default.Person,
-        route = ScreensRoutes.UserProfileScreen.route
+        title = "Personajes",
+        icon = Icons.Default.SupervisedUserCircle,
+        route = ScreensRoutes.CharacterListScreen.route
     ),
     NavigationItem(
         title = "Home",
@@ -52,9 +52,9 @@ val navigationItems = listOf(
         route = ScreensRoutes.HomeScreen.route
     ),
     NavigationItem(
-        title = "Personajes",
-        icon = Icons.Default.SupervisedUserCircle,
-        route = ScreensRoutes.CharacterListScreen.route
+        title = "Perfil",
+        icon = Icons.Default.Person,
+        route = ScreensRoutes.UserProfileScreen.route
     ),
     NavigationItem(
         title = "Settings",

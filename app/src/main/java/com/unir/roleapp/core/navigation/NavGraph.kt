@@ -104,7 +104,7 @@ fun NavGraph(
 
             // HOME
             composable(ScreensRoutes.HomeScreen.route) {
-                HomeScreen()
+                HomeScreen(navController = navController)
             }
         }
     }

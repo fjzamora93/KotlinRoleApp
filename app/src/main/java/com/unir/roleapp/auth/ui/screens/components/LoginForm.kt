@@ -13,6 +13,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,10 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unir.roleapp.R
 
 
 @Composable
@@ -35,6 +38,8 @@ fun LoginForm(
     var email by remember { mutableStateOf("test_6@mail.com") }
     var password by remember { mutableStateOf("1234") }
     var showRegister by remember { mutableStateOf(false) }
+    val textColor: Color  = colorResource(id = R.color.white)
+    val secondTextColor: Color  = colorResource(id = R.color.gray)
 
     Column(
         modifier = Modifier
@@ -46,22 +51,25 @@ fun LoginForm(
         Text(
             text = if (showRegister) "Crear Cuenta" else "Iniciar Sesión",
             fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = textColor
         )
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text("Email", color = secondTextColor) },
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(textColor = textColor)
         )
         TextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Contraseña") },
+            label = { Text("Contraseña", color = secondTextColor) },
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(textColor = textColor)
         )
 
         if (showRegister) {
@@ -70,9 +78,10 @@ fun LoginForm(
             TextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
-                label = { Text("Confirmar Contraseña") },
+                label = { Text("Confirmar Contraseña", color = secondTextColor) },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.textFieldColors(textColor = textColor)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -88,7 +97,7 @@ fun LoginForm(
 
             Button(
                 onClick = { onLogin(email, password) },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
+                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.accent_primary))
             ) {
                 Text(text = "Iniciar sesión", fontSize = 16.sp, color = Color.White)
             }
@@ -103,14 +112,15 @@ fun LoginForm(
         Text(
             text = "¿Eres nuevo?",
             fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
+            color = secondTextColor
         )
 
         TextButton(onClick = { showRegister = !showRegister }) {
             Text(
                 text = if (showRegister) "Volver al login" else "Crear una cuenta",
                 fontSize = 16.sp,
-                color = Color.Blue
+                color = textColor
             )
         }
     }

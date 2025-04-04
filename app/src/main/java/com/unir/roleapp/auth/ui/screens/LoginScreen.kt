@@ -28,8 +28,8 @@ import com.roleapp.auth.viewmodels.AuthViewModel
 fun LoginScreen() {
     MainLayout(){
         Column(){
-            LoginBody()
-            BackButton()
+            LoginBody()/*
+            BackButton()*/
         }
     }
 }
