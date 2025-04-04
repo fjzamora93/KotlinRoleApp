@@ -12,6 +12,8 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.roleapp.core.ui.components.navigationbar.NavigationBar
@@ -48,7 +50,7 @@ fun MainLayout(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = colorResource(id = R.color.dark_blue))
+                    .background(Brush.verticalGradient(colors = listOf(Color(0xFF1F1D36), Color(0xFF3F3351))))
                     .padding(innerPadding)
             ) {
                 /*Header(
