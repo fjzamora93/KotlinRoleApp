@@ -70,9 +70,10 @@ fun LoginBody(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         when (userState) {
-            is UserState.Loading -> CustomCircularProgressIndicator()
+            /*is UserState.Loading -> CustomCircularProgressIndicator()*/
             is UserState.Error -> Toast.makeText(context, (userState as UserState.Error).message, Toast.LENGTH_SHORT).show()
-            else -> Toast.makeText(context, "¡Hola!", Toast.LENGTH_SHORT).show()
+            /*else -> Toast.makeText(context, "¡Hola!", Toast.LENGTH_SHORT).show()*/
+            else -> {}
         }
     }
         LoginForm(viewModel::login, viewModel::signup)
