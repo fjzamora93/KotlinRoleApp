@@ -22,6 +22,7 @@ import com.roleapp.auth.ui.screens.LoginScreen
 import com.roleapp.auth.ui.screens.UserProfileScreen
 import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.character.ui.screens.characterform.CharacterEditorScreen
+import com.unir.roleapp.home.ui.screens.HomeScreen
 
 @Composable
 fun NavGraph(
@@ -98,6 +99,10 @@ fun NavGraph(
             }
 
 
+            // HOME
+            composable(ScreensRoutes.HomeScreen.route) {
+                HomeScreen()
+            }
         }
     }
 }
