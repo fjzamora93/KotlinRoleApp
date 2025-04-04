@@ -85,7 +85,7 @@ fun HeaderBody(
                 )
 
                 Text(
-                    text = "${character.race ?: ""} | ${character.rolClass ?: ""} | ${character.level ?: ""}",
+                    text = "${character.race ?: ""} | ${character.rolClass ?: ""} | ${character._level ?: ""}",
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }

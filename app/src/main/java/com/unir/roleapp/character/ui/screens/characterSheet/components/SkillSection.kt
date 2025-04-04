@@ -193,12 +193,9 @@ fun SkillSectionBody(
                             localValue = skill.value,
                             label = skill.skill.name.split("(")[0],
                         )
-
-
                     }
                 }
             }
-
 
             // Columna CHA
             Column(
