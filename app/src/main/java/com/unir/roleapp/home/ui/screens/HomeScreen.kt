@@ -64,6 +64,12 @@ fun HomeScreenBody(navController: NavHostController) {
             description = "Crea y gestiona tus hojas de personaje. Personaliza atributos, habilidades y equipo para cada aventura. ¡Tu historia comienza aquí!",
             imageResName = "companeros",
             route = ScreensRoutes.CharacterListScreen.route
+        ),
+        SectionCardItem(
+            title = "Usuarios",
+            description = "Consulta y edita tu perfil de aventurero. Gestiona tus partidas, personajes y logros desde un solo lugar. ¡Tu historia te define!",
+            imageResName = "cofre",
+            route = ScreensRoutes.UserProfileScreen.route
         )
     )
 

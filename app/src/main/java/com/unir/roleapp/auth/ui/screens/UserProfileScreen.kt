@@ -37,7 +37,7 @@ fun UserProfileScreen() {
     MainLayout(){
         Column(){
             UserProfileBody()
-            BackButton()
+            /*BackButton()*/
         }
     }
 }
