@@ -6,9 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.R
 import com.unir.roleapp.core.ui.components.SectionCard
@@ -47,6 +49,11 @@ fun HomeScreenBody() {
         painterResource(id = R.drawable.mazmorra),
         painterResource(id = R.drawable.companeros)
     )
+    val routes = listOf(
+        ScreensRoutes.CharacterListScreen.route,
+        ScreensRoutes.CharacterListScreen.route,
+        ScreensRoutes.CharacterListScreen.route
+    )
 
     HorizontalPager(
         count = titles.size,
@@ -58,6 +65,13 @@ fun HomeScreenBody() {
         contentPadding = PaddingValues(horizontal = 32.dp),
         itemSpacing = 16.dp
     ) { page ->
-        SectionCard(titles[page], descriptions[page], images[page])
+        SectionCard(
+            titles[page],
+            descriptions[page],
+            images[page],
+            onClick = {
+                routes[page]
+            }
+        )
     }
 }

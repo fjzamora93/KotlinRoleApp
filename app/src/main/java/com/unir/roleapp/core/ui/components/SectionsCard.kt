@@ -2,6 +2,7 @@ package com.unir.roleapp.core.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -17,7 +18,8 @@ import com.unir.roleapp.R
 fun SectionCard(
     title: String,
     description: String,
-    painter: Painter? = null // Opcional: si quieres cargar una imagen
+    painter: Painter,
+    onClick: () -> Unit // Parámetro para manejar el click
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -25,6 +27,7 @@ fun SectionCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(500.dp)
+            .clickable(onClick = onClick)
             .background(color = colorResource(id = R.color.navy))
     ) {
         Row(
