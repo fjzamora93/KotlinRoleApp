@@ -48,6 +48,9 @@ fun NavGraph(
             composable(ScreensRoutes.AdventureMainScreen.route) {
                 AdventureMainScreen()
             }
+            composable(ScreensRoutes.AdventureListScreen.route) {
+                TemplateAdventureScreen()
+            }
             composable (ScreensRoutes.LoginScreen.route){
                 LoginScreen()
             }

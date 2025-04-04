@@ -50,8 +50,8 @@ fun HomeScreenBody() {
         painterResource(id = R.drawable.companeros)
     )
     val routes = listOf(
-        ScreensRoutes.CharacterListScreen.route,
-        ScreensRoutes.CharacterListScreen.route,
+        ScreensRoutes.AdventureMainScreen.route,
+        ScreensRoutes.AdventureListScreen.route,
         ScreensRoutes.CharacterListScreen.route
     )
 
