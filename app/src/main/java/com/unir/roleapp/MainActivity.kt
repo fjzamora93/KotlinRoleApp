@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         enableEdgeToEdge()
 
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
 
             val navHostController: NavHostController = rememberNavController()

@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalLibrary
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -26,10 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.navigation.NavigationViewModel
 import com.roleapp.core.navigation.ScreensRoutes
+import com.unir.roleapp.R
 
 
 val navigationItems = listOf(
@@ -44,12 +47,17 @@ val navigationItems = listOf(
         route = ScreensRoutes.UserProfileScreen.route
     ),
     NavigationItem(
+        title = "Home",
+        icon = Icons.Default.Home,
+        route = ScreensRoutes.HomeScreen.route
+    ),
+    NavigationItem(
         title = "Personajes",
         icon = Icons.Default.SupervisedUserCircle,
         route = ScreensRoutes.CharacterListScreen.route
     ),
     NavigationItem(
-        title = "Setting",
+        title = "Settings",
         icon = Icons.Default.Settings,
         route = ScreensRoutes.FontTemplateScreen.route
     )
@@ -58,9 +66,8 @@ val navigationItems = listOf(
 
 @Composable
 fun NavigationBar(
-    containerColor: Color = Color.White,
-    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
-    modifier: Modifier = Modifier
+    containerColor: Color = colorResource(id = R.color.navy),
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
 ) {
     val currentRoute by navigationViewModel.currentRoute.collectAsState()
 
@@ -68,7 +75,7 @@ fun NavigationBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(containerColor)
-            .padding(vertical = 8.dp),
+            .padding(vertical = 10.dp, horizontal = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -84,13 +91,13 @@ fun NavigationBar(
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.title,
-                        tint = if (isSelected) Color.Black else Color.Gray
+                        tint = if (isSelected) Color.White else Color.Gray
                     )
                 },
                 label = {
                     Text(
                         text = item.title,
-                        color = if (isSelected) Color.Black else Color.Gray
+                        color = if (isSelected) Color.White else Color.Gray
                     )
                 },
             )

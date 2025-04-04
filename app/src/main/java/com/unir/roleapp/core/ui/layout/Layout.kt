@@ -1,6 +1,7 @@
 package com.roleapp.core.ui.layout
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,8 +12,10 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.roleapp.core.ui.components.navigationbar.NavigationBar
+import com.unir.roleapp.R
 
 import kotlinx.coroutines.launch
 
@@ -45,18 +48,19 @@ fun MainLayout(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(color = colorResource(id = R.color.dark_blue))
                     .padding(innerPadding)
             ) {
-                Header(
+                /*Header(
                     onClickMenu = {
                         coroutineScope.launch { drawerState.open() }
                     }
-                )
+                )*/
 
                 // CONTENIDO DEL SCREEN. MODIFICAR SI FUESE NECESARIO.
                 LazyColumn(Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(vertical = 16.dp , horizontal = 0.dp)
                 ){
                     item {
                         content()
