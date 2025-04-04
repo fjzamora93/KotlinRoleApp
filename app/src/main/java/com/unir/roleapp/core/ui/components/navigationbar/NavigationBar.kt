@@ -66,7 +66,7 @@ val navigationItems = listOf(
 
 @Composable
 fun NavigationBar(
-    containerColor: Color = colorResource(id = R.color.navy),
+    containerColor: Color = colorResource(id = R.color.dark_blue),
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
 ) {
     val currentRoute by navigationViewModel.currentRoute.collectAsState()
