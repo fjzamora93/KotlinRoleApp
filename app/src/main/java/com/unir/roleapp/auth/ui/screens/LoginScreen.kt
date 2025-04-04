@@ -52,7 +52,7 @@ fun LoginBody(
             }
 
             is UserState.Success -> {
-                navigationViewModel.navigate(ScreensRoutes.UserProfileScreen.route)
+                navigationViewModel.navigate(ScreensRoutes.HomeScreen.route)
                 characterViewModel.getCharactersByUser()
             }
 
