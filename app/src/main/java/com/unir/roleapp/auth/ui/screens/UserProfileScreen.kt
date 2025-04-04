@@ -19,6 +19,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.roleapp.core.di.LocalNavigationViewModel
@@ -28,13 +30,14 @@ import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.components.buttons.BackButton
 import com.roleapp.core.ui.layout.MainLayout
 import com.roleapp.auth.viewmodels.AuthViewModel
+import com.unir.roleapp.R
 
 @Composable
 fun UserProfileScreen() {
     MainLayout(){
         Column(){
             UserProfileBody()
-            BackButton()
+            /*BackButton()*/
         }
     }
 }
@@ -64,6 +67,7 @@ fun UserProfileDetail(
     navigation : NavigationViewModel = LocalNavigationViewModel.current
 ){
 
+    val textColor: Color = colorResource(id = R.color.white);
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,16 +78,19 @@ fun UserProfileDetail(
         Text(
             text = "Perfil de Usuario",
             style = MaterialTheme.typography.titleMedium,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            color = textColor
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Nombre: ${user.id}",
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
+            color = textColor
         )
         Text(
             text = "Email: ${user.email}",
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
+            color = textColor
         )
         Spacer(modifier = Modifier.height(32.dp))
 

@@ -10,6 +10,7 @@
 
     /** Colores de la app **/
     <color name="main_color">#35155D</color>
+    <color name="dark_purple">#392467</color>
     <color name="primary">#512B81</color>
     <color name="main_dark">#2D033B</color>
     <color name="accent_primary">#4477CE</color>
