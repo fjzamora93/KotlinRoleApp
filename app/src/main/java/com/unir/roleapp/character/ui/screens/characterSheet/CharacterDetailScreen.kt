@@ -108,7 +108,8 @@ fun DetailCharacterBody(
                 Icon(imageVector = Icons.Outlined.Security, contentDescription = "Armadura",
                     Modifier
                         .size(60.dp)
-                        .clickable { activeDialog = CharacterDialog.Armour })
+                        .clickable { activeDialog = CharacterDialog.Armour },
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(horizontalAlignment = Alignment.Start) {
                     Text(text = "15", style = MaterialTheme.typography.headlineMedium)
