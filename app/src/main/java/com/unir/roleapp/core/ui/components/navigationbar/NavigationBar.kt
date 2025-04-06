@@ -52,20 +52,16 @@ val navigationItems = listOf(
         icon = Icons.Default.Home,
         route = ScreensRoutes.HomeScreen.route
     ),
-    /*NavigationItem(
-        title = "Perfil",
-        icon = Icons.Default.Person,
-        route = ScreensRoutes.UserProfileScreen.route
-    ),*/
+
     NavigationItem(
         title = "Personajes",
         icon = Icons.Default.SupervisedUserCircle,
         route = ScreensRoutes.CharacterListScreen.route
     ),
     NavigationItem(
-        title = "Settings",
+        title = "Perfil",
         icon = Icons.Default.Settings,
-        route = ScreensRoutes.FontTemplateScreen.route
+        route = ScreensRoutes.UserProfileScreen.route
     )
 )
 
