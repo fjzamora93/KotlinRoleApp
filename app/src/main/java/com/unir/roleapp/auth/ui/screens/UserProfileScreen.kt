@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.di.LocalAuthViewModel
 import com.roleapp.core.navigation.NavigationViewModel
@@ -30,12 +31,16 @@ import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.components.buttons.BackButton
 import com.roleapp.core.ui.layout.MainLayout
 import com.roleapp.auth.viewmodels.AuthViewModel
+import com.roleapp.auth.viewmodels.UserState
+import com.roleapp.core.ui.components.common.DefaultColumn
 import com.unir.roleapp.R
+import com.unir.roleapp.core.ui.components.common.MainBanner
 
 @Composable
 fun UserProfileScreen() {
     MainLayout(){
         Column(){
+            MainBanner()
             UserProfileBody()
             /*BackButton()*/
         }
@@ -44,17 +49,18 @@ fun UserProfileScreen() {
 
 @Composable
 fun UserProfileBody(
-    authViewModel: AuthViewModel = LocalAuthViewModel.current
+    authViewModel: AuthViewModel = hiltViewModel(),
+    navigation: NavigationViewModel = LocalNavigationViewModel.current
 ) {
     val userState by authViewModel.userState.collectAsState()
 
     when (userState) {
-        is com.roleapp.auth.viewmodels.UserState.Loading -> CircularProgressIndicator()
-        is com.roleapp.auth.viewmodels.UserState.Success -> UserProfileDetail(user = (userState as com.roleapp.auth.viewmodels.UserState.Success).user)
-        is com.roleapp.auth.viewmodels.UserState.Error -> Text("Error: ${(userState as com.roleapp.auth.viewmodels.UserState.Error).message}")
-        is com.roleapp.auth.viewmodels.UserState.LoggedOut -> Text("Sesión cerrada")
-        is com.roleapp.auth.viewmodels.UserState.Deleted -> Text("Cuenta eliminada")
-        else -> Text("Usuario no registrado")
+        is UserState.Loading -> DefaultColumn{ CircularProgressIndicator() }
+        is UserState.Success -> UserProfileDetail(user = (userState as UserState.Success).user)
+        is UserState.Error -> Text("Error: ${(userState as UserState.Error).message}", style = MaterialTheme.typography.bodyMedium)
+        is UserState.LoggedOut -> navigation.navigate(ScreensRoutes.LoginScreen.route)
+
+        else -> navigation.navigate(ScreensRoutes.LoginScreen.route)
     }
 }
 

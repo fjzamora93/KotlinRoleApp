@@ -1,10 +1,16 @@
 package com.roleapp.character.ui.screens.characterSheet
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.character.data.model.local.CharacterEntity
@@ -38,12 +45,15 @@ import com.roleapp.character.data.model.local.Race
 import com.roleapp.character.data.model.local.RolClass
 import com.roleapp.character.ui.screens.characterSheet.components.CharacterPortrait
 import com.roleapp.character.ui.screens.common.BottomDialogueMenu
+import com.roleapp.core.ui.components.common.CustomCircularProgressIndicator
 import com.unir.roleapp.R
 
 
 @Composable
 fun CharacterListScreen(){
-    MainLayout(){
+    MainLayout(
+        floatingActionButton = { CreateCharacterButton() }
+    ){
         CharacterListBody()
     }
 }
@@ -61,8 +71,11 @@ fun CharacterListBody(
 
     val characters by characterViewModel.characters.collectAsState()
 
+
     Text(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp, horizontal = 10.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 10.dp),
         text = "Personajes",
         style = MaterialTheme.typography.titleMedium,
         color = colorResource(id = R.color.white)
@@ -72,17 +85,22 @@ fun CharacterListBody(
         modifier = Modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+
+        if (characters.isEmpty()){
+            CustomCircularProgressIndicator()
+        }
+
         characters.let {
             it.forEach { character -> CharacterSummary(character) }
         }
 
     }
 
-    MaxWidthButton(
-        label = "Crear personaje",
-        onClick = { navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.createRoute(0)) },
-    )
+
+
 }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,3 +161,37 @@ fun CharacterSummary(
     }
 }
 
+
+
+
+@Composable
+fun CreateCharacterButton(
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        // Modificador para un fondo circular y tamaño grande
+        IconButton(
+            onClick = {
+                navigationViewModel.navigate(ScreensRoutes.CharacterEditorScreen.createRoute(0))
+            },
+            modifier = Modifier
+                .padding(16.dp)
+                .size(80.dp) // Tamaño más grande para el botón
+                .background(
+                    color = MaterialTheme.colorScheme.primary, // Usa el color primario del tema
+                    shape = CircleShape // Forma circular
+                ),
+            content = {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_person_add_alt_1_24),
+                    contentDescription = "Add person icon",
+                    tint = Color.White,
+                    modifier = Modifier.size(50.dp)
+                )
+            }
+        )
+    }
+}
