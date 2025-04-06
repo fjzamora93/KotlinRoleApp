@@ -49,6 +49,7 @@ import com.roleapp.character.ui.screens.characterform.components.PersonalityTest
 import com.roleapp.character.ui.screens.characterform.components.PersonalityTestForm
 import com.roleapp.character.ui.screens.characterform.components.PortraitGridComponent
 import com.roleapp.character.ui.screens.characterform.components.StatSectionForm
+import com.roleapp.character.ui.screens.common.layout.CharacterHeader
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.unir.roleapp.R
 
@@ -85,13 +86,14 @@ fun CharacterEditForm(
     val saveState by characterViewModel.saveState.collectAsState()
     var characterToUpdate by remember { mutableStateOf(CharacterEntity()) }
 
-    var isRequired by remember { mutableStateOf(editableCharacter?.name != "") }
-
+    var isRequired by remember { mutableStateOf(characterToUpdate.name.isBlank()) }
+    var isValidStat by remember { mutableStateOf(true) }
 
     LaunchedEffect(editableCharacter) {
         if (editableCharacter != null) {
             characterToUpdate = editableCharacter!!.copy()
         }
+        isRequired = characterToUpdate.name.isBlank()
     }
 
     // Tan pronto se haya guardado un personaje, navegar a la pantalla de detalles (tiene un retardo)
@@ -109,57 +111,56 @@ fun CharacterEditForm(
 
     DefaultColumn {
 
-        if (characterId == 0L) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { isEditingPortrait = true }
-            ){
 
-                if (characterToUpdate.imgUrl.isEmpty()){
-                    IconButton ( onClick = {  isEditingPortrait = true  }) {
-                        Icon(
-                            tint = colorResource(id = R.color.white),
-                            painter = painterResource(id = R.drawable.baseline_portrait_24),
-                            contentDescription = "Seleccionar Avatar",
-                            modifier = Modifier.size(240.dp)
-                        )
-                    }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { isEditingPortrait = true }
+        ){
 
-                    Text(
-                        "Seleccionar Avatar",
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                        color = colorResource(id = R.color.white)
-
+            if (characterToUpdate.imgUrl.isEmpty()){
+                IconButton ( onClick = {  isEditingPortrait = true  }) {
+                    Icon(
+                        tint = MaterialTheme.colorScheme.inverseOnSurface,
+                        painter = painterResource(id = R.drawable.baseline_portrait_24),
+                        contentDescription = "Seleccionar Avatar",
+                        modifier = Modifier.size(240.dp)
                     )
-                } else {
-                    CharacterPortrait(
-                        size = 60,
-                        character = characterToUpdate,
-                        modifier = Modifier.size(100.dp).clip(CircleShape)
-                    )
-
                 }
 
+                Text(
+                    "Seleccionar Avatar",
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    color = colorResource(id = R.color.white)
 
-
-
-                if (isEditingPortrait) {
-                    Dialog(onDismissRequest = { isEditingPortrait = false }) {
-                        PortraitGridComponent(
-                            onPortraitSelected = { portraitString ->
-                                characterToUpdate = characterToUpdate.copy(imgUrl = portraitString)
-                                isEditingPortrait = false
-                            },
-                            onBackPressed = { isEditingPortrait = false }
-                        )
-                    }
-                }
-
-
+                )
+            } else {
+                CharacterPortrait(
+                    size = 60,
+                    character = characterToUpdate,
+                    modifier = Modifier.size(100.dp).clip(CircleShape)
+                )
 
             }
+
+
+
+
+            if (isEditingPortrait) {
+                Dialog(onDismissRequest = { isEditingPortrait = false }) {
+                    PortraitGridComponent(
+                        onPortraitSelected = { portraitString ->
+                            characterToUpdate = characterToUpdate.copy(imgUrl = portraitString)
+                            isEditingPortrait = false
+                        },
+                        onBackPressed = { isEditingPortrait = false }
+                    )
+                }
+            }
+
+
+
         }
 
         HorizontalDivider(modifier = Modifier.padding(16.dp))
@@ -241,7 +242,7 @@ fun CharacterEditForm(
         )
 
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
 
         // Test de personalidad solo para nuevos personajes
@@ -250,7 +251,8 @@ fun CharacterEditForm(
         } else {
             StatSectionForm(
                 character = characterToUpdate,
-                onValueChange = { updatedCharacter -> characterToUpdate = updatedCharacter }
+                onValueChange = { updatedCharacter -> characterToUpdate = updatedCharacter },
+                isValid = { isValidStat = it  }
             )
         }
 
@@ -260,7 +262,7 @@ fun CharacterEditForm(
         ){
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                enabled = isRequired.not(),
+                enabled = isRequired.not() && isValidStat,
                 colors = ButtonDefaults.buttonColors( containerColor = MaterialTheme.colorScheme.primary),
                 onClick = {
                     characterViewModel.saveCharacter(characterToUpdate, form)

@@ -4,6 +4,7 @@ import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.data.model.local.RolClass
 
 
+/** La suma máxima de todos los stats debe ser de 72 */
 fun generateStats(character: CharacterEntity): CharacterEntity {
 
     when (character.rolClass) {
