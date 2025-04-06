@@ -66,7 +66,6 @@ fun MainLayout(
                 ){
                     item {
                         content()
-                        //Footer(Modifier.fillMaxWidth())
                     }
                 }
             }

@@ -65,7 +65,6 @@ fun HeaderBody(
     navigationViewModel : NavigationViewModel = LocalNavigationViewModel.current
 ){
     val activity = LocalContext.current as Activity
-    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     val navTitle by navigationViewModel.navTitle.collectAsState()
 
     Row(

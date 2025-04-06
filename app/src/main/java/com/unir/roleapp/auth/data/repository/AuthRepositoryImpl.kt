@@ -22,7 +22,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(email: String, password: String): Result<User> {
         return try {
             val response = api.login(LoginRequest(email, password))
-            if (response.isSuccessful && response.body() != null) {
+            if (response.code() == 200 && response.isSuccessful && response.body() != null) {
                 val loginResponse = response.body()!!
 
                 // Guardar tokens
@@ -34,7 +34,8 @@ class AuthRepositoryImpl @Inject constructor(
 
                 Result.success(onlineUser)
             } else {
-                Result.failure(Exception("Error en login: ${response.message()}"))
+                val errorBody = response.errorBody()?.string()
+                Result.failure(Exception("${errorBody}"))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -60,7 +61,8 @@ class AuthRepositoryImpl @Inject constructor(
 
                 Result.success(loginResponse.user.toUserEntity())
             } else {
-                Result.failure(Exception("Error en signup: ${response.message()}"))
+                val errorBody = response.errorBody()?.string()
+                Result.failure(Exception("$errorBody"))
             }
         } catch (e: Exception) {
             Result.failure(e)
