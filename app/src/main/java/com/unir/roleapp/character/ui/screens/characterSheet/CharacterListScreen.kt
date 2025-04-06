@@ -47,6 +47,7 @@ import com.roleapp.character.ui.screens.characterSheet.components.CharacterPortr
 import com.roleapp.character.ui.screens.common.BottomDialogueMenu
 import com.roleapp.core.ui.components.common.CustomCircularProgressIndicator
 import com.unir.roleapp.R
+import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
 
 
 @Composable
@@ -87,7 +88,7 @@ fun CharacterListBody(
     ) {
 
         if (characters.isEmpty()){
-            CustomCircularProgressIndicator()
+            CrossSwordsAnimation()
         }
 
         characters.let {
