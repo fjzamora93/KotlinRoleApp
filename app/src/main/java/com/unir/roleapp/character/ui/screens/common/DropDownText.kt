@@ -40,7 +40,7 @@ fun DropDownText(
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
-            label = { Text(text = label) },
+            label = { Text(text = label, ) },
             modifier = Modifier.menuAnchor()
         )
 

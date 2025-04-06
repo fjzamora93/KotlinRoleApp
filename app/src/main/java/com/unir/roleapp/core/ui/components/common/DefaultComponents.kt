@@ -35,8 +35,11 @@ fun DefaultColumn(
     modifier: Modifier = Modifier.fillMaxWidth().padding(16.dp),
     content: @Composable ColumnScope.() -> Unit
 ){
+
     Column(
         modifier = modifier,
-        content = content
+        content = content,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     )
 }

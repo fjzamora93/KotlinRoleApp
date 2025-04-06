@@ -1,5 +1,6 @@
 package com.roleapp.character.ui.screens.characterform.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,10 +12,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.roleapp.core.ui.components.common.DefaultColumn
 import com.roleapp.character.ui.screens.common.DropDownText
 import com.roleapp.character.ui.screens.common.dialogues.PersonalityTestOptions
+import com.unir.roleapp.R
 
 data class PersonalityTestForm(
     var combatStyle: String = "",
@@ -37,9 +40,8 @@ fun PersonalityTest(
     }
 
 
-    DefaultColumn {
+    Column {
         // Pregunta 1: Estilo de combate
-        Text("¿Qué estilo de combate tiene tu personaje?")
         DropDownText(
             options = PersonalityTestOptions.combatOptions,
             selectedOption = form.combatStyle,
@@ -56,7 +58,6 @@ fun PersonalityTest(
 
         // Pregunta 2: Sociabilidad
         Spacer(modifier = Modifier.height(16.dp))
-        Text("A la hora de relacionarse con otros personajes...")
         DropDownText(
             options = PersonalityTestOptions.sociabilityOptions,
             selectedOption = form.sociability,
@@ -65,7 +66,7 @@ fun PersonalityTest(
                 form = updatedForm
                 onValueChange(updatedForm)
             },
-            label = "Sociabilidad",
+            label = "Habilidades sociales",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 16.dp)
@@ -73,7 +74,6 @@ fun PersonalityTest(
 
         // Pregunta 3: Hobbies
         Spacer(modifier = Modifier.height(16.dp))
-        Text("¿Cuáles son los hobbies de tu personaje?")
         DropDownText(
             options = PersonalityTestOptions.hobbiesOptions,
             selectedOption = form.hobbies,
@@ -90,7 +90,6 @@ fun PersonalityTest(
 
         // Pregunta 4: Miedos
         Spacer(modifier = Modifier.height(16.dp))
-        Text("¿A qué le tiene miedo tu personaje?")
         DropDownText(
             options = PersonalityTestOptions.afraidOptions,
             selectedOption = form.afraid,
@@ -99,7 +98,7 @@ fun PersonalityTest(
                 form = updatedForm
                 onValueChange(updatedForm)
             },
-            label = "Miedos",
+            label = "Defectos y fobias",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 16.dp)
@@ -107,7 +106,6 @@ fun PersonalityTest(
 
         // Pregunta 5: Talentos
         Spacer(modifier = Modifier.height(16.dp))
-        Text("¿Cuál es la especialidad de tu personaje?")
         DropDownText(
             options = PersonalityTestOptions.proeficiencyOptions,
             selectedOption = form.proeficiency,
@@ -116,7 +114,7 @@ fun PersonalityTest(
                 form = updatedForm
                 onValueChange(updatedForm)
             },
-            label = "Talentos",
+            label = "Especialidad y talentos",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 16.dp)

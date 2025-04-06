@@ -29,7 +29,9 @@ import kotlinx.coroutines.launch
  * */
 @Composable
 fun MainLayout(
-    content: @Composable () -> Unit
+    floatingActionButton: @Composable () -> Unit = {},
+
+    content: @Composable () -> Unit,
 ){
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -43,9 +45,11 @@ fun MainLayout(
 
 
         Scaffold(
+            floatingActionButton = floatingActionButton,
+
             bottomBar = {
                 NavigationBar()
-            }
+            },
         ) { innerPadding ->
             Column(
                 modifier = Modifier
