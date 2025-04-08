@@ -4,12 +4,14 @@ package com.roleapp.character.ui.screens.items
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MonetizationOn
+import androidx.compose.material.icons.filled.Shop
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,31 +22,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.roleapp.character.data.model.local.Item
-import com.roleapp.core.ui.components.buttons.MenuMedievalButton
 import com.roleapp.core.ui.components.common.RegularCard
-import com.roleapp.core.ui.components.buttons.BackButton
-import com.roleapp.core.ui.components.buttons.medievalButtonStyleSquare
-import com.roleapp.core.ui.layout.MainLayout
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.ItemViewModel
 import com.roleapp.core.ui.theme.CustomType
 
-@Composable
-fun ItemListScreen(){
-    MainLayout(){
-        Column(Modifier.fillMaxSize().padding(16.dp)
-        ){
-            ItemListBody()
-            BackButton()
-        }
-    }
-}
 
 
 
 // LISTA DE PERSONAJES -> NO UTILIZAR DE MOMENTO
 @Composable
-fun ItemListBody(
+fun ShopComponent(
     itemViewModel: ItemViewModel = hiltViewModel(),
     characterViewModel: CharacterViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxWidth()
@@ -86,14 +74,17 @@ fun ItemSummary(
             if (currentCharacter != null) {
 
                 // Botón de comprar
-                MenuMedievalButton(
+                IconButton(
                     onClick = {
                         itemViewModel.addItemToCharacter(item)
-                    },
-                    modifier = medievalButtonStyleSquare(size = 50.dp),
-                    icon = Icons.Default.MonetizationOn,
-                    text = "Precio: ${item.goldValue}"
-                )
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Shop,
+                        contentDescription = "Volver",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
 
             Column(

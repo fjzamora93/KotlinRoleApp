@@ -13,8 +13,6 @@ import com.roleapp.core.di.LocalAuthViewModel
 import com.roleapp.adventure.ui.screens.AdventureMainScreen
 import com.roleapp.character.ui.screens.characterSheet.CharacterListScreen
 import com.roleapp.character.ui.screens.characterSheet.CharacterDetailScreen
-import com.roleapp.character.ui.screens.items.components.CharacterInventoryScreen
-import com.roleapp.character.ui.screens.items.ItemListScreen
 import com.roleapp.character.ui.screens.spells.CharacterSpellScreen
 import com.roleapp.core.ui.layout.FontsTemplateScreen
 import com.roleapp.adventure.ui.screens.TemplateAdventureScreen
@@ -22,6 +20,7 @@ import com.roleapp.auth.ui.screens.LoginScreen
 import com.roleapp.auth.ui.screens.UserProfileScreen
 import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.character.ui.screens.characterform.CharacterEditorScreen
+import com.roleapp.character.ui.screens.items.components.CharacterInventoryScreen
 import com.unir.roleapp.home.ui.screens.HomeScreen
 
 @Composable
@@ -64,9 +63,7 @@ fun NavGraph(
             composable(ScreensRoutes.FontTemplateScreen.route) {
                 FontsTemplateScreen()
             }
-            composable(ScreensRoutes.ItemListScreen.route) {
-                ItemListScreen()
-            }
+
             composable(ScreensRoutes.InventoryScreen.route) {
                 CharacterInventoryScreen()
             }

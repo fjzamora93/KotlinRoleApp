@@ -63,7 +63,6 @@ fun CharacterDetailScreen(
         characterViewModel.getCharacterById(characterId)
     }
 
-
     CharacterLayout { onClickDrawer ->
         selectedCharacter?.let { character ->
             DetailCharacterBody(
@@ -72,7 +71,6 @@ fun CharacterDetailScreen(
             )
         } ?: CrossSwordsAnimation()
     }
-
 
 }
 
