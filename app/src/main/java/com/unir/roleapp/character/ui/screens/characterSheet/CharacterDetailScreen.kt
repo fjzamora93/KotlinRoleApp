@@ -45,6 +45,7 @@ import com.roleapp.character.ui.screens.common.dialogues.CharacterDialog
 import com.roleapp.character.ui.screens.common.dialogues.SwitchDialogue
 import com.roleapp.character.ui.screens.common.layout.CharacterLayout
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
+import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
 import kotlinx.coroutines.launch
 
 @Composable
@@ -62,16 +63,14 @@ fun CharacterDetailScreen(
         characterViewModel.getCharacterById(characterId)
     }
 
-
     CharacterLayout { onClickDrawer ->
         selectedCharacter?.let { character ->
             DetailCharacterBody(
                 character = character,
                 onClick = { onClickDrawer() }
             )
-        } ?: CustomCircularProgressIndicator()
+        } ?: CrossSwordsAnimation()
     }
-
 
 }
 

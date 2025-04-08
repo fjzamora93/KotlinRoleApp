@@ -34,6 +34,7 @@ import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.auth.viewmodels.UserState
 import com.roleapp.core.ui.components.common.DefaultColumn
 import com.unir.roleapp.R
+import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
 import com.unir.roleapp.core.ui.components.common.MainBanner
 
 @Composable
@@ -55,7 +56,7 @@ fun UserProfileBody(
     val userState by authViewModel.userState.collectAsState()
 
     when (userState) {
-        is UserState.Loading -> DefaultColumn{ CircularProgressIndicator() }
+        is UserState.Loading -> DefaultColumn{  CrossSwordsAnimation() }
         is UserState.Success -> UserProfileDetail(user = (userState as UserState.Success).user)
         is UserState.Error -> Text("Error: ${(userState as UserState.Error).message}", style = MaterialTheme.typography.bodyMedium)
         is UserState.LoggedOut -> navigation.navigate(ScreensRoutes.LoginScreen.route)
@@ -81,6 +82,8 @@ fun UserProfileDetail(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        CrossSwordsAnimation()
+
         Text(
             text = "Perfil de Usuario",
             style = MaterialTheme.typography.titleMedium,

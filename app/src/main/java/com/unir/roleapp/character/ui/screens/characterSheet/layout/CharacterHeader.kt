@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Backpack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material3.HorizontalDivider
@@ -39,6 +40,9 @@ import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.screens.characterSheet.components.CharacterPortrait
 import com.roleapp.character.ui.screens.characterform.components.PortraitGridComponent
 import com.roleapp.character.ui.screens.common.dialogues.CharacterDialog
+import com.roleapp.core.di.LocalNavigationViewModel
+import com.roleapp.core.navigation.NavigationViewModel
+import com.roleapp.core.navigation.ScreensRoutes
 import com.unir.roleapp.core.ui.theme.ThemeViewModel
 
 @Composable
@@ -46,6 +50,7 @@ fun CharacterHeader(
     modifier: Modifier = Modifier,
     characterViewModel: CharacterViewModel = hiltViewModel(),
     onClickMenu : () -> Unit,
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
 ) {
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     var isEditingPortrait by remember { mutableStateOf(false) }
@@ -95,14 +100,14 @@ fun CharacterHeader(
                     .clickable { onClickMenu() }
             ) {
                 IconButton(
-                    onClick = {
-
-                    }
+                    onClick = { navigationViewModel.navigate(ScreensRoutes.InventoryScreen.route) }
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.MoreVert,
+                        imageVector = Icons.Filled.Backpack,
                         contentDescription = "Más opciones",
-                        tint = MaterialTheme.colorScheme.inverseOnSurface
+                        tint = MaterialTheme.colorScheme.inverseOnSurface,
+                        modifier = Modifier.size(60.dp)
+
                     )
                 }
 

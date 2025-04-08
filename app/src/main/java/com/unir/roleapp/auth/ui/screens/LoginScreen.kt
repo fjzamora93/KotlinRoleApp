@@ -45,6 +45,8 @@ import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.components.common.CustomCircularProgressIndicator
 import com.unir.roleapp.MyApplication.Companion.context
 import com.unir.roleapp.R
+import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
+import com.unir.roleapp.core.ui.components.animations.RotatingIcon
 import com.unir.roleapp.core.ui.components.common.MainBanner
 
 
@@ -128,7 +130,8 @@ fun LoginBody(
         }
 
         if (userState is UserState.Loading) {
-            CustomCircularProgressIndicator()
+            CrossSwordsAnimation()
+            //CustomCircularProgressIndicator()
         }
 
         Spacer(modifier = Modifier.height(16.dp))

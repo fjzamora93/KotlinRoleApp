@@ -37,7 +37,6 @@ import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.di.LocalAuthViewModel
 import com.roleapp.core.navigation.NavigationViewModel
 import com.roleapp.core.navigation.ScreensRoutes
-import com.roleapp.core.ui.components.buttons.MaxWidthButton
 import com.roleapp.core.ui.layout.MainLayout
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.auth.viewmodels.AuthViewModel
@@ -47,6 +46,7 @@ import com.roleapp.character.ui.screens.characterSheet.components.CharacterPortr
 import com.roleapp.character.ui.screens.common.BottomDialogueMenu
 import com.roleapp.core.ui.components.common.CustomCircularProgressIndicator
 import com.unir.roleapp.R
+import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
 
 
 @Composable
@@ -87,7 +87,7 @@ fun CharacterListBody(
     ) {
 
         if (characters.isEmpty()){
-            CustomCircularProgressIndicator()
+            CrossSwordsAnimation()
         }
 
         characters.let {
