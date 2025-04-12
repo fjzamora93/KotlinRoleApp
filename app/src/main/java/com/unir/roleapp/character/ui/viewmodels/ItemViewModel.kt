@@ -1,4 +1,5 @@
 package com.roleapp.character.ui.viewmodels
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roleapp.character.data.model.local.Item
@@ -33,8 +34,8 @@ class ItemViewModel @Inject constructor(
     // AL cargar el itemVIewModel, que se carguen los items directamente. Para la tienda se usa la plantilla, no los items personalizados.
     init {
         getItemsByCharacter()
-        //fetchTemplateItems()
-        getItemsBySession()
+        fetchTemplateItems()
+        //getItemsBySession()
     }
 
     fun getItemsByCharacter() {
@@ -121,6 +122,7 @@ class ItemViewModel @Inject constructor(
      * devuelve una copia del objeto a la base de datos custom_item, con el ID del contexto de una sesión.
      * */
     fun fetchTemplateItems() {
+        Log.i("ITEMS", "fetchTemplateItems()")
         viewModelScope.launch {
             val result = itemUseCases.fetchTemplateItems()
             result.onSuccess {
@@ -128,7 +130,6 @@ class ItemViewModel @Inject constructor(
                 _itemList.value = items
             }.onFailure {
                 _loadingState.value = false
-                println("Error ${it.message} al obtener los items desde la API")
             }
 
             println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")

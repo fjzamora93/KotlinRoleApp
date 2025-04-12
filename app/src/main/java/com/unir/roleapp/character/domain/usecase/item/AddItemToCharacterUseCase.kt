@@ -23,7 +23,7 @@ class AddItemToCharacterUseCase(
                 var quantity: Int =
                     itemRepository.getItemDetail(character.id, item.id).getOrThrow().quantity
                 quantity += 1
-                println("La cantidad que se va a modificar es... $quantity")
+
 
                 // Esto se actualiza dentro del dao del repositorio de item, no aquí
                 //character.gold -= item.goldValue

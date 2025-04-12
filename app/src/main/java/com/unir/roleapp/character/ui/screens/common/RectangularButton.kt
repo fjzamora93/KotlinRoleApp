@@ -36,15 +36,17 @@ fun RectangularButton(
     text: String = "",
     isEnabled: Boolean = true,
 ) {
-    // Colores dinámicos según el estado del botón
-    val backgroundBrush = if (isEnabled) {
-        Brush.linearGradient(colors = listOf(MedievalColours.WoodenRegular, MedievalColours.WoodenDark))
-    } else {
-        Brush.linearGradient(colors = listOf(Color.LightGray, Color.Gray))
-    }
+    // Obtener el color primario del tema
+    val primaryColor = MaterialTheme.colorScheme.primary
 
-    val borderColor = if (isEnabled) Color(0xFFDAA520) else Color.DarkGray
-    val iconColor = if (isEnabled) MedievalColours.Gold else Color.Gray
+    // Colores de fondo uniformes según el estado, pero siempre con el color primario
+    val backgroundBrush = Brush.linearGradient(
+        colors = listOf(primaryColor, primaryColor)
+    )
+
+    // Borde destacado cuando el botón está habilitado
+    val borderColor = if (isEnabled) Color(0xFFDAA520) else Color.Transparent
+    val iconColor = if (isEnabled) Color.White else Color.Gray
     val textColor = if (isEnabled) Color.White else Color.Gray
 
     Box(
@@ -55,7 +57,7 @@ fun RectangularButton(
             .clip(RoundedCornerShape(8.dp))
             .background(backgroundBrush)
             .border(2.dp, borderColor, RoundedCornerShape(8.dp))
-            .clickable(enabled = isEnabled) { onClick() },
+            .clickable(enabled = true) { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Row(
@@ -72,7 +74,7 @@ fun RectangularButton(
             if (text.isNotEmpty()) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = if (isEnabled) text else "",
+                    text = text, // El texto siempre aparece, incluso cuando isEnabled es false
                     style = MaterialTheme.typography.titleSmall,
                     color = textColor
                 )
