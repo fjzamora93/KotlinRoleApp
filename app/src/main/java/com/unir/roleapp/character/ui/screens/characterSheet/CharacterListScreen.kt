@@ -111,7 +111,7 @@ fun CharacterSummary(
 ) {
     var claseToString: String = RolClass.getString(character.rolClass)
     var raceToString: String = Race.getString(character.race)
-    var showBottomSheet by remember { mutableStateOf(false) } // Estado para mostrar el Bottom Sheet
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     val textColor: Color = colorResource(id = R.color.white)
     Row(

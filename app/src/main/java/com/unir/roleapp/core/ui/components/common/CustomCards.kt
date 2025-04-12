@@ -20,8 +20,7 @@ fun RegularCard(
 ){
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+            .fillMaxWidth().padding(vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(
@@ -29,8 +28,7 @@ fun RegularCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
-
+            modifier = Modifier.padding(8.dp)
         ) {
             content()
         }

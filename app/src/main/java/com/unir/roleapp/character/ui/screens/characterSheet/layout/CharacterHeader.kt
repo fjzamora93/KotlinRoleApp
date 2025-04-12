@@ -55,11 +55,13 @@ fun CharacterHeader(
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     var isEditingPortrait by remember { mutableStateOf(false) }
 
-
+    val currentRoute by navigationViewModel.currentRoute.collectAsState()
 
     selectedCharacter?.let { character ->
         Row(
-            modifier = modifier.fillMaxWidth().background(Color(0xFF131F3F)),
+            modifier = modifier.fillMaxWidth().background(Color(0xFF131F3F))
+                .clickable {  navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(
+                    selectedCharacter!!.id)) },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -70,7 +72,7 @@ fun CharacterHeader(
             ) {
                 CharacterPortrait(
                     character,
-                    onClick = { isEditingPortrait = true }
+                    onClick = {  onClickMenu() }
                 )
             }
 
@@ -78,7 +80,6 @@ fun CharacterHeader(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { onClickMenu() }
             ) {
                 Text(
                     text = character.name,
@@ -100,7 +101,15 @@ fun CharacterHeader(
                     .clickable { onClickMenu() }
             ) {
                 IconButton(
-                    onClick = { navigationViewModel.navigate(ScreensRoutes.InventoryScreen.route) }
+                    onClick = {
+                        if (currentRoute != ScreensRoutes.InventoryScreen.route){
+                            navigationViewModel.navigate(ScreensRoutes.InventoryScreen.route)
+                        } else {
+                            navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(
+                                selectedCharacter!!.id))
+                        }
+
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Backpack,
