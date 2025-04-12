@@ -30,9 +30,10 @@ class ItemViewModel @Inject constructor(
     val loadingState: StateFlow<Boolean> get() = _loadingState
 
 
-    // AL cargar el itemVIewModel, que se carguen los items directamente
+    // AL cargar el itemVIewModel, que se carguen los items directamente. Para la tienda se usa la plantilla, no los items personalizados.
     init {
         getItemsByCharacter()
+        //fetchTemplateItems()
         getItemsBySession()
     }
 

@@ -17,14 +17,17 @@ class AddItemToCharacterUseCase(
             val character = characterUseCase.getActiveCharacter().getOrNull()
 
             if (character?.id != null) {
+                if (character.gold < item.goldValue) {
+                    return Result.failure(Exception("Oro insuficiente"))
+                }
                 var quantity: Int =
                     itemRepository.getItemDetail(character.id, item.id).getOrThrow().quantity
                 quantity += 1
                 println("La cantidad que se va a modificar es... $quantity")
 
-                if (character.gold < item.goldValue) {
-                    return Result.failure(Exception("Oro insuficiente"))
-                }
+                // Esto se actualiza dentro del dao del repositorio de item, no aquí
+                //character.gold -= item.goldValue
+                //characterUseCase.updateCharacter(character)
                 itemRepository.buyItem(character.id, item)
                 return itemRepository.addItemToCharacter(character.id, item, quantity)
             } else {
