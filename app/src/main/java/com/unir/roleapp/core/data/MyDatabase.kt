@@ -25,7 +25,7 @@ import com.roleapp.character.data.model.local.Spell
     Spell::class,
     CharacterItemCrossRef::class,
     CharacterSkillCrossRef::class,
-], version = 32)
+], version = 33)
 abstract class MyDatabase: RoomDatabase() {
     abstract fun getItemDao(): ItemDao
     abstract fun characterDao(): CharacterDao

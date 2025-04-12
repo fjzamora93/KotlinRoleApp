@@ -32,6 +32,11 @@ class ItemRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 val itemDTOS: List<ItemDTO> = response.body() ?: emptyList()
                 val itemList: List<Item> = itemDTOS.map { it.toItemEntity() }
+                itemDao.insertAll(itemList)
+                itemList.forEach { item ->
+                    println(item.category)}
+                itemDTOS.forEach { item ->
+                    println(item.category)}
                 Result.success(itemList)
             } else {
                 Result.failure(Exception("Error en la respuesta: ${response.code()}"))
@@ -43,6 +48,7 @@ class ItemRepositoryImpl @Inject constructor(
     }
 
 
+    //! NO UTILIZAR AÚN ESTÁ QUE ESTÉN CORRECTAMENTE IMPLEMENTADAS LAS SESIONES
     override suspend fun getItemsBySession(
         gameSessionId: Int
     ): Result<List<Item>> {
@@ -82,9 +88,9 @@ class ItemRepositoryImpl @Inject constructor(
     /** MÉTODOS DE ACCESO AL INVENTARIO  */
     override suspend fun getItemsByCharacterId(characterId: Long): Result<List<CharacterItemDetail>> {
         return try {
-            CoroutineScope(Dispatchers.IO).launch {
-                syncToApiCharacterItem(characterId)
-            }
+//            CoroutineScope(Dispatchers.IO).launch {
+//                syncToApiCharacterItem(characterId)
+//            }
             val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
             Log.w("ITEMS", itemsDetail.toString())
             Result.success(itemsDetail)

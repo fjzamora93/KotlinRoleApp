@@ -1,5 +1,6 @@
 package com.roleapp.character.ui.screens.items.components
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
@@ -10,18 +11,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Backpack
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.data.model.local.Item
 import com.roleapp.character.ui.screens.common.BottomDialogueMenu
+import com.roleapp.character.ui.screens.common.DropDownText
 import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.navigation.NavigationViewModel
 
@@ -41,7 +47,9 @@ import com.roleapp.character.ui.screens.common.layout.CharacterLayout
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.ItemViewModel
 import com.roleapp.core.navigation.ScreensRoutes
+import com.roleapp.core.ui.components.common.DefaultRow
 import com.roleapp.core.ui.theme.MedievalColours
+import com.unir.roleapp.character.data.model.local.ItemCategory
 import com.unir.roleapp.character.ui.screens.items.components.CurrentGoldComponent
 import com.unir.roleapp.character.ui.screens.common.RectangularButton
 import com.unir.roleapp.character.ui.screens.items.components.ItemSummaryComponent
@@ -53,12 +61,11 @@ fun CharacterInventoryScreen(
     characterViewModel: CharacterViewModel = hiltViewModel(),
 ){
 
+    characterViewModel.getActiveCharacter()
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
 
     // Obtener datos cuando se monta la pantalla
-    LaunchedEffect(selectedCharacter) {
-        characterViewModel.getActiveCharacter()
-    }
+
 
     CharacterLayout {
         selectedCharacter?.let {
@@ -70,7 +77,6 @@ fun CharacterInventoryScreen(
 
 @Composable
 fun CharacterInventoryBody(
-    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
     itemViewModel: ItemViewModel = hiltViewModel(),
     characterViewModel: CharacterViewModel = hiltViewModel(),
     modifier: Modifier = Modifier.fillMaxWidth()
@@ -78,25 +84,16 @@ fun CharacterInventoryBody(
     val inventoryItems by itemViewModel.itemsByCharacter.collectAsState()
     val isLoading by itemViewModel.loadingState.collectAsState(false)
     val shopItems by itemViewModel.itemList.collectAsState()
-    var showBottomSheet by remember { mutableStateOf(false) }
     val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
-
     var isInventory by remember { mutableStateOf(true) }
+    var currentGold by remember { mutableIntStateOf(currentCharacter!!.gold) }
 
-    // Animar los pesos
-    val inventoryWeight by animateFloatAsState(
-        targetValue = if (isInventory) 0.7f else 1.5f,
-        animationSpec = tween(durationMillis = 300)
-    )
+    var selectedCategory by remember { mutableStateOf(ItemCategory.ALL) }
 
-    val shopWeight by animateFloatAsState(
-        targetValue = if (isInventory) 1.5f else 0.7f,
-        animationSpec = tween(durationMillis = 300)
-    )
-
-    LaunchedEffect(showBottomSheet){
-        characterViewModel.getActiveCharacter()
+    val filteredItems = shopItems.filter { item ->
+        item.category == selectedCategory || selectedCategory == ItemCategory.ALL
     }
+
 
     Column(
         modifier = modifier.padding(8.dp),
@@ -109,51 +106,68 @@ fun CharacterInventoryBody(
             verticalAlignment = Alignment.CenterVertically
         ) {
             RectangularButton(
-                modifier = Modifier.weight(inventoryWeight),
+                modifier = Modifier.weight(1f),
                 text = "Inventario",
-                icon = Icons.Default.Inventory,
-                isEnabled = !isInventory,
+                icon = Icons.Default.Backpack,
+                isEnabled = isInventory,
                 onClick = { isInventory = true }
             )
 
             RectangularButton(
-                modifier = Modifier.weight(shopWeight),
+                modifier = Modifier.weight(1f),
                 text = "Tienda",
                 icon = Icons.Default.ShoppingBag,
-                isEnabled = isInventory,
+                isEnabled = !isInventory,
                 onClick = { isInventory = false }
             )
         }
 
-        // ORO DISPONIBLE
-        var goldText by remember { mutableStateOf(currentCharacter?.gold?.toString() ?: "0") }
-
         Row(
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-            modifier = modifier
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ){
-            Icon(imageVector = Icons.Default.MonetizationOn, contentDescription = "", tint = MedievalColours.Gold, modifier = Modifier.size(40.dp))
+            Column(modifier = Modifier.weight(4f),){
+                DefaultRow {
+                    Icon(
+                        imageVector = Icons.Default.MonetizationOn,
+                        contentDescription = "", tint = MedievalColours.Gold,
+                        modifier = Modifier.size(40.dp)
+                    )
 
-            TextField(
-                value = goldText,
-                onValueChange = { newValue ->
-                    if (newValue.all { it.isDigit() }) {
-                        goldText = newValue
-                        val currentCharacter = characterViewModel.selectedCharacter.value
-                        currentCharacter!!.gold = newValue.toIntOrNull() ?: 0
-                        characterViewModel.saveCharacter(currentCharacter)
+                    TextField(
+                        value = currentGold.toString(),
+                        onValueChange = { newValue ->
+                            currentGold = newValue.toIntOrNull() ?: 0
+                            val updatedCharacter = currentCharacter!!.copy( gold = currentGold )
+                            characterViewModel.saveCharacter(updatedCharacter)
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        label = { Text("") }
+                    )
+                }
+            }
+
+            if (!isInventory){
+                Column(modifier = Modifier.weight(5f),) {
+                    DefaultRow{
+                        DropDownText(
+                            label = "Categoría",
+                            options = ItemCategory.getListOf(),
+                            selectedOption = ItemCategory.getString(selectedCategory),
+                            onValueChange = { newValue ->
+                                selectedCategory = ItemCategory.getItemCategory(newValue)
+                            }
+                        )
+
                     }
-                },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                label = { Text("") }
-            )
-
+                }
+            }
         }
 
 
         if (isLoading) {
             CircularProgressIndicator()
-            Text("Cargando objetos...")
         } else if (isInventory){
             inventoryItems.forEach { detail ->
                 if (detail.quantity > 0 ){
@@ -167,26 +181,25 @@ fun CharacterInventoryBody(
                 }
             }
         } else {
-            shopItems.forEach { item ->
+            filteredItems.forEach { item ->
 
                 ItemSummaryComponent(
                     item = item,
                     isSelling = true,
                     onClick = {
                         itemViewModel.addItemToCharacter(item)
-                        if (currentCharacter!!.gold >= item.goldValue) {
-                            goldText = (currentCharacter!!.gold - item.goldValue).toString()
-                        }},
+                        currentGold -= item.goldValue
+                        val updatedCharacter = currentCharacter!!.copy(
+                            gold = currentGold
+                        )
+                        characterViewModel.saveCharacter(updatedCharacter)
+                    }
                 )
+
                 HorizontalDivider()
 
             }
         }
-
-
-
-
-
     }
 }
 
