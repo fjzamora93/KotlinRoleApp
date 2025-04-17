@@ -50,29 +50,9 @@ import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.components.common.DefaultRow
 import com.roleapp.core.ui.theme.MedievalColours
 import com.unir.roleapp.character.data.model.local.ItemCategory
-import com.unir.roleapp.character.ui.screens.items.components.CurrentGoldComponent
 import com.unir.roleapp.character.ui.screens.common.RectangularButton
 import com.unir.roleapp.character.ui.screens.items.components.ItemSummaryComponent
-import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
 
-
-@Composable
-fun CharacterInventoryScreen(
-    characterViewModel: CharacterViewModel = hiltViewModel(),
-){
-
-    characterViewModel.getActiveCharacter()
-    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
-
-    // Obtener datos cuando se monta la pantalla
-
-
-    CharacterLayout {
-        selectedCharacter?.let {
-            CharacterInventoryBody()
-        } ?: CrossSwordsAnimation()
-    }
-}
 
 
 @Composable
@@ -94,6 +74,9 @@ fun CharacterInventoryBody(
         item.category == selectedCategory || selectedCategory == ItemCategory.ALL
     }
 
+    LaunchedEffect (inventoryItems) {
+        itemViewModel.calculateStatsFromItems()
+    }
 
     Column(
         modifier = modifier.padding(8.dp),
@@ -173,7 +156,9 @@ fun CharacterInventoryBody(
                 if (detail.quantity > 0 ){
                     ItemSummaryComponent(
                         item = detail.item,
-                        onClick = { itemViewModel.destroyItem(currentCharacter!!, detail.item) } ,
+                        onClick = {
+                            itemViewModel.destroyItem(currentCharacter!!, detail.item)
+                                  } ,
                         quantity = detail.quantity,
 
                     )

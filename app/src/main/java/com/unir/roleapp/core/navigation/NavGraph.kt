@@ -17,14 +17,12 @@ import com.roleapp.core.di.LocalAuthViewModel
 import com.roleapp.adventure.ui.screens.AdventureMainScreen
 import com.roleapp.character.ui.screens.characterSheet.CharacterListScreen
 import com.roleapp.character.ui.screens.characterSheet.CharacterDetailScreen
-import com.roleapp.character.ui.screens.spells.CharacterSpellScreen
 import com.roleapp.core.ui.layout.FontsTemplateScreen
 import com.roleapp.adventure.ui.screens.TemplateAdventureScreen
 import com.roleapp.auth.ui.screens.LoginScreen
 import com.roleapp.auth.ui.screens.UserProfileScreen
 import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.character.ui.screens.characterform.CharacterEditorScreen
-import com.roleapp.character.ui.screens.items.components.CharacterInventoryScreen
 import com.roleapp.core.di.LocalLanguageSetter
 import com.unir.roleapp.core.navigation.LocalizedApp
 import com.unir.roleapp.home.ui.screens.HomeScreen
@@ -73,20 +71,6 @@ fun NavGraph(
                         onLanguageSelected = { selectedLang = it }
                     )
                 }
-
-
-                // HECHIZOS, OBJETOS, INVENTARIO
-                composable(ScreensRoutes.FontTemplateScreen.route) {
-                    FontsTemplateScreen()
-                }
-
-                composable(ScreensRoutes.InventoryScreen.route) {
-                    CharacterInventoryScreen()
-                }
-                composable(ScreensRoutes.CharacterSpellScreen.route) {
-                    CharacterSpellScreen()
-                }
-
 
                 //PERSONAJE
                 composable(ScreensRoutes.CharacterListScreen.route) {

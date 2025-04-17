@@ -6,6 +6,7 @@ import com.roleapp.character.data.model.local.Item
 import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.data.model.local.CharacterItemDetail
 import com.roleapp.character.domain.usecase.item.ItemUseCases
+import com.unir.roleapp.character.data.model.local.ItemCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,11 +31,15 @@ class ItemViewModel @Inject constructor(
     private val _loadingState = MutableStateFlow<Boolean>(false)
     val loadingState: StateFlow<Boolean> get() = _loadingState
 
+    private val _armor = MutableStateFlow<Int>(0)
+    val armor: StateFlow<Int> get() = _armor
+
 
     // AL cargar el itemVIewModel, que se carguen los items directamente. Para la tienda se usa la plantilla, no los items personalizados.
     init {
         getItemsByCharacter()
         fetchTemplateItems()
+        calculateStatsFromItems()
         //getItemsBySession()
     }
 
@@ -102,19 +107,6 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    // IMPLEMENTAR MÉTODO QUE PERMITA OBTENER EL ORO Y ASÍ TENERLO SIEMPRE ACTUALIZADO AL MARGEN DEL CHARACTER
-    fun getCurrentGold(character: CharacterEntity){
-        viewModelScope.launch {
-//            val result = itemUseCases.getCurrentGold(character)
-//            result.onSuccess {
-//                    gold ->
-//                _currentGold.value = gold
-//            }.onFailure {
-//                _loadingState.value = false
-//                println("Error ${it.message} al obtener el oro")
-//            }
-        }
-    }
 
     /**OBTIENE TODOS LOS OBJETOS DE PLANTILLA.
      * Los objetos de plantilla NO adminte POST, PUT O DELETE. Solamente son de lectura
@@ -137,5 +129,19 @@ class ItemViewModel @Inject constructor(
     }
 
 
+    // La armadura actualmente NO repite items. Tal y como está, 5 Botas dan la misma armadura que solo un par.
+    fun calculateStatsFromItems(){
+        viewModelScope.launch{
+            _armor.value = 0
+            _itemsByCharacter.collect { items ->
+                items.forEach { item ->
+                    if (item.item.category == ItemCategory.EQUIPMENT){
+                        _armor.value += 1
+                    }
+                }
+            }
+
+        }
+    }
 
 }

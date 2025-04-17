@@ -31,14 +31,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CharacterLayout(
-    content: @Composable (onClickDrawer: () -> Unit) -> Unit
+    content: @Composable () -> Unit
     ){
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
-    val onClickDrawer: () -> Unit = {
-        coroutineScope.launch { drawerState.open() }
-    }
 
 
     CharacterMenu(drawerState = drawerState, onClose = { coroutineScope.launch { drawerState.close() } }) {
@@ -59,7 +56,7 @@ fun CharacterLayout(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     item {
-                        content(onClickDrawer)
+                        content()
                     }
                 }
             }

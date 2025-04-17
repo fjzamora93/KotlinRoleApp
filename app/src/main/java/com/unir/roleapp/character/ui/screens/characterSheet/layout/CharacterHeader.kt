@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backpack
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -101,18 +102,10 @@ fun CharacterHeader(
                     .clickable { onClickMenu() }
             ) {
                 IconButton(
-                    onClick = {
-                        if (currentRoute != ScreensRoutes.InventoryScreen.route){
-                            navigationViewModel.navigate(ScreensRoutes.InventoryScreen.route)
-                        } else {
-                            navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(
-                                selectedCharacter!!.id))
-                        }
-
-                    }
+                    onClick = { onClickMenu() }
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Backpack,
+                        imageVector = Icons.Filled.Settings,
                         contentDescription = "Más opciones",
                         tint = MaterialTheme.colorScheme.inverseOnSurface,
                         modifier = Modifier.size(60.dp)
