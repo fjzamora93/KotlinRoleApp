@@ -29,26 +29,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 import com.roleapp.character.data.model.local.Spell
 import com.roleapp.character.ui.screens.common.BottomDialogueMenu
+import com.roleapp.character.ui.screens.common.layout.CharacterLayout
+import com.roleapp.character.ui.screens.items.components.CharacterInventoryBody
 import com.roleapp.core.ui.components.buttons.BackButton
 import com.roleapp.core.ui.layout.MainLayout
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.SpellViewModel
 import com.roleapp.core.ui.components.common.CustomCircularProgressIndicator
+import com.unir.roleapp.character.ui.screens.characterSheet.CharacterSection
+import com.unir.roleapp.character.ui.screens.spells.components.SpellSummaryComponent
+import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
 
 
-@Composable
-fun CharacterSpellScreen() {
-    MainLayout() {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            CharacterSpellBody()
-            BackButton()
-        }
-    }
-}
+
 
 
 @Composable
@@ -68,64 +61,22 @@ fun CharacterSpellBody(
     }
 
 
-
     if (spellList == null) {
-        CustomCircularProgressIndicator()
+        CrossSwordsAnimation()
     } else {
         val spells by remember { mutableStateOf(spellList) }
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             spells?.forEach { spell ->
-                SpellCard(spell = spell)
+                SpellSummaryComponent(
+                    spell = spell,
+                    onClick = { /* Lógica para manejar el clic en el ítem */ }
+                )
+                HorizontalDivider()
             }
         }
 
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SpellCard(spell: Spell, spellViewModel: SpellViewModel = hiltViewModel()) {
-    var showBottomSheet by remember { mutableStateOf(false) } // Estado para mostrar el menú de opciones
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(2f)) {
-            Text(
-                text = "lvl: ${spell.level}    |    ${spell.name}    |   ${spell.diceAmount}d${spell.dice}",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = "Coste: ${ spell.cost }ap. ${spell.description}",
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-        }
-
-        IconButton(
-            onClick = { showBottomSheet = true }
-        ) {
-            Icon(
-                imageVector = Icons.Filled.MoreVert,
-                contentDescription = "Más opciones"
-            )
-        }
-    }
-
-    HorizontalDivider(Modifier.padding(vertical = 8.dp))
-
-    if (showBottomSheet) {
-        BottomDialogueMenu(
-            onDismiss = { showBottomSheet = false },
-            onFirstOption = { /* Lógica para lanzar hechizo (update character y quitar la cantidad de maná correspondiente) */ },
-            onSecondOption = { /* SI se considera alguna segunda opción */ },
-            firstLabel = "Lanzar hechizo",
-            secondLable = "Detalles",
-        )
-    }
-}

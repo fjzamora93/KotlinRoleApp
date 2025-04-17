@@ -124,15 +124,15 @@ fun MenuOption(
     onClick: () -> Unit,
     icon : ImageVector = Icons.Default.Home,
     color: Color = MedievalColours.IronDark,
+    modifier : Modifier = Modifier.fillMaxWidth()
+        .padding(vertical = 8.dp)
+        .clip(RoundedCornerShape(8.dp))
+        .background(Color(0xFFD6D6D6))
+        .clickable { onClick() }
+        .padding(12.dp)
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFFD6D6D6))
-            .clickable { onClick() }
-            .padding(12.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
