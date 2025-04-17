@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.roleapp.character.data.model.remote.ItemDTO
 import com.unir.roleapp.character.data.model.local.ItemCategory
+import com.unir.roleapp.character.data.model.local.StatName
 
 @Entity(tableName = "item_table")
 data class Item(
@@ -21,8 +22,8 @@ data class Item(
     @ColumnInfo(name = "goldValue") val goldValue: Int = 0,
     @ColumnInfo(name = "category") val category: ItemCategory,
     @ColumnInfo(name = "dice") val dice: Int,
-    @ColumnInfo(name = "diceAmount") val diceAmount: Int = 1,
-    @ColumnInfo(name = "statType") val statType: String,
+    @ColumnInfo(name = "diceAmount") val diceAmount: Int,
+    @ColumnInfo(name = "statType") val statType: StatName,
     @ColumnInfo(name = "statValue") val statValue: Int,
 
     ){
@@ -38,9 +39,9 @@ data class Item(
             goldValue = this.goldValue,
             category = ItemCategory.getString(this.category),
             dice = this.dice,
-            diceAmount = this.diceAmount,
+            dicesAmount = this.diceAmount,
             statValue = this.statValue,
-            statType = this.statType
+            statType = StatName.getString(this.statType)
         )
     }
 }

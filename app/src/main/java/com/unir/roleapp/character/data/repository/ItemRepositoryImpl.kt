@@ -34,9 +34,9 @@ class ItemRepositoryImpl @Inject constructor(
                 val itemList: List<Item> = itemDTOS.map { it.toItemEntity() }
                 itemDao.insertAll(itemList)
                 itemList.forEach { item ->
-                    println(item.category)}
+                    println( "${item.diceAmount} + d + ${item.dice}")}
                 itemDTOS.forEach { item ->
-                    println(item.category)}
+                    println( "${item.dicesAmount} + d + ${item.dice}")}
                 Result.success(itemList)
             } else {
                 Result.failure(Exception("Error en la respuesta: ${response.code()}"))

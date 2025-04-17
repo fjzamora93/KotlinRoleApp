@@ -2,7 +2,6 @@
     <string name="app_name">RoleApp</string>
     <string name="app_subtitle">La app para gestionar partidas de rol</string>
     <string name="characters">Personajes</string>
-
     <string name="profile_title">Perfil de Usuario</string>
 
     <string name="logout">Cerrar sesión</string>

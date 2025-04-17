@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,14 +47,14 @@ fun MainBanner() {
 
         // Título principal
         androidx.compose.material3.Text(
-            text = "RolApp",
+            text = stringResource(id = R.string.app_name),
             style = MaterialTheme.typography.displayMedium.copy(
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFF9F9F9)
             )
         )
         androidx.compose.material3.Text(
-            text = "La app para gestionar juegos de rol",
+            text = stringResource(id = R.string.app_subtitle),
             style = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFFD4D4D8)),
             textAlign = TextAlign.Center
         )

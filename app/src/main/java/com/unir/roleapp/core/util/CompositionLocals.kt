@@ -1,6 +1,8 @@
 package com.roleapp.core.di
 
+import android.content.Context
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import com.roleapp.core.navigation.NavigationViewModel
 import com.roleapp.auth.viewmodels.AuthViewModel
 
@@ -13,8 +15,11 @@ val LocalNavigationViewModel = compositionLocalOf<NavigationViewModel> {
 }
 
 
-
 val LocalAuthViewModel = compositionLocalOf<AuthViewModel> {
     error("No hay usuario disponible en el contexto actual.")
+}
+
+val LocalLanguageSetter = staticCompositionLocalOf<(String) -> Unit> {
+    error("No language setter provided")
 }
 
