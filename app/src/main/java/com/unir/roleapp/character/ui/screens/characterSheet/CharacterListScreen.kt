@@ -47,7 +47,7 @@ import com.roleapp.character.ui.screens.common.BottomDialogueMenu
 import com.roleapp.core.ui.components.common.CustomCircularProgressIndicator
 import com.unir.roleapp.R
 import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
-
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun CharacterListScreen(){
@@ -76,7 +76,7 @@ fun CharacterListBody(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 10.dp),
-        text = "Personajes",
+        text = stringResource(id = R.string.characters),
         style = MaterialTheme.typography.titleMedium,
         color = colorResource(id = R.color.white)
     )
