@@ -51,8 +51,9 @@ import com.roleapp.core.ui.components.common.DefaultRow
 import com.roleapp.core.ui.theme.MedievalColours
 import com.unir.roleapp.character.data.model.local.ItemCategory
 import com.unir.roleapp.character.ui.screens.common.RectangularButton
+import com.unir.roleapp.character.ui.screens.items.components.InventoryByCategorySection
 import com.unir.roleapp.character.ui.screens.items.components.ItemSummaryComponent
-
+import com.unir.roleapp.character.ui.screens.spells.components.SpellByLevelSection
 
 
 @Composable
@@ -152,18 +153,56 @@ fun CharacterInventoryBody(
         if (isLoading) {
             CircularProgressIndicator()
         } else if (isInventory){
-            inventoryItems.forEach { detail ->
-                if (detail.quantity > 0 ){
-                    ItemSummaryComponent(
-                        item = detail.item,
-                        onClick = {
-                            itemViewModel.destroyItem(currentCharacter!!, detail.item)
-                                  } ,
-                        quantity = detail.quantity,
 
-                    )
-                    HorizontalDivider()
+
+            InventoryByCategorySection(
+                filteredItems = inventoryItems.filter{ item -> item.item.category == ItemCategory.EQUIPMENT },
+                filter = "Equipo",
+                onClick = {
+                    itemViewModel.destroyItem(currentCharacter!!, it)
                 }
+            )
+
+            InventoryByCategorySection(
+                filteredItems = inventoryItems.filter{ item -> item.item.category == ItemCategory.WEAPON },
+                filter = "Armas",
+                onClick = {
+                    itemViewModel.destroyItem(currentCharacter!!, it)
+                }
+            )
+
+            InventoryByCategorySection(
+                filteredItems = inventoryItems.filter{ item -> item.item.category == ItemCategory.CONSUMABLES },
+                filter = "Consumibles",
+                onClick = {
+                    itemViewModel.destroyItem(currentCharacter!!, it)
+                }
+            )
+
+
+            InventoryByCategorySection(
+                filteredItems = inventoryItems.filter{ item -> item.item.category == ItemCategory.COMMON },
+                filter = "Común",
+                onClick = {
+                    itemViewModel.destroyItem(currentCharacter!!, it)
+                }
+            )
+
+
+            inventoryItems.forEach { detail ->
+
+
+//                if (detail.quantity > 0 ){
+//                    ItemSummaryComponent(
+//                        item = detail.item,
+//                        onClick = {
+//                            itemViewModel.destroyItem(currentCharacter!!, detail.item)
+//                                  } ,
+//                        quantity = detail.quantity,
+//
+//                    )
+//                    HorizontalDivider()
+//                }
             }
         } else {
             filteredItems.forEach { item ->

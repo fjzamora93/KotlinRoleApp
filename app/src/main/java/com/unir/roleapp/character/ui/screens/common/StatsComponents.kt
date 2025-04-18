@@ -33,7 +33,10 @@ fun InlineStat(
                 .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
                 .padding(6.dp)
         ) {
-            Text("$localValue", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                "$localValue",
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
 
         Spacer(Modifier.width(8.dp))
