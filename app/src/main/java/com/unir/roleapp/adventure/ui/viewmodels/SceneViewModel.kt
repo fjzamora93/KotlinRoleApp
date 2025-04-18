@@ -34,7 +34,6 @@ class SceneViewModel @Inject constructor(
         _scenes.value = emptyList() // Opcional: se puede mostrar un estado vacío mientras se realiza la operación
         viewModelScope.launch {
             val result = sceneRepository.addScene(scene)
-            println(result)
         }
     }
 
@@ -46,7 +45,6 @@ class SceneViewModel @Inject constructor(
                 _scenes.value = scenes
                 _currentScene.value = scenes.lastOrNull()
                 println(scenes)
-                println("Escenario actual: " + _currentScene.value)
 
                 Log.d("SceneViewModel", "Datos cargados correctamente ${_scenes.value}")
             }.onFailure { exception ->

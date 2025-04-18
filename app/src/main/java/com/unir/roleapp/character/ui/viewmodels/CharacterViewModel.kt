@@ -70,7 +70,6 @@ class CharacterViewModel @Inject constructor(
                 _selectedCharacter.value = savedCharacter
                 _loadingState.value = false
                 _saveState.value = savedCharacter.id
-                println("Personaje creado / actualizado: ${characterEntity.name}")
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message
@@ -83,16 +82,13 @@ class CharacterViewModel @Inject constructor(
     fun getCharacterById(characterId: Long) {
         _loadingState.value = true
         viewModelScope.launch {
-            println("Personaje anterior: ${_selectedCharacter.value}")
             val result = characterUseCases.getCharacterById(characterId)
             result.onSuccess { rolCharacter ->
                 if (rolCharacter != null) {
                     _selectedCharacter.value = rolCharacter
-                    println("Cambiando personaje en uso: ${_selectedCharacter.value}")
 
                 }
                 _loadingState.value = false
-                println("Personaje encontrado: ${rolCharacter?.name}")
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message
@@ -110,7 +106,6 @@ class CharacterViewModel @Inject constructor(
             result.onSuccess {
                 _characters.value = _characters.value.toList().filter { it.id != characterEntity.id }
                 _loadingState.value = false
-                println("Personaje eliminado: ${characterEntity.name}")
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message

@@ -12,6 +12,10 @@ import com.unir.roleapp.character.data.model.local.StatName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,13 +42,13 @@ class ItemViewModel @Inject constructor(
     val armor: StateFlow<Int> get() = _armor
 
 
-    private val _attributes = MutableStateFlow(
+    private val _modifyingStats = MutableStateFlow(
         StatName.values()
             .filter { it != StatName.NONE } // si quieres omitir NONE
             .map { AttributeModifiers(type = it, modifyingValue = 0) }
     )
 
-    val attributes: StateFlow<List<AttributeModifiers>> = _attributes
+    val modifyingStats: StateFlow<List<AttributeModifiers>> = _modifyingStats
 
     // AL cargar el itemVIewModel, que se carguen los items directamente. Para la tienda se usa la plantilla, no los items personalizados.
     init {
@@ -52,7 +56,38 @@ class ItemViewModel @Inject constructor(
         fetchTemplateItems()
         calculateStatsFromItems()
         //getItemsBySession()
+
     }
+    // La armadura actualmente NO repite items. Tal y como está, 5 Botas dan la misma armadura que solo un par.
+    fun calculateStatsFromItems() {
+        _itemsByCharacter
+            .onEach { items ->
+                _armor.value = 0
+
+                val newModifiers = StatName.entries
+                    .filter { it != StatName.NONE }
+                    .map { AttributeModifiers(type = it, modifyingValue = 0) }
+                    .toMutableList()
+
+                items.forEach { item ->
+                    if (item.item.category == ItemCategory.EQUIPMENT) {
+                        _armor.value += 1
+                    }
+
+                    newModifiers.replaceAll {
+                        if (it.type == item.item.statType) {
+                            Log.e("ItemViewModel", "calculateStatsFromItems called on ${item.item.name} + ${item.item.statValue}")
+
+                            it.copy(modifyingValue = it.modifyingValue + item.item.statValue)
+                        } else it
+                    }
+                }
+
+                _modifyingStats.value = newModifiers
+            }
+            .launchIn(viewModelScope)
+    }
+
 
     fun getItemsByCharacter() {
         _loadingState.value = true
@@ -61,10 +96,9 @@ class ItemViewModel @Inject constructor(
             result.onSuccess { items ->
                 _itemsByCharacter.value = items
                 _loadingState.value = false
-                println("Inventario del personaje en el viewModel: ${_itemList.value}")
             }.onFailure {
                 _loadingState.value = false
-                println("Error ${it.message}")
+                Log.e("Error", "Error ${it.message}")
             }
         }
     }
@@ -76,9 +110,8 @@ class ItemViewModel @Inject constructor(
             val result = itemUseCases.upsertItemToCharacter(currentItem)
             result.onSuccess { items ->
                 _itemsByCharacter.value = items
-                println("El objeto se ha añadido correctamente")
             }.onFailure { error ->
-                println("Error al añadir el objeto: ${error.message}")
+                Log.e("Error", "Error ${error.message}")
             }
         }
     }
@@ -91,11 +124,9 @@ class ItemViewModel @Inject constructor(
         currentItem: Item,
     ){
         viewModelScope.launch {
-            println("AÑADIENDO ${currentItem.name} AL PERSONAJE: ${currentCharacter.name}")
             val result = itemUseCases.destroyItem(currentCharacter, currentItem)
             result.onSuccess { items ->
                 _itemsByCharacter.value = items
-                println("El objeto se ha añadido correctamente")
             }.onFailure { error ->
                 println("Error al añadir el objeto: ${error.message}")
             }
@@ -113,8 +144,6 @@ class ItemViewModel @Inject constructor(
                 _loadingState.value = false
                 println("Error ${it.message} al obtener los items desde la API")
             }
-
-            println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")
         }
     }
 
@@ -125,7 +154,6 @@ class ItemViewModel @Inject constructor(
      * devuelve una copia del objeto a la base de datos custom_item, con el ID del contexto de una sesión.
      * */
     fun fetchTemplateItems() {
-        Log.i("ITEMS", "fetchTemplateItems()")
         viewModelScope.launch {
             val result = itemUseCases.fetchTemplateItems()
             result.onSuccess {
@@ -134,35 +162,11 @@ class ItemViewModel @Inject constructor(
             }.onFailure {
                 _loadingState.value = false
             }
-
-            println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")
-        }
-    }
-
-
-    // La armadura actualmente NO repite items. Tal y como está, 5 Botas dan la misma armadura que solo un par.
-    fun calculateStatsFromItems(){
-        viewModelScope.launch{
-            _armor.value = 0
-            _itemsByCharacter.collect { items ->
-                items.forEach { item ->
-                    if (item.item.category == ItemCategory.EQUIPMENT){
-                        _armor.value += 1
-                    }
-                }
-            }
-
         }
     }
 
 
 
-    fun updateAttribute(type: StatName, newValue: Int) {
-        _attributes.update { list ->
-            list.map {
-                if (it.type == type) it.copy(modifyingValue = newValue) else it
-            }
-        }
-    }
+
 
 }

@@ -16,7 +16,6 @@ class GetCharactersByUserUseCase @Inject constructor(
         val userResult = userUseCase.getUser()
         val userId = userResult.getOrNull()?.id ?: return Result.failure(Exception("User not found"))
 
-        Log.d("GetCharactersByUserUseCase", "User ID: $userId")
 
         val result = repository.getCharactersByUserId(userId)
         return if (result.isSuccess) {

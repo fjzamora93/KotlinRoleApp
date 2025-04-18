@@ -33,7 +33,6 @@ fun CharacterPortrait(
     val imageName = character.imgUrl.lowercase()
     val imageResId = rememberImageResource(imageName)
 
-    println("ImagenResource: $imageName")
 
     // Verificar si el recurso existe
     val painter = if (imageResId != 0) {

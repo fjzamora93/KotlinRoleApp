@@ -176,6 +176,7 @@ fun CharacterInventoryBody(
                 filter = "Consumibles",
                 onClick = {
                     itemViewModel.destroyItem(currentCharacter!!, it)
+
                 }
             )
 

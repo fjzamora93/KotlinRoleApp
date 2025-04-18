@@ -36,6 +36,7 @@ import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.ui.screens.common.InlineStat
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.SkillViewModel
+import com.unir.roleapp.character.data.model.local.StatName
 
 
 @Composable
@@ -131,8 +132,9 @@ fun SkillSectionBody(
             ) {
                 Text(text = "Físicas", style= MaterialTheme.typography.titleSmall)
 
-                skillList.filter { it.skill.tag == "STR" }.forEachIndexed() { index, skill ->
+                skillList.filter { it.skill.tag == StatName.STRENGTH }.forEachIndexed() { index, skill ->
                     InlineStat(
+                        skillName = skill.skill.tag,
                         localValue = skill.value,
                         label = skill.skill.name.split("(")[0],
                     )
@@ -148,8 +150,9 @@ fun SkillSectionBody(
             ) {
                 Text(text = "Habilidad", style= MaterialTheme.typography.titleSmall)
 
-                skillList.filter { it.skill.tag == "DEX" }.forEach { skill ->
+                skillList.filter { it.skill.tag == StatName.DEXTERITY }.forEach { skill ->
                     InlineStat(
+                        skillName = skill.skill.tag,
                         localValue = skill.value,
                         label = skill.skill.name.split("(")[0],
                     )
@@ -178,11 +181,13 @@ fun SkillSectionBody(
                     .padding(8.dp)
             ) {
                 Text(text = "Conocimiento", style= MaterialTheme.typography.titleSmall)
-                skillList.filter { it.skill.tag == "INT" }.forEachIndexed { index, skill ->
+                skillList.filter { it.skill.tag == StatName.INTELLIGENCE  }.forEachIndexed { index, skill ->
                     Row(verticalAlignment = Alignment.CenterVertically){
 
 
                         InlineStat(
+                            skillName = skill.skill.tag,
+
                             localValue = skill.value,
                             label = skill.skill.name.split("(")[0],
                         )
@@ -197,8 +202,10 @@ fun SkillSectionBody(
                     .padding(8.dp)
             ) {
                 Text(text = "Sociales", style= MaterialTheme.typography.titleSmall)
-                skillList.filter { it.skill.tag == "CHA" }.forEach { skill ->
+                skillList.filter { it.skill.tag == StatName.CHARISMA  }.forEach { skill ->
                     InlineStat(
+                        skillName = skill.skill.tag,
+
                         localValue = skill.value,
                         label = skill.skill.name.split("(")[0],
                     )

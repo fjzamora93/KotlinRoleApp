@@ -41,9 +41,7 @@ import com.unir.roleapp.R
 // TODO: NO HAY POR QUÉ USAR EL MAIN LAYOUT (que lo que tiene dentro es un Scaffold). Como alternativa, podemos crear un nuevo Scaffold.
 @Composable
 fun AdventureMainScreen() {
-    LaunchedEffect(Unit) {
-        Log.d("CharacterScreen", "NavController está listo")
-    }
+
 
     MainLayout {
         Box(

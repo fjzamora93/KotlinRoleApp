@@ -26,13 +26,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.character.ui.viewmodels.SkillViewModel
+import com.unir.roleapp.character.data.model.local.StatName
 
 @Composable
 fun CombatSkillSection(
     skillViewModel: SkillViewModel = hiltViewModel()
 ) {
     val skillList by skillViewModel.skillList.collectAsState()
-    val combatSkills = skillList.filter { it.skill.tag == "COMBAT" }.sortedByDescending { it.value }
+    val combatSkills = skillList.filter { it.skill.tag == StatName.COMBAT }.sortedByDescending { it.value }
 
     Row(
         modifier = Modifier

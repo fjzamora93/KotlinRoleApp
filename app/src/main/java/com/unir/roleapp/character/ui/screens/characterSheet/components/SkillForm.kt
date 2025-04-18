@@ -47,10 +47,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.data.model.local.Skill
-import com.roleapp.character.data.model.local.SkillTags
-import com.roleapp.character.data.model.local.tagToString
+
 import com.roleapp.character.ui.viewmodels.SkillViewModel
 import com.roleapp.core.ui.components.common.DefaultRow
+import com.unir.roleapp.character.data.model.local.StatName
 import kotlinx.coroutines.launch
 
 @Composable
@@ -71,7 +71,7 @@ fun SkillForm(
 
     // Obtener todas las etiquetas de habilidades únicas
     val skillTags = localSkillList.map { it.skill.tag }.distinct()
-    var selectedTag by remember { mutableStateOf<String?>(SkillTags.STRENGTH ) }
+    var selectedTag by remember { mutableStateOf<StatName?>(StatName.STRENGTH ) }
 
     // Crear un map con claves = tags y valores = lista de habilidades por cada tag
     val skillsByTag = skillTags.associateWith { tag ->
@@ -81,7 +81,7 @@ fun SkillForm(
     // Control de scroll
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
-    val columnPositions = remember { mutableMapOf<String, Int>() }
+    val columnPositions = remember { mutableMapOf<StatName, Int>() }
     Column(){
 
         DefaultRow {
@@ -133,14 +133,14 @@ fun SkillForm(
                 ) {
                     Icon(
                         imageVector = when (tag) {
-                            SkillTags.STRENGTH -> Icons.Default.FitnessCenter // Ícono de fuerza
-                            SkillTags.DEXTERITY -> Icons.Default.DirectionsRun // Ícono de destreza
-                            SkillTags.INTELLIGENCE -> Icons.Default.School // Ícono de conocimiento
-                            SkillTags.CHARISMA -> Icons.Default.Face // Ícono de sociales
-                            SkillTags.COMBAT -> Icons.Default.Security // Ícono de combate
+                            StatName.STRENGTH -> Icons.Default.FitnessCenter // Ícono de fuerza
+                            StatName.DEXTERITY -> Icons.Default.DirectionsRun // Ícono de destreza
+                            StatName.INTELLIGENCE -> Icons.Default.School // Ícono de conocimiento
+                            StatName.CHARISMA -> Icons.Default.Face // Ícono de sociales
+                            StatName.COMBAT -> Icons.Default.Security // Ícono de combate
                             else -> Icons.Default.Help // Ícono genérico
                         },
-                        contentDescription = tagToString(tag),
+                        contentDescription = StatName.getString(tag),
                         modifier = Modifier.size(32.dp),
                         tint = if (selectedTag == tag) MaterialTheme.colorScheme.primary else Color.Gray
                     )
@@ -165,7 +165,7 @@ fun SkillForm(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ){
                     Text(
-                        text = "Habilidades de ${tagToString(tag)}",
+                        text = "Habilidades de ${StatName.getString(tag)}",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.align(Alignment.Start)
                     )
