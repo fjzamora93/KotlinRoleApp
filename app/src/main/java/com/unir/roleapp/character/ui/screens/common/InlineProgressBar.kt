@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.roleapp.core.ui.components.common.DefaultRow
+import com.unir.roleapp.character.data.model.local.StatName
 
 @Composable
 fun InlineProgressBar(
@@ -35,6 +36,8 @@ fun InlineProgressBar(
 
     DefaultRow {
         InlineStat(
+            skillName = StatName.COMBAT,
+
             localValue = localValue,
             label = label,
             modifier = Modifier

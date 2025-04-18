@@ -33,10 +33,7 @@ class ItemRepositoryImpl @Inject constructor(
                 val itemDTOS: List<ItemDTO> = response.body() ?: emptyList()
                 val itemList: List<Item> = itemDTOS.map { it.toItemEntity() }
                 itemDao.insertAll(itemList)
-                itemList.forEach { item ->
-                    println( "${item.diceAmount} + d + ${item.dice}")}
-                itemDTOS.forEach { item ->
-                    println( "${item.dicesAmount} + d + ${item.dice}")}
+
                 Result.success(itemList)
             } else {
                 Result.failure(Exception("Error en la respuesta: ${response.code()}"))
@@ -92,7 +89,6 @@ class ItemRepositoryImpl @Inject constructor(
 //                syncToApiCharacterItem(characterId)
 //            }
             val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
-            Log.w("ITEMS", itemsDetail.toString())
             Result.success(itemsDetail)
         } catch (e: Exception) {
             println("Error en el repositorio al obtener los datos de la API")

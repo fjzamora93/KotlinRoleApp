@@ -1,5 +1,6 @@
 package com.roleapp.character.ui.screens.common
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -8,34 +9,80 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.roleapp.character.ui.viewmodels.ItemViewModel
+import com.unir.roleapp.R
+import com.unir.roleapp.character.data.model.local.StatName
 @Composable
 fun InlineStat(
+    skillName: StatName,
     localValue: Int = 10,
     label: String,
-    modifier: Modifier = Modifier.padding(bottom = 8.dp)
+    modifier: Modifier = Modifier.padding(bottom = 8.dp),
+    itemViewModel: ItemViewModel = hiltViewModel()
 ) {
+    val modifyingStats = itemViewModel.modifyingStats.collectAsState()
+    val modifiedValue = modifyingStats.value.find { it.type == skillName }?.modifyingValue ?: 0
+    val displayValue = localValue + modifiedValue
+
+    val borderColor = when {
+        modifiedValue > 0 -> Color(0xFF4CAF50) // Verde
+        modifiedValue < 0 -> Color(0xFFF44336) // Rojo
+        else -> MaterialTheme.colorScheme.outline
+    }
+
+    val arrowPainter = when {
+        modifiedValue > 0 -> painterResource(id = R.drawable.baseline_keyboard_double_arrow_up_24)
+        modifiedValue < 0 -> painterResource(id = R.drawable.baseline_keyboard_double_arrow_down_24)
+        else -> null
+    }
+
+    val arrowColor = when {
+        modifiedValue > 0 -> Color(0xFF4CAF50)
+        modifiedValue < 0 -> Color(0xFFF44336)
+        else -> Color.Transparent
+    }
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(4.dp))
                 .padding(6.dp)
         ) {
             Text(
-                "$localValue",
+                "$displayValue",
                 style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        if (arrowPainter != null) {
+            Spacer(modifier = Modifier.width(4.dp))
+            Icon(
+                painter = arrowPainter,
+                contentDescription = null,
+                tint = arrowColor,
+                modifier = Modifier.size(18.dp)
             )
         }
 

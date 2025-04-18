@@ -23,7 +23,6 @@ class UserRepositoryImpl  @Inject constructor(
                 // Si no hay token, intentar obtener el usuario desde la base de datos local
                 val localUser = userDao.getUser()
                 if (localUser != null) {
-                    println("USUARIO LOCAL: $localUser")
                     return Result.success(localUser)
                 } else {
                     // Si no hay usuario local, devolver un error adecuado
@@ -33,7 +32,6 @@ class UserRepositoryImpl  @Inject constructor(
 
             // Si hay token, intentar obtener el usuario desde la API
             val response = api.getUser("Bearer $token")
-            println("Tratando de obtener usuario desde API")
 
             if (response.isSuccessful && response.body() != null) {
                 return Result.success(response.body()!!.toUserEntity())
@@ -41,7 +39,6 @@ class UserRepositoryImpl  @Inject constructor(
                 // Si la API falla, intenta obtener el usuario local
                 val localUser = userDao.getUser()
                 if (localUser != null) {
-                    println("USUARIO LOCAL: $localUser")
                     return Result.success(localUser)
                 } else {
                     // Si no hay usuario local, devolver un error adecuado

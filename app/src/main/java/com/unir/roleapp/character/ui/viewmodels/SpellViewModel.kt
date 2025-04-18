@@ -26,10 +26,8 @@ class SpellViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             val result = spellUseCase.getSpellsByLevelAndRoleClass(currentCharacter)
-            println("La clase del personaje es:  "+ currentCharacter.rolClass.toString())
             result.onSuccess {
                     spells -> _spellList.value = spells
-                println("VIendo hechizos disponibles para el personaje: $spells")
 
             }.onFailure {
                 println("ALgo salió mal: ${it.message}")

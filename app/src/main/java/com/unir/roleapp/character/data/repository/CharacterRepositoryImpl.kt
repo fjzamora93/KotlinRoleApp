@@ -78,7 +78,6 @@ class CharacterRepositoryImpl @Inject constructor(
 
             val characterResponse = apiService.getCharacterById(id)
             if (characterResponse.isSuccessful) {
-                Log.d("CharacterRepositoryImpl", "CharacterRepositoryImpl.getCharacterById(): ${characterResponse.body()}")
                 characterResponse.body()?.let { apiCharacter ->
 
                     val crossRefSkills = apiCharacter.skills.map { skillDTO ->
@@ -131,13 +130,11 @@ class CharacterRepositoryImpl @Inject constructor(
                     val apiEntity = apiResult.getOrThrow()
                     // Actualizar localmente con datos de la API
                     characterDao.updateCharacter(apiEntity)
-                    Log.d("Sync", "Retornando personaje desde API")
                     Result.success(apiEntity)
                 }
                 else -> {
                     // Fallback a local
                     characterDao.updateCharacter(character)
-                    Log.w("Sync", "Retornando personaje desde base de datos local (fallo API: ${apiResult.exceptionOrNull()?.message})")
                     Result.success(character)
                 }
             }
@@ -159,10 +156,8 @@ class CharacterRepositoryImpl @Inject constructor(
 
             // 3. Retornar el resultado apropiado
             if (apiResult.isSuccess) {
-                Log.d("Sync", "Retornando personaje con skills desde API")
                 apiResult
             } else {
-                Log.w("Sync", "Retornando personaje con skills desde local (fallo API: ${apiResult.exceptionOrNull()?.message})")
                 Result.success(character)
             }
         } catch (e: Exception) {
@@ -179,7 +174,6 @@ class CharacterRepositoryImpl @Inject constructor(
                 this.characterSkills = skillsCrossRef
             }
 
-            Log.d("CharacterRepositoryImpl", "CharacterRepositoryImpl.upsertCharacterToApi: $characterRequest")
 
             val response = apiService.saveCharacter(characterRequest)
 

@@ -13,10 +13,8 @@ class SaveCharacterUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(character: CharacterEntity, form : PersonalityTestForm): Result<CharacterEntity> {
         return if (character.id == 0L) {
-            Log.d("SaveCharacterUseCase", "Creando personaje")
             createCharacterUseCase(character, form)
         } else {
-            Log.d("SaveCharacterUseCase", "ACTUALIZANDO personaje existente")
             updateCharacterUseCase(character)
         }
     }

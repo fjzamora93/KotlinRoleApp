@@ -13,7 +13,6 @@ class GetActiveCharacterIdUseCase @Inject constructor(
         // Obtén el personaje activo (esto puede ser desde la base de datos o alguna lógica definida)
         val activeCharacter = characterRepository.getActiveCharacter().getOrNull()
         return if (activeCharacter != null) {
-            Log.d("GetActiveCharacterIdUseCase", "Active character ID: ${activeCharacter}")
             Result.success(activeCharacter)
         } else {
             Result.failure(Exception("No active character found"))
