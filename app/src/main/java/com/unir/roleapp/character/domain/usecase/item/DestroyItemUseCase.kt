@@ -27,6 +27,10 @@ class DestroyItemUseCase @Inject constructor(
             quantity -= 1
             println("La cantidad que se va a modificar es... $quantity")
 
+            if (quantity >= 0) {
+                return itemRepository.deleteItemFromCharacter(character.id, item.id)
+            }
+
             return itemRepository.addItemToCharacter(character.id, item, quantity)
 
 

@@ -22,6 +22,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,8 +45,11 @@ fun InlineStat(
     itemViewModel: ItemViewModel = hiltViewModel()
 ) {
     val modifyingStats = itemViewModel.modifyingStats.collectAsState()
-    val modifiedValue = modifyingStats.value.find { it.type == skillName }?.modifyingValue ?: 0
-    val displayValue = localValue + modifiedValue
+    val modifiedValue  by remember { mutableIntStateOf( modifyingStats.value.find { it.type == skillName }?.modifyingValue ?: 0 ) }
+    val displayValue by remember { mutableIntStateOf(localValue + modifiedValue) }
+
+
+    Log.d("InlineStat", "Recomposing for $label with modifiedValue=$modifiedValue")
 
     val borderColor = when {
         modifiedValue > 0 -> Color(0xFF4CAF50) // Verde

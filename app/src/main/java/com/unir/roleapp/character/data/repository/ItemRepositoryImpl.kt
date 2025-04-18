@@ -89,7 +89,9 @@ class ItemRepositoryImpl @Inject constructor(
 //                syncToApiCharacterItem(characterId)
 //            }
             val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
-            Result.success(itemsDetail)
+            val filteredItems = itemsDetail.filter { it.quantity > 0 }
+
+            Result.success(filteredItems)
         } catch (e: Exception) {
             println("Error en el repositorio al obtener los datos de la API")
             Result.failure(e)
@@ -99,9 +101,11 @@ class ItemRepositoryImpl @Inject constructor(
 
     override suspend fun deleteItemFromCharacter(characterId: Long, itemId: Int): Result<List<CharacterItemDetail>> {
         return try {
-            itemDao.deleteItemFromCharacter(CharacterItemCrossRef(characterId, itemId))
+            itemDao.deleteItemFromCharacter(characterId, itemId)
             val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
-            Result.success(itemsDetail)
+            val filteredItems = itemsDetail.filter { it.quantity > 0 }
+
+            Result.success(filteredItems)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -179,7 +183,7 @@ class ItemRepositoryImpl @Inject constructor(
                 val apiItemIds = updatedItemsDetail.map { it.item.id }.toSet()
                 val itemsToDelete = localItemIds - apiItemIds
                 itemsToDelete.forEach { itemId ->
-                    itemDao.deleteItemFromCharacter(CharacterItemCrossRef(characterId, itemId))
+                    itemDao.deleteItemFromCharacter(characterId, itemId)
                 }
 
                 // Actualizar las relaciones que permanecen

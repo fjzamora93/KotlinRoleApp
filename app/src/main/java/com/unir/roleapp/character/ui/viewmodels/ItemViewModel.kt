@@ -12,6 +12,7 @@ import com.unir.roleapp.character.data.model.local.StatName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -57,6 +58,36 @@ class ItemViewModel @Inject constructor(
         //getItemsBySession()
 
     }
+    // La armadura actualmente NO repite items. Tal y como está, 5 Botas dan la misma armadura que solo un par.
+    fun calculateStatsFromItems() {
+        _itemsByCharacter
+            .onEach { items ->
+                _armor.value = 0
+
+                val newModifiers = StatName.entries
+                    .filter { it != StatName.NONE }
+                    .map { AttributeModifiers(type = it, modifyingValue = 0) }
+                    .toMutableList()
+
+                items.forEach { item ->
+                    if (item.item.category == ItemCategory.EQUIPMENT) {
+                        _armor.value += 1
+                    }
+
+                    newModifiers.replaceAll {
+                        if (it.type == item.item.statType) {
+                            Log.e("ItemViewModel", "calculateStatsFromItems called on ${item.item.name} + ${item.item.statValue}")
+
+                            it.copy(modifyingValue = it.modifyingValue + item.item.statValue)
+                        } else it
+                    }
+                }
+
+                _modifyingStats.value = newModifiers
+            }
+            .launchIn(viewModelScope)
+    }
+
 
     fun getItemsByCharacter() {
         _loadingState.value = true
@@ -135,33 +166,6 @@ class ItemViewModel @Inject constructor(
     }
 
 
-    // La armadura actualmente NO repite items. Tal y como está, 5 Botas dan la misma armadura que solo un par.
-    fun calculateStatsFromItems() {
-        _itemsByCharacter
-            .onEach { items ->
-                _armor.value = 0
-
-                val newModifiers = StatName.entries
-                    .filter { it != StatName.NONE }
-                    .map { AttributeModifiers(type = it, modifyingValue = 0) }
-                    .toMutableList()
-
-                items.forEach { item ->
-                    if (item.item.category == ItemCategory.EQUIPMENT) {
-                        _armor.value += 1
-                    }
-
-                    newModifiers.replaceAll {
-                        if (it.type == item.item.statType) {
-                            it.copy(modifyingValue = it.modifyingValue + item.item.statValue)
-                        } else it
-                    }
-                }
-
-                _modifyingStats.value = newModifiers
-            }
-            .launchIn(viewModelScope)
-    }
 
 
 
