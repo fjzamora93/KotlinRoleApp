@@ -8,6 +8,8 @@ import com.roleapp.character.domain.usecase.character.generateutils.configureCha
 import com.roleapp.character.domain.usecase.character.generateutils.generateStats
 import com.roleapp.character.domain.usecase.skill.SkillUseCases
 import com.roleapp.character.ui.screens.characterform.components.PersonalityTestForm
+import com.unir.roleapp.character.domain.usecase.character.generateutils.calculateCharacterActionPoints
+import com.unir.roleapp.character.domain.usecase.character.generateutils.calculateCharacterHealth
 import javax.inject.Inject
 
 class CreateCharacterUseCase @Inject constructor(
@@ -25,17 +27,28 @@ class CreateCharacterUseCase @Inject constructor(
 
             plainCharacter.userId = userId
             plainCharacter.updatedAt = System.currentTimeMillis()
+
+
+
             plainCharacter.id = "${plainCharacter.userId}${plainCharacter.updatedAt}".toLong()
 
             val character: CharacterEntity = generateStats(plainCharacter)
+
 
 
             var skillList: List<Skill> = emptyList()
             skillUseCases.getSkills().onSuccess{ skills -> skillList = skills }.onFailure { throw NoSuchElementException("NO se han recuperado las habilidades")  }
 
             val characterSkillCrossRef = configureCharacterSkills(character, form, skillList)
+            val hp = calculateCharacterHealth(character)
+            val ap = calculateCharacterActionPoints(character)
 
-            return characterRepository.saveCharacterWithSKills(character, characterSkillCrossRef)
+            val updatedCharacter = character.copy(
+                ap = ap,
+                hp = hp,
+            )
+
+            return characterRepository.saveCharacterWithSKills(updatedCharacter, characterSkillCrossRef)
 
         } catch (e: Exception) {
             Result.failure(e)

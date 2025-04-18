@@ -6,10 +6,13 @@ import com.roleapp.character.data.model.local.Item
 import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.data.model.local.CharacterItemDetail
 import com.roleapp.character.domain.usecase.item.ItemUseCases
+import com.unir.roleapp.character.data.model.local.AttributeModifiers
 import com.unir.roleapp.character.data.model.local.ItemCategory
+import com.unir.roleapp.character.data.model.local.StatName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,6 +37,14 @@ class ItemViewModel @Inject constructor(
     private val _armor = MutableStateFlow<Int>(0)
     val armor: StateFlow<Int> get() = _armor
 
+
+    private val _attributes = MutableStateFlow(
+        StatName.values()
+            .filter { it != StatName.NONE } // si quieres omitir NONE
+            .map { AttributeModifiers(type = it, modifyingValue = 0) }
+    )
+
+    val attributes: StateFlow<List<AttributeModifiers>> = _attributes
 
     // AL cargar el itemVIewModel, que se carguen los items directamente. Para la tienda se usa la plantilla, no los items personalizados.
     init {
@@ -141,6 +152,16 @@ class ItemViewModel @Inject constructor(
                 }
             }
 
+        }
+    }
+
+
+
+    fun updateAttribute(type: StatName, newValue: Int) {
+        _attributes.update { list ->
+            list.map {
+                if (it.type == type) it.copy(modifyingValue = newValue) else it
+            }
         }
     }
 
