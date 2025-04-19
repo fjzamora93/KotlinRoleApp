@@ -22,32 +22,37 @@ import javax.inject.Inject
  *
  * */
 class ValidateSkillValue @Inject constructor() {
-     operator fun invoke(
+    operator fun invoke(
         character: CharacterEntity,
         skillValues: List<SkillValue>
     ): Result<SkillValidationResult> {
+        val puntosDisponibles = calculateAvailablePoints(character, skillValues)
 
+        return if (puntosDisponibles < 0) {
+            Result.success(
+                SkillValidationResult.Error(
+                    message = "Has asignado más puntos de los disponibles.",
+                    puntosDisponibles = puntosDisponibles,
+                    correctedSkills = skillValues
+                )
+            )
+        } else {
+            Result.success(
+                SkillValidationResult.Success(
+                    puntosDisponibles = puntosDisponibles
+                )
+            )
+        }
+    }
 
-        return Result.success(SkillValidationResult.Success(
-            puntosDisponibles = calculateAvailablePoints(character, skillValues)
-        ))
+    private fun calculateAvailablePoints(character: CharacterEntity, skillValues: List<SkillValue>): Int {
+        val regularPoints = 175
+        val weaponPoints = 34
+        val totalPoints = 3 * character.level + regularPoints + weaponPoints
+        return totalPoints - skillValues.sumOf { it.value }
     }
 }
 
-/**
- * Calcula los puntos totales a repartir basados en el nivel del personaje. NO ESTÁN INCLUIDOS LOS PUNTOS DE ARMAS.
- *
- * @param level El nivel del personaje.
- * @return Los puntos totales a repartir.
- */
-
-
-private fun calculateAvailablePoints(character: CharacterEntity, skillValues: List<SkillValue>): Int {
-    val regularPoints = 175
-    val weaponPoints = 34 // 5 de cada grupo de armas y 14 para el arma principal
-    val totalPoints = 3 * character.level + regularPoints + weaponPoints
-    return totalPoints - skillValues.sumOf { it.value }
-}
 
 /**
  * Resultado de la validación.

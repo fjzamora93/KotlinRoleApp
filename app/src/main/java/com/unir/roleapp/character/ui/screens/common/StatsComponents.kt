@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.roleapp.character.ui.screens.common.dialogues.CharacterDialog
 import com.roleapp.character.ui.viewmodels.ItemViewModel
 import com.unir.roleapp.R
 import com.unir.roleapp.character.data.model.local.StatName
@@ -47,9 +48,6 @@ fun InlineStat(
     val modifyingStats = itemViewModel.modifyingStats.collectAsState()
     val modifiedValue  by remember { mutableIntStateOf( modifyingStats.value.find { it.type == skillName }?.modifyingValue ?: 0 ) }
     val displayValue by remember { mutableIntStateOf(localValue + modifiedValue) }
-
-
-    Log.d("InlineStat", "Recomposing for $label with modifiedValue=$modifiedValue")
 
     val borderColor = when {
         modifiedValue > 0 -> Color(0xFF4CAF50) // Verde

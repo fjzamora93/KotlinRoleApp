@@ -52,7 +52,8 @@ class SkillViewModel @Inject constructor(
         viewModelScope.launch {
             val result = skillUseCases.updateSkills(character, skillList)
             result.onSuccess {
-                _errorMessage.value = null // Limpiar el mensaje de error
+                _errorMessage.value = null
+                getSkillsFromCharacter(character)
             }.onFailure { error ->
                 _errorMessage.value = "Error al actualizar las habilidades: ${error.message}"
                 println("Error: ${error.message}")

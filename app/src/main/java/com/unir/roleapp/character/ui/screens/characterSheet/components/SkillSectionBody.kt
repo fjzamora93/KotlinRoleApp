@@ -1,4 +1,4 @@
-package com.roleapp.character.ui.screens.characterSheet.components
+package com.unir.roleapp.character.ui.screens.characterSheet.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -6,14 +6,12 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -21,11 +19,8 @@ import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Help
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Security
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,26 +38,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.data.model.local.Skill
 import com.roleapp.character.data.model.local.SkillValue
-
+import com.roleapp.character.ui.viewmodels.CharacterViewModel
+import com.roleapp.character.ui.viewmodels.ItemViewModel
 import com.roleapp.character.ui.viewmodels.SkillViewModel
-import com.roleapp.core.ui.components.common.DefaultRow
+import com.unir.roleapp.R
 import com.unir.roleapp.character.data.model.local.StatName
 import kotlinx.coroutines.launch
 
+
 @Composable
-fun SkillForm(
-    skillViewModel: SkillViewModel = hiltViewModel(),
-    character: CharacterEntity,
-    onChanges: (List<SkillValue>) -> Unit
+fun SkillSectionBody(
+    skillList : List<SkillValue>,
 ) {
-    val skillList by skillViewModel.skillList.collectAsState()
-    val errorMessage by skillViewModel.errorMessage.collectAsState()
 
     // Estado local sincronizado con el ViewModel
     var localSkillList by remember(skillList) {
@@ -70,7 +65,7 @@ fun SkillForm(
 
     // Obtener todas las etiquetas de habilidades únicas
     val skillTags = localSkillList.map { it.skill.tag }.distinct()
-    var selectedTag by remember { mutableStateOf<StatName?>(StatName.STRENGTH ) }
+    var selectedTag by remember { mutableStateOf<StatName?>(StatName.STRENGTH) }
 
     // Crear un map con claves = tags y valores = lista de habilidades por cada tag
     val skillsByTag = skillTags.associateWith { tag ->
@@ -81,9 +76,7 @@ fun SkillForm(
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     val columnPositions = remember { mutableMapOf<StatName, Int>() }
-    Column(){
-
-        errorMessage?.let { Text(it, color = Color.Red) }
+    Column() {
 
         // CABECERA DE LA COLUMNA (Con las subsecciones de la tabla)
         Row(
@@ -96,6 +89,7 @@ fun SkillForm(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             skillTags.forEach { tag ->
+                if (tag != StatName.COMBAT) {
                     IconButton(
                         onClick = {
                             selectedTag = tag
@@ -120,7 +114,6 @@ fun SkillForm(
                                 StatName.DEXTERITY    -> Icons.Default.DirectionsRun
                                 StatName.INTELLIGENCE -> Icons.Default.School
                                 StatName.CHARISMA     -> Icons.Default.Face
-                                StatName.COMBAT         -> Icons.Default.Security
                                 else                  -> Icons.Default.Help
                             },
                             contentDescription = StatName.getString(tag),
@@ -131,115 +124,132 @@ fun SkillForm(
                                 MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-
+                }
             }
         }
 
-        // Secciones de habilidades con scroll horizontal
+        // Body de la columna Listado de habilidades con Scroll horizontal
         Row(
             modifier = Modifier
                 .horizontalScroll(scrollState)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = RoundedCornerShape(8.dp)),
             horizontalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             skillTags.forEach { tag ->
-                Column(
-                    modifier = Modifier.padding(8.dp)
-                        .onGloballyPositioned { coordinates ->
-                            columnPositions[tag] = coordinates.positionInParent().x.toInt()
-                        },
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ){
-                    Text(
-                        text = "Habilidades de ${StatName.getString(tag)}",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.align(Alignment.Start)
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-                    skillsByTag[tag]?.forEach { skill ->
-                        SkillCounter(
-                            skill = skill.skill,
-                            value = skill.value,
-                            onValueChanged = { newValue ->
-                                localSkillList = localSkillList.toMutableList().apply {
-                                    val index = indexOfFirst { it.skill == skill.skill }
-                                    if (index != -1) {
-                                        this[index] = this[index].copy(value = newValue)
-                                    }
-                                }
-
-                                onChanges(localSkillList)
-                            }
+                if (tag != StatName.COMBAT){
+                    Column(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.background,
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .padding(12.dp)
+                            .onGloballyPositioned { coordinates ->
+                                columnPositions[tag] = coordinates.positionInParent().x.toInt()
+                            },
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(
+                            text = "Habilidades de ${StatName.getString(tag)}",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        skillsByTag[tag]?.forEach { skill ->
+                            SkillDetail(
+                                skill = skill.skill,
+                                localValue= skill.value,
+                                value = skill.value,
+                                skillName = skill.skill.tag
+                            )
+
+                        }
                     }
                 }
             }
         }
     }
+
 }
 
 
+
 @Composable
-fun SkillCounter(
+fun SkillDetail(
     skill: Skill,
     value: Int,
-    onValueChanged: (Int) -> Unit
+    localValue: Int = 0,
+    skillName: StatName,
+
+    itemViewModel: ItemViewModel = hiltViewModel()
+
 ) {
-    Row(
+    val modifyingStats = itemViewModel.modifyingStats.collectAsState()
+    val modifiedValue  by remember { mutableIntStateOf( modifyingStats.value.find { it.type == skillName }?.modifyingValue ?: 0 ) }
+    val displayValue by remember { mutableIntStateOf(localValue + modifiedValue) }
+
+    val borderColor = when {
+        modifiedValue > 0 -> Color(0xFF4CAF50) // Verde
+        modifiedValue < 0 -> Color(0xFFF44336) // Rojo
+        else -> MaterialTheme.colorScheme.outline
+    }
+
+    val arrowPainter = when {
+        modifiedValue > 0 -> painterResource(id = R.drawable.baseline_keyboard_double_arrow_up_24)
+        modifiedValue < 0 -> painterResource(id = R.drawable.baseline_keyboard_double_arrow_down_24)
+        else -> null
+    }
+
+    val arrowColor = when {
+        modifiedValue > 0 -> Color(0xFF4CAF50)
+        modifiedValue < 0 -> Color(0xFFF44336)
+        else -> Color.Transparent
+    }
+    Row (
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.width(150.dp)
-        ) {
-            Text(
-                text = skill.name.split("(")[0],
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-        Column(
-            modifier = Modifier.width(150.dp)
-        ) {
+
+    ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.padding(horizontal = 8.dp)
         ) {
-            Button(
-                onClick = { if (value > 5) onValueChanged(value - 1) },
-                enabled = value > 5,
-                modifier = Modifier.size(30.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                contentPadding = PaddingValues(0.dp) // <- Elimina el padding interno
-            ) {
-                Text("-", style = MaterialTheme.typography.bodyMedium)
+            arrowPainter?.let {
+                Icon(
+                    painter = it,
+                    contentDescription = null,
+                    tint = arrowColor,
+                    modifier = Modifier.size(18.dp)
+                )
             }
 
             Box(
                 modifier = Modifier
                     .size(40.dp, 32.dp)
-                    .border(1.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(4.dp)),
+                    .border(1.dp, borderColor, RoundedCornerShape(4.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = value.toString(),
+                    text = displayValue.toString(),
                     style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
             }
 
-            Button(
-                onClick = { if (value < 15) onValueChanged(value + 1) },
-                enabled = value < 15,
-                modifier = Modifier.size(32.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                contentPadding = PaddingValues(0.dp) // <- Elimina el padding interno
 
-            ) {
-                Text("+", style = MaterialTheme.typography.bodyMedium)
-            }
         }
-        }
+
+        // Texto del nombre
+        Text(
+            text = skill.name.split("(")[0],
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
+
 }
