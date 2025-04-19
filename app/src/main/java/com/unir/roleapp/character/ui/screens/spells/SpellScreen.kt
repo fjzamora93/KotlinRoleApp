@@ -66,6 +66,7 @@ fun CharacterSpellBody(
         ) {
 
             filteredSpells?.let {
+                SpellByLevelSection(filteredSpells = it.filter{ spell -> spell.level == 0 }, filter = "Trucos")
                 SpellByLevelSection(filteredSpells = it.filter{ spell -> spell.level == 1 }, filter = "1")
                 SpellByLevelSection(filteredSpells = it.filter{ spell -> spell.level == 2 }, filter = "2")
                 SpellByLevelSection(filteredSpells = it.filter{ spell -> spell.level == 3 }, filter = "3")

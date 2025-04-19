@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.RemoveCircle
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -67,37 +68,49 @@ fun SpellSummaryComponent(
                     .padding(1.dp)  // Espacio entre la imagen y el borde del recuadro
             ) {
                 // Carga la imagen según la categoría del item
-                when (spell.level) {
-                    1 -> Image(
-                        painter = painterResource(id = R.drawable.baseline_filter_1_24),
+                when (spell.imgUrl) {
+                    StatName.COMBAT -> Image(
+                        painter = painterResource(id = R.drawable.weapon_dagger),
                         contentDescription = "Category 1",
                         modifier = Modifier.fillMaxSize()
                     )
-                    2 -> Image(
-                        painter = painterResource(id = R.drawable.baseline_filter_2_24),
+                    StatName.ARMOR  -> Image(
+                        painter = painterResource(id = R.drawable.baseline_shield_24),
                         contentDescription = "Category 2",
                         modifier = Modifier.fillMaxSize()
                     )
-                    3 -> Image(
-                        painter = painterResource(id = R.drawable.baseline_filter_3_24),
-                        contentDescription = "Category 2",
-                        modifier = Modifier.fillMaxSize()
-                    )
-
-                    4 -> Image(
-                        painter = painterResource(id = R.drawable.baseline_filter_4_24),
+                    StatName.CURRENT_HP  -> Image(
+                        painter = painterResource(id = R.drawable.baseline_heart_broken_24),
                         contentDescription = "Category 2",
                         modifier = Modifier.fillMaxSize()
                     )
 
-                    5 -> Image(
-                        painter = painterResource(id = R.drawable.baseline_filter_5_24),
+                    StatName.INTELLIGENCE -> Image(
+                        painter = painterResource(id = R.drawable.magic),
                         contentDescription = "Category 2",
                         modifier = Modifier.fillMaxSize()
                     )
 
-                    6 -> Image(
-                        painter = painterResource(id = R.drawable.baseline_filter_6_24),
+                    StatName.WISDOM  -> Image(
+                        painter = painterResource(id = R.drawable.baseline_menu_book_24),
+                        contentDescription = "Category 2",
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    StatName.CHARISMA -> Image(
+                        painter = painterResource(id = R.drawable.charisma),
+                        contentDescription = "Category 2",
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    StatName.INITIATIVE -> Image(
+                        painter = painterResource(id = R.drawable.initiative_24),
+                        contentDescription = "Category 2",
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    StatName.DEXTERITY -> Image(
+                        painter = painterResource(id = R.drawable.dexterity_24),
                         contentDescription = "Category 2",
                         modifier = Modifier.fillMaxSize()
                     )
@@ -148,7 +161,7 @@ fun SpellSummaryComponent(
                 ) {
                     Icon(
                         modifier = Modifier.size(40.dp),
-                        imageVector = Icons.Filled.Menu,
+                        imageVector = Icons.Filled.MoreVert,
                         contentDescription = "Más opciones",
                     )
                 }
