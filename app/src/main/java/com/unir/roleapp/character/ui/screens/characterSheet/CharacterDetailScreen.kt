@@ -202,6 +202,8 @@ fun DetailCharacterBody(
 
     SkillSection()
 
+    HorizontalDivider(Modifier.padding(16.dp))
+
     StatSection(
         editableCharacter = character,
         onCharacterChange = {

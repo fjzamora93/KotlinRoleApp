@@ -1,21 +1,14 @@
 package com.roleapp.character.ui.screens.characterSheet.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Divider
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,32 +25,79 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.core.ui.components.common.DefaultRow
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.ui.screens.common.InlineStat
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.SkillViewModel
-import com.unir.roleapp.character.data.model.local.StatName
+import com.unir.roleapp.character.ui.screens.characterSheet.components.SkillSectionBody
 
 
 @Composable
 fun SkillSection(
     characterViewModel: CharacterViewModel = hiltViewModel(),
+    skillViewModel: SkillViewModel = hiltViewModel(),
     ){
     val character by characterViewModel.selectedCharacter.collectAsState()
     var isEditing by remember { mutableStateOf(false) }
+    val pointsAvailable by skillViewModel.pointsAvailable.collectAsState()
+    val skillList by skillViewModel.skillList.collectAsState()
 
 
-    character?.let {
+    // Validación y actualización del formulario
+    val isValid by skillViewModel.isValid.collectAsState()
+    var updatedSkills by remember { mutableStateOf(skillList) }
+
+    LaunchedEffect(character) {
+        character?.let {
+            skillViewModel.getSkillsFromCharacter(it)
+        }
+    }
+
+    LaunchedEffect(skillList) {
+        skillViewModel.validateSkills(character!!, skillList)
+    }
+
+    LaunchedEffect(updatedSkills) {
+        skillViewModel.validateSkills(character!!, updatedSkills)
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        ) {
+        IconButton(
+            enabled =  if (isEditing) isValid else true,
+            onClick = {
+                if (isEditing && isValid) {
+                    skillViewModel.updateSkills(character!!, updatedSkills)
+                }
+                isEditing = !isEditing
+            },
+        ) {
+            Icon(
+                imageVector = if (isEditing) Icons.Default.Save else Icons.Default.Settings,
+                contentDescription = "setting",
+                modifier = Modifier.size(30.dp),
+            )
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+        Text(
+            text = if (!isEditing) "Repartir puntos de habilidad" else "Puntos disponibles: $pointsAvailable",
+
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+    }
+
+    character?.let { it ->
         Column(){
             if (!isEditing) {
-                SkillSectionBody(
-                    onEdit = { isEditing = !isEditing }
-                )
+                SkillSectionBody(skillList)
 
             } else {
                 SkillForm(
                     character = it,
-                    onEdit = { isEditing = !isEditing  }
+                    onChanges = { newSkills ->
+                        updatedSkills = newSkills
+                        skillViewModel.validateSkills(character!!, updatedSkills)
+                    }
                 )
             }
         }
@@ -65,155 +105,6 @@ fun SkillSection(
     }
 }
 
-
-
-@Composable
-fun SkillSectionBody(
-    skillViewModel: SkillViewModel = hiltViewModel(),
-    characterViewModel: CharacterViewModel = hiltViewModel(),
-    onEdit: () -> Unit = {},
-) {
-    val editableCharacter by characterViewModel.selectedCharacter.collectAsState()
-
-    editableCharacter?.let{ editableCharacter->
-
-
-    skillViewModel.getSkillsFromCharacter(editableCharacter)
-        val skillList by skillViewModel.skillList.collectAsState()
-        val pointsAvailable by skillViewModel.pointsAvailable.collectAsState()
-
-
-
-        LaunchedEffect(editableCharacter, skillList) {
-            skillViewModel.validateSkills(editableCharacter, skillList)
-        }
-
-        // TODO DISPARAR ESTO CUANDO SE ACTUALICE EL CHARACTER
-        LaunchedEffect(editableCharacter) {
-            skillViewModel.getSkillsFromCharacter(editableCharacter)
-        }
-
-        DefaultRow {
-            Text(
-                text = "Puntos disponibles: $pointsAvailable",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Icon(
-                imageVector = Icons.Default.Settings,
-                contentDescription = "settings",
-                Modifier
-                    .size(30.dp)
-                    .clickable { onEdit() }
-            )
-        }
-
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            if (skillList.isEmpty()) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()
-                ) {
-                    CircularProgressIndicator()
-                }
-
-            }
-
-            // Columna SGTR
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-            ) {
-                Text(text = "Físicas", style= MaterialTheme.typography.titleSmall)
-
-                skillList.filter { it.skill.tag == StatName.STRENGTH }.forEachIndexed() { index, skill ->
-                    InlineStat(
-                        skillName = skill.skill.tag,
-                        localValue = skill.value,
-                        label = skill.skill.name.split("(")[0],
-                    )
-
-                }
-            }
-
-            // Columna DES
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-            ) {
-                Text(text = "Habilidad", style= MaterialTheme.typography.titleSmall)
-
-                skillList.filter { it.skill.tag == StatName.DEXTERITY }.forEach { skill ->
-                    InlineStat(
-                        skillName = skill.skill.tag,
-                        localValue = skill.value,
-                        label = skill.skill.name.split("(")[0],
-                    )
-                }
-            }
-        }
-
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            thickness = 1.dp
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            // COLUMNA INT
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-            ) {
-                Text(text = "Conocimiento", style= MaterialTheme.typography.titleSmall)
-                skillList.filter { it.skill.tag == StatName.INTELLIGENCE  }.forEachIndexed { index, skill ->
-                    Row(verticalAlignment = Alignment.CenterVertically){
-
-
-                        InlineStat(
-                            skillName = skill.skill.tag,
-
-                            localValue = skill.value,
-                            label = skill.skill.name.split("(")[0],
-                        )
-                    }
-                }
-            }
-
-            // Columna CHA
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp)
-            ) {
-                Text(text = "Sociales", style= MaterialTheme.typography.titleSmall)
-                skillList.filter { it.skill.tag == StatName.CHARISMA  }.forEach { skill ->
-                    InlineStat(
-                        skillName = skill.skill.tag,
-
-                        localValue = skill.value,
-                        label = skill.skill.name.split("(")[0],
-                    )
-                }
-            }
-        }
-    }
-}
 
 
 

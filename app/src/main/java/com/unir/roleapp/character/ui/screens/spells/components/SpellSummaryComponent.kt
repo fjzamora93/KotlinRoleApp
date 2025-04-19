@@ -39,7 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.character.data.model.local.Item
 import com.roleapp.character.data.model.local.Spell
+import com.roleapp.character.ui.screens.common.BottomDialogueMenu
+import com.roleapp.character.ui.screens.common.dialogues.CharacterDialog
+import com.roleapp.character.ui.screens.common.dialogues.SwitchDialogue
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
+import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.components.common.DefaultColumn
 import com.roleapp.core.ui.components.common.DefaultRow
 import com.roleapp.core.ui.theme.CustomType
@@ -55,6 +59,8 @@ fun SpellSummaryComponent(
     onClick: () -> Unit,
 ) {
     val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var activeDialog by remember { mutableStateOf<CharacterDialog?>(null) }
 
     currentCharacter?.let {
         DefaultRow{
@@ -157,7 +163,10 @@ fun SpellSummaryComponent(
                     .weight(0.5f),
             ){
                 IconButton(
-                    onClick = { onClick() }
+                    onClick = {
+                        onClick()
+                        showBottomSheet = true
+                    }
                 ) {
                     Icon(
                         modifier = Modifier.size(40.dp),
@@ -167,6 +176,27 @@ fun SpellSummaryComponent(
                 }
             }
 
+            if (showBottomSheet) {
+                BottomDialogueMenu(
+                    onDismiss = { showBottomSheet = false },
+                    onFirstOption = { characterViewModel.saveCharacter(
+                        currentCharacter!!.copy(
+                            currentAp = currentCharacter!!.currentAp - spell.cost
+                        )
+                    ) },
+                    onSecondOption = { activeDialog = CharacterDialog.Spell },
+                    firstLabel = "Realizar acción",
+                    secondLable =  "Información"
+                )
+            }
+
+            // Cuadro de diálogo informativo
+            activeDialog?.let {
+                SwitchDialogue(
+                    activeDialog = it,
+                    onDismiss = { activeDialog = null }
+                )
+            }
 
         }
     }
