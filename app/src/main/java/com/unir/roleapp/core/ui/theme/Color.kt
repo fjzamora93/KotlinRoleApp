@@ -3,7 +3,15 @@ package com.roleapp.core.ui.theme
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-object MedievalColours {
+object CustomColors {
+    val BlackGradient = Brush.verticalGradient(
+        colors = listOf(
+            Color(0xFF171515), // negro suave con un tinte gris
+            Color(0xFF0A0A0A), // negro intenso
+            Color(0xFF202021)  // un toque metálico gris oscuro
+        )
+    )
+
     // Colores de madera
     val WoodenLight = Color(0xFFD7B899)  // Tono claro de madera
     val WoodenRegular = Color(0xFF8B5A2B)  // Madera oscura cálida
@@ -46,7 +54,7 @@ object MedievalColours {
 
     // Colores adicionales temáticos
     val BloodRed = Color(0xFF8B0000)  // Rojo sangre
-    val RoyalPurple = Color(0xFF6A0DAD)  // Púrpura real
+    val RoyalPurple = Color(0xFF380F56)  // Púrpura real
     val AshGray = Color(0xFF708090)  // Gris ceniza
     val MidnightBlack = Color(0xFF1C1C1C)  // Negro medianoche
 

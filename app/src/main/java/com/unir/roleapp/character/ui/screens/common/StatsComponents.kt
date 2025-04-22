@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Handyman
 import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -60,6 +61,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import kotlin.io.path.moveTo
 import androidx.compose.ui.graphics.StampedPathEffectStyle
+import com.unir.roleapp.core.ui.theme.doubleHandDrawnBorder
+import com.unir.roleapp.core.ui.theme.handDrawnBorder
+import com.unir.roleapp.core.ui.theme.wavyBorder
 import kotlin.random.Random
 
 @Composable
@@ -134,7 +138,6 @@ fun NumberBox(
     value: Int,
     modifier: Modifier = Modifier
 ) {
-    val borderColor = MaterialTheme.colorScheme.primary
 
 
     ConstraintLayout(
@@ -155,48 +158,7 @@ fun NumberBox(
                     color = MaterialTheme.colorScheme.surface,
                     shape = RoundedCornerShape(8.dp)
                 )
-                // trazos irregulares en drawBehind
-                .drawBehind {
-                    val strokeWidth = 2.dp.toPx()
-                    val steps = 20
-                    val jitter = 8f
-
-                    fun jitterLine(from: Offset, to: Offset): Path {
-                        val path = Path()
-                        val dx = (to.x - from.x) / steps
-                        val dy = (to.y - from.y) / steps
-
-                        path.moveTo(from.x, from.y)
-                        for (i in 1..steps) {
-                            val x = from.x + dx * i + Random.nextFloat() * jitter - jitter / 2
-                            val y = from.y + dy * i + Random.nextFloat() * jitter - jitter / 2
-                            path.lineTo(x, y)
-                        }
-
-                        return path
-                    }
-
-                    val topLeft = Offset(0f, 0f)
-                    val topRight = Offset(size.width, 0f)
-                    val bottomRight = Offset(size.width, size.height)
-                    val bottomLeft = Offset(0f, size.height)
-
-                    val paths = listOf(
-                        jitterLine(topLeft, topRight),       // superior
-                        jitterLine(topRight, bottomRight),   // derecha
-                        jitterLine(bottomRight, bottomLeft), // inferior
-                        jitterLine(bottomLeft, topLeft)      // izquierda
-                    )
-
-                    paths.forEach { path ->
-                        drawPath(
-                            path = path,
-                            color = borderColor,
-                            style = Stroke(width = strokeWidth)
-                        )
-                    }
-                }
-                // dejamos espacio abajo para el badge
+                .doubleHandDrawnBorder()
                 .padding(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 24.dp)
         ) {
             Column(
@@ -208,11 +170,14 @@ fun NumberBox(
                     style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
+
+                HorizontalDivider(modifier = Modifier.padding(bottom = 8.dp))
+
                 Box(
                     modifier = Modifier
                         .background(
                             color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = CircleShape
+                            shape = RoundedCornerShape(16.dp) // Ajusta el radio a lo que necesites
                         )
                         .padding(horizontal = 20.dp, vertical = 8.dp)
                 ) {

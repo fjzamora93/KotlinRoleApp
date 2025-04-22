@@ -44,6 +44,7 @@ import com.roleapp.character.ui.screens.common.dialogues.CharacterDialog
 import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.navigation.NavigationViewModel
 import com.roleapp.core.navigation.ScreensRoutes
+import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.core.ui.theme.ThemeViewModel
 
 @Composable
@@ -60,7 +61,7 @@ fun CharacterHeader(
 
     selectedCharacter?.let { character ->
         Row(
-            modifier = modifier.fillMaxWidth().background(Color(0xFF131F3F))
+            modifier = modifier.fillMaxWidth().background( CustomColors.BlackGradient)
                 .clickable {  navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(
                     selectedCharacter!!.id)) },
             horizontalArrangement = Arrangement.SpaceBetween,

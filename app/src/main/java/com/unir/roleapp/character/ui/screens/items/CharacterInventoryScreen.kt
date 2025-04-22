@@ -1,8 +1,5 @@
 package com.roleapp.character.ui.screens.items.components
 
-import android.util.Log
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,14 +9,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backpack
-import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -35,25 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.Item
-import com.roleapp.character.ui.screens.common.BottomDialogueMenu
 import com.roleapp.character.ui.screens.common.DropDownText
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.navigation.NavigationViewModel
-
-import com.roleapp.character.ui.screens.common.layout.CharacterLayout
 
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.ItemViewModel
-import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.components.common.DefaultRow
-import com.roleapp.core.ui.theme.MedievalColours
+import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.character.data.model.local.ItemCategory
 import com.unir.roleapp.character.ui.screens.common.RectangularButton
 import com.unir.roleapp.character.ui.screens.items.components.InventoryByCategorySection
 import com.unir.roleapp.character.ui.screens.items.components.ItemSummaryComponent
-import com.unir.roleapp.character.ui.screens.spells.components.SpellByLevelSection
 
 
 @Composable
@@ -115,7 +100,7 @@ fun CharacterInventoryBody(
                 DefaultRow {
                     Icon(
                         imageVector = Icons.Default.MonetizationOn,
-                        contentDescription = "", tint = MedievalColours.Gold,
+                        contentDescription = "", tint = CustomColors.Gold,
                         modifier = Modifier.size(40.dp)
                     )
 

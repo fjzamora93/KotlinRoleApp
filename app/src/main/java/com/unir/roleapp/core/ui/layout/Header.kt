@@ -39,7 +39,7 @@ import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.auth.viewmodels.UserState
 import com.roleapp.auth.viewmodels.AuthViewModel
-import com.roleapp.core.ui.theme.MedievalColours
+import com.roleapp.core.ui.theme.CustomColors
 
 @Composable
 fun Header(
@@ -126,7 +126,7 @@ fun UserThombnail(
                 modifier = Modifier
                     .size(60.dp)
                     .shadow(4.dp, CircleShape),
-                tint = MedievalColours.IronDark
+                tint = CustomColors.IronDark
             )
         }
 
