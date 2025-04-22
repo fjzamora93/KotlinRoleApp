@@ -21,8 +21,7 @@ fun StatSection(
     editableCharacter: CharacterEntity,
     onCharacterChange: (CharacterEntity) -> Unit
 ) {
-    Column(modifier = Modifier.padding(30.dp)){
-
+    Column{
         Row(verticalAlignment = Alignment.CenterVertically) {
 
             NumberBox(
@@ -30,14 +29,14 @@ fun StatSection(
                 stat = StatName.STRENGTH,
                 value = editableCharacter.strength,
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
             NumberBox(
                 modifier = Modifier.weight(1f),
                 stat = StatName.DEXTERITY,
                 value = editableCharacter.dexterity,
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
             NumberBox(
                 modifier = Modifier.weight(1f),
@@ -54,14 +53,14 @@ fun StatSection(
                 stat = StatName.INTELLIGENCE,
                 value = editableCharacter.intelligence,
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
             NumberBox(
                 modifier = Modifier.weight(1f),
                 stat = StatName.WISDOM,
                 value = editableCharacter.wisdom,
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
             NumberBox(
                 modifier = Modifier.weight(1f),

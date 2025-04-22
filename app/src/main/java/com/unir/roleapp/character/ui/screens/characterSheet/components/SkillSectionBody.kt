@@ -51,6 +51,7 @@ import com.roleapp.character.ui.viewmodels.ItemViewModel
 import com.roleapp.character.ui.viewmodels.SkillViewModel
 import com.unir.roleapp.R
 import com.unir.roleapp.character.data.model.local.StatName
+import com.unir.roleapp.core.ui.theme.handDrawnBorder
 import kotlinx.coroutines.launch
 
 
@@ -110,13 +111,7 @@ fun SkillSectionBody(
                             )
                     ) {
                         Icon(
-                            imageVector = when (tag) {
-                                StatName.STRENGTH     -> Icons.Default.FitnessCenter
-                                StatName.DEXTERITY    -> Icons.Default.DirectionsRun
-                                StatName.INTELLIGENCE -> Icons.Default.School
-                                StatName.CHARISMA     -> Icons.Default.Face
-                                else                  -> Icons.Default.Help
-                            },
+                            painter = painterResource(id =StatName.getIcon(tag)),
                             contentDescription = StatName.getString(tag),
                             modifier = Modifier.size(32.dp),
                             tint = if (selectedTag == tag)
@@ -154,13 +149,6 @@ fun SkillSectionBody(
                             },
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Text(
-                            text = "Habilidades de ${StatName.getString(tag)}",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
 
                         skillsByTag[tag]?.forEach { skill ->
                             SkillDetail(
@@ -169,7 +157,6 @@ fun SkillSectionBody(
                                 value = skill.value,
                                 skillName = skill.skill.tag
                             )
-
                         }
                     }
                 }
@@ -232,6 +219,7 @@ fun SkillDetail(
 
             Box(
                 modifier = Modifier
+                    .handDrawnBorder(borderColor)
                     .size(40.dp, 32.dp)
                     .border(1.dp, borderColor, RoundedCornerShape(4.dp)),
                 contentAlignment = Alignment.Center

@@ -42,7 +42,7 @@ import com.roleapp.core.navigation.NavigationViewModel
 import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.auth.viewmodels.UserState
 import com.roleapp.auth.viewmodels.AuthViewModel
-import com.roleapp.core.ui.theme.MedievalColours
+import com.roleapp.core.ui.theme.CustomColors
 
 
 @Composable
@@ -123,7 +123,7 @@ fun MenuOption(
     text: String,
     onClick: () -> Unit,
     icon : ImageVector = Icons.Default.Home,
-    color: Color = MedievalColours.IronDark,
+    color: Color = CustomColors.IronDark,
     modifier : Modifier = Modifier.fillMaxWidth()
         .padding(vertical = 8.dp)
         .clip(RoundedCornerShape(8.dp))
