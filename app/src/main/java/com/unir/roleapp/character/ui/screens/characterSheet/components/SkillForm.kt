@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Handyman
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.School
@@ -117,7 +118,7 @@ fun SkillForm(
                         Icon(
                             imageVector = when (tag) {
                                 StatName.STRENGTH     -> Icons.Default.FitnessCenter
-                                StatName.DEXTERITY    -> Icons.Default.DirectionsRun
+                                StatName.DEXTERITY    -> Icons.Default.Handyman
                                 StatName.INTELLIGENCE -> Icons.Default.School
                                 StatName.CHARISMA     -> Icons.Default.Face
                                 StatName.COMBAT         -> Icons.Default.Security
