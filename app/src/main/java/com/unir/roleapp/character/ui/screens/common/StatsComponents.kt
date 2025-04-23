@@ -61,6 +61,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import kotlin.io.path.moveTo
 import androidx.compose.ui.graphics.StampedPathEffectStyle
+import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.core.ui.theme.doubleHandDrawnBorder
 import com.unir.roleapp.core.ui.theme.handDrawnBorder
 import com.unir.roleapp.core.ui.theme.wavyBorder
@@ -155,7 +156,7 @@ fun NumberBox(
                 }
                 // fondo liso
                 .background(
-                    color = MaterialTheme.colorScheme.surface,
+                    brush = CustomColors.BlackGradient,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .doubleHandDrawnBorder()
@@ -168,23 +169,23 @@ fun NumberBox(
                 Text(
                     text = StatName.getString(stat),
                     style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    color = Color.White
                 )
 
                 HorizontalDivider(modifier = Modifier.padding(bottom = 8.dp))
 
+
                 Box(
                     modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = RoundedCornerShape(16.dp) // Ajusta el radio a lo que necesites
-                        )
-                        .padding(horizontal = 20.dp, vertical = 8.dp)
+                        .background(Color.White, shape = RoundedCornerShape(8.dp))
+                        .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
                     Text(
                         text = value.toString(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.Black
                     )
                 }
             }
@@ -193,11 +194,9 @@ fun NumberBox(
         // 2) Óvalo superpuesto (badge)
         Box(
             modifier = Modifier
+                .wavyBorder()
                 .size(48.dp, 32.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.secondary,
-                    shape = RoundedCornerShape(50)
-                )
+                .background(color = MaterialTheme.colorScheme.secondary,)
                 .constrainAs(badgeRef) {
                     top.linkTo(cardRef.bottom, margin = (-16).dp)
                     centerHorizontallyTo(cardRef)

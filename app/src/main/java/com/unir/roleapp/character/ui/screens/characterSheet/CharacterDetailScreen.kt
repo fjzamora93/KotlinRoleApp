@@ -111,6 +111,14 @@ fun DetailCharacterBody(
     var characterState by remember { mutableStateOf(character) }
     val currentArmor by itemViewModel.armor.collectAsState()
 
+    StatSection(
+        editableCharacter = character,
+        onCharacterChange = {
+        }
+    )
+    HorizontalDivider(Modifier.padding(16.dp))
+
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -194,21 +202,14 @@ fun DetailCharacterBody(
         )
     }
 
-
     CombatSkillSection()
 
     HorizontalDivider(Modifier.padding(16.dp))
-
 
     SkillSection()
 
     HorizontalDivider(Modifier.padding(16.dp))
 
-    StatSection(
-        editableCharacter = character,
-        onCharacterChange = {
-        }
-    )
 
     activeDialog?.let {
         SwitchDialogue(

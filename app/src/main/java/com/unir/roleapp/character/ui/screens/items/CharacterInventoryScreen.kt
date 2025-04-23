@@ -1,19 +1,24 @@
 package com.roleapp.character.ui.screens.items.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Backpack
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -28,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.character.ui.screens.common.DropDownText
 
@@ -38,6 +44,7 @@ import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.character.data.model.local.ItemCategory
 import com.unir.roleapp.character.ui.screens.common.RectangularButton
 import com.unir.roleapp.character.ui.screens.items.components.InventoryByCategorySection
+import com.unir.roleapp.character.ui.screens.items.components.ItemForm
 import com.unir.roleapp.character.ui.screens.items.components.ItemSummaryComponent
 
 
@@ -51,6 +58,9 @@ fun CharacterInventoryBody(
     val isLoading by itemViewModel.loadingState.collectAsState(false)
     val shopItems by itemViewModel.itemList.collectAsState()
     val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
+
+    var isEditingItem by remember { mutableStateOf(false) }
+
     var isInventory by remember { mutableStateOf(true) }
     var currentGold by remember { mutableIntStateOf(currentCharacter!!.gold) }
 
@@ -99,10 +109,17 @@ fun CharacterInventoryBody(
             Column(modifier = Modifier.weight(4f),){
                 DefaultRow {
                     Icon(
+                        imageVector = Icons.Default.AddCircle,
+                        contentDescription = "", tint = CustomColors.AshGray,
+                        modifier = Modifier.size(40.dp).clickable { isEditingItem = true }
+                    )
+
+                    Icon(
                         imageVector = Icons.Default.MonetizationOn,
                         contentDescription = "", tint = CustomColors.Gold,
                         modifier = Modifier.size(40.dp)
                     )
+
 
                     TextField(
                         value = currentGold.toString(),
@@ -211,6 +228,24 @@ fun CharacterInventoryBody(
             }
         }
     }
+
+    if (isEditingItem) {
+        Dialog(onDismissRequest = { isEditingItem = false }) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.background,
+                tonalElevation = 8.dp
+            ) {
+                ItemForm(
+                    onDismiss = { isEditingItem = false },
+                    onSave = { item ->
+                        isEditingItem = false
+                    }
+                )
+            }
+        }
+    }
+
 }
 
 
