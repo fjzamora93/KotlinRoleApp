@@ -19,8 +19,12 @@ object CustomColors {
 
 
     // Colores de pergamino
-    val ParchmentLight = Color(0xFFFFF8E1)  // Pergamino claro
-    val ParchmentDark = Color(0xFFF5DEB3)  // Pergamino envejecido
+    val ParchmentLight = Color(0xFFFFFFFF)  // Pergamino claro
+    val ParchmentDark = Color(0xFFE3DBCC)  // Pergamino envejecido
+
+    val ParchmentGradient = Brush.verticalGradient(
+        colors = listOf(ParchmentLight, ParchmentDark)
+    )
 
     // Colores metálicos
     val Gold = Color(0xFFDAA520)  // Dorado brillante
@@ -57,15 +61,19 @@ object CustomColors {
     val RoyalPurple = Color(0xFF380F56)  // Púrpura real
     val AshGray = Color(0xFF708090)  // Gris ceniza
     val MidnightBlack = Color(0xFF1C1C1C)  // Negro medianoche
+    // SIN USO
+    val Purple80 = Color(0xFFD0BCFF)
+    val PurpleGrey80 = Color(0xFFCCC2DC)
+    val Pink80 = Color(0xFF58179D)
 
+    val PurpleGradient = Brush.horizontalGradient(
+        colors = listOf(Purple80, PurpleGrey80, Pink80)
+    )
 }
 
 
 
-// SIN USO
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+
 
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)

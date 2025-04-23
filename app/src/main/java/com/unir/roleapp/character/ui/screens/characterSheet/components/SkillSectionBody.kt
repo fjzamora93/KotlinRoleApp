@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -49,9 +51,12 @@ import com.roleapp.character.data.model.local.SkillValue
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.ItemViewModel
 import com.roleapp.character.ui.viewmodels.SkillViewModel
+import com.roleapp.core.ui.components.common.DefaultRow
+import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.R
 import com.unir.roleapp.character.data.model.local.StatName
 import com.unir.roleapp.core.ui.theme.handDrawnBorder
+import com.unir.roleapp.core.ui.theme.wavyBorder
 import kotlinx.coroutines.launch
 
 
@@ -82,10 +87,11 @@ fun SkillSectionBody(
 
         // CABECERA DE LA COLUMNA (Con las subsecciones de la tabla)
         Row(
+
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    color = MaterialTheme.colorScheme.primaryContainer,
+                    brush = CustomColors.BlackGradient,
                     shape = RoundedCornerShape(8.dp)
                 ),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -115,9 +121,9 @@ fun SkillSectionBody(
                             contentDescription = StatName.getString(tag),
                             modifier = Modifier.size(32.dp),
                             tint = if (selectedTag == tag)
-                                MaterialTheme.colorScheme.onPrimaryContainer
+                                Color.White
                             else
-                                MaterialTheme.colorScheme.onSurfaceVariant
+                                Color.LightGray
                         )
                     }
                 }
@@ -139,10 +145,6 @@ fun SkillSectionBody(
                     Column(
                         modifier = Modifier
                             .padding(8.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.background,
-                                shape = RoundedCornerShape(6.dp)
-                            )
                             .padding(12.dp)
                             .onGloballyPositioned { coordinates ->
                                 columnPositions[tag] = coordinates.positionInParent().x.toInt()
@@ -199,46 +201,69 @@ fun SkillDetail(
         modifiedValue < 0 -> Color(0xFFF44336)
         else -> Color.Transparent
     }
-    Row (
-        verticalAlignment = Alignment.CenterVertically,
-
-    ){
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
-            arrowPainter?.let {
-                Icon(
-                    painter = it,
-                    contentDescription = null,
-                    tint = arrowColor,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
 
+
+            // Box con el número de la habilidad (más grande)
             Box(
                 modifier = Modifier
+                    .background(CustomColors.BlackGradient)
                     .handDrawnBorder(borderColor)
-                    .size(40.dp, 32.dp)
+                    .size(width = 56.dp, height = 56.dp)
                     .border(1.dp, borderColor, RoundedCornerShape(4.dp)),
                 contentAlignment = Alignment.Center
             ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color.White, shape = RoundedCornerShape(8.dp))
+                        .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                ) {
+                    Text(
+                        text = displayValue.toString(),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.Black
+                    )
+                }
+            }
+        }
+
+        // Box con el texto (mínimo 200dp de ancho y ligeramente superpuesto)
+        Box(
+            modifier = Modifier
+                .background(CustomColors.BlackGradient)
+                .offset(x = (-8).dp)
+                .widthIn(min = 150.dp)
+                .wavyBorder()
+                .padding(8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            DefaultRow {
+                arrowPainter?.let {
+                    Icon(
+                        painter = it,
+                        contentDescription = null,
+                        tint = arrowColor,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+
                 Text(
-                    text = displayValue.toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Center
+                    text = skill.name.split("(")[0],
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
                 )
             }
 
-
         }
-
-        // Texto del nombre
-        Text(
-            text = skill.name.split("(")[0],
-            style = MaterialTheme.typography.bodyMedium
-        )
     }
+
 
 }

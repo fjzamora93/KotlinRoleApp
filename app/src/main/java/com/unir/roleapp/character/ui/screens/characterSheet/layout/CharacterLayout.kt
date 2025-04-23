@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.core.ui.components.navigationbar.NavigationBar
+import com.roleapp.core.ui.theme.CustomColors
 import kotlinx.coroutines.launch
 
 
@@ -47,6 +48,9 @@ fun CharacterLayout(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .background(
+                        CustomColors.ParchmentGradient
+                    )
             ) {
                 CharacterHeader(
                     onClickMenu = { coroutineScope.launch { drawerState.open() } },
