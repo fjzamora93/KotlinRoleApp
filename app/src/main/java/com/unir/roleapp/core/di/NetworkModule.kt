@@ -1,5 +1,8 @@
 package com.roleapp.core.di
 
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.roleapp.auth.security.AuthInterceptor
@@ -53,6 +56,13 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideFirestore(): FirebaseFirestore {
+        return Firebase.firestore
     }
 
 
