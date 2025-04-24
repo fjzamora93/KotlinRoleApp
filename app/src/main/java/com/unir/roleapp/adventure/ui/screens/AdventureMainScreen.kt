@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -62,7 +63,7 @@ fun AdventureScreenBody(
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
     ) {
 
-    var newScenario by remember() { mutableStateOf(Scene("Título", "Descripción")) }
+    var newAdventure by remember() { mutableStateOf(Scene("", "")) }
 
     Column(
         modifier = modifier.fillMaxHeight(),
@@ -84,7 +85,7 @@ fun AdventureScreenBody(
         Spacer(modifier = Modifier.height(32.dp))
 
         androidx.compose.material.Text(
-            text = "Nueva aventura",
+            text = "Crea una aventura",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = colorResource(id = R.color.white)
@@ -92,11 +93,21 @@ fun AdventureScreenBody(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        TextField(
+        androidx.compose.material.Text(
+            text = "Inicia la creación de una nueva aventura poniendole un título y una breve descripción para que tus amigos puedan saber de que tratará esta aventura.",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 24.dp),
+            color = colorResource(id = R.color.white)
+        )
 
-            value = newScenario.name,
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextField(
+            value = newAdventure.name,
             onValueChange = { newName ->
-                newScenario = newScenario.copy(name = newName)
+                newAdventure = newAdventure.copy(name = newName)
             },
             shape = RoundedCornerShape(4.dp),
             label = { Text("Título") },
@@ -106,55 +117,25 @@ fun AdventureScreenBody(
 
         TextField(
             modifier = Modifier.height(200.dp),
-            value = newScenario.description,
+            value = newAdventure.description,
             onValueChange = { newDesc ->
-                newScenario = newScenario.copy(description = newDesc)
+                newAdventure = newAdventure.copy(description = newDesc)
             },
             shape = RoundedCornerShape(4.dp),
             label = { Text("Descripción") },
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = { sceneViewModel.addScene(newScenario)  },
-            colors = ButtonDefaults.buttonColors(Color.Black),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.padding(horizontal = 24.dp)
-        ) {
-            Text("Añadir escenario a FireBase", style= MaterialTheme.typography.bodyLarge.copy(color = Color.White))
-        }
 
-
-        // Botón para navegar al último escenario creado
+        // Botón para continuar la creación de la aventura
         Button(
             onClick = { navigationViewModel.navigate(ScreensRoutes.TemplateAdventureScreen.route)  },
             colors = ButtonDefaults.buttonColors(Color.Black),
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            Text("Ver escenarios", style= MaterialTheme.typography.bodyLarge.copy(color = Color.White))
+            Text("Continuar", style= MaterialTheme.typography.bodyLarge.copy(color = Color.White))
         }
-
-        // Decoración: Imagen con temática de rol
-        /*Image(
-            painter = painterResource(id = R.drawable.fantasy_landscape),
-            contentDescription = "Paisaje de fantasía",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .border(2.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(16.dp)),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Texto adicional decorativo
-        Text(
-            text = "Explora, combate y haz crecer a tus personajes.",
-            style = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFFF4F4F5)),
-            textAlign = TextAlign.Center
-        )*/
     }
 }
 
