@@ -46,6 +46,10 @@ val dialogTexts = mapOf(
         
         """.trimIndent(),
 
+    CharacterDialog.Spell to """
+        Todos los hechizos son orientativos. Queda en manos del jugador y del game máster decidir de qué manera se aplican a cada partida.
+        """.trimIndent(),
+
     CharacterDialog.Initiative to "La iniciativa representa la rapidez con la que el personaje actúa en combate.",
     CharacterDialog.Inventory to "Aquí puedes gestionar el inventario, los hechizos y otros recursos del personaje."
 

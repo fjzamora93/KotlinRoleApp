@@ -1,25 +1,24 @@
 package com.roleapp.character.ui.screens.items.components
 
-import android.util.Log
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Backpack
-import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -34,45 +33,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.Item
-import com.roleapp.character.ui.screens.common.BottomDialogueMenu
 import com.roleapp.character.ui.screens.common.DropDownText
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.navigation.NavigationViewModel
-
-import com.roleapp.character.ui.screens.common.layout.CharacterLayout
 
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.ItemViewModel
-import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.components.common.DefaultRow
-import com.roleapp.core.ui.theme.MedievalColours
+import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.character.data.model.local.ItemCategory
-import com.unir.roleapp.character.ui.screens.items.components.CurrentGoldComponent
 import com.unir.roleapp.character.ui.screens.common.RectangularButton
+import com.unir.roleapp.character.ui.screens.items.components.InventoryByCategorySection
+import com.unir.roleapp.character.ui.screens.items.components.ItemForm
 import com.unir.roleapp.character.ui.screens.items.components.ItemSummaryComponent
-import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
-
-
-@Composable
-fun CharacterInventoryScreen(
-    characterViewModel: CharacterViewModel = hiltViewModel(),
-){
-
-    characterViewModel.getActiveCharacter()
-    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
-
-    // Obtener datos cuando se monta la pantalla
-
-
-    CharacterLayout {
-        selectedCharacter?.let {
-            CharacterInventoryBody()
-        } ?: CrossSwordsAnimation()
-    }
-}
 
 
 @Composable
@@ -85,6 +58,9 @@ fun CharacterInventoryBody(
     val isLoading by itemViewModel.loadingState.collectAsState(false)
     val shopItems by itemViewModel.itemList.collectAsState()
     val currentCharacter by characterViewModel.selectedCharacter.collectAsState()
+
+    var isEditingItem by remember { mutableStateOf(false) }
+
     var isInventory by remember { mutableStateOf(true) }
     var currentGold by remember { mutableIntStateOf(currentCharacter!!.gold) }
 
@@ -94,6 +70,9 @@ fun CharacterInventoryBody(
         item.category == selectedCategory || selectedCategory == ItemCategory.ALL
     }
 
+    LaunchedEffect (inventoryItems) {
+        itemViewModel.calculateStatsFromItems()
+    }
 
     Column(
         modifier = modifier.padding(8.dp),
@@ -130,10 +109,17 @@ fun CharacterInventoryBody(
             Column(modifier = Modifier.weight(4f),){
                 DefaultRow {
                     Icon(
+                        imageVector = Icons.Default.AddCircle,
+                        contentDescription = "", tint = CustomColors.AshGray,
+                        modifier = Modifier.size(40.dp).clickable { isEditingItem = true }
+                    )
+
+                    Icon(
                         imageVector = Icons.Default.MonetizationOn,
-                        contentDescription = "", tint = MedievalColours.Gold,
+                        contentDescription = "", tint = CustomColors.Gold,
                         modifier = Modifier.size(40.dp)
                     )
+
 
                     TextField(
                         value = currentGold.toString(),
@@ -169,16 +155,57 @@ fun CharacterInventoryBody(
         if (isLoading) {
             CircularProgressIndicator()
         } else if (isInventory){
-            inventoryItems.forEach { detail ->
-                if (detail.quantity > 0 ){
-                    ItemSummaryComponent(
-                        item = detail.item,
-                        onClick = { itemViewModel.destroyItem(currentCharacter!!, detail.item) } ,
-                        quantity = detail.quantity,
 
-                    )
-                    HorizontalDivider()
+
+            InventoryByCategorySection(
+                filteredItems = inventoryItems.filter{ item -> item.item.category == ItemCategory.EQUIPMENT },
+                filter = "Equipo",
+                onClick = {
+                    itemViewModel.destroyItem(currentCharacter!!, it)
                 }
+            )
+
+            InventoryByCategorySection(
+                filteredItems = inventoryItems.filter{ item -> item.item.category == ItemCategory.WEAPON },
+                filter = "Armas",
+                onClick = {
+                    itemViewModel.destroyItem(currentCharacter!!, it)
+                }
+            )
+
+            InventoryByCategorySection(
+                filteredItems = inventoryItems.filter{ item -> item.item.category == ItemCategory.CONSUMABLES },
+                filter = "Consumibles",
+                onClick = {
+                    itemViewModel.destroyItem(currentCharacter!!, it)
+
+                }
+            )
+
+
+            InventoryByCategorySection(
+                filteredItems = inventoryItems.filter{ item -> item.item.category == ItemCategory.COMMON },
+                filter = "Común",
+                onClick = {
+                    itemViewModel.destroyItem(currentCharacter!!, it)
+                }
+            )
+
+
+            inventoryItems.forEach { detail ->
+
+
+//                if (detail.quantity > 0 ){
+//                    ItemSummaryComponent(
+//                        item = detail.item,
+//                        onClick = {
+//                            itemViewModel.destroyItem(currentCharacter!!, detail.item)
+//                                  } ,
+//                        quantity = detail.quantity,
+//
+//                    )
+//                    HorizontalDivider()
+//                }
             }
         } else {
             filteredItems.forEach { item ->
@@ -201,6 +228,24 @@ fun CharacterInventoryBody(
             }
         }
     }
+
+    if (isEditingItem) {
+        Dialog(onDismissRequest = { isEditingItem = false }) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.background,
+                tonalElevation = 8.dp
+            ) {
+                ItemForm(
+                    onDismiss = { isEditingItem = false },
+                    onSave = { item ->
+                        isEditingItem = false
+                    }
+                )
+            }
+        }
+    }
+
 }
 
 

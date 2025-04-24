@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RoleApp</string>
+    <string name="app_subtitle">The app to manage role play</string>
+    <string name="characters">Characters</string>
+    <string name="inventory">Inventory</string>
+    <string name="spells">Spells</string>
+    <string name="profile_title">User Profile</string>
+    <string name="logout">Log out</string>
+</resources>

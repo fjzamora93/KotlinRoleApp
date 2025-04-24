@@ -7,5 +7,6 @@ sealed class CharacterDialog {
     object Skills : CharacterDialog()
     object Initiative : CharacterDialog()
     object Inventory : CharacterDialog()
+    object Spell: CharacterDialog()
     data class Custom(val message: String) : CharacterDialog()
 }

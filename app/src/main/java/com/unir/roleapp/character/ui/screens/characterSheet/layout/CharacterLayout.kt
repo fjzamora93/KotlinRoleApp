@@ -25,20 +25,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.core.ui.components.navigationbar.NavigationBar
+import com.roleapp.core.ui.theme.CustomColors
 import kotlinx.coroutines.launch
 
 
 
 @Composable
 fun CharacterLayout(
-    content: @Composable (onClickDrawer: () -> Unit) -> Unit
+    content: @Composable () -> Unit
     ){
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
-    val onClickDrawer: () -> Unit = {
-        coroutineScope.launch { drawerState.open() }
-    }
 
 
     CharacterMenu(drawerState = drawerState, onClose = { coroutineScope.launch { drawerState.close() } }) {
@@ -50,6 +48,9 @@ fun CharacterLayout(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .background(
+                        CustomColors.ParchmentGradient
+                    )
             ) {
                 CharacterHeader(
                     onClickMenu = { coroutineScope.launch { drawerState.open() } },
@@ -59,7 +60,7 @@ fun CharacterLayout(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     item {
-                        content(onClickDrawer)
+                        content()
                     }
                 }
             }

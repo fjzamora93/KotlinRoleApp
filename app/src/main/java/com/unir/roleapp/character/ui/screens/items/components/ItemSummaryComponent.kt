@@ -39,6 +39,7 @@ import com.roleapp.core.ui.components.common.DefaultRow
 import com.roleapp.core.ui.theme.CustomType
 import com.unir.roleapp.R
 import com.unir.roleapp.character.data.model.local.ItemCategory
+import com.unir.roleapp.character.data.model.local.StatName
 
 
 @Composable
@@ -111,7 +112,6 @@ fun ItemSummaryComponent(
                                 text = "    ${item.goldValue} 🪙",
                                 style = CustomType.bodySmall
                             )
-
                         }
                     } else {
                         Text(
@@ -124,20 +124,15 @@ fun ItemSummaryComponent(
                 }
 
                 if (item.category != ItemCategory.COMMON){
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Dados: ${item.diceAmount}d${item.dice}",
-                            style = CustomType.bodyMedium
-                        )
-                        Text(
+                    Text(
+                        text = "Dados: ${item.diceAmount}d${item.dice}",
+                        style = CustomType.bodyMedium
+                    )
+                    Text(
 
-                            text = "    + ${item.statValue} de ${item.statType}",
-                            style = CustomType.bodyMedium
-                        )
-                    }
+                        text = "${item.statValue} de ${StatName.getString(item.statType)}",
+                        style = CustomType.bodyMedium
+                    )
                 } else{
                     Text(
                         text = "${item.description}",

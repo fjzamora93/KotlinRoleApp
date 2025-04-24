@@ -71,7 +71,6 @@ fun CharacterEditForm(
 ) {
     LaunchedEffect(characterId) {
         if (characterId != 0L) {
-            println("Cargando personaje con ID: $characterId")
             characterViewModel.getCharacterById(characterId)
         }
     }

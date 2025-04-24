@@ -57,8 +57,8 @@ interface ItemDao {
     @Query("DELETE FROM item_table WHERE id = :itemId")
     suspend fun deleteItemById(itemId: Int)
 
-    @Delete
-    suspend fun deleteItemFromCharacter(characterItem: CharacterItemCrossRef)
+    @Query("DELETE FROM character_item_cross_ref WHERE characterId = :characterId AND itemId = :itemId")
+    suspend fun deleteItemFromCharacter(characterId: Long, itemId: Int)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(items: List<Item>)

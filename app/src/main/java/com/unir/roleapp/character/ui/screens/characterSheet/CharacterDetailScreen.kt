@@ -1,5 +1,6 @@
 package com.roleapp.character.ui.screens.characterSheet
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,8 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material3.DrawerValue
@@ -30,6 +33,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,7 +50,16 @@ import com.roleapp.character.ui.screens.common.ProgressBarSection
 import com.roleapp.character.ui.screens.common.dialogues.CharacterDialog
 import com.roleapp.character.ui.screens.common.dialogues.SwitchDialogue
 import com.roleapp.character.ui.screens.common.layout.CharacterLayout
+import com.roleapp.character.ui.screens.items.components.CharacterInventoryBody
+import com.roleapp.character.ui.screens.spells.CharacterSpellBody
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
+import com.roleapp.character.ui.viewmodels.ItemViewModel
+import com.roleapp.core.di.LocalNavigationViewModel
+import com.roleapp.core.navigation.NavigationViewModel
+import com.roleapp.core.navigation.ScreensRoutes
+import com.roleapp.core.ui.components.common.DefaultRow
+import com.unir.roleapp.R
+import com.unir.roleapp.character.ui.screens.characterSheet.CharacterSection
 import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
 import kotlinx.coroutines.launch
 
@@ -54,40 +69,56 @@ fun CharacterDetailScreen(
     characterViewModel: CharacterViewModel = hiltViewModel(),
 ){
 
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val coroutineScope = rememberCoroutineScope()
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
+    var currentSection by remember { mutableStateOf(CharacterSection.CHARACTERDETAIL) }
 
-    // Obtener datos cuando se monta la pantalla
     LaunchedEffect(characterId) {
         characterViewModel.getCharacterById(characterId)
     }
 
-    CharacterLayout { onClickDrawer ->
+    CharacterLayout {
         selectedCharacter?.let { character ->
-            DetailCharacterBody(
-                character = character,
-                onClick = { onClickDrawer() }
-            )
+            when (currentSection) {
+                CharacterSection.CHARACTERDETAIL -> DetailCharacterBody(
+                    character = character,
+                    onClick = { currentSection = it }
+                )
+
+                CharacterSection.INVENTORY -> CharacterInventoryBody()
+
+                CharacterSection.SPELLS -> CharacterSpellBody()
+
+                else -> DetailCharacterBody(
+                    character = character,
+                    onClick = { currentSection = it }
+                )
+            }
+
         } ?: CrossSwordsAnimation()
     }
 
 }
 
 
-
-
-
-
-
 @Composable
 fun DetailCharacterBody(
     character: CharacterEntity,
     characterViewModel: CharacterViewModel = hiltViewModel(),
-    onClick : () -> Unit = {}
+    itemViewModel: ItemViewModel = hiltViewModel(),
+    onClick : (CharacterSection) -> Unit = {}
 ) {
     var activeDialog by remember { mutableStateOf<CharacterDialog?>(null) }
     var characterState by remember { mutableStateOf(character) }
+    val currentArmor by itemViewModel.armor.collectAsState()
+
+    StatSection(
+        editableCharacter = character,
+        onCharacterChange = {
+        }
+    )
+    HorizontalDivider(Modifier.padding(16.dp))
+
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -111,7 +142,7 @@ fun DetailCharacterBody(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(horizontalAlignment = Alignment.Start) {
-                    Text(text = "15", style = MaterialTheme.typography.headlineMedium)
+                    Text(text = currentArmor.toString(), style = MaterialTheme.typography.headlineMedium)
                     Text(text = "Armadura", fontSize = 12.sp)
                 }
             }
@@ -143,25 +174,42 @@ fun DetailCharacterBody(
         }
     }
 
+    DefaultRow{
+        MenuOption(
+            text = stringResource(id = R.string.inventory),
+            onClick = { onClick(CharacterSection.INVENTORY) },
+            icon = Icons.Default.Apps,
+            modifier = Modifier.weight(1f)
+                .padding(vertical = 8.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color(0xFFD6D6D6))
+                .clickable { onClick(CharacterSection.INVENTORY) }
+                .padding(12.dp)
+        )
 
-    MenuOption(
-        text = "Inventario, hechizos, Sesión",
-        onClick = { onClick() },
-        icon = Icons.Default.Apps,
-    )
+        Spacer(modifier = Modifier.width(8.dp))
+
+        MenuOption(
+            text = stringResource(id = R.string.spells),
+            onClick = { onClick(CharacterSection.SPELLS)  },
+            icon = Icons.Default.MenuBook,
+            modifier = Modifier.weight(1f)
+                .padding(vertical = 8.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color(0xFFD6D6D6))
+                .clickable { onClick(CharacterSection.SPELLS) }
+                .padding(12.dp)
+        )
+    }
 
     CombatSkillSection()
 
     HorizontalDivider(Modifier.padding(16.dp))
 
-
     SkillSection()
 
-    StatSection(
-        editableCharacter = character,
-        onCharacterChange = {
-        }
-    )
+    HorizontalDivider(Modifier.padding(16.dp))
+
 
     activeDialog?.let {
         SwitchDialogue(

@@ -128,7 +128,6 @@ class SkillRepositoryImpl @Inject constructor(
 
             // 3. Obtener y retornar las habilidades actualizadas
             val skillsWithValues = skillDao.getSkillsWithValues(characterId)
-            println("SKILL REPORISTORY fetchCharacterSkillsFromApi: $skillsWithValues")
             Result.success(skillsWithValues)
 
         } catch (e: Exception) {
@@ -144,8 +143,6 @@ class SkillRepositoryImpl @Inject constructor(
             val characterRequest = character.toApiRequest().apply {
                 this.characterSkills = skillsCrossRef
             }
-
-            Log.d("CharacterRepositoryImpl", "CharacterRepositoryImpl.upsertCharacterToApi: $characterRequest")
 
             val response = characterApi.saveCharacter(characterRequest)
 
