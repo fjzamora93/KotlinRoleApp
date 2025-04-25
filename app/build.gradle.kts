@@ -15,12 +15,11 @@ kapt {
 
 android {
     namespace = "com.unir.roleapp"
-    compileSdk = 34
-
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.unir.roleapp"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -92,6 +91,7 @@ dependencies {
 
     // Room
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.androidx.media3.common.ktx)
     kapt("androidx.room:room-compiler:2.6.1")
 
     // Coroutines
