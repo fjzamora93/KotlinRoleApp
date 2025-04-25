@@ -37,6 +37,7 @@ val navigationItems = listOf(
         title = "Escenarios",
         icon = Icons.Default.LocalLibrary,
         route = ScreensRoutes.AdventureMainScreen.route
+        //route = ScreensRoutes.CreateAdventureScreen.route
     ),
     NavigationItem(
         title = "Perfil",

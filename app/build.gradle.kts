@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
-
     alias(libs.plugins.googleServices)
     alias(libs.plugins.crashlytics)
 }
@@ -122,6 +121,13 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.realtime)
     implementation(libs.firebase.config)
+    implementation("com.google.firebase:firebase-firestore-ktx:24.5.2")
+    implementation("com.google.firebase:firebase-auth-ktx:22.0.0")
+
+    // Conversion a JSON para Firebase
+    implementation("com.squareup.moshi:moshi:1.15.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")

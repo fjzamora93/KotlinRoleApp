@@ -1,6 +1,6 @@
 pluginManagement {
     plugins {
-        id("org.jetbrains.kotlin.android") version "1.9.21" // Versión explícita
+        id("org.jetbrains.kotlin.android") version "1.9.21"
     }
     repositories {
         google {

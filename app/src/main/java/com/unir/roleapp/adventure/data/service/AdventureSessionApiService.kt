@@ -11,7 +11,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface GameSessionApiService {
+interface AventureSessionApiService {
     // BUSCAR SESIÓN POR ID
     @GET("gamesession/{id}")
     suspend fun getGameSessionById(@Path("id") id: Long): Response<GameSessionDTO>

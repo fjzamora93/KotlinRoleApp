@@ -31,8 +31,19 @@ sealed class ScreensRoutes(val route: String) {
 
 
     // ADVENTURE
+<<<<<<< Updated upstream
     object AdventureMainScreen: ScreensRoutes("AdventureMainScreen")
+=======
+    //object AdventureMainScreen : ScreensRoutes("adventure_main")
+    //object AdventureMainScreen: ScreensRoutes("AdventureMainScreen")
+    object AdventureMainScreen : ScreensRoutes("AdventureMainScreen")
+    object AdventureListScreen: ScreensRoutes("AdventureListScreen")
+>>>>>>> Stashed changes
     object TemplateAdventureScreen: ScreensRoutes("TemplateAdventureScreen")
+    object CreateAdventureScreen : ScreensRoutes("CreateAdventureScreen")
+    object AdventureContextScreen : ScreensRoutes("adventure_context/{adventureId}") {
+        fun createRoute(adventureId: String) = "adventure_context/$adventureId"
+    }
 
     // TEST
     object AiTestScreen  : ScreensRoutes("AiTestScreen")

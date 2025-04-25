@@ -1,7 +1,5 @@
 package com.roleapp.adventure.ui.screens
 
-
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,55 +14,116 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+<<<<<<< Updated upstream
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+=======
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+>>>>>>> Stashed changes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.navigation.NavigationViewModel
+import androidx.navigation.NavHostController
 import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.layout.MainLayout
-import com.roleapp.adventure.data.model.Scene
-import com.roleapp.adventure.ui.viewmodels.SceneViewModel
 import com.unir.roleapp.R
+import com.unir.roleapp.adventure.ui.viewmodels.CreateAdventureViewModel
 
-// TODO: NO HAY POR QUÉ USAR EL MAIN LAYOUT (que lo que tiene dentro es un Scaffold). Como alternativa, podemos crear un nuevo Scaffold.
 @Composable
+<<<<<<< Updated upstream
 fun AdventureMainScreen() {
     LaunchedEffect(Unit) {
         Log.d("CharacterScreen", "NavController está listo")
     }
+=======
+fun AdventureMainScreen(
+    navController: NavHostController,
+    viewModel: CreateAdventureViewModel = hiltViewModel()
+) {
+    val title       by viewModel.title.collectAsState()
+    val description by viewModel.description.collectAsState()
+    val loading     by viewModel.loading.collectAsState()
+    val error       by viewModel.error.collectAsState()
+>>>>>>> Stashed changes
 
     MainLayout {
-        Box(
+        Column(
             Modifier
                 .fillMaxSize()
+<<<<<<< Updated upstream
                 .background(Brush.verticalGradient(colors = listOf(Color(0xFF1F1D36), Color(0xFF3F3351))))
+=======
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+>>>>>>> Stashed changes
         ) {
-            AdventureScreenBody(Modifier.fillMaxSize())
+            Spacer(Modifier.height(32.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.fantasy_landscape),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(2.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(16.dp)),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(Modifier.height(24.dp))
+
+            Text("Nueva aventura", style = MaterialTheme.typography.titleLarge)
+
+            Spacer(Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = title,
+                onValueChange = viewModel::onTitleChange,
+                label = { Text("Título") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = description,
+                onValueChange = viewModel::onDescriptionChange,
+                label = { Text("Descripción") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+            )
+
+            error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+
+            Spacer(Modifier.weight(1f))
+
+            Button(
+                onClick = {
+                    viewModel.createAdventure { adventure ->
+                        // Paso 1: vamos a CreateAdventureScreen
+                        navController.navigate(ScreensRoutes.CreateAdventureScreen.route)
+                    }
+                },
+                enabled = !loading && title.isNotBlank() && description.isNotBlank(),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (loading) CircularProgressIndicator(Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
+                else Text("Crear Aventura")
+            }
         }
     }
 }
+<<<<<<< Updated upstream
 
 @Composable
 fun AdventureScreenBody(
@@ -194,3 +253,5 @@ fun AdventureScreenBody(
     }
 }
 
+=======
+>>>>>>> Stashed changes
