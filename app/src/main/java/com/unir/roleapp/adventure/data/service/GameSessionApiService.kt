@@ -11,6 +11,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+
+//! NO TENER EN CUENTA -> UTILIZAR LO DE PABLO
+
 interface GameSessionApiService {
     // BUSCAR SESIÓN POR ID
     @GET("gamesession/{id}")

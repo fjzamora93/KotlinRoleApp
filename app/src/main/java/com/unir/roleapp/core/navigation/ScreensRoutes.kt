@@ -33,8 +33,6 @@ sealed class ScreensRoutes(val route: String) {
     object AdventureListScreen: ScreensRoutes("AdventureListScreen")
     object TemplateAdventureScreen: ScreensRoutes("TemplateAdventureScreen")
 
-    // GAME SESSION
-    object GameSessionScreen: ScreensRoutes("GameSessionScreen")
 
 
     // HOME
