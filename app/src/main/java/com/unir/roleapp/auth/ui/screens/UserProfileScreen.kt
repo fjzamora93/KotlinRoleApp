@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -81,10 +82,15 @@ fun UserProfileBody(
             selectedLang = selectedLang,
             onLanguageSelected = onLanguageSelected
         )
-        is UserState.Error -> Text("Error: ${(userState as UserState.Error).message}", style = MaterialTheme.typography.bodyMedium)
+        is UserState.Error -> {
+            navigation.navigate(ScreensRoutes.LoginScreen.route)
+        }
+
         is UserState.LoggedOut -> navigation.navigate(ScreensRoutes.LoginScreen.route)
 
-        else -> navigation.navigate(ScreensRoutes.LoginScreen.route)
+        else -> {
+
+        }
     }
 }
 

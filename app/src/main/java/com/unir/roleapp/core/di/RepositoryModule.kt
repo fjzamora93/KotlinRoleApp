@@ -1,4 +1,5 @@
 package com.roleapp.core.di
+import com.google.firebase.firestore.FirebaseFirestore
 import com.roleapp.adventure.data.repository.SceneRepository
 import com.roleapp.auth.data.dao.UserDao
 import com.roleapp.auth.data.repository.AuthRepositoryImpl
@@ -23,6 +24,7 @@ import com.roleapp.character.domain.repository.CharacterRepository
 import com.roleapp.character.domain.repository.ItemRepository
 import com.roleapp.character.domain.repository.SkillRepository
 import com.roleapp.character.domain.repository.SpellRepository
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -90,9 +92,12 @@ object RepositoryModule {
     fun provideAuthRepository(
         api: AuthApiService,
         userDao: UserDao,
-        tokenManager: TokenManager
+        tokenManager: TokenManager,
+        userPreferences: UserPreferences
     ): AuthRepository {
-        return AuthRepositoryImpl(api, userDao, tokenManager)
+        return AuthRepositoryImpl(api, userDao, tokenManager, userPreferences)
     }
+
+
 
 }

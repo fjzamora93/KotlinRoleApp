@@ -42,7 +42,7 @@ fun HomeScreenBody(navController: NavHostController) {
             title = "Crear partida",
             description = "Crea y gestiona tus propias partidas de rol. Invita jugadores, personaliza reglas y vive aventuras únicas desde la app.",
             imageResName = "erudito",
-            route = ScreensRoutes.AdventureMainScreen.route
+            route = ScreensRoutes.AdventureListScreen.route
         ),
         SectionCardItem(
             title = "Iniciar partida",
