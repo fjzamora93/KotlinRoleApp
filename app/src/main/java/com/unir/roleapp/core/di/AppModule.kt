@@ -4,7 +4,7 @@ import android.content.Context
 import com.roleapp.auth.security.AuthInterceptor
 import com.roleapp.auth.security.TokenManager
 import com.roleapp.core.data.MyDatabase
-import com.unir.roleapp.adventure.data.repository.UserPreferences
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

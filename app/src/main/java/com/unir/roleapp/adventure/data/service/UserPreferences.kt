@@ -1,4 +1,4 @@
-package com.unir.roleapp.adventure.data.repository
+package com.unir.roleapp.adventure.data.service
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext

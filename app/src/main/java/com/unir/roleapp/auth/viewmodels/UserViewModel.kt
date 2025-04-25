@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roleapp.auth.data.model.User
 import com.roleapp.auth.data.repository.UserRepositoryImpl
-import com.unir.roleapp.adventure.data.repository.UserPreferences
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

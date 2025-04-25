@@ -8,7 +8,7 @@ import com.roleapp.auth.data.model.User
 import com.roleapp.auth.data.model.LoginRequest
 import com.roleapp.auth.data.model.RefreshTokenRequest
 import com.roleapp.auth.domain.repository.AuthRepository
-import com.unir.roleapp.adventure.data.repository.UserPreferences
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import java.io.IOException
 import javax.inject.Inject
 

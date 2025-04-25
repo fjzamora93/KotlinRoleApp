@@ -1,11 +1,9 @@
 package com.unir.roleapp.adventure.data.repository
 
-import android.content.SharedPreferences
-import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 import com.unir.roleapp.adventure.data.model.GameSession
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import com.unir.roleapp.adventure.domain.GameSessionRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow

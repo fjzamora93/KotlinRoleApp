@@ -25,7 +25,7 @@ import com.roleapp.character.domain.repository.ItemRepository
 import com.roleapp.character.domain.repository.SkillRepository
 import com.roleapp.character.domain.repository.SpellRepository
 import com.unir.roleapp.adventure.data.repository.GameSessionRepositoryImpl
-import com.unir.roleapp.adventure.data.repository.UserPreferences
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import com.unir.roleapp.adventure.domain.GameSessionRepository
 import dagger.Module
 import dagger.Provides
