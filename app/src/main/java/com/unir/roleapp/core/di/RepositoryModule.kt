@@ -24,9 +24,7 @@ import com.roleapp.character.domain.repository.CharacterRepository
 import com.roleapp.character.domain.repository.ItemRepository
 import com.roleapp.character.domain.repository.SkillRepository
 import com.roleapp.character.domain.repository.SpellRepository
-import com.unir.roleapp.adventure.data.repository.GameSessionRepositoryImpl
 import com.unir.roleapp.adventure.data.service.UserPreferences
-import com.unir.roleapp.adventure.domain.GameSessionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -101,14 +99,5 @@ object RepositoryModule {
     }
 
 
-    @Singleton
-    @Provides
-    fun provideGameSessionRepository(
-        firestore: FirebaseFirestore,
-        userPreferences: UserPreferences
-
-    ): GameSessionRepository {
-        return GameSessionRepositoryImpl(firestore, userPreferences)
-    }
 
 }
