@@ -24,6 +24,7 @@ import com.roleapp.auth.ui.screens.UserProfileScreen
 import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.character.ui.screens.characterform.CharacterEditorScreen
 import com.roleapp.core.di.LocalLanguageSetter
+import com.unir.roleapp.adventure.ui.screens.HomeAdventureScreen
 import com.unir.roleapp.core.navigation.LocalizedApp
 import com.unir.roleapp.home.ui.screens.HomeScreen
 
@@ -93,6 +94,9 @@ fun NavGraph(
 
 
                 // ADVENTURE
+                composable(ScreensRoutes.HomeAdventureScreen.route) {
+                    HomeAdventureScreen(navController = navController)
+                }
                 composable(ScreensRoutes.TemplateAdventureScreen.route) {
                     TemplateAdventureScreen()
                 }

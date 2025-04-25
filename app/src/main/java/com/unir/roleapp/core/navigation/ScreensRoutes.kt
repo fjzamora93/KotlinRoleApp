@@ -29,6 +29,7 @@ sealed class ScreensRoutes(val route: String) {
 
 
     // ADVENTURE
+    object HomeAdventureScreen: ScreensRoutes("HomeAdventureScreen")
     object AdventureMainScreen: ScreensRoutes("AdventureMainScreen")
     object AdventureListScreen: ScreensRoutes("AdventureListScreen")
     object TemplateAdventureScreen: ScreensRoutes("TemplateAdventureScreen")

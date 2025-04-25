@@ -1,4 +1,4 @@
-package com.unir.roleapp.home.ui.screens
+package com.unir.roleapp.adventure.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -14,7 +14,7 @@ import com.unir.roleapp.core.ui.components.sectioncard.SectionCardItem
 
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeAdventureScreen(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -39,22 +39,22 @@ fun HomeScreenBody(navController: NavHostController) {
 
     val cardItems = listOf(
         SectionCardItem(
-            title = "Partidas",
-            description = "Entra a la sección de partidas para decidir que vas a hacer. ¿iniciar una nueva partida o buscar una existente? ¿crear una nueva partida?",
-            imageResName = "partidas_cartas",
-            route = ScreensRoutes.HomeAdventureScreen.route
+            title = "Crear partida",
+            description = "Crea y gestiona tus propias partidas de rol. Invita jugadores, personaliza reglas y vive aventuras únicas desde la app.",
+            imageResName = "erudito2",
+            route = ScreensRoutes.AdventureListScreen.route
         ),
         SectionCardItem(
-            title = "Personajes",
-            description = "Crea y gestiona tus hojas de personaje. Personaliza atributos, habilidades y equipo para cada aventura. ¡Tu historia comienza aquí!",
-            imageResName = "companeros",
+            title = "Iniciar partida",
+            description = "Inicia una nueva aventura, en solitario o con tu grupo. Elige tu historia, crea tu personaje y comienza la partida.",
+            imageResName = "adventure_init",
+            route = ScreensRoutes.AdventureListScreen.route
+        ),
+        SectionCardItem(
+            title = "Reanudar partida",
+            description = "Reanuda la partida que hayas dejado a medias con tus compañeros.",
+            imageResName = "morning_camp",
             route = ScreensRoutes.CharacterListScreen.route
-        ),
-        SectionCardItem(
-            title = "Usuarios",
-            description = "Busca y contacta con tus amigos para crear nuevas aventuras o remotar alguna aventura sin acabar.",
-            imageResName = "taberna_aventureros",
-            route = ScreensRoutes.UserProfileScreen.route
         )
     )
 
