@@ -25,6 +25,7 @@ import com.roleapp.character.domain.repository.ItemRepository
 import com.roleapp.character.domain.repository.SkillRepository
 import com.roleapp.character.domain.repository.SpellRepository
 import com.unir.roleapp.adventure.data.repository.GameSessionRepositoryImpl
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import com.unir.roleapp.adventure.domain.GameSessionRepository
 import dagger.Module
 import dagger.Provides
@@ -93,18 +94,21 @@ object RepositoryModule {
     fun provideAuthRepository(
         api: AuthApiService,
         userDao: UserDao,
-        tokenManager: TokenManager
+        tokenManager: TokenManager,
+        userPreferences: UserPreferences
     ): AuthRepository {
-        return AuthRepositoryImpl(api, userDao, tokenManager)
+        return AuthRepositoryImpl(api, userDao, tokenManager, userPreferences)
     }
 
 
     @Singleton
     @Provides
     fun provideGameSessionRepository(
-        firestore: FirebaseFirestore
+        firestore: FirebaseFirestore,
+        userPreferences: UserPreferences
+
     ): GameSessionRepository {
-        return GameSessionRepositoryImpl(firestore)
+        return GameSessionRepositoryImpl(firestore, userPreferences)
     }
 
 }

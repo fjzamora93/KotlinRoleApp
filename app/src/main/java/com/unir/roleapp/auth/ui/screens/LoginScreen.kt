@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.core.ui.layout.MainLayout
 import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.auth.viewmodels.UserState
+import com.roleapp.auth.viewmodels.UserViewModel
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.navigation.NavigationViewModel
@@ -65,10 +66,15 @@ fun LoginScreen() {
 @Composable
 fun LoginBody(
     authViewModel: AuthViewModel = hiltViewModel(),
+    userViewModel: UserViewModel = hiltViewModel(),
     characterViewModel: CharacterViewModel = hiltViewModel(),
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
 ) {
-    var email by remember { mutableStateOf("test_6@mail.com") }
+
+    val savedEmail by userViewModel.userEmail.collectAsState()
+    var email by remember { mutableStateOf(savedEmail ?: "test_6@mail.com") }
+
+
     var password by remember { mutableStateOf("1234") }
     var showRegister by remember { mutableStateOf(false) }
     val textColor: Color  = colorResource(id = R.color.white)
@@ -97,7 +103,10 @@ fun LoginBody(
                 Toast.makeText(context, "Cuenta eliminada", Toast.LENGTH_SHORT).show()
             }
 
-            else -> {}
+            else -> {
+                //navigationViewModel.navigate(ScreensRoutes.LoginScreen.route)
+
+            }
 
         }
 
