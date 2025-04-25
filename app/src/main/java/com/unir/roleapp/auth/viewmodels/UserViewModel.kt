@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roleapp.auth.data.model.User
 import com.roleapp.auth.data.repository.UserRepositoryImpl
+import com.unir.roleapp.adventure.data.repository.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val userRepository: UserRepositoryImpl
+    private val userRepository: UserRepositoryImpl,
+    private val userPreferences: UserPreferences
 ) : ViewModel() {
 
     private val _user = MutableStateFlow<User?>(null)
@@ -24,6 +26,11 @@ class UserViewModel @Inject constructor(
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
+
+    private val _userEmail = MutableStateFlow(userPreferences.getEmail())
+    val userEmail: StateFlow<String?> = _userEmail
+
+
 
     init {
         getUser()

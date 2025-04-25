@@ -5,8 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.unir.roleapp.adventure.data.model.GameSession
 import com.unir.roleapp.adventure.domain.GameSessionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,26 +31,36 @@ class GameSessionViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
 
+    private var sessionJob: Job? = null
     init {
         fetchGameSessions()
     }
 
 
-    fun fetchGameSessionById(sessionId: String) {
-        viewModelScope.launch {
+    // Método que observa la sesión actual y cualquier cambio en la base de datos
+    fun observeCurrentGameSession(sessionId: String) {
+        sessionJob?.cancel() // Cancelar observador anterior si lo hay
+
+        sessionJob = viewModelScope.launch {
             _loading.value = true
             _errorMessage.value = null
 
-            val result = repository.getGameSessionById(sessionId)
-            _loading.value = false
-
-            result.onSuccess { session ->
-                _selectedSession.value = session
-            }.onFailure { error ->
-                _errorMessage.value = error.localizedMessage ?: "Error al buscar la sesión"
-            }
+            repository.observeGameSession(sessionId)
+                .onEach { session ->
+                    _selectedSession.value = session
+                    _loading.value = false
+                }
+                .catch { error ->
+                    _errorMessage.value = error.localizedMessage ?: "Error al observar la sesión"
+                    _loading.value = false
+                }
+                .collect { session ->
+                    _selectedSession.value = session
+                    _loading.value = false
+                }
         }
     }
+
 
     // Busca las sesiones por el ID del usuario actual (la id del usuario actual la obtenemos de la sesión, no te preocupes por eso ahora)
     fun fetchGameSessions() {
