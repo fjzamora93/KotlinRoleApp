@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.roleapp.core.ui.components.navigationbar.NavigationBar
+import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.R
 
 import kotlinx.coroutines.launch
@@ -46,7 +47,6 @@ fun MainLayout(
 
         Scaffold(
             floatingActionButton = floatingActionButton,
-
             bottomBar = {
                 NavigationBar()
             },
@@ -54,7 +54,7 @@ fun MainLayout(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Brush.verticalGradient(colors = listOf(Color(0xFF1F1D36), Color(0xFF3F3351))))
+                    .background(CustomColors.ThemeGradient)
                     .padding(innerPadding)
             ) {
                 /*Header(

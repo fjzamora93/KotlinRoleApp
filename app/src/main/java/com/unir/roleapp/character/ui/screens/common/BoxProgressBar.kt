@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.roleapp.character.data.model.local.CharacterEntity
+import com.roleapp.core.ui.theme.CustomColors
 
 
 @Composable
@@ -40,7 +41,7 @@ fun ProgressBarSection(
         onValueChanged = { newHp -> onCharacterUpdate(character.copy(currentHp = newHp)) }
     )
 
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(10.dp))
 
     BoxProgressBar(
         label = "AP",
@@ -64,14 +65,17 @@ fun BoxProgressBar(
     // Contenedor principal
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .background(CustomColors.BlackGradient)
             .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
-            .padding(12.dp),
+            .fillMaxWidth()
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Fila con botones y texto centrado
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -118,7 +122,9 @@ fun BoxProgressBar(
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(progress)
-                    .background(MaterialTheme.colorScheme.primary) // Azul según el tema
+                    .background(
+                        if (label == "HP") CustomColors.BloodRed else CustomColors.LightBlue
+                    )
             )
         }
     }

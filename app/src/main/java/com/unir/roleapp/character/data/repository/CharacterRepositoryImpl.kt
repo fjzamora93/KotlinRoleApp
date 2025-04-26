@@ -1,15 +1,19 @@
 package com.roleapp.character.data.repository
 
 import android.util.Log
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.roleapp.character.data.dao.CharacterDao
 import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.data.model.local.CharacterSkillCrossRef
 import com.roleapp.character.data.service.CharacterApiService
 import com.roleapp.character.domain.repository.CharacterRepository
+import com.unir.roleapp.character.data.model.remote.FirebaseCharacter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -28,6 +32,48 @@ class CharacterRepositoryImpl @Inject constructor(
     override suspend fun getActiveCharacter() : Result<CharacterEntity> {
         return Result.success(activeCharacter)
     }
+
+    // Añade el personaje a Firebase
+    override suspend fun addCharacterToAdventure(
+        character: FirebaseCharacter,
+        sessionId: String
+    ): Result<CharacterEntity> {
+        return try {
+            val db = FirebaseFirestore.getInstance()
+
+            // Paso 1: Buscar la aventura
+            val adventureDoc = db.collection("adventures")
+                .document(sessionId)
+                .get()
+                .await()
+
+            if (!adventureDoc.exists()) {
+                // No existe la aventura, error
+                return Result.failure(Exception("Adventure with ID $sessionId not found"))
+            }
+
+            // Paso 2a: Guardar el personaje en la colección "characters"
+            db.collection("characters")
+                .document(character.id.toString())
+                .set(character)
+                .await()
+
+            // Paso 2b: Añadir el personaje en el array de la aventura
+            db.collection("adventures")
+                .document(sessionId)
+                .update("characters", FieldValue.arrayUnion(character))
+                .await()
+
+            // Log de éxito
+            Log.d("Repository", "Character ${character.name} added successfully to adventure $sessionId")
+
+            Result.success(activeCharacter) // Devuelve el CharacterEntity original
+        } catch (e: Exception) {
+            Log.e("Repository", "Error adding character to adventure", e)
+            Result.failure(e)
+        }
+    }
+
 
     /** Este método hace el fetch en segundo plano, pero la vista no se va a refrescar automáticamente, habría que refrescarla manualmente */
     override suspend fun getCharactersByUserId(userId: Int): Result<List<CharacterEntity>> {

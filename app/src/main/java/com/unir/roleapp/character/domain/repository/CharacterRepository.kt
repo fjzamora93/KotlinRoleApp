@@ -2,6 +2,7 @@ package com.roleapp.character.domain.repository
 
 import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.data.model.local.CharacterSkillCrossRef
+import com.unir.roleapp.character.data.model.remote.FirebaseCharacter
 
 interface CharacterRepository {
     suspend fun getCharactersByUserId(userId: Int): Result<List<CharacterEntity>>
@@ -11,4 +12,6 @@ interface CharacterRepository {
     suspend fun saveCharacterWithSKills(character: CharacterEntity, skillCrossRef: List<CharacterSkillCrossRef>) : Result<CharacterEntity>
 
     suspend fun getActiveCharacter(): Result<CharacterEntity>
+    suspend fun addCharacterToAdventure(character: FirebaseCharacter, sessionId : String): Result<CharacterEntity>
+
 }

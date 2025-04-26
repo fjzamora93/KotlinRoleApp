@@ -85,7 +85,8 @@ fun SkillSection(
         Text(
             text = if (!isEditing) "Repartir puntos de habilidad" else "Puntos disponibles: $pointsAvailable",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp),
+            color = Color.LightGray
         )
     }
 

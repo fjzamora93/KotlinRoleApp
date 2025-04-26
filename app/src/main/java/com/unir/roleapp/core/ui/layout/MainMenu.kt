@@ -123,7 +123,7 @@ fun MenuOption(
     text: String,
     onClick: () -> Unit,
     icon : ImageVector = Icons.Default.Home,
-    color: Color = CustomColors.IronDark,
+    textColor: Color = CustomColors.IronDark,
     modifier : Modifier = Modifier.fillMaxWidth()
         .padding(vertical = 8.dp)
         .clip(RoundedCornerShape(8.dp))
@@ -141,13 +141,13 @@ fun MenuOption(
                 .size(30.dp),
             imageVector = icon,
             contentDescription = "",
-            tint = color
+            tint = textColor
         )
 
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
-            color = Color.Black
+            color = textColor
         )
     }
 }

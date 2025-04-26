@@ -145,7 +145,6 @@ fun SkillSectionBody(
                     Column(
                         modifier = Modifier
                             .padding(8.dp)
-                            .padding(12.dp)
                             .onGloballyPositioned { coordinates ->
                                 columnPositions[tag] = coordinates.positionInParent().x.toInt()
                             },
@@ -156,7 +155,6 @@ fun SkillSectionBody(
                             SkillDetail(
                                 skill = skill.skill,
                                 localValue= skill.value,
-                                value = skill.value,
                                 skillName = skill.skill.tag
                             )
                         }
@@ -173,7 +171,6 @@ fun SkillSectionBody(
 @Composable
 fun SkillDetail(
     skill: Skill,
-    value: Int,
     localValue: Int = 0,
     skillName: StatName,
 
@@ -181,8 +178,8 @@ fun SkillDetail(
 
 ) {
     val modifyingStats = itemViewModel.modifyingStats.collectAsState()
-    val modifiedValue  by remember { mutableIntStateOf( modifyingStats.value.find { it.type == skillName }?.modifyingValue ?: 0 ) }
-    val displayValue by remember { mutableIntStateOf(localValue + modifiedValue) }
+    val modifiedValue = modifyingStats.value.find { it.type == skillName }?.modifyingValue ?: 0
+    val displayValue = localValue + modifiedValue
 
     val borderColor = when {
         modifiedValue > 0 -> Color(0xFF4CAF50) // Verde
@@ -204,46 +201,43 @@ fun SkillDetail(
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.padding(horizontal = 8.dp)
-        ) {
 
-
-            // Box con el número de la habilidad (más grande)
-            Box(
-                modifier = Modifier
-                    .background(CustomColors.BlackGradient)
-                    .handDrawnBorder(borderColor)
-                    .size(width = 56.dp, height = 56.dp)
-                    .border(1.dp, borderColor, RoundedCornerShape(4.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.White, shape = RoundedCornerShape(8.dp))
-                        .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
-                ) {
-                    Text(
-                        text = displayValue.toString(),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = Color.Black
-                    )
-                }
-            }
-        }
-
-        // Box con el texto (mínimo 200dp de ancho y ligeramente superpuesto)
+        // Box con el número de la habilidad (más grande)
         Box(
             modifier = Modifier
                 .background(CustomColors.BlackGradient)
-                .offset(x = (-8).dp)
-                .widthIn(min = 150.dp)
-                .wavyBorder()
-                .padding(8.dp),
+                .handDrawnBorder(borderColor)
+                .size(width = 48.dp, height = 48.dp)
+                .border(1.dp, borderColor, RoundedCornerShape(4.dp)),
             contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .widthIn(min = 36.dp)
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
+                    .padding(horizontal = 8.dp, vertical = 6.dp),
+                contentAlignment = Alignment.Center
+
+            ) {
+                Text(
+                    text = displayValue.toString(),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.Black
+                )
+            }
+        }
+
+
+        // Box con el texto (mínimo 100dp de ancho y ligeramente superpuesto)
+        Box(
+            modifier = Modifier
+                .background(CustomColors.BlackGradient)
+                .offset(x = (-5).dp)
+                .widthIn(min = 130.dp)
+                .wavyBorder()
+                .padding(start = 10.dp, top = 4.dp, bottom = 4.dp) ,
+            contentAlignment = Alignment.CenterStart
         ) {
             DefaultRow {
                 arrowPainter?.let {

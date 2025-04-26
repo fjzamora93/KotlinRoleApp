@@ -41,6 +41,7 @@ import com.roleapp.character.domain.usecase.skill.ValidateSkillValue
 import com.roleapp.character.domain.usecase.spell.GetAllSpellsUseCase
 import com.roleapp.character.domain.usecase.spell.GetSpellsByLevelAndRoleClassUseCase
 import com.roleapp.character.domain.usecase.spell.SpellUseCases
+import com.unir.roleapp.character.domain.usecase.character.AddCharacterToAdventureUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,7 +71,8 @@ object UseCaseModule {
             deleteCharacter = DeleteCharacterUseCase(characterRepository),
             updateCharacter = UpdateCharacterUseCase(characterRepository),
             createCharacter = CreateCharacterUseCase(characterRepository, skillUseCase, userUseCase),
-            getActiveCharacter = GetActiveCharacterIdUseCase(characterRepository)
+            getActiveCharacter = GetActiveCharacterIdUseCase(characterRepository),
+            addCharacterToAdventure = AddCharacterToAdventureUseCase(characterRepository)
         )
     }
 

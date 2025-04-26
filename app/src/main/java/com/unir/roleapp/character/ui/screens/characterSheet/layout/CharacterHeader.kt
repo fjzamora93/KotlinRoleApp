@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backpack
+import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material3.HorizontalDivider
@@ -52,6 +54,7 @@ fun CharacterHeader(
     modifier: Modifier = Modifier,
     characterViewModel: CharacterViewModel = hiltViewModel(),
     onClickMenu : () -> Unit,
+    onClickAdventure: () -> Unit,
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
 ) {
     val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
@@ -100,19 +103,26 @@ fun CharacterHeader(
             Column(
                 modifier = Modifier
                     .weight(0.5f)
-                    .clickable { onClickMenu() }
+                    .clickable { onClickMenu() },
+                horizontalAlignment = Alignment.CenterHorizontally // para centrar ícono y texto
             ) {
+
                 IconButton(
-                    onClick = { onClickMenu() }
+                    onClick = { onClickAdventure() }
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Settings,
+                        imageVector = Icons.Filled.Flag,
                         contentDescription = "Más opciones",
                         tint = MaterialTheme.colorScheme.inverseOnSurface,
                         modifier = Modifier.size(60.dp)
 
                     )
                 }
+                Text(
+                    text = "Aventura",
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium
+                )
 
             }
 

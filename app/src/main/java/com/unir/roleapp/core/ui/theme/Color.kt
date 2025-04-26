@@ -12,6 +12,8 @@ object CustomColors {
         )
     )
 
+
+
     // Colores de madera
     val WoodenLight = Color(0xFFD7B899)  // Tono claro de madera
     val WoodenRegular = Color(0xFF8B5A2B)  // Madera oscura cálida
@@ -42,6 +44,7 @@ object CustomColors {
     val StoneGray = Color(0xFF696969)  // Gris piedra
     val Turquoise = Color(0xFF2C8C8A)
     val NightSkyBlue = Color(0xFF191970)  // Azul cielo nocturno
+    val LightBlue = Color(0xFF4A60D9)  // Azul cielo nocturno
 
     val greenGradient = Brush.horizontalGradient(
         colors = listOf(Bronze, HerbGreen)
@@ -66,9 +69,18 @@ object CustomColors {
     val PurpleGrey80 = Color(0xFFCCC2DC)
     val Pink80 = Color(0xFF58179D)
 
-    val PurpleGradient = Brush.horizontalGradient(
-        colors = listOf(Purple80, PurpleGrey80, Pink80)
+    val PurpleGradient = Brush.verticalGradient(colors = listOf(
+        Color(0xFF2D0C62), // inicio oscuro
+        Color(0xFF141848)  // final un poco más claro
+        )
     )
+
+    val ThemeGradient = Brush.verticalGradient(
+        colors = listOf(Color(0xFF1F1D36),
+            Color(0xFF3F3351))
+    )
+
+
 }
 
 

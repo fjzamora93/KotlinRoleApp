@@ -1,28 +1,18 @@
 package com.unir.roleapp.character.ui.screens.spells.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.RemoveCircle
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,18 +27,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.roleapp.character.data.model.local.Item
 import com.roleapp.character.data.model.local.Spell
 import com.roleapp.character.ui.screens.common.BottomDialogueMenu
 import com.roleapp.character.ui.screens.common.dialogues.CharacterDialog
-import com.roleapp.character.ui.screens.common.dialogues.SwitchDialogue
+import com.unir.roleapp.character.ui.screens.common.InfoDialog
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
-import com.roleapp.core.navigation.ScreensRoutes
-import com.roleapp.core.ui.components.common.DefaultColumn
 import com.roleapp.core.ui.components.common.DefaultRow
 import com.roleapp.core.ui.theme.CustomType
 import com.unir.roleapp.R
-import com.unir.roleapp.character.data.model.local.ItemCategory
 import com.unir.roleapp.character.data.model.local.StatName
 
 
@@ -192,7 +178,7 @@ fun SpellSummaryComponent(
 
             // Cuadro de diálogo informativo
             activeDialog?.let {
-                SwitchDialogue(
+                InfoDialog(
                     activeDialog = it,
                     onDismiss = { activeDialog = null }
                 )

@@ -37,6 +37,11 @@ class CharacterViewModel @Inject constructor(
     private val _selectedCharacter = MutableStateFlow<CharacterEntity?>(null)
     val selectedCharacter: MutableStateFlow<CharacterEntity?> = _selectedCharacter
 
+
+    // GameSession preparada
+    private val _gameSession = MutableStateFlow(false)
+    val gameSession: StateFlow<Boolean> get() = _gameSession
+
     init{
         getCharactersByUser()
     }
@@ -127,4 +132,30 @@ class CharacterViewModel @Inject constructor(
             }
         }
     }
+
+    fun addCharacterToAdventure(
+        character: CharacterEntity,
+        adventureId: String
+    ){
+        _gameSession.value = false
+        _loadingState.value = true
+        _errorMessage.value = null
+        Log.w("CharacterViewModel", "Adding character to adventure: $character, $adventureId")
+
+        viewModelScope.launch {
+            val result = characterUseCases.addCharacterToAdventure(character, adventureId)
+            result.onSuccess {
+                _gameSession.value = true
+                _loadingState.value = false
+                _errorMessage.value = null
+
+                Log.d("CharacterViewModel", "Character added to Adventure: $it")
+            }.onFailure {
+                _loadingState.value = false
+                _errorMessage.value = it.message
+            }
+        }
+    }
+
+
 }
