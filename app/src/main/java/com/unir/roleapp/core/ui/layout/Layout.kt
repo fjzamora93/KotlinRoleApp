@@ -47,7 +47,6 @@ fun MainLayout(
 
         Scaffold(
             floatingActionButton = floatingActionButton,
-
             bottomBar = {
                 NavigationBar()
             },

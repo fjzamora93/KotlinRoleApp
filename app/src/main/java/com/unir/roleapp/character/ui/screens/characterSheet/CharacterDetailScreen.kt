@@ -17,19 +17,16 @@ import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.roleapp.core.ui.components.common.CustomCircularProgressIndicator
 import com.roleapp.core.ui.layout.MenuOption
 import com.roleapp.character.data.model.local.CharacterEntity
 import com.roleapp.character.ui.screens.characterSheet.components.CombatSkillSection
@@ -48,22 +44,17 @@ import com.roleapp.character.ui.screens.characterSheet.components.SkillSection
 import com.roleapp.character.ui.screens.characterSheet.components.StatSection
 import com.roleapp.character.ui.screens.common.ProgressBarSection
 import com.roleapp.character.ui.screens.common.dialogues.CharacterDialog
-import com.roleapp.character.ui.screens.common.dialogues.SwitchDialogue
+import com.unir.roleapp.character.ui.screens.common.InfoDialog
 import com.roleapp.character.ui.screens.common.layout.CharacterLayout
 import com.roleapp.character.ui.screens.items.components.CharacterInventoryBody
 import com.roleapp.character.ui.screens.spells.CharacterSpellBody
 import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.ItemViewModel
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.navigation.NavigationViewModel
-import com.roleapp.core.navigation.ScreensRoutes
-import com.roleapp.core.ui.components.common.DefaultRow
 import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.R
 import com.unir.roleapp.character.ui.screens.characterSheet.CharacterSection
 import com.unir.roleapp.character.ui.screens.characterSheet.helper.util.calculateInitative
 import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
-import kotlinx.coroutines.launch
 
 @Composable
 fun CharacterDetailScreen(
@@ -234,7 +225,7 @@ fun DetailCharacterBody(
 
 
     activeDialog?.let {
-        SwitchDialogue(
+        InfoDialog(
             activeDialog = it,
             onDismiss = { activeDialog = null }
         )

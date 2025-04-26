@@ -1,10 +1,7 @@
-package com.roleapp.character.ui.screens.common.dialogues
+package com.unir.roleapp.character.ui.screens.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.roleapp.character.ui.screens.common.dialogues.CharacterDialog
+import com.roleapp.character.ui.screens.common.dialogues.dialogTexts
 
 
 /** Composable para mostrar un diálogo de información en pantalla completa.
@@ -39,7 +38,7 @@ import androidx.compose.ui.window.Dialog
 * }
  * * */
 @Composable
-fun SwitchDialogue(
+fun InfoDialog(
     activeDialog: CharacterDialog,
     onDismiss: (CharacterDialog) -> Unit,
 ) {
