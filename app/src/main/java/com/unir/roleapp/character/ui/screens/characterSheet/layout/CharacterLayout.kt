@@ -48,9 +48,7 @@ fun CharacterLayout(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .background(
-                        CustomColors.ParchmentGradient
-                    )
+                    .background(brush = CustomColors.ThemeGradient)
             ) {
                 CharacterHeader(
                     onClickMenu = { coroutineScope.launch { drawerState.open() } },

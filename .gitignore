@@ -6,6 +6,7 @@
 **/out/
 **/*.lock
 
+
 # IntelliJ / Android Studio
 .idea/
 *.iml

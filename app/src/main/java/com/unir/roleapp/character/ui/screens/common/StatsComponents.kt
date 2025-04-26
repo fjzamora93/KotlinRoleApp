@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -181,6 +182,9 @@ fun NumberBox(
                         .background(Color.White, shape = RoundedCornerShape(8.dp))
                         .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
                         .padding(horizontal = 12.dp, vertical = 6.dp)
+                        .widthIn(min = 30.dp),
+                    contentAlignment = Alignment.Center
+
                 ) {
                     Text(
                         text = value.toString(),

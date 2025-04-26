@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -81,8 +82,11 @@ fun CombatSkillSection(
                     Box(
                         modifier = Modifier
                             .background(Color.White, shape = RoundedCornerShape(8.dp))
+                            .widthIn(min = 45.dp)
                             .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                            .padding(horizontal = 12.dp, vertical = 6.dp),
+                        contentAlignment = Alignment.Center
+
                     ) {
                         Text(
                             text = skill.value.toString(),

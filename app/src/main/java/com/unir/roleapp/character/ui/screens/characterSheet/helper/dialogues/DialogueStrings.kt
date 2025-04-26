@@ -50,7 +50,14 @@ val dialogTexts = mapOf(
         Todos los hechizos son orientativos. Queda en manos del jugador y del game máster decidir de qué manera se aplican a cada partida.
         """.trimIndent(),
 
-    CharacterDialog.Initiative to "La iniciativa representa la rapidez con la que el personaje actúa en combate.",
+    CharacterDialog.Initiative to """"
+            La iniciativa representa el orden en el que los personajes intervienen en un combate, siendo el primer personaje en atacar el que tenga el valor más bajo.
+            La iniciativa se calcula de forma aleatoria asignando un número entre 1 y 10 al personaje y restando un modificador de destreza.
+            """,
+
+
+
+
     CharacterDialog.Inventory to "Aquí puedes gestionar el inventario, los hechizos y otros recursos del personaje."
 
 

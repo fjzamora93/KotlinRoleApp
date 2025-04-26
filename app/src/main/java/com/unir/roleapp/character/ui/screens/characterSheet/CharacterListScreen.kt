@@ -44,7 +44,6 @@ import com.roleapp.character.data.model.local.Race
 import com.roleapp.character.data.model.local.RolClass
 import com.roleapp.character.ui.screens.characterSheet.components.CharacterPortrait
 import com.roleapp.character.ui.screens.common.BottomDialogueMenu
-import com.roleapp.core.ui.components.common.CustomCircularProgressIndicator
 import com.unir.roleapp.R
 import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
 import androidx.compose.ui.res.stringResource
@@ -179,7 +178,7 @@ fun CreateCharacterButton(
             },
             modifier = Modifier
                 .padding(16.dp)
-                .size(80.dp) // Tamaño más grande para el botón
+                .size(60.dp) // Tamaño más grande para el botón
                 .background(
                     color = MaterialTheme.colorScheme.primary, // Usa el color primario del tema
                     shape = CircleShape // Forma circular
@@ -189,7 +188,7 @@ fun CreateCharacterButton(
                     painter = painterResource(id = R.drawable.baseline_person_add_alt_1_24),
                     contentDescription = "Add person icon",
                     tint = Color.White,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(32.dp)
                 )
             }
         )

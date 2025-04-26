@@ -58,8 +58,10 @@ import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.navigation.NavigationViewModel
 import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.components.common.DefaultRow
+import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.R
 import com.unir.roleapp.character.ui.screens.characterSheet.CharacterSection
+import com.unir.roleapp.character.ui.screens.characterSheet.helper.util.calculateInitative
 import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
 import kotlinx.coroutines.launch
 
@@ -132,18 +134,20 @@ fun DetailCharacterBody(
             verticalArrangement = Arrangement.Center
         ) {
 
-
             // Armadura (icono a la izquierda, número y texto a la derecha)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.Outlined.Security, contentDescription = "Armadura",
+                Icon(
+                    imageVector = Icons.Outlined.Security, contentDescription = "Armadura",
                     Modifier
                         .size(60.dp)
                         .clickable { activeDialog = CharacterDialog.Armour },
-                )
+                    tint = Color.LightGray,
+
+                    )
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(horizontalAlignment = Alignment.Start) {
-                    Text(text = currentArmor.toString(), style = MaterialTheme.typography.headlineMedium)
-                    Text(text = "Armadura", fontSize = 12.sp)
+                    Text(text = currentArmor.toString(), style = MaterialTheme.typography.headlineMedium, color = Color.LightGray)
+                    Text(text = "Armadura", fontSize = 12.sp, color = Color.LightGray)
                 }
             }
 
@@ -151,14 +155,22 @@ fun DetailCharacterBody(
 
             // INICIATIVA
             Row(verticalAlignment = Alignment.CenterVertically) {
+                var randomInitiative = calculateInitative(characterState.dexterity)
+
                 Icon(imageVector = Icons.Default.WorkspacePremium, contentDescription = "Iniciativa",
                     Modifier
                         .size(60.dp)
-                        .clickable { activeDialog = CharacterDialog.Initiative })
+                        .clickable {
+                            activeDialog = CharacterDialog.Initiative
+                            randomInitiative = calculateInitative(characterState.dexterity)
+                                   },
+                    tint = Color.LightGray,
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(horizontalAlignment = Alignment.Start) {
-                    Text(text = "+4", fontSize = 20.sp)
-                    Text(text = "Iniciativa", fontSize = 12.sp)
+                    Text(text = "${randomInitiative.toString()}", fontSize = 20.sp, color = Color.LightGray)
+                    Text(text = "Iniciativa", fontSize = 12.sp, color = Color.LightGray)
+
                 }
             }
         }
@@ -174,15 +186,21 @@ fun DetailCharacterBody(
         }
     }
 
-    DefaultRow{
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ){
         MenuOption(
             text = stringResource(id = R.string.inventory),
             onClick = { onClick(CharacterSection.INVENTORY) },
             icon = Icons.Default.Apps,
-            modifier = Modifier.weight(1f)
+            textColor = Color.LightGray,
+            modifier = Modifier
+                .weight(1f)
                 .padding(vertical = 8.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(Color(0xFFD6D6D6))
+                .background(CustomColors.BlackGradient)
                 .clickable { onClick(CharacterSection.INVENTORY) }
                 .padding(12.dp)
         )
@@ -193,15 +211,19 @@ fun DetailCharacterBody(
             text = stringResource(id = R.string.spells),
             onClick = { onClick(CharacterSection.SPELLS)  },
             icon = Icons.Default.MenuBook,
-            modifier = Modifier.weight(1f)
+            textColor = Color.LightGray,
+
+            modifier = Modifier
+                .weight(1f)
                 .padding(vertical = 8.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(Color(0xFFD6D6D6))
+                .background(CustomColors.BlackGradient)
                 .clickable { onClick(CharacterSection.SPELLS) }
                 .padding(12.dp)
         )
     }
 
+    // Sección de competencia con armas
     CombatSkillSection()
 
     HorizontalDivider(Modifier.padding(16.dp))
