@@ -1,4 +1,4 @@
-package com.roleapp.core.navigation
+package com.unir.roleapp.core.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

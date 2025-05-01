@@ -1,6 +1,6 @@
 package com.unir.roleapp.adventure.domain.model
 
-import com.roleapp.adventure.data.model.Scene
+import com.unir.roleapp.adventure.data.model.Scene
 
 data class AdventureAct(
     val actNumber: Int,

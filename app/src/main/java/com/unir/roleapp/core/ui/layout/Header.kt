@@ -1,4 +1,4 @@
-package com.roleapp.core.ui.layout
+package com.unir.roleapp.core.ui.layout
 
 
 import android.app.Activity
@@ -32,14 +32,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.di.LocalAuthViewModel
-import com.roleapp.core.navigation.NavigationViewModel
-import com.roleapp.core.navigation.ScreensRoutes
-import com.roleapp.character.ui.viewmodels.CharacterViewModel
-import com.roleapp.auth.viewmodels.UserState
-import com.roleapp.auth.viewmodels.AuthViewModel
-import com.roleapp.core.ui.theme.MedievalColours
+import com.unir.roleapp.core.di.LocalNavigationViewModel
+import com.unir.roleapp.core.di.LocalAuthViewModel
+import com.unir.roleapp.core.navigation.NavigationViewModel
+import com.unir.roleapp.core.navigation.ScreensRoutes
+import com.unir.roleapp.character.ui.viewmodels.CharacterViewModel
+import com.unir.roleapp.auth.viewmodels.UserState
+import com.unir.roleapp.auth.viewmodels.AuthViewModel
+import com.unir.roleapp.core.ui.theme.CustomColors
 
 @Composable
 fun Header(
@@ -65,7 +65,6 @@ fun HeaderBody(
     navigationViewModel : NavigationViewModel = LocalNavigationViewModel.current
 ){
     val activity = LocalContext.current as Activity
-    val selectedCharacter by characterViewModel.selectedCharacter.collectAsState()
     val navTitle by navigationViewModel.navTitle.collectAsState()
 
     Row(
@@ -127,7 +126,7 @@ fun UserThombnail(
                 modifier = Modifier
                     .size(60.dp)
                     .shadow(4.dp, CircleShape),
-                tint = MedievalColours.IronDark
+                tint = CustomColors.IronDark
             )
         }
 

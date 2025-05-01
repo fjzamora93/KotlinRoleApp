@@ -1,15 +1,15 @@
-package com.roleapp.character.data.repository
+package com.unir.roleapp.character.data.repository
 
 import android.util.Log
-import com.roleapp.character.data.dao.SkillDao
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.CharacterSkillCrossRef
-import com.roleapp.character.data.model.local.Skill
-import com.roleapp.character.data.model.local.SkillValue
-import com.roleapp.character.data.model.remote.toSkill
-import com.roleapp.character.data.service.CharacterApiService
-import com.roleapp.character.data.service.SkillApiService
-import com.roleapp.character.domain.repository.SkillRepository
+import com.unir.roleapp.character.data.dao.SkillDao
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.CharacterSkillCrossRef
+import com.unir.roleapp.character.data.model.local.Skill
+import com.unir.roleapp.character.data.model.local.SkillValue
+import com.unir.roleapp.character.data.model.remote.toSkill
+import com.unir.roleapp.character.data.service.CharacterApiService
+import com.unir.roleapp.character.data.service.SkillApiService
+import com.unir.roleapp.character.domain.repository.SkillRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -128,7 +128,6 @@ class SkillRepositoryImpl @Inject constructor(
 
             // 3. Obtener y retornar las habilidades actualizadas
             val skillsWithValues = skillDao.getSkillsWithValues(characterId)
-            println("SKILL REPORISTORY fetchCharacterSkillsFromApi: $skillsWithValues")
             Result.success(skillsWithValues)
 
         } catch (e: Exception) {
@@ -144,8 +143,6 @@ class SkillRepositoryImpl @Inject constructor(
             val characterRequest = character.toApiRequest().apply {
                 this.characterSkills = skillsCrossRef
             }
-
-            Log.d("CharacterRepositoryImpl", "CharacterRepositoryImpl.upsertCharacterToApi: $characterRequest")
 
             val response = characterApi.saveCharacter(characterRequest)
 

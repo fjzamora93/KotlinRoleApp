@@ -1,7 +1,7 @@
-package com.roleapp.auth.domain.usecase.user
+package com.unir.roleapp.auth.domain.usecase.user
 
-import com.roleapp.auth.data.model.User
-import com.roleapp.auth.domain.repository.UserRepository
+import com.unir.roleapp.auth.data.model.User
+import com.unir.roleapp.auth.domain.repository.UserRepository
 import javax.inject.Inject
 
 class UpdateUserUseCase @Inject constructor(

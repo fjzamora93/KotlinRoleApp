@@ -1,4 +1,4 @@
-package com.roleapp.core.data
+package com.unir.roleapp.core.data
 
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig

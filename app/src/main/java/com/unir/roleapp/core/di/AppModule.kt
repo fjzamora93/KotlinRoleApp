@@ -1,9 +1,10 @@
-package com.roleapp.core.di
+package com.unir.roleapp.core.di
 
 import android.content.Context
-import com.roleapp.auth.security.AuthInterceptor
-import com.roleapp.auth.security.TokenManager
-import com.roleapp.core.data.MyDatabase
+import com.unir.roleapp.auth.security.AuthInterceptor
+import com.unir.roleapp.auth.security.TokenManager
+import com.unir.roleapp.core.data.MyDatabase
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +31,11 @@ object AppModule {
         return AuthInterceptor(tokenManager)
     }
 
+    @Provides
+    @Singleton
+    fun provideUserPreferences(@ApplicationContext context: Context): UserPreferences {
+        return UserPreferences(context)
+    }
 
 
 }

@@ -1,11 +1,11 @@
-package com.roleapp.character.ui.viewmodels
+package com.unir.roleapp.character.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.domain.usecase.character.CharacterUseCases
-import com.roleapp.character.ui.screens.characterform.components.PersonalityTestForm
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.domain.usecase.character.CharacterUseCases
+import com.unir.roleapp.character.ui.screens.characterform.components.PersonalityTestForm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -70,7 +70,6 @@ class CharacterViewModel @Inject constructor(
                 _selectedCharacter.value = savedCharacter
                 _loadingState.value = false
                 _saveState.value = savedCharacter.id
-                println("Personaje creado / actualizado: ${characterEntity.name}")
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message
@@ -83,16 +82,13 @@ class CharacterViewModel @Inject constructor(
     fun getCharacterById(characterId: Long) {
         _loadingState.value = true
         viewModelScope.launch {
-            println("Personaje anterior: ${_selectedCharacter.value}")
             val result = characterUseCases.getCharacterById(characterId)
             result.onSuccess { rolCharacter ->
                 if (rolCharacter != null) {
                     _selectedCharacter.value = rolCharacter
-                    println("Cambiando personaje en uso: ${_selectedCharacter.value}")
 
                 }
                 _loadingState.value = false
-                println("Personaje encontrado: ${rolCharacter?.name}")
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message
@@ -110,7 +106,6 @@ class CharacterViewModel @Inject constructor(
             result.onSuccess {
                 _characters.value = _characters.value.toList().filter { it.id != characterEntity.id }
                 _loadingState.value = false
-                println("Personaje eliminado: ${characterEntity.name}")
             }.onFailure {
                 _loadingState.value = false
                 _errorMessage.value = it.message

@@ -1,4 +1,4 @@
-package com.roleapp.character.domain.usecase.item
+package com.unir.roleapp.character.domain.usecase.item
 
 data class ItemUseCases (
     val upsertItemToCharacter: AddItemToCharacterUseCase,

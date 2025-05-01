@@ -1,4 +1,4 @@
-package com.roleapp.core.ui.theme
+package com.unir.roleapp.core.ui.theme
 import androidx.compose.material3.Typography
 
 // NO UTILIZAR! MEJOR UTILIZAR TIPOGRAFÍAS POR DEFECTO O DE ALGÚN TEMA QUE SE HAYA ELEGIDO

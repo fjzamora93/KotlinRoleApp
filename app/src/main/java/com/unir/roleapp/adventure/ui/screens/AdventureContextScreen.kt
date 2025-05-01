@@ -1,158 +1,132 @@
 package com.unir.roleapp.adventure.ui.screens
 
-import com.unir.roleapp.adventure.ui.components.CharacterSelectionList
-import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureContextViewModel
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.ui.viewmodels.CharacterViewModel
 
 @Composable
 fun AdventureContextScreen(
     adventureId: String,
-    onCancel:    () -> Unit,
-    onFinish:    () -> Unit,
-    viewModel: AdventureContextViewModel = hiltViewModel()
+    viewModel: AdventureContextViewModel = hiltViewModel(),
+    onCancel: () -> Unit,
+    onFinish: () -> Unit
 ) {
-    // 1) Dispara la carga de título/descrición al montar
-    LaunchedEffect(adventureId) {
-        viewModel.loadAdventure(adventureId)
-    }
+    // Estados del VM
+    val histCtx        by viewModel.historicalContext.collectAsState(initial = "")
+    val selectedIds    by viewModel.selectedCharacterIds.collectAsState()
+    val charCtxMap     by viewModel.charContexts.collectAsState()
+    val loading        by viewModel.loading.collectAsState()
+    val error          by viewModel.error.collectAsState()
 
-    // 2) Lee los flujos del ViewModel
-    val title       by viewModel.title.collectAsState()
-    val description by viewModel.description.collectAsState()
-    val histCtx     by viewModel.historicalContext.collectAsState()
-    val selectedIds by viewModel.selectedCharacterIds.collectAsState()
-    val charCtxMap  by viewModel.charContexts.collectAsState()
-    val loading     by viewModel.loading.collectAsState()
-    val error       by viewModel.error.collectAsState()
-    val allChars    = viewModel.sampleChars
+    // Lista de personajes desde CharacterViewModel
+    val characterViewModel: CharacterViewModel = hiltViewModel()
+    val allChars by characterViewModel.characters.collectAsState(initial = emptyList())
 
-    MainLayout {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            // 1. Fila: título / ID
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment   = Alignment.CenterVertically
-            ) {
-                Text(text = title, style = MaterialTheme.typography.titleLarge)
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(
+            "Contexto histórico y descripción de personajes",
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        OutlinedTextField(
+            value = histCtx,
+            onValueChange = { viewModel.updateHistoricalContext(it) },
+            label = { Text("Contexto histórico") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp)
+        )
+
+        Text("Selecciona hasta 4 personajes", style = MaterialTheme.typography.bodyLarge)
+
+        // Listado de selección, usando CharacterEntity
+        CharacterSelectionList(
+            characters  = allChars,
+            selectedIds = selectedIds,
+            onSelect    = viewModel::selectChar,
+            modifier    = Modifier
+                .fillMaxWidth()
+                .height(150.dp)
+        )
+
+        // Campo de texto por cada personaje seleccionado
+        LazyColumn {
+            items(selectedIds) { charId ->
+                Spacer(Modifier.height(8.dp))
                 Text(
-                    text  = adventureId,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    "Contexto para personaje $charId",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                OutlinedTextField(
+                    value = charCtxMap[charId] ?: "",
+                    onValueChange = { viewModel.updateCharContext(charId, it) },
+                    placeholder = { Text("¿Quién es? ¿Traumas? ¿Inicio?") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
                 )
             }
+        }
 
-            Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.weight(1f))
 
-            // 2. Descripción (máx. 2 líneas)
-            Text(
-                text     = description,
-                style    = MaterialTheme.typography.bodyMedium,
-                maxLines = 2
-            )
+        // Mostrar error si lo hay
+        error?.let {
+            Text(it, color = MaterialTheme.colorScheme.error)
+        }
 
-            Spacer(Modifier.height(16.dp))
-
-            // 3. Contexto histórico
-            OutlinedTextField(
-                value         = histCtx,
-                onValueChange = viewModel::onHistoricalContextChange,
-                label         = { Text("Contexto histórico") },
-                modifier      = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                shape         = RoundedCornerShape(8.dp)
-            )
-
-            Spacer(Modifier.height(16.dp))
-
-            // 4. Personajes
-            Text("Personajes", style = MaterialTheme.typography.titleMedium)
-            Text(
-                "Selecciona hasta 4 personajes y escribe su contexto",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            // 5. Lista de personajes (checkbox)
-            CharacterSelectionList(
-                characters  = allChars,      // <- aquí la lista fija
-                selectedIds = selectedIds,
-                onSelect    = viewModel::selectChar,
-                modifier    = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-            )
-
-
-            Spacer(Modifier.height(16.dp))
-
-            // 6. Contexto del personaje seleccionado
-            val currentId = selectedIds.firstOrNull()
-            val currentCtx = currentId?.let { charCtxMap[it] } ?: ""
-            OutlinedTextField(
-                value         = currentCtx,
-                onValueChange = { viewModel.updateCharContext(currentId!!, it) },
-                label         = { Text("Contexto para personaje") },
-                modifier      = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                shape         = RoundedCornerShape(8.dp)
-            )
-
-            Spacer(Modifier.weight(1f))
-
-            // 7. Botones Cancelar / Crear
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TextButton(
-                    onClick = {
-                        viewModel.deleteAdventure(adventureId) {
-                            onCancel()
-                        }
-                    }
-                ) {
-                    Text("Cancelar")
-                }
-
-                Button(
-                    onClick = {
-                        viewModel.saveAll(adventureId) { onFinish() }
-                    },
-                    enabled = !loading && histCtx.isNotBlank() && selectedIds.isNotEmpty()
-                ) {
-                    if (loading) {
-                        CircularProgressIndicator(
-                            Modifier.size(20.dp),
-                            color       = MaterialTheme.colorScheme.onPrimary,
-                            strokeWidth = 2.dp
-                        )
-                    } else {
-                        Text("Crear Aventura")
-                    }
-                }
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            TextButton(onClick = onCancel) {
+                Text("Cancelar")
             }
+            Button(
+                onClick = { viewModel.saveAll { onFinish() } },
+                enabled = histCtx.isNotBlank() && selectedIds.isNotEmpty() && !loading
+            ) {
+                Text("Crear partida")
+            }
+        }
+    }
+}
 
-            // 8. Mostrar error si hay
-            error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+@Composable
+fun CharacterSelectionList(
+    characters: List<CharacterEntity>,
+    selectedIds: List<Long>,
+    onSelect: (Long) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(modifier = modifier) {
+        items(characters) { char ->
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = selectedIds.contains(char.id),
+                    onCheckedChange = { onSelect(char.id) }
+                )
+                Text(char.name, Modifier.padding(start = 8.dp))
+            }
         }
     }
 }

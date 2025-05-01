@@ -1,4 +1,4 @@
-package com.roleapp.auth.data.model
+package com.unir.roleapp.auth.data.model
 
 
 data class UserDTO(

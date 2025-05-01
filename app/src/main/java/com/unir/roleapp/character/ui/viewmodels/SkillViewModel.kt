@@ -1,10 +1,10 @@
-package com.roleapp.character.ui.viewmodels
+package com.unir.roleapp.character.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.SkillValue
-import com.roleapp.character.domain.usecase.skill.SkillUseCases
-import com.roleapp.character.domain.usecase.skill.SkillValidationResult
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.SkillValue
+import com.unir.roleapp.character.domain.usecase.skill.SkillUseCases
+import com.unir.roleapp.character.domain.usecase.skill.SkillValidationResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,7 +40,6 @@ class SkillViewModel @Inject constructor(
             result.onSuccess { skills ->
                 _skillList.value = skills
                 _errorMessage.value = null
-                println("Skills en el ViewModel: ${skillList.value}")
                 skillUseCases.validateSkillValue(character, _skillList.value)
             }.onFailure { error ->
                 _errorMessage.value = "Error al obtener las habilidades: ${error.message}"
@@ -53,8 +52,8 @@ class SkillViewModel @Inject constructor(
         viewModelScope.launch {
             val result = skillUseCases.updateSkills(character, skillList)
             result.onSuccess {
-                _errorMessage.value = null // Limpiar el mensaje de error
-                println("Habilidades actualizadas correctamente")
+                _errorMessage.value = null
+                getSkillsFromCharacter(character)
             }.onFailure { error ->
                 _errorMessage.value = "Error al actualizar las habilidades: ${error.message}"
                 println("Error: ${error.message}")
@@ -107,7 +106,6 @@ class SkillViewModel @Inject constructor(
             val result = skillUseCases.fetchSkills()
             result.onSuccess { skills ->
                 _errorMessage.value = null
-                println("Skills en el ViewModel: ${skillList.value}")
             }.onFailure { error ->
                 _errorMessage.value = "Error al obtener las habilidades: ${error.message}"
                 println("Error: ${error.message}")

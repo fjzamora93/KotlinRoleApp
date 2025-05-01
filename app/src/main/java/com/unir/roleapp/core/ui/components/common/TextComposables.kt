@@ -1,10 +1,10 @@
-package com.roleapp.core.ui.components.common
+package com.unir.roleapp.core.ui.components.common
 
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.roleapp.core.ui.theme.CustomType
+import com.unir.roleapp.core.ui.theme.CustomType
 
 @Composable
 fun TitleLarge(text: String, modifier: Modifier = Modifier) {

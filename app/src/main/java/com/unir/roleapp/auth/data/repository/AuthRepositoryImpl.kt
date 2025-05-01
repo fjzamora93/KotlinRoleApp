@@ -1,13 +1,14 @@
-package com.roleapp.auth.data.repository
+package com.unir.roleapp.auth.data.repository
 
 import android.util.Log
-import com.roleapp.auth.data.dao.UserDao
-import com.roleapp.auth.data.service.AuthApiService
-import com.roleapp.auth.security.TokenManager
-import com.roleapp.auth.data.model.User
-import com.roleapp.auth.data.model.LoginRequest
-import com.roleapp.auth.data.model.RefreshTokenRequest
-import com.roleapp.auth.domain.repository.AuthRepository
+import com.unir.roleapp.auth.data.dao.UserDao
+import com.unir.roleapp.auth.data.service.AuthApiService
+import com.unir.roleapp.auth.security.TokenManager
+import com.unir.roleapp.auth.data.model.User
+import com.unir.roleapp.auth.data.model.LoginRequest
+import com.unir.roleapp.auth.data.model.RefreshTokenRequest
+import com.unir.roleapp.auth.domain.repository.AuthRepository
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import java.io.IOException
 import javax.inject.Inject
 
@@ -15,26 +16,32 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApiService,
     private val userDao: UserDao,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val userPreferences: UserPreferences
 ) : AuthRepository {
 
 
     override suspend fun login(email: String, password: String): Result<User> {
         return try {
             val response = api.login(LoginRequest(email, password))
-            if (response.isSuccessful && response.body() != null) {
+            if (response.code() == 200 && response.isSuccessful && response.body() != null) {
                 val loginResponse = response.body()!!
 
                 // Guardar tokens
                 tokenManager.saveAccessToken(loginResponse.accessToken)
                 tokenManager.saveRefreshToken(loginResponse.refreshToken)
+                userPreferences.saveEmail(email)
+
+                Log.e("AuthRepositoryImpl", "EMAIL DEL USUARIO ACTUAL: ${userPreferences.getEmail()}")
+
 
                 val onlineUser = loginResponse.user.toUserEntity()
                 userDao.upsertUser(onlineUser)
 
                 Result.success(onlineUser)
             } else {
-                Result.failure(Exception("Error en login: ${response.message()}"))
+                val errorBody = response.errorBody()?.string()
+                Result.failure(Exception("${errorBody}"))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -60,7 +67,8 @@ class AuthRepositoryImpl @Inject constructor(
 
                 Result.success(loginResponse.user.toUserEntity())
             } else {
-                Result.failure(Exception("Error en signup: ${response.message()}"))
+                val errorBody = response.errorBody()?.string()
+                Result.failure(Exception("$errorBody"))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -75,6 +83,7 @@ class AuthRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) {
                 tokenManager.clearTokens()
+                userPreferences.clear()
                 Result.success(Unit)
             } else {
                 Result.failure(Exception("Error en logout: ${response.message()}"))

@@ -1,4 +1,4 @@
-package com.roleapp.character.ui.screens.common.dialogues
+package com.unir.roleapp.character.ui.screens.common.dialogues
 
 val dialogTexts = mapOf(
     CharacterDialog.Armour to """
@@ -44,6 +44,10 @@ val dialogTexts = mapOf(
         Sin embargo, el director del juego puede poner límites a las habilidades que se pueden usar en cada circunstancia.
         Por ejemplo, podría alegar que cierto NPC es imposible se engañar o no se deja seducir, pero que sin embargo sí está abierto a negociar (entonces se forzaría una tirada de Negociación).
         
+        """.trimIndent(),
+
+    CharacterDialog.Spell to """
+        Todos los hechizos son orientativos. Queda en manos del jugador y del game máster decidir de qué manera se aplican a cada partida.
         """.trimIndent(),
 
     CharacterDialog.Initiative to "La iniciativa representa la rapidez con la que el personaje actúa en combate.",

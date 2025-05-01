@@ -1,4 +1,4 @@
-package com.roleapp.character.ui.screens.common
+package com.unir.roleapp.character.ui.screens.common
 
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api

@@ -1,4 +1,4 @@
-package com.roleapp.character.domain.usecase.character
+package com.unir.roleapp.character.domain.usecase.character
 
 
 data class CharacterUseCases(

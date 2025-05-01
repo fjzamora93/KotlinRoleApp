@@ -1,7 +1,7 @@
-package com.roleapp.character.domain.usecase.skill
+package com.unir.roleapp.character.domain.usecase.skill
 
-import com.roleapp.character.data.model.local.Skill
-import com.roleapp.character.domain.repository.SkillRepository
+import com.unir.roleapp.character.data.model.local.Skill
+import com.unir.roleapp.character.domain.repository.SkillRepository
 import javax.inject.Inject
 
 /** NO UTILIZAR. SOLO EN EL INIT de SkillVIewModel.

@@ -1,4 +1,4 @@
-package com.roleapp.character.data.model.remote
+package com.unir.roleapp.character.data.model.remote
 
 data class GameSessionDTO(
     private val id: Int,

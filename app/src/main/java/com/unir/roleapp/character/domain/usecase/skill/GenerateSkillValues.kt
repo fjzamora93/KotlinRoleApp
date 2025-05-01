@@ -1,13 +1,13 @@
-package com.roleapp.character.domain.usecase.skill
+package com.unir.roleapp.character.domain.usecase.skill
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.Skill
-import com.roleapp.character.data.model.local.SkillValue
-import com.roleapp.character.domain.repository.SkillRepository
-import com.roleapp.character.domain.usecase.character.generateutils.adjustCharacterSkills
-import com.roleapp.character.domain.usecase.character.generateutils.calculateSkills
-import com.roleapp.character.domain.usecase.character.generateutils.calculateTestResult
-import com.roleapp.character.ui.screens.characterform.components.PersonalityTestForm
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.Skill
+import com.unir.roleapp.character.data.model.local.SkillValue
+import com.unir.roleapp.character.domain.repository.SkillRepository
+import com.unir.roleapp.character.domain.usecase.character.generateutils.adjustCharacterSkills
+import com.unir.roleapp.character.domain.usecase.character.generateutils.calculateSkills
+import com.unir.roleapp.character.domain.usecase.character.generateutils.calculateTestResult
+import com.unir.roleapp.character.ui.screens.characterform.components.PersonalityTestForm
 import javax.inject.Inject
 
 class GenerateSkillValues @Inject constructor(private val repository: SkillRepository) {

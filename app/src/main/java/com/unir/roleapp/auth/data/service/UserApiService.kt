@@ -1,6 +1,6 @@
-package com.roleapp.auth.data.service
+package com.unir.roleapp.auth.data.service
 
-import com.roleapp.auth.data.model.UserDTO
+import com.unir.roleapp.auth.data.model.UserDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

@@ -1,4 +1,4 @@
-package com.roleapp.core.ui.components.navigationbar
+package com.unir.roleapp.core.ui.components.navigationbar
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

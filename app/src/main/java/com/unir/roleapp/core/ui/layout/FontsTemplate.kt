@@ -1,4 +1,4 @@
-package com.roleapp.core.ui.layout
+package com.unir.roleapp.core.ui.layout
 
 
 import androidx.compose.foundation.layout.Column
@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.roleapp.core.ui.theme.CustomType
+import com.unir.roleapp.core.ui.theme.CustomType
 
 @Composable
 fun FontsTemplateScreen(){

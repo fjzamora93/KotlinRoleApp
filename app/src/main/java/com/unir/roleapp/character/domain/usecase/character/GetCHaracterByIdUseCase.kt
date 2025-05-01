@@ -1,7 +1,7 @@
-package com.roleapp.character.domain.usecase.character
+package com.unir.roleapp.character.domain.usecase.character
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.domain.repository.CharacterRepository
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.domain.repository.CharacterRepository
 import javax.inject.Inject
 
 

@@ -1,11 +1,11 @@
-package com.roleapp.adventure.data.repository
+package com.unir.roleapp.adventure.data.repository
 
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
-import com.roleapp.adventure.data.model.Scene
+import com.unir.roleapp.adventure.data.model.Scene
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 

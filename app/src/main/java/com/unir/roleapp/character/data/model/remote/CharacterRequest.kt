@@ -1,6 +1,6 @@
-package com.roleapp.character.data.model.remote
+package com.unir.roleapp.character.data.model.remote
 
-import com.roleapp.character.data.model.local.CharacterSkillCrossRef
+import com.unir.roleapp.character.data.model.local.CharacterSkillCrossRef
 
 data class CharacterRequest(
     val id: Long,

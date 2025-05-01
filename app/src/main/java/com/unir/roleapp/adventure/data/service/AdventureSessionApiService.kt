@@ -1,8 +1,8 @@
-package com.roleapp.adventure.data.service
+package com.unir.roleapp.adventure.data.service
 
-import com.roleapp.character.data.model.remote.CharacterResponse
-import com.roleapp.character.data.model.remote.GameSessionDTO
-import com.roleapp.character.data.model.remote.ItemDTO
+import com.unir.roleapp.character.data.model.remote.CharacterResponse
+import com.unir.roleapp.character.data.model.remote.GameSessionDTO
+import com.unir.roleapp.character.data.model.remote.ItemDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

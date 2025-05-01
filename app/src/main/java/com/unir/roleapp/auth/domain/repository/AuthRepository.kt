@@ -1,6 +1,6 @@
-package com.roleapp.auth.domain.repository
+package com.unir.roleapp.auth.domain.repository
 
-import com.roleapp.auth.data.model.User
+import com.unir.roleapp.auth.data.model.User
 
 interface AuthRepository {
     suspend fun login(email: String, password: String): Result<User>

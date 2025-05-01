@@ -1,4 +1,4 @@
-package com.roleapp.character.data.model.local
+package com.unir.roleapp.character.data.model.local
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

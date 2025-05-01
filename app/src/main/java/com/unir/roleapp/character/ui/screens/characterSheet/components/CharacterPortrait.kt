@@ -1,7 +1,8 @@
-package com.roleapp.character.ui.screens.characterSheet.components
+package com.unir.roleapp.character.ui.screens.characterSheet.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -11,10 +12,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.RolClass
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.navigation.NavigationViewModel
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.RolClass
+import com.unir.roleapp.core.di.LocalNavigationViewModel
+import com.unir.roleapp.core.navigation.NavigationViewModel
 import com.unir.roleapp.R
 import java.util.Locale
 
@@ -24,11 +25,14 @@ fun CharacterPortrait(
     navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
     onClick : () -> Unit = {  },
     size:Int = 120,
+    modifier: Modifier = Modifier
+        .width(size.dp)
+        .padding(16.dp)
+        .clickable(onClick = { onClick() })
 ) {
     val imageName = character.imgUrl.lowercase()
     val imageResId = rememberImageResource(imageName)
 
-    println("ImagenResource: $imageName")
 
     // Verificar si el recurso existe
     val painter = if (imageResId != 0) {
@@ -53,10 +57,7 @@ fun CharacterPortrait(
     Image(
         painter = painter,
         contentDescription = "Título no disponible: $imageName",
-        modifier = Modifier
-            .width(size.dp)
-            .padding(16.dp)
-            .clickable(onClick = { onClick() })
+        modifier = modifier
     )
 }
 

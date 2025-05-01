@@ -1,8 +1,8 @@
-package com.roleapp.auth.data.service
+package com.unir.roleapp.auth.data.service
 
-import com.roleapp.auth.data.model.LoginRequest
-import com.roleapp.auth.data.model.LoginResponse
-import com.roleapp.auth.data.model.RefreshTokenRequest
+import com.unir.roleapp.auth.data.model.LoginRequest
+import com.unir.roleapp.auth.data.model.LoginResponse
+import com.unir.roleapp.auth.data.model.RefreshTokenRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

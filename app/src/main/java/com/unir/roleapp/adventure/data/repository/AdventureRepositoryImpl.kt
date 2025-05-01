@@ -12,17 +12,32 @@ class AdventureRepositoryImpl @Inject constructor() : AdventureRepository {
 
     private val db: FirebaseFirestore = Firebase.firestore
 
+
     override suspend fun createAdventure(request: CreateAdventureRequest): Result<Adventure> {
         return try {
-            val doc = db.collection("adventures").document()
-            val adv = Adventure(
-                id          = doc.id,
-                title       = request.title,
-                description = request.description,
-                createdAt   = System.currentTimeMillis()
+            // 1️⃣ Capta un ID nuevo
+            val newDoc = db
+                .collection("adventures")
+                .document()
+
+            // 2️⃣ Monta tu objeto con characters inicializado
+            val adventure = Adventure(
+                id                = newDoc.id,
+                title             = request.title,
+                description       = request.description,
+                userId            = request.userId,
+                characters        = emptyList(),        // inicializa aquí
+                acts              = emptyList(),
+                historicalContext = "",
+                characterContexts = emptyList()
             )
-            doc.set(adv).await()
-            Result.success(adv)
+
+            // 3️⃣ Sube el documento completo
+            newDoc
+                .set(adventure)
+                .await()
+
+            Result.success(adventure)
         } catch (e: Exception) {
             Result.failure(e)
         }

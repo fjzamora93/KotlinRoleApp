@@ -1,11 +1,11 @@
-package com.roleapp.core.di
+package com.unir.roleapp.core.di
 
-import com.roleapp.auth.data.dao.UserDao
-import com.roleapp.core.data.MyDatabase
-import com.roleapp.character.data.dao.CharacterDao
-import com.roleapp.character.data.dao.ItemDao
-import com.roleapp.character.data.dao.SkillDao
-import com.roleapp.character.data.dao.SpellDao
+import com.unir.roleapp.auth.data.dao.UserDao
+import com.unir.roleapp.core.data.MyDatabase
+import com.unir.roleapp.character.data.dao.CharacterDao
+import com.unir.roleapp.character.data.dao.ItemDao
+import com.unir.roleapp.character.data.dao.SkillDao
+import com.unir.roleapp.character.data.dao.SpellDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

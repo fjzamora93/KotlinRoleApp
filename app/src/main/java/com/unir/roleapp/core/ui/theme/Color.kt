@@ -1,9 +1,17 @@
-package com.roleapp.core.ui.theme
+package com.unir.roleapp.core.ui.theme
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-object MedievalColours {
+object CustomColors {
+    val BlackGradient = Brush.verticalGradient(
+        colors = listOf(
+            Color(0xFF171515), // negro suave con un tinte gris
+            Color(0xFF0A0A0A), // negro intenso
+            Color(0xFF202021)  // un toque metálico gris oscuro
+        )
+    )
+
     // Colores de madera
     val WoodenLight = Color(0xFFD7B899)  // Tono claro de madera
     val WoodenRegular = Color(0xFF8B5A2B)  // Madera oscura cálida
@@ -11,8 +19,12 @@ object MedievalColours {
 
 
     // Colores de pergamino
-    val ParchmentLight = Color(0xFFFFF8E1)  // Pergamino claro
-    val ParchmentDark = Color(0xFFF5DEB3)  // Pergamino envejecido
+    val ParchmentLight = Color(0xFFFFFFFF)  // Pergamino claro
+    val ParchmentDark = Color(0xFFE3DBCC)  // Pergamino envejecido
+
+    val ParchmentGradient = Brush.verticalGradient(
+        colors = listOf(ParchmentLight, ParchmentDark)
+    )
 
     // Colores metálicos
     val Gold = Color(0xFFDAA520)  // Dorado brillante
@@ -46,18 +58,22 @@ object MedievalColours {
 
     // Colores adicionales temáticos
     val BloodRed = Color(0xFF8B0000)  // Rojo sangre
-    val RoyalPurple = Color(0xFF6A0DAD)  // Púrpura real
+    val RoyalPurple = Color(0xFF380F56)  // Púrpura real
     val AshGray = Color(0xFF708090)  // Gris ceniza
     val MidnightBlack = Color(0xFF1C1C1C)  // Negro medianoche
+    // SIN USO
+    val Purple80 = Color(0xFFD0BCFF)
+    val PurpleGrey80 = Color(0xFFCCC2DC)
+    val Pink80 = Color(0xFF58179D)
 
+    val PurpleGradient = Brush.horizontalGradient(
+        colors = listOf(Purple80, PurpleGrey80, Pink80)
+    )
 }
 
 
 
-// SIN USO
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+
 
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)

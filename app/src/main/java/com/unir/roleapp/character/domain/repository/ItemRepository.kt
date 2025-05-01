@@ -1,7 +1,7 @@
-package com.roleapp.character.domain.repository
+package com.unir.roleapp.character.domain.repository
 
-import com.roleapp.character.data.model.local.Item
-import com.roleapp.character.data.model.local.CharacterItemDetail
+import com.unir.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.data.model.local.CharacterItemDetail
 
 interface ItemRepository {
 

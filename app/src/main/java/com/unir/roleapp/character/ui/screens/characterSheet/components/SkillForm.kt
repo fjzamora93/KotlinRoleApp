@@ -1,4 +1,4 @@
-package com.roleapp.character.ui.screens.characterSheet.components
+package com.unir.roleapp.character.ui.screens.characterSheet.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Handyman
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.School
@@ -45,24 +46,23 @@ import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.Skill
-import com.roleapp.character.data.model.local.SkillTags
-import com.roleapp.character.data.model.local.tagToString
-import com.roleapp.character.ui.viewmodels.SkillViewModel
-import com.roleapp.core.ui.components.common.DefaultRow
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.Skill
+import com.unir.roleapp.character.data.model.local.SkillValue
+
+import com.unir.roleapp.character.ui.viewmodels.SkillViewModel
+import com.unir.roleapp.core.ui.components.common.DefaultRow
+import com.unir.roleapp.character.data.model.local.StatName
 import kotlinx.coroutines.launch
 
 @Composable
 fun SkillForm(
     skillViewModel: SkillViewModel = hiltViewModel(),
     character: CharacterEntity,
-    onEdit: () -> Unit
+    onChanges: (List<SkillValue>) -> Unit
 ) {
     val skillList by skillViewModel.skillList.collectAsState()
-    val pointsAvailable by skillViewModel.pointsAvailable.collectAsState()
     val errorMessage by skillViewModel.errorMessage.collectAsState()
-    val isValid by skillViewModel.isValid.collectAsState()
 
     // Estado local sincronizado con el ViewModel
     var localSkillList by remember(skillList) {
@@ -71,7 +71,7 @@ fun SkillForm(
 
     // Obtener todas las etiquetas de habilidades únicas
     val skillTags = localSkillList.map { it.skill.tag }.distinct()
-    var selectedTag by remember { mutableStateOf<String?>(SkillTags.STRENGTH ) }
+    var selectedTag by remember { mutableStateOf<StatName?>(StatName.STRENGTH ) }
 
     // Crear un map con claves = tags y valores = lista de habilidades por cada tag
     val skillsByTag = skillTags.associateWith { tag ->
@@ -81,72 +81,59 @@ fun SkillForm(
     // Control de scroll
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
-    val columnPositions = remember { mutableMapOf<String, Int>() }
+    val columnPositions = remember { mutableMapOf<StatName, Int>() }
     Column(){
-
-        DefaultRow {
-            Text(
-                text = "Puntos disponibles: $pointsAvailable",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-
-            // meter un enabled = isValid
-            IconButton(
-                onClick = {
-                    skillViewModel.updateSkills(character, localSkillList)
-                    onEdit()
-                },
-                enabled = isValid // deshabilitar boton si no está validado el formulario
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Save,
-                    contentDescription = "save",
-                    modifier = Modifier.size(30.dp)
-                )
-            }
-        }
-
 
         errorMessage?.let { Text(it, color = Color.Red) }
 
+        // CABECERA DE LA COLUMNA (Con las subsecciones de la tabla)
         Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
-                .background(MaterialTheme.colorScheme.surface),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = RoundedCornerShape(8.dp)
+                ),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             skillTags.forEach { tag ->
-                IconButton(
-
-                    onClick = {
-                        selectedTag = tag
-                        coroutineScope.launch {
-                            columnPositions[tag]?.let { position ->
-                                scrollState.animateScrollTo(position)
+                    IconButton(
+                        onClick = {
+                            selectedTag = tag
+                            coroutineScope.launch {
+                                columnPositions[tag]?.let { position ->
+                                    scrollState.animateScrollTo(position)
+                                }
                             }
-                        }
-                    },
-                    modifier = Modifier.size(48.dp).background(
-                        if (selectedTag == tag) MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
-                        else Color.Transparent,
-                    )
-                ) {
-                    Icon(
-                        imageVector = when (tag) {
-                            SkillTags.STRENGTH -> Icons.Default.FitnessCenter // Ícono de fuerza
-                            SkillTags.DEXTERITY -> Icons.Default.DirectionsRun // Ícono de destreza
-                            SkillTags.INTELLIGENCE -> Icons.Default.School // Ícono de conocimiento
-                            SkillTags.CHARISMA -> Icons.Default.Face // Ícono de sociales
-                            SkillTags.COMBAT -> Icons.Default.Security // Ícono de combate
-                            else -> Icons.Default.Help // Ícono genérico
                         },
-                        contentDescription = tagToString(tag),
-                        modifier = Modifier.size(32.dp),
-                        tint = if (selectedTag == tag) MaterialTheme.colorScheme.primary else Color.Gray
-                    )
-                }
-            }
+                        modifier = Modifier
+                            .size(48.dp)
+                            .background(
+                                if (selectedTag == tag)
+                                    MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+                                else Color.Transparent,
+                                shape = RoundedCornerShape(24.dp)
+                            )
+                    ) {
+                        Icon(
+                            imageVector = when (tag) {
+                                StatName.STRENGTH     -> Icons.Default.FitnessCenter
+                                StatName.DEXTERITY    -> Icons.Default.Handyman
+                                StatName.INTELLIGENCE -> Icons.Default.School
+                                StatName.CHARISMA     -> Icons.Default.Face
+                                StatName.COMBAT         -> Icons.Default.Security
+                                else                  -> Icons.Default.Help
+                            },
+                            contentDescription = StatName.getString(tag),
+                            modifier = Modifier.size(32.dp),
+                            tint = if (selectedTag == tag)
+                                MaterialTheme.colorScheme.onPrimaryContainer
+                            else
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
 
+            }
         }
 
         // Secciones de habilidades con scroll horizontal
@@ -165,7 +152,7 @@ fun SkillForm(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ){
                     Text(
-                        text = "Habilidades de ${tagToString(tag)}",
+                        text = "Habilidades de ${StatName.getString(tag)}",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.align(Alignment.Start)
                     )
@@ -182,7 +169,8 @@ fun SkillForm(
                                         this[index] = this[index].copy(value = newValue)
                                     }
                                 }
-                                skillViewModel.validateSkills(character, localSkillList)
+
+                                onChanges(localSkillList)
                             }
                         )
                     }

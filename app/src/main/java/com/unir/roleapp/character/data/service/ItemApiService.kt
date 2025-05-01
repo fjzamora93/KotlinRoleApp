@@ -1,7 +1,7 @@
-package com.roleapp.character.data.service
+package com.unir.roleapp.character.data.service
 
-import com.roleapp.character.data.model.remote.ApiCharacterItem
-import com.roleapp.character.data.model.remote.ItemDTO
+import com.unir.roleapp.character.data.model.remote.ApiCharacterItem
+import com.unir.roleapp.character.data.model.remote.ItemDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

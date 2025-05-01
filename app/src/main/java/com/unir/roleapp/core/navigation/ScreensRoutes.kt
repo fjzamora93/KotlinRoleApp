@@ -1,4 +1,4 @@
-package com.roleapp.core.navigation
+package com.unir.roleapp.core.navigation
 
 sealed class ScreensRoutes(val route: String) {
     object CharacterListScreen : ScreensRoutes("CharacterListScreen")
@@ -11,14 +11,12 @@ sealed class ScreensRoutes(val route: String) {
     }
 
 
-    object SkillListScreen : ScreensRoutes("SkillListScreen")
 
     // TEST Y TEMPLATES
     object FontTemplateScreen : ScreensRoutes("FontTemplateScreen")
 
 
     // ITEMS
-    object ItemListScreen: ScreensRoutes("ItemListScreen")
     object InventoryScreen: ScreensRoutes("InventoryScreen")
     object ItemDetailScreen : ScreensRoutes("ItemDetailScreen/{itemId}") {
         fun createRoute(itemId: Int) = "ItemDetailScreen/$itemId"
@@ -31,21 +29,22 @@ sealed class ScreensRoutes(val route: String) {
 
 
     // ADVENTURE
-<<<<<<< Updated upstream
-    object AdventureMainScreen: ScreensRoutes("AdventureMainScreen")
-=======
-    //object AdventureMainScreen : ScreensRoutes("adventure_main")
-    //object AdventureMainScreen: ScreensRoutes("AdventureMainScreen")
+    object HomeAdventureScreen : ScreensRoutes("AdventureMainScreen")
     object AdventureMainScreen : ScreensRoutes("AdventureMainScreen")
     object AdventureListScreen: ScreensRoutes("AdventureListScreen")
->>>>>>> Stashed changes
     object TemplateAdventureScreen: ScreensRoutes("TemplateAdventureScreen")
-    object CreateAdventureScreen : ScreensRoutes("CreateAdventureScreen")
+    object CreateAdventureScreen : ScreensRoutes("create_adventure/{adventureId}") {
+        fun createRoute(adventureId: String) = "create_adventure/$adventureId"
+    }
     object AdventureContextScreen : ScreensRoutes("adventure_context/{adventureId}") {
         fun createRoute(adventureId: String) = "adventure_context/$adventureId"
     }
+    object WaitingRoomScreen : ScreensRoutes("waiting/{adventureId}") {
+        fun createRoute(adventureId: String) = "waiting/$adventureId"
+    }
 
-    // TEST
-    object AiTestScreen  : ScreensRoutes("AiTestScreen")
+
+        // HOME
+    object HomeScreen: ScreensRoutes("HomeScreen")
 
 }

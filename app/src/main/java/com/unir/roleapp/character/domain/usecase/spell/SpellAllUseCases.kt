@@ -1,8 +1,8 @@
-package com.roleapp.character.domain.usecase.spell
+package com.unir.roleapp.character.domain.usecase.spell
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.Spell
-import com.roleapp.character.domain.repository.SpellRepository
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.Spell
+import com.unir.roleapp.character.domain.repository.SpellRepository
 import javax.inject.Inject
 
 class GetAllSpellsUseCase @Inject constructor(

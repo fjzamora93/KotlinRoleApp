@@ -1,10 +1,10 @@
-package com.roleapp.adventure.ui.viewmodels
+package com.unir.roleapp.adventure.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roleapp.adventure.data.model.Scene
-import com.roleapp.adventure.data.repository.SceneRepository
+import com.unir.roleapp.adventure.data.model.Scene
+import com.unir.roleapp.adventure.data.repository.SceneRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +34,6 @@ class SceneViewModel @Inject constructor(
         _scenes.value = emptyList() // Opcional: se puede mostrar un estado vacío mientras se realiza la operación
         viewModelScope.launch {
             val result = sceneRepository.addScene(scene)
-            println(result)
         }
     }
 
@@ -46,7 +45,6 @@ class SceneViewModel @Inject constructor(
                 _scenes.value = scenes
                 _currentScene.value = scenes.lastOrNull()
                 println(scenes)
-                println("Escenario actual: " + _currentScene.value)
 
                 Log.d("SceneViewModel", "Datos cargados correctamente ${_scenes.value}")
             }.onFailure { exception ->

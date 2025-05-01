@@ -9,7 +9,6 @@ import com.unir.roleapp.adventure.data.repository.DeleteAdventureUseCaseImpl
 import com.unir.roleapp.adventure.domain.usecase.CreateAdventureUseCase
 import com.unir.roleapp.adventure.domain.usecase.CreateAdventureUseCaseImpl
 import com.unir.roleapp.adventure.domain.usecase.DeleteAdventureUseCase
-
 import com.unir.roleapp.adventure.domain.usecase.SaveAdventureContextUseCase
 import com.unir.roleapp.adventure.domain.usecase.GenerateAdventureScriptUseCase
 import com.unir.roleapp.adventure.domain.usecase.GetAdventureUseCase
@@ -34,17 +33,17 @@ abstract class AdventureModule {
         impl: AdventureRepositoryImpl
     ): AdventureRepository
 
-    // 2️⃣ Use-case bindings
     @Binds
+    @Singleton
     abstract fun bindCreateAdventureUseCase(
         impl: CreateAdventureUseCaseImpl
     ): CreateAdventureUseCase
 
     @Binds
+    @Singleton
     abstract fun bindGetAdventureUseCase(
         impl: GetAdventureUseCaseImpl
     ): GetAdventureUseCase
-
     @Binds
     abstract fun bindSaveAdventureContextUseCase(
         impl: AdventureContextRepositoryImpl

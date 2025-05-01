@@ -1,8 +1,10 @@
-package com.roleapp.auth.viewmodels
+package com.unir.roleapp.auth.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roleapp.auth.domain.usecase.auth.AuthUseCases
+import com.unir.roleapp.auth.data.model.User
+import com.unir.roleapp.auth.domain.usecase.auth.AuthUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +22,10 @@ class AuthViewModel @Inject constructor(
     private val _userState = MutableStateFlow<UserState>(UserState.Idle)
     val userState: StateFlow<UserState> = _userState
 
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
+
 
     // Lanzar el autologin al inicializar el ViewModel
     init {
@@ -36,6 +42,12 @@ class AuthViewModel @Inject constructor(
                 onSuccess = { UserState.Success(it) },
                 onFailure = { UserState.Error(it.message ?: "Error en login") }
             )
+            if (userState.value is UserState.Error) {
+                val errorMessage = (userState.value as UserState.Error).message
+                _errorMessage.value = errorMessage
+                println("Error en login: $errorMessage")
+            }
+
         }
     }
 
@@ -56,8 +68,20 @@ class AuthViewModel @Inject constructor(
             val result = authUseCase.postSignup(email, password, confirmPassword)
             _userState.value = result.fold(
                 onSuccess = { UserState.Success(it) },
-                onFailure = { UserState.Error(it.message ?: "Error actualizando usuario") }
+                onFailure = {
+                    UserState.Error(it.message ?: "Error registrando usuario")
+                }
             )
+            if (userState.value is UserState.Error) {
+                val errorMessage = (userState.value as UserState.Error).message
+                _errorMessage.value = errorMessage
+                println("Error en signup: $errorMessage")
+            }
+
+            if (userState.value is UserState.Success) {
+                login(email, password)
+            }
+
         }
     }
 
@@ -70,6 +94,11 @@ class AuthViewModel @Inject constructor(
                 onFailure = { UserState.Error(it.message ?: "Error en logout") }
             )
         }
+    }
+
+    fun clearErrorMessage() {
+        _errorMessage.value = null
+
     }
 
 }

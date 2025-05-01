@@ -1,11 +1,11 @@
-package com.roleapp.character.ui.viewmodels
+package com.unir.roleapp.character.ui.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.Spell
-import com.roleapp.character.domain.usecase.spell.SpellUseCases
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.Spell
+import com.unir.roleapp.character.domain.usecase.spell.SpellUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,10 +26,8 @@ class SpellViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             val result = spellUseCase.getSpellsByLevelAndRoleClass(currentCharacter)
-            println("La clase del personaje es:  "+ currentCharacter.rolClass.toString())
             result.onSuccess {
                     spells -> _spellList.value = spells
-                println("VIendo hechizos disponibles para el personaje: $spells")
 
             }.onFailure {
                 println("ALgo salió mal: ${it.message}")

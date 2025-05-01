@@ -1,9 +1,9 @@
-package com.roleapp.character.data.repository
+package com.unir.roleapp.character.data.repository
 
-import com.roleapp.character.data.model.local.Spell
-import com.roleapp.character.data.model.remote.SpellDTO
-import com.roleapp.character.data.service.SpellApiService
-import com.roleapp.character.domain.repository.SpellRepository
+import com.unir.roleapp.character.data.model.local.Spell
+import com.unir.roleapp.character.data.model.remote.SpellDTO
+import com.unir.roleapp.character.data.service.SpellApiService
+import com.unir.roleapp.character.domain.repository.SpellRepository
 import javax.inject.Inject
 
 

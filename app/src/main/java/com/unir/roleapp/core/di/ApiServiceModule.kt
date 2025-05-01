@@ -1,10 +1,10 @@
-package com.roleapp.core.di
-import com.roleapp.auth.data.service.AuthApiService
-import com.roleapp.auth.data.service.UserApiService
-import com.roleapp.character.data.service.CharacterApiService
-import com.roleapp.character.data.service.ItemApiService
-import com.roleapp.character.data.service.SkillApiService
-import com.roleapp.character.data.service.SpellApiService
+package com.unir.roleapp.core.di
+import com.unir.roleapp.auth.data.service.AuthApiService
+import com.unir.roleapp.auth.data.service.UserApiService
+import com.unir.roleapp.character.data.service.CharacterApiService
+import com.unir.roleapp.character.data.service.ItemApiService
+import com.unir.roleapp.character.data.service.SkillApiService
+import com.unir.roleapp.character.data.service.SpellApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

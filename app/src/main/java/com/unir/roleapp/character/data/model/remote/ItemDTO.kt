@@ -1,6 +1,8 @@
-package com.roleapp.character.data.model.remote
+package com.unir.roleapp.character.data.model.remote
 
-import com.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.data.model.local.ItemCategory
+import com.unir.roleapp.character.data.model.local.StatName
 
 data class ItemDTO(
     val id: Int,
@@ -10,7 +12,7 @@ data class ItemDTO(
     val goldValue: Int,
     val category: String,
     val dice: Int,
-    val diceAmount: Int,
+    val dicesAmount: Int,
     val statValue: Int,
     val statType: String,
     val gameSession: Int?,
@@ -26,11 +28,11 @@ data class ItemDTO(
             description = this.description,
             imgUrl = this.imgUrl ?: "",
             goldValue = this.goldValue,
-            category = this.category,
+            category = ItemCategory.getItemCategory(this.category),
             dice = this.dice,
             statValue = this.statValue,
-            statType = this.statType,
-            diceAmount = this.diceAmount,
+            statType = StatName.getStatName(statType),
+            diceAmount = this.dicesAmount,
             gameSession = this.gameSession,
 
             )

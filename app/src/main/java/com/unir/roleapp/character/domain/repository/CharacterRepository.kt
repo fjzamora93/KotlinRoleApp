@@ -1,7 +1,7 @@
-package com.roleapp.character.domain.repository
+package com.unir.roleapp.character.domain.repository
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.CharacterSkillCrossRef
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.CharacterSkillCrossRef
 
 interface CharacterRepository {
     suspend fun getCharactersByUserId(userId: Int): Result<List<CharacterEntity>>

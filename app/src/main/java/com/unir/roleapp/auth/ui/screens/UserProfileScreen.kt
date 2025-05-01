@@ -1,12 +1,16 @@
-package com.roleapp.auth.ui.screens
+package com.unir.roleapp.auth.ui.screens
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -14,44 +18,79 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.di.LocalAuthViewModel
-import com.roleapp.core.navigation.NavigationViewModel
-import com.roleapp.core.navigation.ScreensRoutes
-import com.roleapp.core.ui.components.buttons.BackButton
-import com.roleapp.core.ui.layout.MainLayout
-import com.roleapp.auth.viewmodels.AuthViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.unir.roleapp.auth.data.model.User
+import com.unir.roleapp.core.di.LocalNavigationViewModel
+import com.unir.roleapp.core.di.LocalAuthViewModel
+import com.unir.roleapp.core.navigation.NavigationViewModel
+import com.unir.roleapp.core.navigation.ScreensRoutes
+import com.unir.roleapp.core.ui.components.buttons.BackButton
+import com.unir.roleapp.core.ui.layout.MainLayout
+import com.unir.roleapp.auth.viewmodels.AuthViewModel
+import com.unir.roleapp.auth.viewmodels.UserState
+import com.unir.roleapp.core.di.LocalLanguageSetter
+import com.unir.roleapp.core.ui.components.common.DefaultColumn
+import com.unir.roleapp.core.ui.components.common.DefaultRow
+import com.unir.roleapp.R
+import com.unir.roleapp.core.ui.components.animations.CrossSwordsAnimation
+import com.unir.roleapp.core.ui.components.common.MainBanner
 
 @Composable
-fun UserProfileScreen() {
+fun UserProfileScreen(
+    selectedLang: String,
+    onLanguageSelected: (String) -> Unit,
+) {
     MainLayout(){
         Column(){
-            UserProfileBody()
-            BackButton()
+            MainBanner()
+
+            UserProfileBody(selectedLang, onLanguageSelected)
+            /*BackButton()*/
         }
     }
 }
 
 @Composable
 fun UserProfileBody(
-    authViewModel: AuthViewModel = LocalAuthViewModel.current
+    selectedLang: String,
+    onLanguageSelected: (String) -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel(),
+    navigation: NavigationViewModel = LocalNavigationViewModel.current
 ) {
     val userState by authViewModel.userState.collectAsState()
 
     when (userState) {
-        is com.roleapp.auth.viewmodels.UserState.Loading -> CircularProgressIndicator()
-        is com.roleapp.auth.viewmodels.UserState.Success -> UserProfileDetail(user = (userState as com.roleapp.auth.viewmodels.UserState.Success).user)
-        is com.roleapp.auth.viewmodels.UserState.Error -> Text("Error: ${(userState as com.roleapp.auth.viewmodels.UserState.Error).message}")
-        is com.roleapp.auth.viewmodels.UserState.LoggedOut -> Text("Sesión cerrada")
-        is com.roleapp.auth.viewmodels.UserState.Deleted -> Text("Cuenta eliminada")
-        else -> Text("Usuario no registrado")
+        is UserState.Loading -> DefaultColumn{  CrossSwordsAnimation() }
+        is UserState.Success -> UserProfileDetail(
+            user = (userState as UserState.Success).user,
+            selectedLang = selectedLang,
+            onLanguageSelected = onLanguageSelected
+        )
+        is UserState.Error -> {
+            navigation.navigate(ScreensRoutes.LoginScreen.route)
+        }
+
+        is UserState.LoggedOut -> navigation.navigate(ScreensRoutes.LoginScreen.route)
+
+        else -> {
+
+        }
     }
 }
 
@@ -59,11 +98,13 @@ fun UserProfileBody(
 
 @Composable
 fun UserProfileDetail(
-    user: com.roleapp.auth.data.model.User,
+    selectedLang: String,
+    onLanguageSelected: (String) -> Unit,
+    user: User,
     viewModel: AuthViewModel = LocalAuthViewModel.current,
     navigation : NavigationViewModel = LocalNavigationViewModel.current
 ){
-
+    val textColor: Color = colorResource(id = R.color.white);
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -71,19 +112,43 @@ fun UserProfileDetail(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            LanguageFlag(
+                emoji = "🇪🇸",
+                isSelected = selectedLang == "es" ,
+                onClick = {
+                    onLanguageSelected("es")
+                }
+            )
+
+            LanguageFlag(
+                emoji = "🇬🇧",
+                isSelected = selectedLang == "en",
+                onClick = {
+                    onLanguageSelected("en")                }
+            )
+        }
+
         Text(
-            text = "Perfil de Usuario",
+            text = stringResource(id = R.string.profile_title),
             style = MaterialTheme.typography.titleMedium,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            color = textColor
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Nombre: ${user.id}",
-            style = MaterialTheme.typography.titleSmall
+            text = "${user.id}",
+            style = MaterialTheme.typography.titleSmall,
+            color = textColor
         )
         Text(
-            text = "Email: ${user.email}",
-            style = MaterialTheme.typography.titleSmall
+            text = "${user.email}",
+            style = MaterialTheme.typography.titleSmall,
+            color = textColor
         )
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -100,10 +165,35 @@ fun UserProfileDetail(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Cerrar sesión",
+                text = stringResource(id = R.string.logout),
                 fontSize = 16.sp,
             )
         }
 
     }
+}
+
+
+
+@Composable
+fun LanguageFlag(
+    emoji: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    val borderModifier = if (isSelected) {
+        Modifier
+            .border(2.dp, Color.White, shape = CircleShape)
+            .padding(16.dp)
+    } else {
+        Modifier.padding(4.dp)
+    }
+
+    Text(
+        text = emoji,
+        fontSize = 32.sp,
+        modifier = borderModifier
+            .clip(CircleShape)
+            .clickable { onClick() }
+    )
 }

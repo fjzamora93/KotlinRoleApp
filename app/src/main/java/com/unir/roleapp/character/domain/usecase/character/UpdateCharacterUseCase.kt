@@ -1,7 +1,9 @@
-package com.roleapp.character.domain.usecase.character
+package com.unir.roleapp.character.domain.usecase.character
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.domain.repository.CharacterRepository
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.domain.repository.CharacterRepository
+import com.unir.roleapp.character.domain.usecase.character.generateutils.calculateCharacterActionPoints
+import com.unir.roleapp.character.domain.usecase.character.generateutils.calculateCharacterHealth
 import javax.inject.Inject
 
 class UpdateCharacterUseCase @Inject constructor(
@@ -9,7 +11,16 @@ class UpdateCharacterUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(character: CharacterEntity): Result<CharacterEntity> {
 
-        val updatedCharacter = character.copy(updatedAt = System.currentTimeMillis())
+        val hp = calculateCharacterHealth(character)
+        val ap = calculateCharacterActionPoints(character)
+
+        val updatedCharacter = character.copy(
+            ap = ap,
+            hp = hp,
+            updatedAt = System.currentTimeMillis()
+        )
+
+
         return try {
             repository.saveCharacter(updatedCharacter)
         } catch (e: Exception) {

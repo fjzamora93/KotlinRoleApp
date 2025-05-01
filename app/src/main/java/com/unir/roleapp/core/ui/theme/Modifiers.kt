@@ -1,4 +1,4 @@
-package com.roleapp.core.ui.theme
+package com.unir.roleapp.core.ui.theme
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

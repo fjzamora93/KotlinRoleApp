@@ -6,7 +6,7 @@ import com.unir.roleapp.adventure.domain.usecase.SaveAdventureContextUseCase
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AdventureContextRepositoryImpl @Inject constructor(
+class   AdventureContextRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : SaveAdventureContextUseCase {
 

@@ -1,7 +1,7 @@
-package com.roleapp.character.domain.usecase.item
+package com.unir.roleapp.character.domain.usecase.item
 
-import com.roleapp.character.data.model.local.Item
-import com.roleapp.character.domain.repository.ItemRepository
+import com.unir.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.domain.repository.ItemRepository
 import javax.inject.Inject
 
 /** DEntro del Use case podemos implementar la lógica por la cuál se van a recuperar los items.

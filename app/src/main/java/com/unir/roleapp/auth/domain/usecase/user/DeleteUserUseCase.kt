@@ -1,6 +1,6 @@
-package com.roleapp.auth.domain.usecase.user
+package com.unir.roleapp.auth.domain.usecase.user
 
-import com.roleapp.auth.domain.repository.UserRepository
+import com.unir.roleapp.auth.domain.repository.UserRepository
 import javax.inject.Inject
 
 class DeleteUserUseCase @Inject constructor(

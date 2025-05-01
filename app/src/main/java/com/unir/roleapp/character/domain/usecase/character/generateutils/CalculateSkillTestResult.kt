@@ -1,7 +1,7 @@
-package com.roleapp.character.domain.usecase.character.generateutils
+package com.unir.roleapp.character.domain.usecase.character.generateutils
 
-import com.roleapp.character.data.model.local.CharacterSkillCrossRef
-import com.roleapp.character.ui.screens.characterform.components.PersonalityTestForm
+import com.unir.roleapp.character.data.model.local.CharacterSkillCrossRef
+import com.unir.roleapp.character.ui.screens.characterform.components.PersonalityTestForm
 
 
 fun calculateTestResult(

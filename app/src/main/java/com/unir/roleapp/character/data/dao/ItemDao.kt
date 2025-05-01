@@ -1,4 +1,4 @@
-package com.roleapp.character.data.dao
+package com.unir.roleapp.character.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,9 +6,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.roleapp.character.data.model.local.CharacterItemCrossRef
-import com.roleapp.character.data.model.local.CharacterItemDetail
-import com.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.data.model.local.CharacterItemCrossRef
+import com.unir.roleapp.character.data.model.local.CharacterItemDetail
+import com.unir.roleapp.character.data.model.local.Item
 
 @Dao
 interface ItemDao {
@@ -57,8 +57,8 @@ interface ItemDao {
     @Query("DELETE FROM item_table WHERE id = :itemId")
     suspend fun deleteItemById(itemId: Int)
 
-    @Delete
-    suspend fun deleteItemFromCharacter(characterItem: CharacterItemCrossRef)
+    @Query("DELETE FROM character_item_cross_ref WHERE characterId = :characterId AND itemId = :itemId")
+    suspend fun deleteItemFromCharacter(characterId: Long, itemId: Int)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(items: List<Item>)

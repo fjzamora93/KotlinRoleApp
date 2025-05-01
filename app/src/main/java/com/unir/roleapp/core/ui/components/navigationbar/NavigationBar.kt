@@ -1,4 +1,4 @@
-package com.roleapp.core.ui.components.navigationbar
+package com.unir.roleapp.core.ui.components.navigationbar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +14,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Castle
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalLibrary
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -26,42 +28,48 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.navigation.NavigationViewModel
-import com.roleapp.core.navigation.ScreensRoutes
+import com.unir.roleapp.core.di.LocalNavigationViewModel
+import com.unir.roleapp.core.navigation.NavigationViewModel
+import com.unir.roleapp.core.navigation.ScreensRoutes
+import com.unir.roleapp.R
 
 
 val navigationItems = listOf(
     NavigationItem(
-        title = "Escenarios",
+        title = "Aventuras",
         icon = Icons.Default.LocalLibrary,
         route = ScreensRoutes.AdventureMainScreen.route
-        //route = ScreensRoutes.CreateAdventureScreen.route
     ),
     NavigationItem(
-        title = "Perfil",
-        icon = Icons.Default.Person,
-        route = ScreensRoutes.UserProfileScreen.route
+        title = "Escenarios",
+        icon = Icons.Default.Castle,
+        route = ScreensRoutes.TemplateAdventureScreen.route
     ),
+    NavigationItem(
+        title = "Home",
+        icon = Icons.Default.Home,
+        route = ScreensRoutes.HomeScreen.route
+    ),
+
     NavigationItem(
         title = "Personajes",
         icon = Icons.Default.SupervisedUserCircle,
         route = ScreensRoutes.CharacterListScreen.route
     ),
     NavigationItem(
-        title = "Setting",
+        title = "Perfil",
         icon = Icons.Default.Settings,
-        route = ScreensRoutes.FontTemplateScreen.route
+        route = ScreensRoutes.UserProfileScreen.route
     )
 )
 
 
 @Composable
 fun NavigationBar(
-    containerColor: Color = Color.White,
-    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
-    modifier: Modifier = Modifier
+    containerColor: Color = colorResource(id = R.color.dark_blue),
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
 ) {
     val currentRoute by navigationViewModel.currentRoute.collectAsState()
 
@@ -69,7 +77,7 @@ fun NavigationBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(containerColor)
-            .padding(vertical = 8.dp),
+            .padding(bottom = 10.dp, top = 0.dp, start = 10.dp, end = 10.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -85,13 +93,13 @@ fun NavigationBar(
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.title,
-                        tint = if (isSelected) Color.Black else Color.Gray
+                        tint = if (isSelected) Color.White else Color.Gray
                     )
                 },
                 label = {
                     Text(
                         text = item.title,
-                        color = if (isSelected) Color.Black else Color.Gray
+                        color = if (isSelected) Color.White else Color.Gray
                     )
                 },
             )
@@ -105,14 +113,14 @@ fun NavigationBarItem(
     onClick: () -> Unit,
     icon: @Composable () -> Unit,
     label: @Composable () -> Unit,
-    containerColor: Color = Color.White,
+    /*containerColor: Color = Color.White,
     selectedIconColor: Color = MaterialTheme.colorScheme.surface,
     selectedTextColor: Color = Color.Black,
-    unselectedTextColor: Color = Color.Gray,
+    unselectedTextColor: Color = Color.Gray,*/
     indicatorColor: Color = MaterialTheme.colorScheme.primary
 ) {
     val backgroundColor = if (selected) indicatorColor.copy(alpha = 0.1f) else Color.Transparent
-    val iconColor = if (selected) selectedIconColor else unselectedTextColor
+    /*val iconColor = if (selected) selectedIconColor else unselectedTextColor*/
 
     Box(
         modifier = Modifier
@@ -137,7 +145,7 @@ fun NavigationBarItem(
                 icon()
             }
             Spacer(modifier = Modifier.height(4.dp))
-            label()
+            if (selected) label()
         }
     }
 }

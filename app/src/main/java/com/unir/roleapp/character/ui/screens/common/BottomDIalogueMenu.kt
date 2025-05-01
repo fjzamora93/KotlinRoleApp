@@ -1,4 +1,4 @@
-package com.roleapp.character.ui.screens.common
+package com.unir.roleapp.character.ui.screens.common
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

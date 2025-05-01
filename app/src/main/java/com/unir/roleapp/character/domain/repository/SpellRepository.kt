@@ -1,6 +1,6 @@
-package com.roleapp.character.domain.repository
+package com.unir.roleapp.character.domain.repository
 
-import com.roleapp.character.data.model.local.Spell
+import com.unir.roleapp.character.data.model.local.Spell
 
 interface SpellRepository {
 

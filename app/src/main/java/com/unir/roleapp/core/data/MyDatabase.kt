@@ -1,21 +1,21 @@
-package com.roleapp.core.data
+package com.unir.roleapp.core.data
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.roleapp.auth.data.dao.UserDao
-import com.roleapp.auth.data.model.User
-import com.roleapp.character.data.dao.CharacterDao
-import com.roleapp.character.data.dao.ItemDao
-import com.roleapp.character.data.dao.SkillDao
-import com.roleapp.character.data.dao.SpellDao
-import com.roleapp.character.data.model.local.Item
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.CharacterItemCrossRef
-import com.roleapp.character.data.model.local.Skill
-import com.roleapp.character.data.model.local.CharacterSkillCrossRef
-import com.roleapp.character.data.model.local.Spell
+import com.unir.roleapp.auth.data.dao.UserDao
+import com.unir.roleapp.auth.data.model.User
+import com.unir.roleapp.character.data.dao.CharacterDao
+import com.unir.roleapp.character.data.dao.ItemDao
+import com.unir.roleapp.character.data.dao.SkillDao
+import com.unir.roleapp.character.data.dao.SpellDao
+import com.unir.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.CharacterItemCrossRef
+import com.unir.roleapp.character.data.model.local.Skill
+import com.unir.roleapp.character.data.model.local.CharacterSkillCrossRef
+import com.unir.roleapp.character.data.model.local.Spell
 
 @Database(entities = [
     User::class,
@@ -25,7 +25,7 @@ import com.roleapp.character.data.model.local.Spell
     Spell::class,
     CharacterItemCrossRef::class,
     CharacterSkillCrossRef::class,
-], version = 32)
+], version = 34)
 abstract class MyDatabase: RoomDatabase() {
     abstract fun getItemDao(): ItemDao
     abstract fun characterDao(): CharacterDao

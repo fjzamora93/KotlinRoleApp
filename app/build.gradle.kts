@@ -152,4 +152,9 @@ dependencies {
     // Arrow
     implementation("io.arrow-kt:arrow-core:1.2.4")
     implementation("io.arrow-kt:arrow-fx-coroutines:1.2.4")
+
+    // Accompanist Pager
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+
 }

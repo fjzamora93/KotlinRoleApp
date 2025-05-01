@@ -1,9 +1,9 @@
-package com.roleapp.character.data.model.remote
+package com.unir.roleapp.character.data.model.remote
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.Race
-import com.roleapp.character.data.model.local.RolClass
-import com.roleapp.character.data.model.local.SkillValue
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.Race
+import com.unir.roleapp.character.data.model.local.RolClass
+import com.unir.roleapp.character.data.model.local.SkillValue
 
 data class CharacterResponse(
     val id: Long,

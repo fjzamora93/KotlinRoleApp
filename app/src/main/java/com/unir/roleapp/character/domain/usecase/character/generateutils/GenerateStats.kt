@@ -1,9 +1,10 @@
-package com.roleapp.character.domain.usecase.character.generateutils
+package com.unir.roleapp.character.domain.usecase.character.generateutils
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.RolClass
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.RolClass
 
 
+/** La suma máxima de todos los stats debe ser de 72 */
 fun generateStats(character: CharacterEntity): CharacterEntity {
 
     when (character.rolClass) {

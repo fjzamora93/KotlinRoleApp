@@ -1,9 +1,9 @@
-package com.roleapp.character.domain.usecase.item
+package com.unir.roleapp.character.domain.usecase.item
 
-import com.roleapp.character.data.model.local.Item
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.CharacterItemDetail
-import com.roleapp.character.domain.repository.ItemRepository
+import com.unir.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.CharacterItemDetail
+import com.unir.roleapp.character.domain.repository.ItemRepository
 import javax.inject.Inject
 
 
@@ -26,6 +26,10 @@ class DestroyItemUseCase @Inject constructor(
             var quantity: Int = itemRepository.getItemDetail(character.id, item.id).getOrThrow().quantity
             quantity -= 1
             println("La cantidad que se va a modificar es... $quantity")
+
+            if (quantity >= 0) {
+                return itemRepository.deleteItemFromCharacter(character.id, item.id)
+            }
 
             return itemRepository.addItemToCharacter(character.id, item, quantity)
 

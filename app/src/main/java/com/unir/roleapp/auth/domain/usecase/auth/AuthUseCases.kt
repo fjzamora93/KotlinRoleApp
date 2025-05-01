@@ -1,4 +1,4 @@
-package com.roleapp.auth.domain.usecase.auth
+package com.unir.roleapp.auth.domain.usecase.auth
 
 
 /**

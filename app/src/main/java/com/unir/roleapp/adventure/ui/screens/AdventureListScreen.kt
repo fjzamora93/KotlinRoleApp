@@ -1,4 +1,4 @@
-package com.roleapp.adventure.ui.screens
+package com.unir.roleapp.adventure.ui.screens
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -30,18 +30,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.roleapp.core.ui.components.common.DefaultRow
-import com.roleapp.core.ui.layout.MainLayout
-import com.roleapp.adventure.ui.viewmodels.SceneViewModel
+import com.unir.roleapp.core.ui.components.common.DefaultRow
+import com.unir.roleapp.core.ui.layout.MainLayout
+import com.unir.roleapp.adventure.ui.viewmodels.SceneViewModel
 import com.unir.roleapp.R
 
 
 // TODO: NO HAY POR QUÉ USAR EL MAIN LAYOUT (que lo que tiene dentro es un Scaffold). Como alternativa, podemos crear un nuevo Scaffold.
 @Composable
 fun TemplateAdventureScreen() {
-    LaunchedEffect(Unit) {
-        Log.d("CharacterScreen", "NavController está listo")
-    }
+
 
     MainLayout {
         Box(

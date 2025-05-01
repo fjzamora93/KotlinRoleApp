@@ -1,9 +1,11 @@
-package com.roleapp.character.data.model.local
+package com.unir.roleapp.character.data.model.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.roleapp.character.data.model.remote.ItemDTO
+import com.unir.roleapp.character.data.model.remote.ItemDTO
+import com.unir.roleapp.character.data.model.local.ItemCategory
+import com.unir.roleapp.character.data.model.local.StatName
 
 @Entity(tableName = "item_table")
 data class Item(
@@ -11,20 +13,22 @@ data class Item(
     @ColumnInfo(name = "id")
     val id: Int,
 
-    @ColumnInfo(name = "id_game_session")  val gameSession: Int?,
+    @ColumnInfo(name = "id_game_session") var gameSession: Int?,
 
     // DEMÁS ATRIBUTOS
     @ColumnInfo(name = "name")  val name: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "imgUrl") val imgUrl: String,
     @ColumnInfo(name = "goldValue") val goldValue: Int = 0,
-    @ColumnInfo(name = "category") val category: String,
+    @ColumnInfo(name = "category") val category: ItemCategory,
     @ColumnInfo(name = "dice") val dice: Int,
-    @ColumnInfo(name = "diceAmount") val diceAmount: Int = 1,
-    @ColumnInfo(name = "statType") val statType: String,
+    @ColumnInfo(name = "diceAmount") val diceAmount: Int,
+    @ColumnInfo(name = "statType") val statType: StatName,
     @ColumnInfo(name = "statValue") val statValue: Int,
 
     ){
+
+
     fun toApiItem(): ItemDTO {
         return ItemDTO(
             id = this.id,
@@ -33,11 +37,11 @@ data class Item(
             description = this.description,
             imgUrl = this.imgUrl,
             goldValue = this.goldValue,
-            category = this.category,
+            category = ItemCategory.getString(this.category),
             dice = this.dice,
-            diceAmount = this.diceAmount,
+            dicesAmount = this.diceAmount,
             statValue = this.statValue,
-            statType = this.statType
+            statType = StatName.getString(this.statType)
         )
     }
 }

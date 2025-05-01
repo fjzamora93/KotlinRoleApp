@@ -1,4 +1,4 @@
-package com.roleapp.character.domain.usecase.skill
+package com.unir.roleapp.character.domain.usecase.skill
 
 import javax.inject.Inject
 

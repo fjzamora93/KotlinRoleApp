@@ -1,4 +1,4 @@
-package com.roleapp.core.navigation
+package com.unir.roleapp.core.navigation
 
 sealed class NavigationEvent {
     data class Navigate(val route: String) : NavigationEvent()

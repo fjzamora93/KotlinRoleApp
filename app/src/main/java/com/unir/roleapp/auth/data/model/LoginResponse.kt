@@ -1,4 +1,4 @@
-package com.roleapp.auth.data.model
+package com.unir.roleapp.auth.data.model
 
 import java.util.Date
 

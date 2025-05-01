@@ -1,10 +1,10 @@
-package com.roleapp.auth.data.repository
+package com.unir.roleapp.auth.data.repository
 
-import com.roleapp.auth.data.dao.UserDao
-import com.roleapp.auth.data.model.User
-import com.roleapp.auth.data.service.UserApiService
-import com.roleapp.auth.domain.repository.UserRepository
-import com.roleapp.auth.security.TokenManager
+import com.unir.roleapp.auth.data.dao.UserDao
+import com.unir.roleapp.auth.data.model.User
+import com.unir.roleapp.auth.data.service.UserApiService
+import com.unir.roleapp.auth.domain.repository.UserRepository
+import com.unir.roleapp.auth.security.TokenManager
 import javax.inject.Inject
 
 class UserRepositoryImpl  @Inject constructor(
@@ -23,7 +23,6 @@ class UserRepositoryImpl  @Inject constructor(
                 // Si no hay token, intentar obtener el usuario desde la base de datos local
                 val localUser = userDao.getUser()
                 if (localUser != null) {
-                    println("USUARIO LOCAL: $localUser")
                     return Result.success(localUser)
                 } else {
                     // Si no hay usuario local, devolver un error adecuado
@@ -33,7 +32,6 @@ class UserRepositoryImpl  @Inject constructor(
 
             // Si hay token, intentar obtener el usuario desde la API
             val response = api.getUser("Bearer $token")
-            println("Tratando de obtener usuario desde API")
 
             if (response.isSuccessful && response.body() != null) {
                 return Result.success(response.body()!!.toUserEntity())
@@ -41,7 +39,6 @@ class UserRepositoryImpl  @Inject constructor(
                 // Si la API falla, intenta obtener el usuario local
                 val localUser = userDao.getUser()
                 if (localUser != null) {
-                    println("USUARIO LOCAL: $localUser")
                     return Result.success(localUser)
                 } else {
                     // Si no hay usuario local, devolver un error adecuado

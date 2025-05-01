@@ -1,4 +1,4 @@
-package com.roleapp.auth.domain.usecase.user
+package com.unir.roleapp.auth.domain.usecase.user
 
 data class UserUseCase(
     val getUser: GetUserUseCase,

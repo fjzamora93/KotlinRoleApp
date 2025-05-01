@@ -1,8 +1,8 @@
-package com.roleapp.character.domain.usecase.item
+package com.unir.roleapp.character.domain.usecase.item
 
-import com.roleapp.character.data.model.local.Item
-import com.roleapp.character.domain.repository.ItemRepository
-import com.roleapp.character.domain.usecase.character.CharacterUseCases
+import com.unir.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.domain.repository.ItemRepository
+import com.unir.roleapp.character.domain.usecase.character.CharacterUseCases
 import javax.inject.Inject
 
 class GetItemsBySessionUseCase @Inject constructor(

@@ -1,6 +1,6 @@
-package com.roleapp.character.data.model.local
+package com.unir.roleapp.character.data.model.local
 
-import com.roleapp.character.data.model.remote.ApiCharacterItem
+import com.unir.roleapp.character.data.model.remote.ApiCharacterItem
 
 
 data class CharacterItemDetail(

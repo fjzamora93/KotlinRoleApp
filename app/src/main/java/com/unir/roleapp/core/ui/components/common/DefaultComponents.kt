@@ -1,4 +1,4 @@
-package com.roleapp.core.ui.components.common
+package com.unir.roleapp.core.ui.components.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,8 +35,11 @@ fun DefaultColumn(
     modifier: Modifier = Modifier.fillMaxWidth().padding(16.dp),
     content: @Composable ColumnScope.() -> Unit
 ){
+
     Column(
         modifier = modifier,
-        content = content
+        content = content,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     )
 }

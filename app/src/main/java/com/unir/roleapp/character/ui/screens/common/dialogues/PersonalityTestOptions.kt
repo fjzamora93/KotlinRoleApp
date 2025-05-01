@@ -1,4 +1,4 @@
-package com.roleapp.character.ui.screens.common.dialogues
+package com.unir.roleapp.character.ui.screens.common.dialogues
 
 object PersonalityTestOptions {
     val combatOptions = listOf(

@@ -8,10 +8,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.unir.roleapp.core.navigation.ScreensRoutes
 
 
 @Composable
 fun CreateAdventureScreen(
+    navController: NavController,
     viewModel: CreateAdventureViewModel = hiltViewModel(),
     onNext: (String) -> Unit
 ) {
@@ -50,9 +53,12 @@ fun CreateAdventureScreen(
 
         Button(onClick = {
             viewModel.createAdventure { adv ->
-                onNext(adv.id)  // aquí recibes el ID
+                navController.navigate(ScreensRoutes.WaitingRoomScreen.createRoute(adv.id))
             }
-        }) {
+            },
+            enabled = !loading && title.isNotBlank() && description.isNotBlank(),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text("Siguiente")
         }
     }

@@ -1,8 +1,8 @@
-package com.roleapp.character.domain.usecase.character.generateutils
+package com.unir.roleapp.character.domain.usecase.character.generateutils
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.CharacterSkillCrossRef
-import com.roleapp.character.data.model.local.RolClass
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.CharacterSkillCrossRef
+import com.unir.roleapp.character.data.model.local.RolClass
 
 fun adjustCharacterSkills(
     character: CharacterEntity, skillCrossRefList: List<CharacterSkillCrossRef>

@@ -1,4 +1,4 @@
-package com.roleapp.auth.data.dao
+package com.unir.roleapp.auth.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.roleapp.auth.data.model.User
+import com.unir.roleapp.auth.data.model.User
 
 @Dao
 interface UserDao {

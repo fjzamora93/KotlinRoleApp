@@ -1,28 +1,30 @@
-package com.roleapp.core.di
-import com.roleapp.adventure.data.repository.SceneRepository
-import com.roleapp.auth.data.dao.UserDao
-import com.roleapp.auth.data.repository.AuthRepositoryImpl
-import com.roleapp.auth.data.repository.UserRepositoryImpl
-import com.roleapp.auth.data.service.AuthApiService
-import com.roleapp.auth.data.service.UserApiService
-import com.roleapp.auth.domain.repository.AuthRepository
-import com.roleapp.auth.domain.repository.UserRepository
-import com.roleapp.auth.security.TokenManager
-import com.roleapp.core.data.MyDatabase
-import com.roleapp.character.data.dao.ItemDao
-import com.roleapp.character.data.dao.SkillDao
-import com.roleapp.character.data.repository.CharacterRepositoryImpl
-import com.roleapp.character.data.repository.ItemRepositoryImpl
-import com.roleapp.character.data.repository.SkillRepositoryImpl
-import com.roleapp.character.data.repository.SpellRepositoryImpl
-import com.roleapp.character.data.service.CharacterApiService
-import com.roleapp.character.data.service.ItemApiService
-import com.roleapp.character.data.service.SkillApiService
-import com.roleapp.character.data.service.SpellApiService
-import com.roleapp.character.domain.repository.CharacterRepository
-import com.roleapp.character.domain.repository.ItemRepository
-import com.roleapp.character.domain.repository.SkillRepository
-import com.roleapp.character.domain.repository.SpellRepository
+package com.unir.roleapp.core.di
+import com.google.firebase.firestore.FirebaseFirestore
+import com.unir.roleapp.adventure.data.repository.SceneRepository
+import com.unir.roleapp.auth.data.dao.UserDao
+import com.unir.roleapp.auth.data.repository.AuthRepositoryImpl
+import com.unir.roleapp.auth.data.repository.UserRepositoryImpl
+import com.unir.roleapp.auth.data.service.AuthApiService
+import com.unir.roleapp.auth.data.service.UserApiService
+import com.unir.roleapp.auth.domain.repository.AuthRepository
+import com.unir.roleapp.auth.domain.repository.UserRepository
+import com.unir.roleapp.auth.security.TokenManager
+import com.unir.roleapp.core.data.MyDatabase
+import com.unir.roleapp.character.data.dao.ItemDao
+import com.unir.roleapp.character.data.dao.SkillDao
+import com.unir.roleapp.character.data.repository.CharacterRepositoryImpl
+import com.unir.roleapp.character.data.repository.ItemRepositoryImpl
+import com.unir.roleapp.character.data.repository.SkillRepositoryImpl
+import com.unir.roleapp.character.data.repository.SpellRepositoryImpl
+import com.unir.roleapp.character.data.service.CharacterApiService
+import com.unir.roleapp.character.data.service.ItemApiService
+import com.unir.roleapp.character.data.service.SkillApiService
+import com.unir.roleapp.character.data.service.SpellApiService
+import com.unir.roleapp.character.domain.repository.CharacterRepository
+import com.unir.roleapp.character.domain.repository.ItemRepository
+import com.unir.roleapp.character.domain.repository.SkillRepository
+import com.unir.roleapp.character.domain.repository.SpellRepository
+import com.unir.roleapp.adventure.data.service.UserPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -90,9 +92,12 @@ object RepositoryModule {
     fun provideAuthRepository(
         api: AuthApiService,
         userDao: UserDao,
-        tokenManager: TokenManager
+        tokenManager: TokenManager,
+        userPreferences: UserPreferences
     ): AuthRepository {
-        return AuthRepositoryImpl(api, userDao, tokenManager)
+        return AuthRepositoryImpl(api, userDao, tokenManager, userPreferences)
     }
+
+
 
 }

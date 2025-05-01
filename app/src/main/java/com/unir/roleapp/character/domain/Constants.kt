@@ -1,4 +1,4 @@
-package com.roleapp.character.domain
+package com.unir.roleapp.character.domain
 
 object Constants {
 

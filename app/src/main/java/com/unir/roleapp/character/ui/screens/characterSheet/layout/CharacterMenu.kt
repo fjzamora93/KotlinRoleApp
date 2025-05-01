@@ -1,4 +1,4 @@
-package com.roleapp.character.ui.screens.common.layout
+package com.unir.roleapp.character.ui.screens.common.layout
 
 
 import androidx.compose.foundation.background
@@ -27,11 +27,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.navigation.NavigationViewModel
-import com.roleapp.core.navigation.ScreensRoutes
-import com.roleapp.core.ui.layout.MenuOption
-import com.roleapp.character.ui.viewmodels.CharacterViewModel
+import com.unir.roleapp.core.di.LocalNavigationViewModel
+import com.unir.roleapp.core.navigation.NavigationViewModel
+import com.unir.roleapp.core.navigation.ScreensRoutes
+import com.unir.roleapp.core.ui.layout.MenuOption
+import com.unir.roleapp.character.ui.viewmodels.CharacterViewModel
 
 
 @Composable

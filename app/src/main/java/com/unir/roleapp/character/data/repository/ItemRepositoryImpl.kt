@@ -1,15 +1,15 @@
-package com.roleapp.character.data.repository
+package com.unir.roleapp.character.data.repository
 
 import android.util.Log
-import com.roleapp.character.data.dao.ItemDao
-import com.roleapp.character.data.model.local.CharacterItemCrossRef
-import com.roleapp.character.data.model.local.Item
-import com.roleapp.character.data.model.remote.ApiCharacterItem
-import com.roleapp.character.data.model.local.CharacterItemDetail
-import com.roleapp.character.data.model.remote.ItemDTO
-import com.roleapp.character.data.model.remote.toCharacterItemDetail
-import com.roleapp.character.data.service.ItemApiService
-import com.roleapp.character.domain.repository.ItemRepository
+import com.unir.roleapp.character.data.dao.ItemDao
+import com.unir.roleapp.character.data.model.local.CharacterItemCrossRef
+import com.unir.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.data.model.remote.ApiCharacterItem
+import com.unir.roleapp.character.data.model.local.CharacterItemDetail
+import com.unir.roleapp.character.data.model.remote.ItemDTO
+import com.unir.roleapp.character.data.model.remote.toCharacterItemDetail
+import com.unir.roleapp.character.data.service.ItemApiService
+import com.unir.roleapp.character.domain.repository.ItemRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,6 +32,8 @@ class ItemRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 val itemDTOS: List<ItemDTO> = response.body() ?: emptyList()
                 val itemList: List<Item> = itemDTOS.map { it.toItemEntity() }
+                itemDao.insertAll(itemList)
+
                 Result.success(itemList)
             } else {
                 Result.failure(Exception("Error en la respuesta: ${response.code()}"))
@@ -43,6 +45,7 @@ class ItemRepositoryImpl @Inject constructor(
     }
 
 
+    //! NO UTILIZAR AÚN ESTÁ QUE ESTÉN CORRECTAMENTE IMPLEMENTADAS LAS SESIONES
     override suspend fun getItemsBySession(
         gameSessionId: Int
     ): Result<List<Item>> {
@@ -82,12 +85,13 @@ class ItemRepositoryImpl @Inject constructor(
     /** MÉTODOS DE ACCESO AL INVENTARIO  */
     override suspend fun getItemsByCharacterId(characterId: Long): Result<List<CharacterItemDetail>> {
         return try {
-            CoroutineScope(Dispatchers.IO).launch {
-                syncToApiCharacterItem(characterId)
-            }
+//            CoroutineScope(Dispatchers.IO).launch {
+//                syncToApiCharacterItem(characterId)
+//            }
             val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
-            Log.w("ITEMS", itemsDetail.toString())
-            Result.success(itemsDetail)
+            val filteredItems = itemsDetail.filter { it.quantity > 0 }
+
+            Result.success(filteredItems)
         } catch (e: Exception) {
             println("Error en el repositorio al obtener los datos de la API")
             Result.failure(e)
@@ -97,9 +101,11 @@ class ItemRepositoryImpl @Inject constructor(
 
     override suspend fun deleteItemFromCharacter(characterId: Long, itemId: Int): Result<List<CharacterItemDetail>> {
         return try {
-            itemDao.deleteItemFromCharacter(CharacterItemCrossRef(characterId, itemId))
+            itemDao.deleteItemFromCharacter(characterId, itemId)
             val itemsDetail = itemDao.getItemsDetailByCharacter(characterId)
-            Result.success(itemsDetail)
+            val filteredItems = itemsDetail.filter { it.quantity > 0 }
+
+            Result.success(filteredItems)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -177,7 +183,7 @@ class ItemRepositoryImpl @Inject constructor(
                 val apiItemIds = updatedItemsDetail.map { it.item.id }.toSet()
                 val itemsToDelete = localItemIds - apiItemIds
                 itemsToDelete.forEach { itemId ->
-                    itemDao.deleteItemFromCharacter(CharacterItemCrossRef(characterId, itemId))
+                    itemDao.deleteItemFromCharacter(characterId, itemId)
                 }
 
                 // Actualizar las relaciones que permanecen

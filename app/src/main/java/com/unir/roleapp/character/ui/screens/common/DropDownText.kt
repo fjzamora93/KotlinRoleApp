@@ -1,4 +1,4 @@
-package com.roleapp.character.ui.screens.common
+package com.unir.roleapp.character.ui.screens.common
 
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,7 +40,7 @@ fun DropDownText(
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
-            label = { Text(text = label) },
+            label = { Text(text = label, ) },
             modifier = Modifier.menuAnchor()
         )
 

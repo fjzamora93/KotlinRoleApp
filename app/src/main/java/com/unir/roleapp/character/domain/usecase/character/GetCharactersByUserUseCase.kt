@@ -1,9 +1,9 @@
-package com.roleapp.character.domain.usecase.character
+package com.unir.roleapp.character.domain.usecase.character
 
 import android.util.Log
-import com.roleapp.auth.domain.usecase.user.UserUseCase
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.domain.repository.CharacterRepository
+import com.unir.roleapp.auth.domain.usecase.user.UserUseCase
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.domain.repository.CharacterRepository
 import javax.inject.Inject
 
 
@@ -16,7 +16,6 @@ class GetCharactersByUserUseCase @Inject constructor(
         val userResult = userUseCase.getUser()
         val userId = userResult.getOrNull()?.id ?: return Result.failure(Exception("User not found"))
 
-        Log.d("GetCharactersByUserUseCase", "User ID: $userId")
 
         val result = repository.getCharactersByUserId(userId)
         return if (result.isSuccess) {

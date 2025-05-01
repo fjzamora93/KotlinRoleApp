@@ -1,13 +1,22 @@
-package com.roleapp.character.ui.viewmodels
+package com.unir.roleapp.character.ui.viewmodels
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roleapp.character.data.model.local.Item
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.CharacterItemDetail
-import com.roleapp.character.domain.usecase.item.ItemUseCases
+import com.unir.roleapp.character.data.model.local.Item
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.CharacterItemDetail
+import com.unir.roleapp.character.domain.usecase.item.ItemUseCases
+import com.unir.roleapp.character.data.model.local.AttributeModifiers
+import com.unir.roleapp.character.data.model.local.ItemCategory
+import com.unir.roleapp.character.data.model.local.StatName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,12 +38,56 @@ class ItemViewModel @Inject constructor(
     private val _loadingState = MutableStateFlow<Boolean>(false)
     val loadingState: StateFlow<Boolean> get() = _loadingState
 
+    private val _armor = MutableStateFlow<Int>(0)
+    val armor: StateFlow<Int> get() = _armor
 
-    // AL cargar el itemVIewModel, que se carguen los items directamente
+
+    private val _modifyingStats = MutableStateFlow(
+        StatName.values()
+            .filter { it != StatName.NONE } // si quieres omitir NONE
+            .map { AttributeModifiers(type = it, modifyingValue = 0) }
+    )
+
+    val modifyingStats: StateFlow<List<AttributeModifiers>> = _modifyingStats
+
+    // AL cargar el itemVIewModel, que se carguen los items directamente. Para la tienda se usa la plantilla, no los items personalizados.
     init {
         getItemsByCharacter()
-        getItemsBySession()
+        fetchTemplateItems()
+        calculateStatsFromItems()
+        //getItemsBySession()
+
     }
+    // La armadura actualmente NO repite items. Tal y como está, 5 Botas dan la misma armadura que solo un par.
+    fun calculateStatsFromItems() {
+        _itemsByCharacter
+            .onEach { items ->
+                _armor.value = 0
+
+                val newModifiers = StatName.entries
+                    .filter { it != StatName.NONE }
+                    .map { AttributeModifiers(type = it, modifyingValue = 0) }
+                    .toMutableList()
+
+                items.forEach { item ->
+                    if (item.item.category == ItemCategory.EQUIPMENT) {
+                        _armor.value += 1
+                    }
+
+                    newModifiers.replaceAll {
+                        if (it.type == item.item.statType) {
+                            Log.e("ItemViewModel", "calculateStatsFromItems called on ${item.item.name} + ${item.item.statValue}")
+
+                            it.copy(modifyingValue = it.modifyingValue + item.item.statValue)
+                        } else it
+                    }
+                }
+
+                _modifyingStats.value = newModifiers
+            }
+            .launchIn(viewModelScope)
+    }
+
 
     fun getItemsByCharacter() {
         _loadingState.value = true
@@ -43,10 +96,9 @@ class ItemViewModel @Inject constructor(
             result.onSuccess { items ->
                 _itemsByCharacter.value = items
                 _loadingState.value = false
-                println("Inventario del personaje en el viewModel: ${_itemList.value}")
             }.onFailure {
                 _loadingState.value = false
-                println("Error ${it.message}")
+                Log.e("Error", "Error ${it.message}")
             }
         }
     }
@@ -58,9 +110,8 @@ class ItemViewModel @Inject constructor(
             val result = itemUseCases.upsertItemToCharacter(currentItem)
             result.onSuccess { items ->
                 _itemsByCharacter.value = items
-                println("El objeto se ha añadido correctamente")
             }.onFailure { error ->
-                println("Error al añadir el objeto: ${error.message}")
+                Log.e("Error", "Error ${error.message}")
             }
         }
     }
@@ -73,11 +124,9 @@ class ItemViewModel @Inject constructor(
         currentItem: Item,
     ){
         viewModelScope.launch {
-            println("AÑADIENDO ${currentItem.name} AL PERSONAJE: ${currentCharacter.name}")
             val result = itemUseCases.destroyItem(currentCharacter, currentItem)
             result.onSuccess { items ->
                 _itemsByCharacter.value = items
-                println("El objeto se ha añadido correctamente")
             }.onFailure { error ->
                 println("Error al añadir el objeto: ${error.message}")
             }
@@ -95,24 +144,9 @@ class ItemViewModel @Inject constructor(
                 _loadingState.value = false
                 println("Error ${it.message} al obtener los items desde la API")
             }
-
-            println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")
         }
     }
 
-    // IMPLEMENTAR MÉTODO QUE PERMITA OBTENER EL ORO Y ASÍ TENERLO SIEMPRE ACTUALIZADO AL MARGEN DEL CHARACTER
-    fun getCurrentGold(character: CharacterEntity){
-        viewModelScope.launch {
-//            val result = itemUseCases.getCurrentGold(character)
-//            result.onSuccess {
-//                    gold ->
-//                _currentGold.value = gold
-//            }.onFailure {
-//                _loadingState.value = false
-//                println("Error ${it.message} al obtener el oro")
-//            }
-        }
-    }
 
     /**OBTIENE TODOS LOS OBJETOS DE PLANTILLA.
      * Los objetos de plantilla NO adminte POST, PUT O DELETE. Solamente son de lectura
@@ -127,12 +161,11 @@ class ItemViewModel @Inject constructor(
                 _itemList.value = items
             }.onFailure {
                 _loadingState.value = false
-                println("Error ${it.message} al obtener los items desde la API")
             }
-
-            println("LISTA ACTUALIZADA EN EL ITEM VIEW MODEL: ${itemList.value}")
         }
     }
+
+
 
 
 

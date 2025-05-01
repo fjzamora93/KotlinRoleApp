@@ -1,4 +1,4 @@
-package com.roleapp.core.navigation
+package com.unir.roleapp.core.navigation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -62,12 +62,9 @@ class NavigationViewModel : ViewModel() {
                 previousRoute,
                 inclusive = false
             )
-
-            println("La ruta ANTERIOR es... $previousRoute El tamaño es : ${_routeStack.size}")
             _navigationEvent.value = NavigationEvent.Navigate(previousRoute)
         } else {
             this.navigate(ScreensRoutes.AdventureMainScreen.route)
-            println("No hay más pantallas para retroceder.")
         }
     }
 

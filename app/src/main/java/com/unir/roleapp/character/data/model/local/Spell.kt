@@ -1,9 +1,10 @@
-package com.roleapp.character.data.model.local
+package com.unir.roleapp.character.data.model.local
 
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.unir.roleapp.character.data.model.local.StatName
 
 
 @Entity(tableName = "spellTable")
@@ -23,5 +24,5 @@ data class Spell(
 
     var level: Int = 0,
     var cost: Int = 0,
-    var imgUrl: String = "",
+    var imgUrl: StatName,
     )

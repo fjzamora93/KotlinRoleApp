@@ -1,4 +1,4 @@
-package com.roleapp.core.ui.layout
+package com.unir.roleapp.core.ui.layout
 
 
 import androidx.compose.foundation.background
@@ -36,13 +36,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-import com.roleapp.core.di.LocalNavigationViewModel
-import com.roleapp.core.di.LocalAuthViewModel
-import com.roleapp.core.navigation.NavigationViewModel
-import com.roleapp.core.navigation.ScreensRoutes
-import com.roleapp.auth.viewmodels.UserState
-import com.roleapp.auth.viewmodels.AuthViewModel
-import com.roleapp.core.ui.theme.MedievalColours
+import com.unir.roleapp.core.di.LocalNavigationViewModel
+import com.unir.roleapp.core.di.LocalAuthViewModel
+import com.unir.roleapp.core.navigation.NavigationViewModel
+import com.unir.roleapp.core.navigation.ScreensRoutes
+import com.unir.roleapp.auth.viewmodels.UserState
+import com.unir.roleapp.auth.viewmodels.AuthViewModel
+import com.unir.roleapp.core.ui.theme.CustomColors
 
 
 @Composable
@@ -123,16 +123,16 @@ fun MenuOption(
     text: String,
     onClick: () -> Unit,
     icon : ImageVector = Icons.Default.Home,
-    color: Color = MedievalColours.IronDark,
+    color: Color = CustomColors.IronDark,
+    modifier : Modifier = Modifier.fillMaxWidth()
+        .padding(vertical = 8.dp)
+        .clip(RoundedCornerShape(8.dp))
+        .background(Color(0xFFD6D6D6))
+        .clickable { onClick() }
+        .padding(12.dp)
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFFD6D6D6))
-            .clickable { onClick() }
-            .padding(12.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

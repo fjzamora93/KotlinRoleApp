@@ -1,8 +1,8 @@
-package com.roleapp.character.domain.usecase.skill
+package com.unir.roleapp.character.domain.usecase.skill
 
-import com.roleapp.character.data.model.local.CharacterEntity
-import com.roleapp.character.data.model.local.SkillValue
-import com.roleapp.character.domain.repository.SkillRepository
+import com.unir.roleapp.character.data.model.local.CharacterEntity
+import com.unir.roleapp.character.data.model.local.SkillValue
+import com.unir.roleapp.character.domain.repository.SkillRepository
 import javax.inject.Inject
 
 class UpdateSkills @Inject constructor(private val repository: SkillRepository) {
