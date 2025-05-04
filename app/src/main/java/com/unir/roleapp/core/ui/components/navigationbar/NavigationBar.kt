@@ -30,6 +30,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.roleapp.auth.viewmodels.AuthViewModel
+import com.roleapp.auth.viewmodels.UserState
+import com.roleapp.core.di.LocalAuthViewModel
 import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.navigation.NavigationViewModel
 import com.roleapp.core.navigation.ScreensRoutes
@@ -68,9 +72,11 @@ val navigationItems = listOf(
 
 @Composable
 fun NavigationBar(
+
     containerColor: Color = colorResource(id = R.color.dark_blue),
-    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
-) {
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
+
+    ) {
     val currentRoute by navigationViewModel.currentRoute.collectAsState()
 
     Row(
@@ -104,6 +110,7 @@ fun NavigationBar(
                 },
             )
         }
+
     }
 }
 

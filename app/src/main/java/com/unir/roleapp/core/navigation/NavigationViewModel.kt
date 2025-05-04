@@ -12,11 +12,11 @@ class NavigationViewModel : ViewModel() {
     private val _routeStack = mutableListOf<String>()
     val routeStack: List<String> get() = _routeStack
 
-    private val _currentRoute = MutableStateFlow<String?>(null)
-    val currentRoute: StateFlow<String?> = _currentRoute
+    private val _currentRoute = MutableStateFlow<String?>(ScreensRoutes.LoginScreen.route)
+    val currentRoute: MutableStateFlow<String?> = _currentRoute
 
     private val _navTitle = MutableStateFlow<String?>(null)
-    val navTitle: StateFlow<String?> = _navTitle
+    val navTitle: MutableStateFlow<String?> = _navTitle
 
     private val _navigationEvent = MutableLiveData<NavigationEvent?>()
     val navigationEvent: LiveData<NavigationEvent?> = _navigationEvent

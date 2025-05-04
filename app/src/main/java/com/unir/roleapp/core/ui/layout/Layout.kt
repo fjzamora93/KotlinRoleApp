@@ -10,18 +10,22 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.roleapp.core.di.LocalNavigationViewModel
+import com.roleapp.core.navigation.NavigationViewModel
+import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.components.navigationbar.NavigationBar
 import com.roleapp.core.ui.theme.CustomColors
 import com.unir.roleapp.R
 
 import kotlinx.coroutines.launch
-
+import androidx.compose.runtime.getValue
 /**
  * Composable plantilla, disponible para todas las screens, que incluye:
  * - Header.
@@ -30,12 +34,16 @@ import kotlinx.coroutines.launch
  * */
 @Composable
 fun MainLayout(
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current,
+
     floatingActionButton: @Composable () -> Unit = {},
 
     content: @Composable () -> Unit,
-){
+
+    ){
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
+    val currentRoute by navigationViewModel.currentRoute.collectAsState()
 
     MainMenu(
         drawerState = drawerState,
@@ -48,7 +56,9 @@ fun MainLayout(
         Scaffold(
             floatingActionButton = floatingActionButton,
             bottomBar = {
-                NavigationBar()
+                if (currentRoute != ScreensRoutes.LoginScreen.route) {
+                    NavigationBar()
+                }
             },
         ) { innerPadding ->
             Column(
@@ -57,11 +67,6 @@ fun MainLayout(
                     .background(CustomColors.ThemeGradient)
                     .padding(innerPadding)
             ) {
-                /*Header(
-                    onClickMenu = {
-                        coroutineScope.launch { drawerState.open() }
-                    }
-                )*/
 
                 // CONTENIDO DEL SCREEN. MODIFICAR SI FUESE NECESARIO.
                 LazyColumn(Modifier

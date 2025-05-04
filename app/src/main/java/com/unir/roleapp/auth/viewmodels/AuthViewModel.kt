@@ -96,6 +96,16 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+//            val result = authUseCase.putUser(user)
+//            _userState.value = result.fold(
+//                onSuccess = { UserState.Success(it) },
+//                onFailure = { UserState.Error(it.message ?: "Error en updateUser") }
+//            )
+        }
+    }
+
     fun clearErrorMessage() {
         _errorMessage.value = null
 
