@@ -13,7 +13,7 @@ object CustomColors {
     )
 
 
-
+    val LIGHTRED = Color(0xFFE87474)
     // Colores de madera
     val WoodenLight = Color(0xFFD7B899)  // Tono claro de madera
     val WoodenRegular = Color(0xFF8B5A2B)  // Madera oscura cálida
