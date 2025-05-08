@@ -1,10 +1,10 @@
-package com.roleapp.adventure.ui.viewmodels
+package com.unir.roleapp.adventure.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.roleapp.adventure.data.model.Scene
-import com.roleapp.adventure.data.repository.SceneRepository
+import com.unir.roleapp.adventure.data.model.Scene
+import com.unir.roleapp.adventure.data.repository.SceneRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
