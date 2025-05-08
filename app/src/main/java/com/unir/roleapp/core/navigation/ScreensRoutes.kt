@@ -29,10 +29,19 @@ sealed class ScreensRoutes(val route: String) {
 
 
     // ADVENTURE
-    object HomeAdventureScreen: ScreensRoutes("HomeAdventureScreen")
-    object AdventureMainScreen: ScreensRoutes("AdventureMainScreen")
+    object HomeAdventureScreen : ScreensRoutes("AdventureMainScreen")
+    object AdventureMainScreen : ScreensRoutes("AdventureMainScreen")
     object AdventureListScreen: ScreensRoutes("AdventureListScreen")
     object TemplateAdventureScreen: ScreensRoutes("TemplateAdventureScreen")
+    object CreateAdventureScreen : ScreensRoutes("create_adventure/{adventureId}") {
+        fun createRoute(adventureId: String) = "create_adventure/$adventureId"
+    }
+    object AdventureContextScreen : ScreensRoutes("adventure_context/{adventureId}") {
+        fun createRoute(adventureId: String) = "adventure_context/$adventureId"
+    }
+    object WaitingRoomScreen : ScreensRoutes("waiting/{adventureId}") {
+        fun createRoute(adventureId: String) = "waiting/$adventureId"
+    }
 
 
 
