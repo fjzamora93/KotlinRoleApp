@@ -2,6 +2,8 @@ package com.roleapp.core.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -14,11 +16,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.di.LocalAuthViewModel
-import com.roleapp.adventure.ui.screens.AdventureMainScreen
 import com.roleapp.character.ui.screens.characterSheet.CharacterListScreen
 import com.roleapp.character.ui.screens.characterSheet.CharacterDetailScreen
 import com.roleapp.core.ui.layout.FontsTemplateScreen
-import com.roleapp.adventure.ui.screens.TemplateAdventureScreen
 import com.roleapp.auth.ui.screens.LoginScreen
 import com.roleapp.auth.ui.screens.UserProfileScreen
 import com.roleapp.auth.viewmodels.AuthViewModel
@@ -30,17 +30,9 @@ import com.unir.roleapp.home.ui.screens.HomeScreen
 import com.unir.roleapp.adventure.ui.screens.AdventureContextScreen
 import com.unir.roleapp.adventure.ui.screens.AdventureMainScreen
 import com.unir.roleapp.adventure.ui.screens.CreateAdventureScreen
+import com.unir.roleapp.adventure.ui.screens.TemplateAdventureScreen
 import com.unir.roleapp.adventure.ui.screens.WaitingRoomScreen
 import com.unir.roleapp.adventure.ui.viewmodels.WaitingRoomViewModel
-import com.unir.roleapp.auth.ui.screens.LoginScreen
-import com.unir.roleapp.auth.ui.screens.UserProfileScreen
-import com.unir.roleapp.auth.viewmodels.AuthViewModel
-import com.unir.roleapp.character.ui.screens.characterSheet.CharacterListScreen
-import com.unir.roleapp.character.ui.screens.characterSheet.CharacterDetailScreen
-import com.unir.roleapp.character.ui.screens.characterform.CharacterEditorScreen
-import com.unir.roleapp.core.di.LocalAuthViewModel
-import com.unir.roleapp.core.di.LocalLanguageSetter
-import com.unir.roleapp.core.di.LocalNavigationViewModel
 
 @Composable
 fun NavGraph(
@@ -111,7 +103,7 @@ fun NavGraph(
 
                 // 1) Pantalla de creación inicial
                 composable(ScreensRoutes.AdventureMainScreen.route) {
-                    AdventureMainScreen(navController = navController)
+                    AdventureMainScreen()
                 }
 
                 // 2) Sala de espera

@@ -15,14 +15,17 @@
     import androidx.compose.ui.unit.dp
     import androidx.hilt.navigation.compose.hiltViewModel
     import androidx.navigation.NavHostController
-    import com.unir.roleapp.core.navigation.ScreensRoutes
-    import com.unir.roleapp.core.ui.layout.MainLayout
+    import com.roleapp.core.di.LocalNavigationViewModel
+    import com.roleapp.core.navigation.NavigationViewModel
+    import com.roleapp.core.navigation.ScreensRoutes
+    import com.roleapp.core.ui.layout.MainLayout
+
     import com.unir.roleapp.R
     import com.unir.roleapp.adventure.ui.viewmodels.CreateAdventureViewModel
 
     @Composable
     fun AdventureMainScreen(
-        navController: NavHostController,
+        navController: NavigationViewModel = LocalNavigationViewModel.current,
         viewModel: CreateAdventureViewModel = hiltViewModel()
     ) {
         // 1) Recoge el estado del ViewModel

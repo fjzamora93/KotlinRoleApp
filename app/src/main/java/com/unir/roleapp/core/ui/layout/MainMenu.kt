@@ -95,12 +95,6 @@ fun MainMenu(
 
 
 
-                        MenuOption(
-                            text = "Tipografías y fuentes",
-                            onClick = { navigationViewModel.navigate(ScreensRoutes.FontTemplateScreen.route) },
-                            icon = Icons.Default.FontDownload
-                        )
-
                     }
 
 

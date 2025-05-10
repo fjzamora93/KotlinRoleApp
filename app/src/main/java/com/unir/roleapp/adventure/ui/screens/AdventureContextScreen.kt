@@ -9,9 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.roleapp.character.data.model.local.CharacterEntity
+import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureContextViewModel
-import com.unir.roleapp.character.data.model.local.CharacterEntity
-import com.unir.roleapp.character.ui.viewmodels.CharacterViewModel
+
 
 @Composable
 fun AdventureContextScreen(

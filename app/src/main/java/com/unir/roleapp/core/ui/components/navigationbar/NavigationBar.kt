@@ -49,7 +49,7 @@ val navigationItems = listOf(
     NavigationItem(
         title = "Escenarios",
         icon = Icons.Default.Castle,
-        route = ScreensRoutes.TemplateAdventureScreen.route
+        route = ScreensRoutes.HomeAdventureScreen.route
     ),
     NavigationItem(
         title = "Home",

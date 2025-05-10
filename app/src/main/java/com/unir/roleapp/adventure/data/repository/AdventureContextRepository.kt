@@ -1,7 +1,7 @@
 package com.unir.roleapp.adventure.data.repository
 
+import com.roleapp.character.data.model.local.CharacterEntity
 import com.unir.roleapp.adventure.domain.model.CharacterContext
-import com.unir.roleapp.character.data.model.local.CharacterEntity
 import kotlinx.coroutines.flow.Flow
 
 /**

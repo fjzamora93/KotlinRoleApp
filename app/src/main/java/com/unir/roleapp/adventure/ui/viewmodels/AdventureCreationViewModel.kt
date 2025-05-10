@@ -2,10 +2,10 @@ package com.unir.roleapp.adventure.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.roleapp.auth.domain.usecase.user.GetUserUseCase
 import com.unir.roleapp.adventure.domain.model.Adventure
 import com.unir.roleapp.adventure.domain.usecase.CreateAdventureRequest
 import com.unir.roleapp.adventure.domain.usecase.CreateAdventureUseCase
-import com.unir.roleapp.auth.domain.usecase.user.GetUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
