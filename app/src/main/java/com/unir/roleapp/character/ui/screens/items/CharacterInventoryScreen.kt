@@ -114,11 +114,7 @@ fun CharacterInventoryBody(
                         modifier = Modifier.size(40.dp).clickable { isEditingItem = true }
                     )
 
-                    Icon(
-                        imageVector = Icons.Default.MonetizationOn,
-                        contentDescription = "", tint = CustomColors.Gold,
-                        modifier = Modifier.size(40.dp)
-                    )
+
 
 
                     TextField(

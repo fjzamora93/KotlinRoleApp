@@ -36,6 +36,7 @@ import com.roleapp.character.ui.viewmodels.CharacterViewModel
 import com.roleapp.character.ui.viewmodels.ItemViewModel
 import com.roleapp.core.ui.components.common.DefaultColumn
 import com.roleapp.core.ui.components.common.DefaultRow
+import com.roleapp.core.ui.theme.CustomColors
 import com.roleapp.core.ui.theme.CustomType
 import com.unir.roleapp.R
 import com.unir.roleapp.character.data.model.local.ItemCategory
@@ -102,7 +103,8 @@ fun ItemSummaryComponent(
 
                     Text(
                         text = item.name,
-                        style = CustomType.titleMedium
+                        style = CustomType.titleMedium,
+                        color = Color.White
                     )
                     if (isSelling){
                         Row(
@@ -110,13 +112,15 @@ fun ItemSummaryComponent(
                         ){
                             Text(
                                 text = "    ${item.goldValue} 🪙",
-                                style = CustomType.bodySmall
+                                style = CustomType.bodySmall,
+                                color = Color.White
                             )
                         }
                     } else {
                         Text(
                             text = "    x $quantity",
-                            style = CustomType.titleMedium
+                            style = CustomType.titleMedium,
+                            color = Color.White
                         )
                     }
 
@@ -126,16 +130,20 @@ fun ItemSummaryComponent(
                 if (item.category != ItemCategory.COMMON){
                     Text(
                         text = "Dados: ${item.diceAmount}d${item.dice}",
-                        style = CustomType.bodyMedium
+                        style = CustomType.bodyMedium,
+                        color = Color.White
                     )
                     Text(
 
                         text = "${item.statValue} de ${StatName.getString(item.statType)}",
-                        style = CustomType.bodyMedium
+                        style = CustomType.bodyMedium,
+                        color = Color.White
                     )
                 } else{
                     Text(
                         text = "${item.description}",
+                        style = CustomType.bodyMedium,
+                        color = Color.White
                     )
                 }
 
@@ -151,6 +159,7 @@ fun ItemSummaryComponent(
                         modifier = Modifier.size(40.dp),
                         imageVector = if (isSelling) Icons.Filled.AddCircle else Icons.Filled.RemoveCircle,
                         contentDescription = "Más opciones",
+                        tint = CustomColors.LIGHTRED
                     )
                 }
             }
