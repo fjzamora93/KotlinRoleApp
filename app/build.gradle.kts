@@ -96,6 +96,8 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")

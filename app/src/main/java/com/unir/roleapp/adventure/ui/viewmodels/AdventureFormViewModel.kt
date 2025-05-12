@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -23,7 +24,9 @@ import javax.inject.Inject
 class AdventureFormViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val createAdventureUseCase: CreateAdventureUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+
 ): ViewModel() {
 
     private val _id   = MutableStateFlow("")
@@ -161,6 +164,7 @@ class AdventureFormViewModel @Inject constructor(
             result
                 .onSuccess { adv ->
                     _createdAdventure.value = adv
+                    _id.value = adv.id
                     onSuccess(adv)
                 }
                 .onFailure {
@@ -168,4 +172,35 @@ class AdventureFormViewModel @Inject constructor(
                 }
         }
     }
+
+
+    fun saveWholeAdventure(onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+        val adventureId = id.value
+        if (adventureId.isBlank()) {
+            onError(IllegalStateException("Falta el ID de la aventura"))
+            return
+        }
+        // update con lo que hay en memoria
+        val adventure = Adventure(
+            id                = adventureId,
+            userId            = userId.value,
+            title             = title.value,
+            description       = description.value,
+            historicalContext = historicalContext.value,
+            acts              = acts.value
+        )
+        // Envio de la Aventura a FireStore:
+        viewModelScope.launch {
+            try {
+                db.collection("adventures")
+                    .document(adventureId)
+                    .set(adventure)
+                    .await()
+                onSuccess()
+            } catch (e: Exception) {
+                onError(e)
+            }
+        }
+    }
+
 }

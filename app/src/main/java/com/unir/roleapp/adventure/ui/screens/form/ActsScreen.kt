@@ -1,5 +1,6 @@
 package com.unir.roleapp.adventure.ui.screens.form
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -17,13 +18,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.adventure.domain.model.AdventureAct
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
 
 @Composable
 fun ActsScreen(
-    viewModel: AdventureFormViewModel,
+    navController: NavHostController,
+    viewModel: AdventureFormViewModel
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -37,6 +41,7 @@ fun ActsScreen(
                 verticalArrangement = Arrangement.Center,
             ) {
                 ActsScreenBody(
+                    navController = navController,
                     viewModel
                 )
             }
@@ -46,7 +51,9 @@ fun ActsScreen(
 
 @Composable
 fun ActsScreenBody(
-    viewModel: AdventureFormViewModel,
+    navController: NavHostController,
+    viewModel: AdventureFormViewModel
+
 ) {
     val textColor = Color.White;
     val acts by viewModel.acts.collectAsState(initial = emptyList())
@@ -177,19 +184,26 @@ fun ActsScreenBody(
 
         Button(
             onClick = {
-                viewModel.submitAdventure(
-                    onSuccess = { /* TODO */ },
-                    onError = { /* TODO */ }
+                viewModel.saveWholeAdventure(
+                    onSuccess = {
+                        // Si todo OK vamos a AdventureHomeScreen
+                        navController.navigate(ScreensRoutes.HomeScreen.route)
+                    },
+                    onError = { exception ->
+                        // Log de Error
+                        Log.e("AdventureForm", "Error al guardar la aventura", exception)
+                    }
                 )
             },
-            enabled = acts.isNotEmpty() && acts.all {
-                it.title.isNotBlank() &&
-                        it.narrative.isNotBlank() &&
-                        it.mapDescription.isNotBlank()
+            enabled = acts.isNotEmpty() && acts.all { act ->
+                act.title.isNotBlank() &&
+                        act.narrative.isNotBlank() &&
+                        act.mapDescription.isNotBlank()
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Enviar Aventura")
         }
+
     }
 }

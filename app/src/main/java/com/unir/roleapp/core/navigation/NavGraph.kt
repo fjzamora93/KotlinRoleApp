@@ -225,7 +225,8 @@ fun NavGraph(
                     val formVm: AdventureFormViewModel = hiltViewModel(parentEntry)
 
                     ActsScreen(
-                        viewModel = formVm
+                        viewModel = formVm,
+                        navController = navController,
                     )
                 }
 
