@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +41,7 @@ import com.unir.roleapp.adventure.ui.screens.TemplateAdventureScreen
 import com.unir.roleapp.adventure.ui.screens.WaitingRoomScreen
 import com.unir.roleapp.adventure.ui.viewmodels.WaitingRoomViewModel
 import com.unir.roleapp.adventure.ui.screens.form.*
+import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
 
 @Composable
 fun NavGraph(
@@ -184,22 +186,47 @@ fun NavGraph(
 
 
                 // Creación aventura Esteban
-                composable(route = ScreensRoutes.TitleScreen.route) {
+                composable(
+                    route = ScreensRoutes.TitleScreen.route
+                ) { backStackEntry ->
+                    val formEntry = backStackEntry
+                    val formVm: AdventureFormViewModel = hiltViewModel(formEntry)
+
                     TitleScreen(
+                        viewModel = formVm,
                         onNext = {
                             navController.navigate(ScreensRoutes.HistoricalContextScreen.route)
                         }
                     )
                 }
 
-                composable(route = ScreensRoutes.HistoricalContextScreen.route) {
+                composable(
+                    route = ScreensRoutes.HistoricalContextScreen.route
+                ) { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry(ScreensRoutes.TitleScreen.route)
+                    }
+                    val formVm: AdventureFormViewModel = hiltViewModel(parentEntry)
+
                     HistoricalContextScreen(
-                        onNext = { navController.navigate(ScreensRoutes.ActsScreen.route) }
+                        viewModel = formVm,
+                        onNext = {
+                            navController.navigate(ScreensRoutes.ActsScreen.route)
+                        }
                     )
                 }
 
-                composable(route = ScreensRoutes.ActsScreen.route) {
-                    ActsScreen()
+                composable(
+                    route = ScreensRoutes.ActsScreen.route
+                ) { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry(ScreensRoutes.TitleScreen.route)
+                    }
+                    val formVm: AdventureFormViewModel = hiltViewModel(parentEntry)
+
+                    ActsScreen(
+                        viewModel = formVm
+                    )
                 }
 
                 // HOME

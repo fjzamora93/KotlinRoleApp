@@ -2,6 +2,7 @@ package com.unir.roleapp.adventure.ui.screens.form
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -13,19 +14,40 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.adventure.domain.model.AdventureAct
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
 
 @Composable
 fun ActsScreen(
-    viewModel: AdventureFormViewModel = hiltViewModel()
+    viewModel: AdventureFormViewModel,
 ) {
-    // Collect the list of acts from the ViewModel
+    Scaffold(
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        MainLayout() {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                verticalArrangement = Arrangement.Center,
+            ) {
+                ActsScreenBody(
+                    viewModel
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ActsScreenBody(
+    viewModel: AdventureFormViewModel,
+) {
     val acts by viewModel.acts.collectAsState(initial = emptyList())
     var selectedTab by remember { mutableStateOf(0) }
 
-    // Temporary fields for a new act before it's added
     var newTitle by remember { mutableStateOf("") }
     var newNarrative by remember { mutableStateOf("") }
     var newMapDesc by remember { mutableStateOf("") }
@@ -34,7 +56,6 @@ fun ActsScreen(
         Text("Creación de los actos", style = MaterialTheme.typography.h5)
         Spacer(Modifier.height(12.dp))
 
-        // Tabs for existing acts + a '+' tab to add a new one
         ScrollableTabRow(selectedTabIndex = selectedTab) {
             acts.forEachIndexed { index, act ->
                 Tab(
@@ -46,7 +67,6 @@ fun ActsScreen(
             Tab(
                 selected = false,
                 onClick = {
-                    // Reset temp fields and add a blank act
                     newTitle = ""
                     newNarrative = ""
                     newMapDesc = ""
@@ -56,24 +76,21 @@ fun ActsScreen(
                             title = newTitle,
                             narrative = newNarrative,
                             mapDescription = newMapDesc,
-                            // pass any additional lists as needed
                             emptyList()
                         )
                     )
-                    selectedTab = acts.size // switch to the new tab
+                    selectedTab = acts.size
                 },
                 text = { Icon(Icons.Default.Add, contentDescription = "Nuevo acto") }
             )
         }
         Spacer(Modifier.height(16.dp))
 
-        // Determine if we are editing an existing act or the new one
         val currentAct = acts.getOrNull(selectedTab)
         val titleValue = currentAct?.title ?: newTitle
         val narrativeValue = currentAct?.narrative ?: newNarrative
         val mapDescValue = currentAct?.mapDescription ?: newMapDesc
 
-        // Title field
         OutlinedTextField(
             value = titleValue,
             onValueChange = { text ->
@@ -89,7 +106,6 @@ fun ActsScreen(
         )
         Spacer(Modifier.height(8.dp))
 
-        // Narrative field
         OutlinedTextField(
             value = narrativeValue,
             onValueChange = { text ->
@@ -106,7 +122,6 @@ fun ActsScreen(
         )
         Spacer(Modifier.height(8.dp))
 
-        // Map description field
         OutlinedTextField(
             value = mapDescValue,
             onValueChange = { text ->
@@ -123,7 +138,6 @@ fun ActsScreen(
         )
         Spacer(Modifier.height(16.dp))
 
-        // Submit button
         Button(
             onClick = {
                 viewModel.submitAdventure(
