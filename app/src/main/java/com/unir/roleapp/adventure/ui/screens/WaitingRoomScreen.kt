@@ -1,18 +1,13 @@
 package com.unir.roleapp.adventure.ui.screens
 
-import android.util.Log
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.adventure.domain.model.Character
 import com.unir.roleapp.adventure.ui.screens.components.PlayerGrid
@@ -115,7 +110,6 @@ fun WaitingRoomScreenBody(
         Spacer(Modifier.height(44.dp))
 
         // Cuadrícula de jugadores
-        PlayerGrid(players = characters, onAddPlayer = onAddPlayer)
 
         Spacer(Modifier.height(32.dp))
 

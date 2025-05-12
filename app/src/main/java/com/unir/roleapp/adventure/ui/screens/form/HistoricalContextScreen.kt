@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.roleapp.core.ui.layout.MainLayout
+import com.unir.roleapp.adventure.ui.screens.components.PlayerGrid
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
 
 @Composable
@@ -56,10 +57,13 @@ fun HistoricalContextScreenBody(
         Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Inicio de la aventura", style = MaterialTheme.typography.h5, color = textColor)
-        Spacer(Modifier.height(15.dp))
+        Text(
+            "Inicio de la aventura",
+            style = MaterialTheme.typography.h5,
+            color = textColor
+        )
+        Spacer(Modifier.height(10.dp))
 
-        // ② Código de partida + copiado al portapapeles
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Código partida:", color = textColor)
             Spacer(Modifier.width(8.dp))
@@ -69,9 +73,12 @@ fun HistoricalContextScreenBody(
         }
         Spacer(Modifier.height(30.dp))
 
-        // ③ Contexto histórico
-        Text("Contexto histórico", style = MaterialTheme.typography.subtitle1, color = textColor,
-            modifier = Modifier.padding(bottom = 10.dp))
+        Text(
+            "Contexto histórico",
+            style = MaterialTheme.typography.subtitle1,
+            color = textColor,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
         Text(
             "Escribe el contexto histórico en el cuál se desarrolla tu aventura mientras más detalles escribas mejor.",
             style = MaterialTheme.typography.body2, color = textColor,
@@ -85,20 +92,25 @@ fun HistoricalContextScreenBody(
                 .fillMaxWidth()
                 .height(150.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.White,
+                focusedBorderColor = textColor,
                 unfocusedBorderColor = Color.Gray,
-                textColor = Color.White
+                textColor = textColor
             )
         )
         Spacer(Modifier.height(40.dp))
 
-        // ④ Listado de jugadores ya añadidos
-        Text("Listado jugadores", style = MaterialTheme.typography.subtitle1, color = textColor)
         Text(
-            "Envía el código de partida a tus amigos para que se puedan unir a la aventura, o has click en el “+” y busca a uno de tus amigos.",
-            style = MaterialTheme.typography.body2, color = textColor
+            "Listado jugadores",
+            style = MaterialTheme.typography.subtitle1,
+            color = textColor,
+            modifier = Modifier.padding(bottom = 10.dp)
         )
-        Spacer(Modifier.height(8.dp))
+        Text(
+            "Envía el código de partida a tus amigos para que se puedan unir a la aventura.",
+            style = MaterialTheme.typography.body2,
+            color = textColor
+        )
+        Spacer(Modifier.height(30.dp))
         Row {
             characters.forEach { char ->
                 Box(
@@ -111,13 +123,13 @@ fun HistoricalContextScreenBody(
                 }
                 Spacer(Modifier.width(8.dp))
             }
+            PlayerGrid(players = characters)
         }
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(40.dp))
 
-        // ⑤ Botón Continuar
         Button(
             onClick = onNext,
-            enabled = characters.size >= 2,
+            enabled = historicalContext.isNotBlank(),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Continuar")

@@ -44,7 +44,17 @@ class AdventureFormViewModel @Inject constructor(
     private val _characters   = MutableStateFlow<List<CharacterEntity>>(value = emptyList())
     val characters: StateFlow<List<CharacterEntity>> = _characters.asStateFlow()
 
-    private val _acts   = MutableStateFlow<List<AdventureAct>>(value = emptyList())
+    private val _acts = MutableStateFlow(
+        listOf(
+            AdventureAct(
+                actNumber = 1,
+                title = "",
+                narrative = "",
+                mapDescription = "",
+                emptyList()
+            )
+        )
+    )
     val acts: StateFlow<List<AdventureAct>> = _acts.asStateFlow()
 
     private val _error = MutableStateFlow<String?>(null)
@@ -84,7 +94,7 @@ class AdventureFormViewModel @Inject constructor(
      */
     fun addAct(act: AdventureAct) {
         val nextNumber = _acts.value.size + 1
-        _acts.value = _acts.value + act.copy(actNumber = nextNumber)
+        _acts.value += act.copy(actNumber = nextNumber)
     }
 
     /**

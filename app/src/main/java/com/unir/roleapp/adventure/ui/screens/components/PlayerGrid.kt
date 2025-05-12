@@ -1,7 +1,6 @@
 package com.unir.roleapp.adventure.ui.screens.components
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,38 +16,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.unir.roleapp.adventure.domain.model.Character
+import com.roleapp.character.data.model.local.CharacterEntity
 
 @Composable
-fun PlayerGrid(players: List<Character>, onAddPlayer: () -> Unit) {
+fun PlayerGrid(players: List<CharacterEntity>) {
     val totalSlots = 4
-    val columns = 2
-    val rows = totalSlots / columns
+    val columns = 4
+    val rows = totalSlots / columns  // = 1
 
     Column {
-        for (row in 0 until rows) {
+        repeat(rows) { row ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                for (col in 0 until columns) {
+                repeat(columns) { col ->
                     val index = row * columns + col
                     Box(
                         modifier = Modifier
-                            .weight(1.5f)
-                            .aspectRatio(1.5f)
-                            .border(2.dp, Color.White)
-                            .clickable {
-                                if (index >= players.size) {
-                                    onAddPlayer()
-                                }
-                            },
+                            .weight(1f)
+                            .aspectRatio(1f)
+                            .border(2.dp, Color.White),
                         contentAlignment = Alignment.Center
                     ) {
                         if (index < players.size) {
-                            Text(players[index].name, style = MaterialTheme.typography.bodyLarge)
+                            Text(
+                                players[index].name,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Color.White
+                            )
                         } else {
-                            Text("+", style = MaterialTheme.typography.headlineMedium, color = Color.White)
+                            Text(
+                                "?",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = Color.White
+                            )
                         }
                     }
                 }
