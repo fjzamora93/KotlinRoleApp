@@ -9,9 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.roleapp.core.ui.layout.MainLayout
+import com.unir.roleapp.R
 import com.unir.roleapp.adventure.ui.screens.components.PlayerGrid
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
 
@@ -47,7 +49,6 @@ fun HistoricalContextScreenBody(
 ) {
     val textColor = Color.White;
 
-    // ① Recogemos los flows como estados Compose
     val id by viewModel.id.collectAsState(initial = "")
     val historicalContext by viewModel.historicalContext.collectAsState(initial = "")
     val characters by viewModel.characters.collectAsState(initial = emptyList())
@@ -67,8 +68,21 @@ fun HistoricalContextScreenBody(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Código partida:", color = textColor)
             Spacer(Modifier.width(8.dp))
-            Button(onClick = { clipboard.setText(AnnotatedString(id)) }) {
-                Text(id.ifBlank { "—" })
+            Button(onClick = {
+                clipboard.setText(AnnotatedString(id))
+            }) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = if (id.isNotBlank()) id else "—",
+                        color = Color.White
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.content_copy_24dp),
+                        contentDescription = "Copiar",
+                        tint = Color.White
+                    )
+                }
             }
         }
         Spacer(Modifier.height(30.dp))
