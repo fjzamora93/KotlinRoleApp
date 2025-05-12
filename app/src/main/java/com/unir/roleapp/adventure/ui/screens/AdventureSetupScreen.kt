@@ -69,7 +69,7 @@ fun ActCard(act: AdventureAct) {
         Column(Modifier.padding(12.dp)) {
             Text("Acto ${act.actNumber}", style = MaterialTheme.typography.titleMedium)
             act.scenes.forEach { scene ->
-                Text("• ${scene.name}", style = MaterialTheme.typography.bodySmall)
+                Text("• ${scene?.name}", style = MaterialTheme.typography.bodySmall)
             }
         }
     }

@@ -44,6 +44,15 @@ sealed class ScreensRoutes(val route: String) {
     }
 
 
+    object TitleScreen : ScreensRoutes("TitleScreen")
+    object HistoricalContextScreen : ScreensRoutes("HistoricalContextScreen/{adventureId}") {
+        fun createRoute(adventureId: String) = "HistoricalContextScreen/$adventureId"
+    }
+    object ActsScreen : ScreensRoutes("ActsScreen/{adventureId}") {
+        fun createRoute(adventureId: String) = "ActsScreen/$adventureId"
+    }
+
+
 
     // HOME
     object HomeScreen: ScreensRoutes("HomeScreen")

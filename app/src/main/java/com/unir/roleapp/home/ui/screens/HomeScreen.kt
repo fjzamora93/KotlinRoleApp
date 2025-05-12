@@ -42,7 +42,7 @@ fun HomeScreenBody(navController: NavHostController) {
             title = "Partidas",
             description = "Entra a la sección de partidas para decidir que vas a hacer. ¿iniciar una nueva partida o buscar una existente? ¿crear una nueva partida?",
             imageResName = "partidas_cartas",
-            route = ScreensRoutes.HomeAdventureScreen.route
+            route = ScreensRoutes.TitleScreen.route
         ),
         SectionCardItem(
             title = "Personajes",

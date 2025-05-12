@@ -1,5 +1,9 @@
 package com.roleapp.core.navigation
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -8,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -24,6 +29,7 @@ import com.roleapp.auth.ui.screens.UserProfileScreen
 import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.character.ui.screens.characterform.CharacterEditorScreen
 import com.roleapp.core.di.LocalLanguageSetter
+import com.unir.roleapp.MyApplication.Companion.context
 import com.unir.roleapp.adventure.ui.screens.HomeAdventureScreen
 import com.unir.roleapp.core.navigation.LocalizedApp
 import com.unir.roleapp.home.ui.screens.HomeScreen
@@ -33,6 +39,7 @@ import com.unir.roleapp.adventure.ui.screens.CreateAdventureScreen
 import com.unir.roleapp.adventure.ui.screens.TemplateAdventureScreen
 import com.unir.roleapp.adventure.ui.screens.WaitingRoomScreen
 import com.unir.roleapp.adventure.ui.viewmodels.WaitingRoomViewModel
+import com.unir.roleapp.adventure.ui.screens.form.*
 
 @Composable
 fun NavGraph(
@@ -127,6 +134,13 @@ fun NavGraph(
                         characters  = characters,
                         loading     = loading,
                         error       = error,
+                        onCopyCode  = {
+                            val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clip = ClipData.newPlainText("Código de partida", adventureId)
+                            clipboardManager.setPrimaryClip(clip)
+                            Toast.makeText(context, "Código copiado al portapapeles", Toast.LENGTH_SHORT).show()
+                        },
+                        onAddPlayer = { },
                         onContinue  = {
                             navController.navigate(
                                 ScreensRoutes.CreateAdventureScreen.createRoute(adventureId)
@@ -168,6 +182,26 @@ fun NavGraph(
                     )
                 }
 
+
+                // Creación aventura Esteban
+                composable(route = ScreensRoutes.TitleScreen.route) {
+                    TitleScreen(
+                        onNext = {
+                            navController.navigate(ScreensRoutes.HistoricalContextScreen.route)
+                        }
+                    )
+                }
+
+                composable(route = ScreensRoutes.HistoricalContextScreen.route) {
+                    HistoricalContextScreen(
+                        onNext = { navController.navigate(ScreensRoutes.ActsScreen.route) }
+                    )
+                }
+
+                composable(route = ScreensRoutes.ActsScreen.route) {
+                    ActsScreen()
+                }
+
                 // HOME
                 composable(ScreensRoutes.HomeScreen.route) {
                     HomeScreen(navController = navController)
@@ -176,3 +210,4 @@ fun NavGraph(
         }
     }
 }
+

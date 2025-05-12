@@ -47,7 +47,7 @@ class WaitingRoomViewModel @Inject constructor(
             // Petición al caso de uso
             getAdventureUseCase(adventureId)
                 .onSuccess { adventure ->
-                    _characters.value = adventure.characters
+                    /*_characters.value = adventure.characters*/
                 }
                 .onFailure { e ->
                     _error.value = e.message

@@ -10,6 +10,7 @@
     import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
     import androidx.compose.ui.draw.clip
+    import androidx.compose.ui.graphics.Color
     import androidx.compose.ui.layout.ContentScale
     import androidx.compose.ui.res.painterResource
     import androidx.compose.ui.unit.dp
@@ -54,26 +55,37 @@
 
                 Spacer(Modifier.height(24.dp))
 
-                Text("Nueva aventura", style = MaterialTheme.typography.titleLarge)
-
-                Spacer(Modifier.height(16.dp))
+                Text(
+                    text = "Nueva aventura",
+                    color = Color.White,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
+                Text(
+                    text = "Para comenzar una nueva aventura crea un título y una breve descripción que permita a tus jugadores entender de qué irá la aventura que están por comenzar a jugar.",
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
 
                 OutlinedTextField(
                     value = title,
                     onValueChange = viewModel::onTitleChange,
-                    label = { Text("Título") },
-                    modifier = Modifier.fillMaxWidth()
+                    label = { Text("Título de la aventura") },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 5.dp)
                 )
-
-                Spacer(Modifier.height(16.dp))
 
                 OutlinedTextField(
                     value = description,
                     onValueChange = viewModel::onDescriptionChange,
-                    label = { Text("Descripción") },
+                    label = { Text("Descripción de la aventura") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(120.dp)
+                        .height(150.dp),
+                    maxLines = 6
                 )
 
                 Spacer(Modifier.height(24.dp))
