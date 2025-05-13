@@ -186,6 +186,11 @@ fun NavGraph(
 
 
                 // Creación aventura Esteban
+
+                composable(ScreensRoutes.AdventureHomeScreen.route) {
+                    HomeAdventureScreen(navController)
+                }
+
                 composable(
                     route = ScreensRoutes.TitleScreen.route
                 ) { backStackEntry ->
@@ -199,6 +204,7 @@ fun NavGraph(
                         }
                     )
                 }
+
 
                 composable(
                     route = ScreensRoutes.HistoricalContextScreen.route
@@ -227,6 +233,19 @@ fun NavGraph(
                     ActsScreen(
                         viewModel = formVm,
                         navController = navController,
+                    )
+                }
+
+                composable(ScreensRoutes.MyAdventuresScreen.route) {
+                    MyAdventuresScreen(
+                        onAdventureClick = { adventureId ->
+                            // aquí decides a dónde ir, p.ej. la sala de espera:
+                            navController.navigate(ScreensRoutes.WaitingRoomScreen.createRoute(adventureId))
+                        },
+                        onCreateNew = {
+                            // y aquí a la pantalla de creación:
+                            navController.navigate(ScreensRoutes.AdventureMainScreen.route)
+                        }
                     )
                 }
 

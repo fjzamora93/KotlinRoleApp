@@ -7,6 +7,16 @@ data class AdventureAct(
     val title: String,
     val narrative: String,
     val mapDescription: String,
-
     val scenes: List<Scene?> // TODO: Borrar y arreglar conflictos
-)
+){
+
+    constructor() : this(
+        actNumber =0,
+        title = "",
+        narrative ="",
+        mapDescription = "",
+        scenes = emptyList()
+
+    )
+
+}

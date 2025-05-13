@@ -116,15 +116,15 @@ class AdventureFormViewModel @Inject constructor(
 
     // Envío a Firebase
     fun submitAdventure(onSuccess: () -> Unit, onError: (Exception) -> Unit) {
-        val adventure = Adventure(
-            id = id.value,
-            userId = userId.value,
-            title = title.value,
-            description = description.value,
-            historicalContext = historicalContext.value,
-            characters = _characters.value,
-            acts = _acts.value
-        )
+        val adventure = Adventure()  // todos los valores por defecto
+            .copy(
+                id                = id.value,
+                userId            = userId.value,
+                title             = title.value,
+                description       = description.value,
+                historicalContext = historicalContext.value,
+                acts              = _acts.value
+            )
         FirebaseFirestore.getInstance()
             .collection("adventures")
             .add(adventure)

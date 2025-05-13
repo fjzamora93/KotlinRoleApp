@@ -187,7 +187,7 @@ fun ActsScreenBody(
                 viewModel.saveWholeAdventure(
                     onSuccess = {
                         // Si todo OK vamos a AdventureHomeScreen
-                        navController.navigate(ScreensRoutes.HomeScreen.route)
+                        navController.navigate(ScreensRoutes.MyAdventuresScreen.route)
                     },
                     onError = { exception ->
                         // Log de Error

@@ -39,12 +39,19 @@ fun HomeScreenBody(navController: NavHostController) {
 
     val cardItems = listOf(
         SectionCardItem(
-            title = "Crear partida",
+            title = "Crear Aventura",
             description = "Crea y gestiona tus propias partidas de rol. Invita jugadores, personaliza reglas y vive aventuras únicas desde la app.",
             imageResName = "erudito2",
-            route = ScreensRoutes.AdventureListScreen.route
+            route = ScreensRoutes.TitleScreen.route
         ),
+
         SectionCardItem(
+            title = "Listado de Aventuras",
+            description = "Listado de todas tus Aventuras. Reanuda la Aventura que hayas dejado a medias con tus compañeros.",
+            imageResName = "adventure_init",
+            route = ScreensRoutes.MyAdventuresScreen.route
+        )
+        /*SectionCardItem(
             title = "Iniciar partida",
             description = "Inicia una nueva aventura, en solitario o con tu grupo. Elige tu historia, crea tu personaje y comienza la partida.",
             imageResName = "adventure_init",
@@ -55,7 +62,7 @@ fun HomeScreenBody(navController: NavHostController) {
             description = "Reanuda la partida que hayas dejado a medias con tus compañeros.",
             imageResName = "morning_camp",
             route = ScreensRoutes.CharacterListScreen.route
-        )
+        )*/
     )
 
     CardCarousel(cardItems, pagerState, navController)

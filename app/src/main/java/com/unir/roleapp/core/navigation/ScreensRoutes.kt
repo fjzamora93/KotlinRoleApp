@@ -1,5 +1,7 @@
 package com.roleapp.core.navigation
 
+import com.unir.roleapp.adventure.ui.screens.form.MyAdventuresScreen
+
 sealed class ScreensRoutes(val route: String) {
     object CharacterListScreen : ScreensRoutes("CharacterListScreen")
     object CharacterSpellScreen : ScreensRoutes("CharacterSpellScreen")
@@ -29,6 +31,7 @@ sealed class ScreensRoutes(val route: String) {
 
 
     // ADVENTURE
+    object AdventureHomeScreen : ScreensRoutes("AdventureHomeScreen")
     object HomeAdventureScreen : ScreensRoutes("AdventureMainScreen")
     object AdventureMainScreen : ScreensRoutes("AdventureMainScreen")
     object AdventureListScreen: ScreensRoutes("AdventureListScreen")
@@ -43,7 +46,6 @@ sealed class ScreensRoutes(val route: String) {
         fun createRoute(adventureId: String) = "waiting/$adventureId"
     }
 
-
     object TitleScreen : ScreensRoutes("TitleScreen")
     object HistoricalContextScreen : ScreensRoutes("HistoricalContextScreen/{adventureId}") {
         fun createRoute(adventureId: String) = "HistoricalContextScreen/$adventureId"
@@ -52,7 +54,7 @@ sealed class ScreensRoutes(val route: String) {
         fun createRoute(adventureId: String) = "ActsScreen/$adventureId"
     }
 
-
+    object MyAdventuresScreen : ScreensRoutes("MyAdventures")
 
     // HOME
     object HomeScreen: ScreensRoutes("HomeScreen")
