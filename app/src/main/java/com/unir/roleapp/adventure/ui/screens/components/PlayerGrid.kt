@@ -3,6 +3,7 @@ package com.unir.roleapp.adventure.ui.screens.components
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,11 +25,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.roleapp.core.di.LocalNavigationViewModel
+import com.roleapp.core.navigation.NavigationViewModel
+import com.roleapp.core.navigation.ScreensRoutes
 import com.unir.roleapp.adventure.domain.model.AdventureCharacter
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun PlayerGrid(players: List<AdventureCharacter>) {
+fun PlayerGrid(
+    players: List<AdventureCharacter>,
+    navigationViewModel: NavigationViewModel = LocalNavigationViewModel.current
+) {
     val totalSlots = 4
     val columns = 4
     val rows = totalSlots / columns
@@ -49,7 +56,7 @@ fun PlayerGrid(players: List<AdventureCharacter>) {
                             .weight(1f)
                             .aspectRatio(1f)
                             .border(2.dp, Color.White),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         if (index < players.size) {
 
@@ -75,14 +82,20 @@ fun PlayerGrid(players: List<AdventureCharacter>) {
                                             2.dp,
                                             MaterialTheme.colorScheme.onSurface,
                                             RoundedCornerShape(16.dp)
-                                        ),
+                                        )
+                                        .clickable {
+                                            navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(players[index].id))
+                                        },
                                     contentScale = ContentScale.Crop
                                 )
                             } else {
                                 Text(
-                                    text = "?",
+                                    text = players[index].name.take(2).uppercase(),
                                     style = MaterialTheme.typography.titleLarge,
-                                    color = Color.White
+                                    color = Color.White,
+                                    modifier = Modifier.clickable {
+                                        navigationViewModel.navigate(ScreensRoutes.CharacterDetailScreen.createRoute(players[index].id))
+                                    }
                                 )
                             }
 

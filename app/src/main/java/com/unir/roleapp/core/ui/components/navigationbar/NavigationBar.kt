@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Castle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalLibrary
@@ -37,14 +38,14 @@ import com.unir.roleapp.R
 
 val navigationItems = listOf(
     NavigationItem(
-        title = "Aventuras",
+        title = "Nueva aventura",
         icon = Icons.Default.LocalLibrary,
         route = ScreensRoutes.TitleScreen.route
     ),
     NavigationItem(
-        title = "Escenarios",
-        icon = Icons.Default.Castle,
-        route = ScreensRoutes.HomeAdventureScreen.route
+        title = "Listado aventuras",
+        icon = Icons.Default.Book,
+        route = ScreensRoutes.MyAdventuresScreen.route
     ),
     NavigationItem(
         title = "Home",

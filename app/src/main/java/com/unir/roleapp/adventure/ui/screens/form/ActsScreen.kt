@@ -1,7 +1,10 @@
 package com.unir.roleapp.adventure.ui.screens.form
 
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -16,11 +19,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.roleapp.core.navigation.ScreensRoutes
 import com.roleapp.core.ui.layout.MainLayout
+import com.unir.roleapp.R
 import com.unir.roleapp.adventure.domain.model.AdventureAct
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
 import kotlinx.coroutines.flow.map
@@ -167,6 +174,20 @@ fun ActsScreenBody(
                         .height(160.dp)
                 )
                 Spacer(Modifier.height(25.dp))
+
+                if (isEditing)
+                    Image(
+                        painter = painterResource(id = R.drawable.fantasy_landscape),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .border(2.dp, androidx.compose.material3.MaterialTheme.colorScheme.onSurface, RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+
+                Spacer(Modifier.height(12.dp))
 
                 OutlinedTextField(
                     value = mapDescValue,
