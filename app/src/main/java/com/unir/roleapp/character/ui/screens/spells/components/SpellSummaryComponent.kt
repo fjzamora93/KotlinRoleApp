@@ -132,35 +132,38 @@ fun SpellSummaryComponent(
 
                     Text(
                         text = spell.name  + "✨" + " ${spell.cost} Ap",
-                        style = CustomType.titleMedium
+                        style = CustomType.titleMedium,
+                        color = Color.White
                     )
 
                 }
 
                 Text(
                     text = "${ spell.diceAmount }d${ spell.dice } 🎲 ${spell.description}",
+                    color = Color.White
                 )
 
             }
-
-            Column(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .weight(0.5f),
-            ){
-                IconButton(
-                    onClick = {
-                        onClick()
-                        showBottomSheet = true
-                    }
-                ) {
-                    Icon(
-                        modifier = Modifier.size(40.dp),
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = "Más opciones",
-                    )
-                }
-            }
+//
+//            Column(
+//                modifier = Modifier
+//                    .padding(8.dp)
+//                    .weight(0.5f),
+//            ){
+//                IconButton(
+//                    onClick = {
+//                        onClick()
+//                        showBottomSheet = true
+//                    }
+//                ) {
+//                    Icon(
+//                        modifier = Modifier.size(40.dp),
+//                        imageVector = Icons.Filled.MoreVert,
+//                        contentDescription = "Más opciones",
+//                        tint = Color.White
+//                    )
+//                }
+//            }
 
             if (showBottomSheet) {
                 BottomDialogueMenu(
