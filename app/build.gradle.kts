@@ -92,10 +92,13 @@ dependencies {
     // Room
     implementation("androidx.room:room-ktx:2.6.1")
     implementation(libs.androidx.media3.common.ktx)
+    implementation(libs.androidx.storage)
     kapt("androidx.room:room-compiler:2.6.1")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")

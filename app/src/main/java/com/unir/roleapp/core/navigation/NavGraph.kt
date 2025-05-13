@@ -1,18 +1,26 @@
 package com.roleapp.core.navigation
 
+import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.di.LocalAuthViewModel
@@ -24,16 +32,16 @@ import com.roleapp.auth.ui.screens.UserProfileScreen
 import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.character.ui.screens.characterform.CharacterEditorScreen
 import com.roleapp.core.di.LocalLanguageSetter
+import com.unir.roleapp.MyApplication.Companion.context
 import com.unir.roleapp.adventure.ui.screens.HomeAdventureScreen
 import com.unir.roleapp.core.navigation.LocalizedApp
 import com.unir.roleapp.home.ui.screens.HomeScreen
-import com.unir.roleapp.adventure.ui.screens.AdventureContextScreen
-import com.unir.roleapp.adventure.ui.screens.AdventureMainScreen
-import com.unir.roleapp.adventure.ui.screens.CreateAdventureScreen
 import com.unir.roleapp.adventure.ui.screens.TemplateAdventureScreen
-import com.unir.roleapp.adventure.ui.screens.WaitingRoomScreen
-import com.unir.roleapp.adventure.ui.viewmodels.WaitingRoomViewModel
+import com.unir.roleapp.adventure.ui.screens.form.*
+import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
+import com.unir.roleapp.core.navigation.AdventureFormGraph
 
+@SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
 fun NavGraph(
     navController: NavHostController
@@ -64,7 +72,7 @@ fun NavGraph(
 
                 // USUARIO Y FUNCIONALIDAD GENERAL
                 composable(ScreensRoutes.AdventureMainScreen.route) {
-                    AdventureMainScreen()
+//                    AdventureMainScreen()
                 }
                 composable(ScreensRoutes.AdventureListScreen.route) {
                     TemplateAdventureScreen()
@@ -99,72 +107,63 @@ fun NavGraph(
                 }
 
 
-                // ---- AVENTURA ----
-
-                // 1) Pantalla de creación inicial
-                composable(ScreensRoutes.AdventureMainScreen.route) {
-                    AdventureMainScreen()
+                // —————————— ADVENTURE FORM SUB‐GRAPH ——————————
+                composable(ScreensRoutes.AdventureHomeScreen.route) {
+                    HomeAdventureScreen(navController)
                 }
 
-                // 2) Sala de espera
-                composable(
-                    route = ScreensRoutes.WaitingRoomScreen.route,
-                    arguments = listOf(navArgument("adventureId") {
-                        type = NavType.StringType
-                    })
-                ) { backStack ->
-                    val adventureId = backStack.arguments!!.getString("adventureId")!!
-
-                    val vm: WaitingRoomViewModel = hiltViewModel()
-                    LaunchedEffect(adventureId) { vm.loadCharacters(adventureId) }
-
-                    val characters by vm.characters.collectAsState(initial = emptyList())
-                    val loading    by vm.loading.collectAsState(initial = false)
-                    val error      by vm.error.collectAsState(initial = null)
-
-                    WaitingRoomScreen(
-                        adventureId = adventureId,
-                        characters  = characters,
-                        loading     = loading,
-                        error       = error,
-                        onContinue  = {
-                            navController.navigate(
-                                ScreensRoutes.CreateAdventureScreen.createRoute(adventureId)
-                            )
+                navigation(
+                    route = AdventureFormGraph.pattern,
+                    startDestination = ScreensRoutes.TitleScreen.route,
+                    arguments = listOf(
+                        navArgument("adventureId") {
+                            type = NavType.StringType
+                            nullable = true
+                            defaultValue = ""
                         }
                     )
+                ) {
+                    composable(ScreensRoutes.TitleScreen.route) { backStack ->
+                        val advId = backStack.arguments?.getString("adventureId").orEmpty()
+                        val formVm: AdventureFormViewModel = hiltViewModel(backStack)
+                        TitleScreen(
+                            viewModel   = formVm,
+                            adventureId = advId,
+                            onNext      = { navController.navigate(ScreensRoutes.HistoricalContextScreen.route) }
+                        )
+                    }
+
+                    composable(ScreensRoutes.HistoricalContextScreen.route) {
+                        val parentEntry = navController.getBackStackEntry(AdventureFormGraph.pattern)
+                        val formVm: AdventureFormViewModel = hiltViewModel(parentEntry)
+
+                        HistoricalContextScreen(
+                            viewModel = formVm,
+                            onNext    = { navController.navigate(ScreensRoutes.ActsScreen.route) }
+                        )
+                    }
+
+                    composable(ScreensRoutes.ActsScreen.route) {
+                        val parentEntry = navController.getBackStackEntry(AdventureFormGraph.pattern)
+                        val formVm: AdventureFormViewModel = hiltViewModel(parentEntry)
+
+                        ActsScreen(
+                            viewModel     = formVm,
+                            navController = navController
+                        )
+                    }
                 }
 
-                // 3) Ajustes finales antes del contexto
-                composable(
-                    route     = ScreensRoutes.CreateAdventureScreen.route,
-                    arguments = listOf(navArgument("adventureId") {
-                        type = NavType.StringType
-                    })
-                ) { backStack ->
-                    val adventureId = backStack.arguments!!.getString("adventureId")!!
-                    CreateAdventureScreen(
-                        navController = navController,
-                        onNext        = { id ->
-                            navController.navigate(
-                                ScreensRoutes.AdventureContextScreen.createRoute(id)
-                            )
+                composable(ScreensRoutes.MyAdventuresScreen.route) {
+                    MyAdventuresScreen(
+                        onAdventureClick = { adventureId ->
+                            navController.navigate(AdventureFormGraph.createRoute(adventureId)) {
+                                launchSingleTop = true
+                            }
+                        },
+                        onCreateNew = {
+                            navController.navigate(ScreensRoutes.TitleScreen.route)
                         }
-                    )
-                }
-
-                // 4) Contexto histórico y de personajes
-                composable(
-                    route     = ScreensRoutes.AdventureContextScreen.route,
-                    arguments = listOf(navArgument("adventureId") {
-                        type = NavType.StringType
-                    })
-                ) { backStack ->
-                    val adventureId = backStack.arguments!!.getString("adventureId")!!
-                    AdventureContextScreen(
-                        adventureId = adventureId,
-                        onCancel    = { navController.popBackStack() },
-                        onFinish    = { navController.popBackStack() }
                     )
                 }
 
@@ -176,3 +175,4 @@ fun NavGraph(
         }
     }
 }
+

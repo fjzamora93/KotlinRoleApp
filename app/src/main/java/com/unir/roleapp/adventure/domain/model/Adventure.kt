@@ -4,12 +4,23 @@ import com.google.firebase.firestore.DocumentId
 
 data class Adventure(
     @DocumentId val id: String = "",
+    val userId: String = "",
     val title: String = "",
     val description: String = "",
-    val userId: String = "",
-    val characters: List<Character> = emptyList(),
-    val acts: List<AdventureAct> = emptyList(),
     val historicalContext: String = "",
-    val characterContexts: List<CharacterContext> = emptyList()
+    val characters: List<AdventureCharacter> = emptyList(),
+    val characterContexts: List<CharacterContext> = emptyList(),
+    val acts: List<AdventureAct> = emptyList(),
+){
 
+    constructor() : this(
+        id = "",
+        title = "",
+        description = "",
+        userId = "",
+        characters = emptyList(),
+        acts = emptyList(),
+        historicalContext = ""
     )
+
+}

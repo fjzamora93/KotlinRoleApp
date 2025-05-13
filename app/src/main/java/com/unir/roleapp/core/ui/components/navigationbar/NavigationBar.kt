@@ -14,10 +14,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Castle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalLibrary
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material3.MaterialTheme
@@ -30,10 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.roleapp.auth.viewmodels.AuthViewModel
-import com.roleapp.auth.viewmodels.UserState
-import com.roleapp.core.di.LocalAuthViewModel
 import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.navigation.NavigationViewModel
 import com.roleapp.core.navigation.ScreensRoutes
@@ -42,14 +38,14 @@ import com.unir.roleapp.R
 
 val navigationItems = listOf(
     NavigationItem(
-        title = "Aventuras",
+        title = "Nueva aventura",
         icon = Icons.Default.LocalLibrary,
-        route = ScreensRoutes.AdventureMainScreen.route
+        route = ScreensRoutes.TitleScreen.route
     ),
     NavigationItem(
-        title = "Escenarios",
-        icon = Icons.Default.Castle,
-        route = ScreensRoutes.HomeAdventureScreen.route
+        title = "Listado aventuras",
+        icon = Icons.Default.Book,
+        route = ScreensRoutes.MyAdventuresScreen.route
     ),
     NavigationItem(
         title = "Home",
@@ -120,14 +116,9 @@ fun NavigationBarItem(
     onClick: () -> Unit,
     icon: @Composable () -> Unit,
     label: @Composable () -> Unit,
-    /*containerColor: Color = Color.White,
-    selectedIconColor: Color = MaterialTheme.colorScheme.surface,
-    selectedTextColor: Color = Color.Black,
-    unselectedTextColor: Color = Color.Gray,*/
     indicatorColor: Color = MaterialTheme.colorScheme.primary
 ) {
     val backgroundColor = if (selected) indicatorColor.copy(alpha = 0.1f) else Color.Transparent
-    /*val iconColor = if (selected) selectedIconColor else unselectedTextColor*/
 
     Box(
         modifier = Modifier
