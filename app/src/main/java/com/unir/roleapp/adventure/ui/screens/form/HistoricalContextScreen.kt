@@ -16,6 +16,7 @@ import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.R
 import com.unir.roleapp.adventure.ui.screens.components.PlayerGrid
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun HistoricalContextScreen(
@@ -53,14 +54,22 @@ fun HistoricalContextScreenBody(
     val historicalContext by viewModel.historicalContext.collectAsState(initial = "")
     val characters by viewModel.characters.collectAsState(initial = emptyList())
     val clipboard = LocalClipboardManager.current
+    val isEditing by viewModel.id
+        .map { it.isNotBlank() }
+        .collectAsState(initial = false)
+    val titleHeaderText = if (isEditing) "Editar la aventura"
+    else "Inicio de la aventura"
+
+    val headerText = if (isEditing) "Editar contexto histórico"
+    else "Contexto histórico"
 
     Column(
         Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "Inicio de la aventura",
-            style = MaterialTheme.typography.h5,
+            titleHeaderText,
+            style = MaterialTheme.typography.h4,
             color = textColor
         )
         Spacer(Modifier.height(10.dp))
@@ -88,8 +97,8 @@ fun HistoricalContextScreenBody(
         Spacer(Modifier.height(30.dp))
 
         Text(
-            "Contexto histórico",
-            style = MaterialTheme.typography.subtitle1,
+            headerText,
+            style = MaterialTheme.typography.h6,
             color = textColor,
             modifier = Modifier.padding(bottom = 10.dp)
         )
@@ -115,7 +124,7 @@ fun HistoricalContextScreenBody(
 
         Text(
             "Listado jugadores",
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.h6,
             color = textColor,
             modifier = Modifier.padding(bottom = 10.dp)
         )
@@ -126,17 +135,6 @@ fun HistoricalContextScreenBody(
         )
         Spacer(Modifier.height(30.dp))
         Row {
-            characters.forEach { char ->
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .border(1.dp, Color.Gray, RoundedCornerShape(4.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(char.name.take(1))
-                }
-                Spacer(Modifier.width(8.dp))
-            }
             PlayerGrid(players = characters)
         }
         Spacer(Modifier.height(40.dp))

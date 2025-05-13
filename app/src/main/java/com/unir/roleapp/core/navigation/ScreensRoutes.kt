@@ -46,13 +46,11 @@ sealed class ScreensRoutes(val route: String) {
         fun createRoute(adventureId: String) = "waiting/$adventureId"
     }
 
-    object TitleScreen : ScreensRoutes("TitleScreen")
-    object HistoricalContextScreen : ScreensRoutes("HistoricalContextScreen/{adventureId}") {
-        fun createRoute(adventureId: String) = "HistoricalContextScreen/$adventureId"
+    object TitleScreen : ScreensRoutes("TitleScreen") {
+        fun createRoute(adventureId: String) = "TitleScreen?adventureId=$adventureId"
     }
-    object ActsScreen : ScreensRoutes("ActsScreen/{adventureId}") {
-        fun createRoute(adventureId: String) = "ActsScreen/$adventureId"
-    }
+    object HistoricalContextScreen : ScreensRoutes("HistoricalContextScreen/{adventureId}")
+    object ActsScreen : ScreensRoutes("ActsScreen/{adventureId}")
 
     object MyAdventuresScreen : ScreensRoutes("MyAdventures")
 

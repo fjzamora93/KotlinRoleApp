@@ -8,7 +8,7 @@ data class Adventure(
     val title: String = "",
     val description: String = "",
     val historicalContext: String = "",
-    val characters: List<Character> = emptyList(),
+    val characters: List<AdventureCharacter> = emptyList(),
     val characterContexts: List<CharacterContext> = emptyList(),
     val acts: List<AdventureAct> = emptyList(),
 ){

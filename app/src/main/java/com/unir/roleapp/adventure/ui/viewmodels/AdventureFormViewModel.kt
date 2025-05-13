@@ -1,5 +1,7 @@
 package com.unir.roleapp.adventure.ui.viewmodels
 
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
@@ -7,6 +9,7 @@ import com.roleapp.auth.domain.usecase.user.GetUserUseCase
 import com.roleapp.character.data.model.local.CharacterEntity
 import com.unir.roleapp.adventure.domain.model.AdventureAct
 import com.unir.roleapp.adventure.domain.model.Adventure
+import com.unir.roleapp.adventure.domain.model.AdventureCharacter
 import com.unir.roleapp.adventure.domain.usecase.CreateAdventureRequest
 import com.unir.roleapp.adventure.domain.usecase.CreateAdventureUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,12 +25,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AdventureFormViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getUserUseCase: GetUserUseCase,
     private val createAdventureUseCase: CreateAdventureUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
 ): ViewModel() {
+
+    init {
+        savedStateHandle.get<String>("adventureId")
+            ?.takeIf { it.isNotBlank() }
+            ?.let { loadAdventure(it) }
+    }
 
     private val _id   = MutableStateFlow("")
     val id: StateFlow<String> = _id.asStateFlow()
@@ -44,8 +54,8 @@ class AdventureFormViewModel @Inject constructor(
     private val _historicalContext   = MutableStateFlow("")
     val historicalContext: StateFlow<String> = _historicalContext.asStateFlow()
 
-    private val _characters   = MutableStateFlow<List<CharacterEntity>>(value = emptyList())
-    val characters: StateFlow<List<CharacterEntity>> = _characters.asStateFlow()
+    private val _characters   = MutableStateFlow<List<AdventureCharacter>>(value = emptyList())
+    val characters: StateFlow<List<AdventureCharacter>> = _characters.asStateFlow()
 
     private val _acts = MutableStateFlow(
         listOf(
@@ -86,7 +96,7 @@ class AdventureFormViewModel @Inject constructor(
         _historicalContext.value = newContext
     }
 
-    fun onChangeCharacter(char: CharacterEntity) {
+    fun onChangeCharacter(char: AdventureCharacter) {
         if (_characters.value.none { it.id == char.id }) {
             _characters.value = _characters.value + char
         }
@@ -108,28 +118,10 @@ class AdventureFormViewModel @Inject constructor(
     }
 
     // Funciones de ayuda
-    fun addCharacter(char: CharacterEntity) {
+    fun addCharacter(char: AdventureCharacter) {
         if (_characters.value.none() { it.id == char.id }) {
             _characters.value += char
         }
-    }
-
-    // Envío a Firebase
-    fun submitAdventure(onSuccess: () -> Unit, onError: (Exception) -> Unit) {
-        val adventure = Adventure()  // todos los valores por defecto
-            .copy(
-                id                = id.value,
-                userId            = userId.value,
-                title             = title.value,
-                description       = description.value,
-                historicalContext = historicalContext.value,
-                acts              = _acts.value
-            )
-        FirebaseFirestore.getInstance()
-            .collection("adventures")
-            .add(adventure)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { ex -> onError(ex) }
     }
 
     /**
@@ -198,6 +190,33 @@ class AdventureFormViewModel @Inject constructor(
                     .await()
                 onSuccess()
             } catch (e: Exception) {
+                onError(e)
+            }
+        }
+    }
+
+    fun loadAdventure(adventureId: String, onError: (Exception) -> Unit = {}) {
+        viewModelScope.launch {
+            try {
+                val snapshot = db.collection("adventures")
+                    .document(adventureId)
+                    .get()
+                    .await()
+                val adventure = snapshot.toObject(Adventure::class.java)
+                    ?: throw IllegalStateException("Aventura no encontrada")
+
+                // Rellenamos los StateFlows
+                _id.value                = adventure.id
+                _userId.value            = adventure.userId
+                _title.value             = adventure.title
+                _description.value       = adventure.description
+                _historicalContext.value = adventure.historicalContext
+                _characters.value        = adventure.characters
+                _acts.value              = adventure.acts
+                // Si tuvieras también personajes en Firestore, cárgalos aquí
+
+            } catch (e: Exception) {
+                _error.value = e.message
                 onError(e)
             }
         }

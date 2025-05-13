@@ -2,7 +2,7 @@ package com.unir.roleapp.adventure.domain.model
 
 import com.google.firebase.firestore.DocumentId
 
-data class Character(
+data class AdventureCharacter(
     val id: Long = 0,
     val name: String = "",
     val gameSessionId: String = "",

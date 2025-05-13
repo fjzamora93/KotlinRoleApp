@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,11 +21,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.R
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun TitleScreen(
     onNext: () -> Unit,
     viewModel: AdventureFormViewModel,
+    adventureId: String
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -39,7 +42,8 @@ fun TitleScreen(
             ) {
                 TitleScreenBody(
                     onNext,
-                    viewModel
+                    viewModel,
+                    adventureId
                 )
             }
         }
@@ -49,13 +53,25 @@ fun TitleScreen(
 @Composable
 fun TitleScreenBody(
     onNext: () -> Unit,
-    viewModel: AdventureFormViewModel = hiltViewModel()
+    viewModel: AdventureFormViewModel = hiltViewModel(),
+    adventureId: String
 ) {
+    LaunchedEffect(adventureId) {
+        if (adventureId.isNotBlank())
+            viewModel.loadAdventure(adventureId)
+    }
+
     val textColor = Color.White;
 
     val title by viewModel.title.collectAsState(initial = "")
     val description by viewModel.description.collectAsState(initial = "")
     val error by viewModel.error.collectAsState(initial = null)
+    val isEditing by viewModel.id
+        .map { it.isNotBlank() }
+        .collectAsState(initial = false)
+
+    val headerText = if (isEditing) "Editar aventura"
+    else "Nueva aventura"
 
     Column(
         Modifier.padding(16.dp),
@@ -75,8 +91,8 @@ fun TitleScreenBody(
 
         Spacer(Modifier.height(30.dp))
 
-        Text("Nueva aventura",
-            style = MaterialTheme.typography.h5,
+        Text(headerText,
+            style = MaterialTheme.typography.h4,
             color = textColor,
             modifier = Modifier.padding(bottom = 16.dp)
         )
