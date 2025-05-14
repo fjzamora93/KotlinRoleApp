@@ -20,7 +20,11 @@ import com.unir.roleapp.core.ui.components.sectioncard.SectionCardItem
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CardCarousel(cardItems: List<SectionCardItem>, pagerState: PagerState, navController: NavHostController) {
+fun CardCarousel(
+        cardItems: List<SectionCardItem>,
+        pagerState: PagerState,
+        navController: NavHostController,
+        isAdventure: Boolean = false) {
 
     HorizontalPager(
         count = cardItems.size,
@@ -52,6 +56,7 @@ fun CardCarousel(cardItems: List<SectionCardItem>, pagerState: PagerState, navCo
                 onClick = {
                     navController.navigate(cardItems[page].route)
                 },
+                isAdventure,
                 interactionSource = interactionSource
             )
         }
