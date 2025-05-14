@@ -17,6 +17,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.unir.roleapp.R
+import com.unir.roleapp.core.ui.components.RemoteImage
 
 @Composable
 fun SectionCard(
@@ -24,6 +25,7 @@ fun SectionCard(
     description: String,
     imageResName: String,
     onClick: () -> Unit,
+    isAdventure: Boolean = false,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     val context = LocalContext.current
@@ -77,12 +79,16 @@ fun SectionCard(
                             .padding(4.dp),
                         contentAlignment = Alignment.TopCenter
                     ) {
-                        painter?.let {
-                            Image(
-                                painter = it,
-                                contentDescription = "Card Image",
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                        if (isAdventure) {
+                            RemoteImage(imageResName)
+                        } else {
+                            painter?.let {
+                                Image(
+                                    painter = it,
+                                    contentDescription = "Card Image",
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
                         }
                     }
 

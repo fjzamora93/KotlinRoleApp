@@ -3,10 +3,13 @@ package com.unir.roleapp.adventure.ui.screens.form
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SmallTopAppBar
@@ -35,29 +38,35 @@ import com.unir.roleapp.core.ui.components.sectioncard.SectionCardItem
 @Composable
 fun MyAdventuresScreen(
     navController: NavHostController,
-    onAdventureClick: (String) -> Unit, // ya no te hace falta si usas route en el carousel
+    onAdventureClick: (String) -> Unit,
     onCreateNew: () -> Unit,
     vm: MyAdventuresViewModel = hiltViewModel()
 ) {
-    // 1) Estado de la UI
     val adventures by vm.adventures.collectAsState()
     val loading    by vm.loading.collectAsState()
     val error      by vm.error.collectAsState()
 
-    // 2) Única invocación de MainLayout (sin navController ni topBar)
+    val textColor: Color = Color.White
+
     MainLayout {
-        // tu contenido va aquí: SmallTopAppBar + carrusel
         Column(Modifier.fillMaxSize()) {
-            // — Opcional: tu propia AppBar dentro del content
             SmallTopAppBar(
-                title = { Text("Mis Aventuras") },
+                title = { Text("Mis Aventuras", color = textColor) },
                 actions = {
-                    TextButton(onClick = onCreateNew) {
-                        Text("Nueva")
+                    Button(
+                        onClick = onCreateNew,
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = textColor
+                        ),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+                    ) {
+                        Text("Crear nueva")
                     }
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Transparent  // deja ver tu fondo
+                    containerColor = Color.Transparent
                 ),
                 modifier = Modifier.background(Color.Transparent)
             )
@@ -68,26 +77,23 @@ fun MyAdventuresScreen(
                 when {
                     loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
                     else    -> {
-                        // 3a) PagerState
+
                         val pagerState = rememberPagerState()
 
-                        // 3b) Mapea cada Adventure a SectionCardItem, incluyendo la ruta de edición
                         val cardItems = adventures.map { adv ->
                             SectionCardItem(
                                 title        = adv.title,
                                 description  = adv.description,
-                                imageResName = "adventure_default",
-                                // aquí pones la ruta de edición de esa aventura
+                                imageResName = adv.acts.getOrNull(0)?.mapURL.orEmpty(),
                                 route        = AdventureFormGraph.createRoute(adv.id)
                             )
                         }
 
-                        // 3c) Llama al carrusel con la firma correcta:
-                        //     fun CardCarousel(cardItems, pagerState, navController)
                         CardCarousel(
                             cardItems,
                             pagerState,
-                            navController
+                            navController,
+                            true
                         )
                     }
                 }
