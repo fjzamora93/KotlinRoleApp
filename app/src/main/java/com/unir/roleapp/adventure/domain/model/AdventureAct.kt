@@ -7,6 +7,7 @@ data class AdventureAct(
     val title: String,
     val narrative: String,
     val mapDescription: String,
+    val mapURL: String,
     val scenes: List<Scene?> // TODO: Borrar y arreglar conflictos
 ){
 
@@ -15,6 +16,7 @@ data class AdventureAct(
         title = "",
         narrative ="",
         mapDescription = "",
+        mapURL = "",
         scenes = emptyList()
 
     )

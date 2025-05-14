@@ -151,13 +151,12 @@ fun NavGraph(
 
                 composable(ScreensRoutes.MyAdventuresScreen.route) {
                     MyAdventuresScreen(
-                        onAdventureClick = { adventureId ->
-                            navController.navigate(AdventureFormGraph.createRoute(adventureId)) {
-                                launchSingleTop = true
-                            }
+                        navController      = navController,
+                        onAdventureClick   = { id ->
+                            navController.navigate(AdventureFormGraph.createRoute(id))
                         },
-                        onCreateNew = {
-                            navController.navigate(ScreensRoutes.TitleScreen.route)
+                        onCreateNew        = {
+                            navController.navigate(AdventureFormGraph.createRoute(null))
                         }
                     )
                 }

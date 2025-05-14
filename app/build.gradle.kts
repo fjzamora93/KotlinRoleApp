@@ -93,6 +93,9 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.storage)
+    implementation(libs.androidx.navigation.runtime.android)
+    implementation(libs.androidx.foundation.android)
+    implementation(libs.storage)
     kapt("androidx.room:room-compiler:2.6.1")
 
     // Coroutines

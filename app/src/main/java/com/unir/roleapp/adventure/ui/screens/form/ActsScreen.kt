@@ -30,6 +30,9 @@ import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.R
 import com.unir.roleapp.adventure.domain.model.AdventureAct
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
+import kotlinx.coroutines.launch
+import com.unir.roleapp.core.ui.components.RemoteImage
+
 
 @Composable
 fun ActsScreen(
@@ -69,6 +72,7 @@ fun ActsScreenBody(
     var newTitle by remember { mutableStateOf("") }
     var newNarrative by remember { mutableStateOf("") }
     var newMapDesc by remember { mutableStateOf("") }
+    var newMapURL by remember { mutableStateOf("") }
     val isEditing by viewModel.isEditMode.collectAsState()
     val headerText = if (isEditing) "Editar actos de la aventura"
     else "Creación de los actos"
@@ -116,6 +120,7 @@ fun ActsScreenBody(
                             title = newTitle,
                             narrative = newNarrative,
                             mapDescription = newMapDesc,
+                            mapURL =  newMapURL,
                             emptyList()
                         )
                     )
@@ -140,6 +145,7 @@ fun ActsScreenBody(
                 val titleValue = currentAct?.title ?: newTitle
                 val narrativeValue = currentAct?.narrative ?: newNarrative
                 val mapDescValue = currentAct?.mapDescription ?: newMapDesc
+                val mapURL = currentAct?.mapURL ?: newMapDesc
 
                 OutlinedTextField(
                     value = titleValue,
@@ -173,7 +179,11 @@ fun ActsScreenBody(
                 Spacer(Modifier.height(25.dp))
 
                 if (isEditing)
-                    Image(
+
+                    Log.d("URL MAPA:", mapURL)
+                    RemoteImage(mapURL)
+
+                    /*Image(
                         painter = painterResource(id = R.drawable.fantasy_landscape),
                         contentDescription = null,
                         modifier = Modifier
@@ -182,7 +192,7 @@ fun ActsScreenBody(
                             .clip(RoundedCornerShape(8.dp))
                             .border(2.dp, androidx.compose.material3.MaterialTheme.colorScheme.onSurface, RoundedCornerShape(8.dp)),
                         contentScale = ContentScale.Crop
-                    )
+                    )*/
 
                 Spacer(Modifier.height(12.dp))
 
@@ -205,13 +215,17 @@ fun ActsScreenBody(
         }
 
         Spacer(Modifier.height(35.dp))
-
+        val coroutineScope = rememberCoroutineScope()
         Button(
             onClick = {
                 viewModel.saveWholeAdventure(
                     onSuccess = {
-                        // Si todo OK vamos a AdventureHomeScreen
-                        navController.navigate(ScreensRoutes.MyAdventuresScreen.route)
+                        Log.d("ID DE AVENTURA:",viewModel.id.value)
+                        coroutineScope.launch {
+                            viewModel.sendPostToN8n(viewModel.id.value)
+                            //Si todo ok nos redirige a la lista de aventuras
+                            navController.navigate(ScreensRoutes.MyAdventuresScreen.route)
+                        }
                     },
                     onError = { exception ->
                         // Log de Error

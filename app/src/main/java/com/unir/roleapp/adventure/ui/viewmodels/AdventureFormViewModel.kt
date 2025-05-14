@@ -19,6 +19,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,6 +71,7 @@ class AdventureFormViewModel @Inject constructor(
                 title = "",
                 narrative = "",
                 mapDescription = "",
+                mapURL = "",
                 emptyList()
             )
         )
@@ -223,6 +227,29 @@ class AdventureFormViewModel @Inject constructor(
                 _error.value = e.message
                 onError(e)
             }
+        }
+    }
+
+    suspend fun sendPostToN8n(adventureId: String) {
+        withContext(Dispatchers.IO) {
+            val url = URL("https://d733-2a0c-5a84-730d-b00-5f1-42cc-c20a-de58.ngrok-free.app/webhook/generateAdventure")
+            val connection = url.openConnection() as HttpURLConnection
+
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/json")
+
+            val jsonInput = """{ "adventureId": "$adventureId" }"""
+
+            val outputStreamWriter = OutputStreamWriter(connection.outputStream)
+            outputStreamWriter.write(jsonInput)
+            outputStreamWriter.flush()
+            outputStreamWriter.close()
+
+            val responseCode = connection.responseCode
+            println("Response Code: $responseCode")
+
+            connection.disconnect()
         }
     }
 
