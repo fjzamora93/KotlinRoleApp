@@ -138,14 +138,10 @@ fun TitleScreenBody(
 
         Button(
             onClick = {
-                if(isEditing){
+                viewModel.createAdventure { adv ->
+                    Log.d("AdventureMain", "ID generado: ${adv.id}")
+                    viewModel.onChangeId(adv.id)
                     onNext()
-                }else{
-                    viewModel.createAdventure { adv ->
-                        Log.d("AdventureMain", "ID generado: ${adv.id}")
-                        viewModel.onChangeId(adv.id)
-                        onNext()
-                    }
                 }
             },
             enabled = title.isNotBlank() && description.isNotBlank(),
