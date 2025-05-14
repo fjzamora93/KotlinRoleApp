@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -21,7 +20,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.R
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun TitleScreen(
@@ -56,19 +54,13 @@ fun TitleScreenBody(
     viewModel: AdventureFormViewModel = hiltViewModel(),
     adventureId: String
 ) {
-    LaunchedEffect(adventureId) {
-        if (adventureId.isNotBlank())
-            viewModel.loadAdventure(adventureId)
-    }
 
     val textColor = Color.White;
 
     val title by viewModel.title.collectAsState(initial = "")
     val description by viewModel.description.collectAsState(initial = "")
     val error by viewModel.error.collectAsState(initial = null)
-    val isEditing by viewModel.id
-        .map { it.isNotBlank() }
-        .collectAsState(initial = false)
+    val isEditing by viewModel.isEditMode.collectAsState()
 
     val headerText = if (isEditing) "Editar aventura"
     else "Nueva aventura"

@@ -1,4 +1,4 @@
-package com.unir.roleapp.core.navigation
+package com.unir.roleapp.core.navigation.helpers
 
 import android.net.Uri
 

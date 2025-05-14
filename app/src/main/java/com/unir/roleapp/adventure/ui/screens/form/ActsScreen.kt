@@ -30,7 +30,6 @@ import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.R
 import com.unir.roleapp.adventure.domain.model.AdventureAct
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun ActsScreen(
@@ -70,9 +69,7 @@ fun ActsScreenBody(
     var newTitle by remember { mutableStateOf("") }
     var newNarrative by remember { mutableStateOf("") }
     var newMapDesc by remember { mutableStateOf("") }
-    val isEditing by viewModel.id
-        .map { it.isNotBlank() }
-        .collectAsState(initial = false)
+    val isEditing by viewModel.isEditMode.collectAsState()
     val headerText = if (isEditing) "Editar actos de la aventura"
     else "Creación de los actos"
 
