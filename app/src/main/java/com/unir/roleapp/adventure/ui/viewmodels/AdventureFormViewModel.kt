@@ -1,12 +1,10 @@
 package com.unir.roleapp.adventure.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.roleapp.auth.domain.usecase.user.GetUserUseCase
-import com.roleapp.character.data.model.local.CharacterEntity
 import com.unir.roleapp.adventure.domain.model.AdventureAct
 import com.unir.roleapp.adventure.domain.model.Adventure
 import com.unir.roleapp.adventure.domain.model.AdventureCharacter
@@ -33,10 +31,16 @@ class AdventureFormViewModel @Inject constructor(
 
 ): ViewModel() {
 
+    private val initialArg = savedStateHandle
+        .get<String>("adventureId")
+        .orEmpty()
+    private val _isEditMode = MutableStateFlow(initialArg.isNotBlank())
+    val isEditMode: StateFlow<Boolean> = _isEditMode.asStateFlow()
+
     init {
-        savedStateHandle.get<String>("adventureId")
-            ?.takeIf { it.isNotBlank() }
-            ?.let { loadAdventure(it) }
+        if (initialArg.isNotBlank()) {
+            loadAdventure(initialArg)
+        }
     }
 
     private val _id   = MutableStateFlow("")

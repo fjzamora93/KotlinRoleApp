@@ -1,20 +1,12 @@
 package com.roleapp.core.navigation
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -26,20 +18,18 @@ import com.roleapp.core.di.LocalNavigationViewModel
 import com.roleapp.core.di.LocalAuthViewModel
 import com.roleapp.character.ui.screens.characterSheet.CharacterListScreen
 import com.roleapp.character.ui.screens.characterSheet.CharacterDetailScreen
-import com.roleapp.core.ui.layout.FontsTemplateScreen
 import com.roleapp.auth.ui.screens.LoginScreen
 import com.roleapp.auth.ui.screens.UserProfileScreen
 import com.roleapp.auth.viewmodels.AuthViewModel
 import com.roleapp.character.ui.screens.characterform.CharacterEditorScreen
 import com.roleapp.core.di.LocalLanguageSetter
-import com.unir.roleapp.MyApplication.Companion.context
 import com.unir.roleapp.adventure.ui.screens.HomeAdventureScreen
 import com.unir.roleapp.core.navigation.LocalizedApp
 import com.unir.roleapp.home.ui.screens.HomeScreen
 import com.unir.roleapp.adventure.ui.screens.TemplateAdventureScreen
 import com.unir.roleapp.adventure.ui.screens.form.*
-import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
-import com.unir.roleapp.core.navigation.AdventureFormGraph
+import com.unir.roleapp.core.navigation.helpers.AdventureFormGraph
+import com.unir.roleapp.core.navigation.helpers.SharedAdventureForm
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
@@ -123,34 +113,39 @@ fun NavGraph(
                         }
                     )
                 ) {
-                    composable(ScreensRoutes.TitleScreen.route) { backStack ->
-                        val advId = backStack.arguments?.getString("adventureId").orEmpty()
-                        val formVm: AdventureFormViewModel = hiltViewModel(backStack)
-                        TitleScreen(
-                            viewModel   = formVm,
-                            adventureId = advId,
-                            onNext      = { navController.navigate(ScreensRoutes.HistoricalContextScreen.route) }
-                        )
+                    // TitleScreen
+                    composable(ScreensRoutes.TitleScreen.route) {
+                        SharedAdventureForm(navController) { formVm, advId ->
+                            TitleScreen(
+                                viewModel   = formVm,
+                                adventureId = advId.toString(),
+                                onNext      = {
+                                    navController.navigate(ScreensRoutes.HistoricalContextScreen.route)
+                                }
+                            )
+                        }
                     }
 
+                    // HistoricalContextScreen
                     composable(ScreensRoutes.HistoricalContextScreen.route) {
-                        val parentEntry = navController.getBackStackEntry(AdventureFormGraph.pattern)
-                        val formVm: AdventureFormViewModel = hiltViewModel(parentEntry)
-
-                        HistoricalContextScreen(
-                            viewModel = formVm,
-                            onNext    = { navController.navigate(ScreensRoutes.ActsScreen.route) }
-                        )
+                        SharedAdventureForm(navController) { formVm, /* advId no se usa aquí */ _ ->
+                            HistoricalContextScreen(
+                                viewModel = formVm,
+                                onNext    = {
+                                    navController.navigate(ScreensRoutes.ActsScreen.route)
+                                }
+                            )
+                        }
                     }
 
+                    // ActsScreen
                     composable(ScreensRoutes.ActsScreen.route) {
-                        val parentEntry = navController.getBackStackEntry(AdventureFormGraph.pattern)
-                        val formVm: AdventureFormViewModel = hiltViewModel(parentEntry)
-
-                        ActsScreen(
-                            viewModel     = formVm,
-                            navController = navController
-                        )
+                        SharedAdventureForm(navController) { formVm, _ ->
+                            ActsScreen(
+                                viewModel     = formVm,
+                                navController = navController
+                            )
+                        }
                     }
                 }
 

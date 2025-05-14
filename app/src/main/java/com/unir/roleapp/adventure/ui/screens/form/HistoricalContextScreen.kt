@@ -1,8 +1,6 @@
 package com.unir.roleapp.adventure.ui.screens.form
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,7 +14,6 @@ import com.roleapp.core.ui.layout.MainLayout
 import com.unir.roleapp.R
 import com.unir.roleapp.adventure.ui.screens.components.PlayerGrid
 import com.unir.roleapp.adventure.ui.viewmodels.AdventureFormViewModel
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun HistoricalContextScreen(
@@ -54,9 +51,7 @@ fun HistoricalContextScreenBody(
     val historicalContext by viewModel.historicalContext.collectAsState(initial = "")
     val characters by viewModel.characters.collectAsState(initial = emptyList())
     val clipboard = LocalClipboardManager.current
-    val isEditing by viewModel.id
-        .map { it.isNotBlank() }
-        .collectAsState(initial = false)
+    val isEditing by viewModel.isEditMode.collectAsState()
     val titleHeaderText = if (isEditing) "Editar la aventura"
     else "Inicio de la aventura"
 
